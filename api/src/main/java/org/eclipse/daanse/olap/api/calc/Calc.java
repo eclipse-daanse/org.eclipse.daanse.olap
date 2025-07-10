@@ -89,8 +89,8 @@ public interface Calc<E> {
      * depends on all dimensions except [Measures].
      *
      * The boolean expression
-     * <blockquote>([Measures].[Unit Sales],
-     * [Time].[1997]) &gt; 1000</blockquote>
+     * ([Measures].[Unit Sales],
+     * [Time].[1997]) &gt; 1000
      * depends on all hierarchies except [Measures] and [Time].
      *
      * The list expression

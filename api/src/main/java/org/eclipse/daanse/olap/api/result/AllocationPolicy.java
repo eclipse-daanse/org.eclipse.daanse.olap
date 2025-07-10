@@ -49,10 +49,10 @@ public enum AllocationPolicy {
      * Every atomic cell that contributes to the updated cell will be
      * assigned an equal value that is:
      *
-     * <blockquote>
+     *
      * &lt;atomic cell value&gt; =
      * &lt;value&gt; / Count(atomic cells contained in &lt;tuple&gt;)
-     * </blockquote>
+     *
      */
     EQUAL_ALLOCATION,
 
@@ -60,11 +60,11 @@ public enum AllocationPolicy {
      * Every atomic cell that contributes to the updated cell will be
      * changed according to:
      *
-     * <blockquote>
+     *
      * &lt;atomic cell value&gt; = &lt;atomic cell value&gt; +
      * (&lt;value&gt; - &lt;existing value&gt;)  /
      * Count(atomic cells contained in &lt;tuple&gt;)
-     * </blockquote>
+     *
      */
     EQUAL_INCREMENT,
 
@@ -72,10 +72,10 @@ public enum AllocationPolicy {
      * Every atomic cell that contributes to the updated cell will be
      * assigned an equal value that is:
      *
-     * <blockquote>
+     *
      * &lt;atomic cell value&gt; =
      * &lt;value&gt; * &lt;weight value expression&gt;
-     * </blockquote>
+     *
      *
      * Takes an optional argument, {@code weight_value_expression}.
      * If {@code weight_value_expression} is not provided, the following

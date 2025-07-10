@@ -27,6 +27,8 @@ public interface ISegmentCacheManager {
 
     void printCacheState(CellRegion region, PrintWriter pw, Locus locus);
 
+    <T> T execute( CacheCommand<T> command );
 
+    ISegmentCacheIndex getIndexRegistry();
 
 }

@@ -28,16 +28,14 @@ package org.eclipse.daanse.olap.util;
 
 import java.sql.Statement;
 
-import org.eclipse.daanse.olap.common.Util;
-
 
 public interface UtilCompatible {
 
 
 
     /**
-     * Cancels and closes a SQL Statement object. If errors are encountered,
-     * they should be logged under {@link Util}.
+     * Cancels and closes a SQL Statement object.
+     * 
      * @param stmt The statement to close.
      */
     void cancelStatement(Statement stmt);

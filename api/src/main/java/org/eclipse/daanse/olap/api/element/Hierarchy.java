@@ -120,4 +120,6 @@ public interface Hierarchy extends OlapElement, MetaElement {
      * @return Ordinal of this hierarchy in its cube
      */
     int getOrdinalInCube();
+    
+    String getSubName();
 }

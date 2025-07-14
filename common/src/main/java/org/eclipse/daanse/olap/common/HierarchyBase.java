@@ -122,6 +122,7 @@ public abstract class HierarchyBase
      *
      * @return name of hierarchy sans dimension name
      */
+    @Override
     public String getSubName() {
         return subName;
     }

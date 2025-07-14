@@ -30,7 +30,6 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.SqlExpression;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
 

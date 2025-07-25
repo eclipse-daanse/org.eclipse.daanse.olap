@@ -77,7 +77,7 @@ class OtherDiscoverServiceTest {
 
     @Mock
     private ContextGroup contextGroup;
-    
+
     @Mock
     private RequestMetaData requestMetaData;
     @Mock
@@ -88,7 +88,7 @@ class OtherDiscoverServiceTest {
     private ContextsSupplyerImpl cls;
 
     private ContextGroupXmlaServiceConfig config;
-    
+
     @BeforeEach
     void setup() {
         cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
@@ -107,9 +107,9 @@ class OtherDiscoverServiceTest {
         when(catalog1.getDescription()).thenReturn("barDescription");
         when(catalog2.getName()).thenReturn("foo");
         when(catalog2.getDescription()).thenReturn("fooDescription");
-        //when(context2.getDataSource()).thenReturn(dataSource);
+        // when(context2.getDataSource()).thenReturn(dataSource);
 
-		List<DiscoverDataSourcesResponseRow> rows = service.dataSources(request, requestMetaData, userPrincipal);
+        List<DiscoverDataSourcesResponseRow> rows = service.dataSources(request, requestMetaData, userPrincipal);
         verify(catalog1, times(1)).getName();
         verify(catalog2, times(1)).getName();
         assertThat(rows).isNotNull().hasSize(2);
@@ -138,15 +138,10 @@ class OtherDiscoverServiceTest {
     void discoverEnumerators() {
         DiscoverEnumeratorsRequest request = mock(DiscoverEnumeratorsRequest.class);
 
-        List<DiscoverEnumeratorsResponseRow> rows = service.discoverEnumerators(request, requestMetaData, userPrincipal);
-        assertThat(rows).isNotNull().hasSize(15)
-            .extracting(DiscoverEnumeratorsResponseRow::enumName)
-            .containsAnyOf(
-                "Access",
-                "AuthenticationMode",
-                "ProviderType",
-                "TreeOp"
-            );
+        List<DiscoverEnumeratorsResponseRow> rows = service.discoverEnumerators(request, requestMetaData,
+                userPrincipal);
+        assertThat(rows).isNotNull().hasSize(15).extracting(DiscoverEnumeratorsResponseRow::enumName)
+                .containsAnyOf("Access", "AuthenticationMode", "ProviderType", "TreeOp");
     }
 
     @Test
@@ -155,51 +150,45 @@ class OtherDiscoverServiceTest {
         when(cls.getContexts()).thenReturn(List.of(context1, context2));
         when(context1.getKeywordList()).thenReturn(Context.KEYWORD_LIST);
         List<DiscoverKeywordsResponseRow> rows = service.discoverKeywords(request, requestMetaData, userPrincipal);
-        assertThat(rows).isNotNull().hasSize(256)
-            .extracting(DiscoverKeywordsResponseRow::keyword)
-            .containsExactlyInAnyOrder(
-                "$AdjustedProbability", "$Distance",
-                "$Probability", "$ProbabilityStDev",
-                "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev", "$StdDeV",
-                "$Support", "$Variance", "AddCalculatedMembers", "Action", "After", "Aggregate", "All",
-                "Alter", "Ancestor", "And", "Append", "As", "ASC", "Axis", "Automatic", "Back_Color",
-                "BASC", "BDESC", "Before", "Before_And_After", "Before_And_Self",
-                "Before_Self_After", "BottomCount", "BottomPercent", "BottomSum",
-                "Break", "Boolean", "Cache", "Calculated", "Call", "Case", "Catalog_Name", "Cell",
-                "Cell_Ordinal", "Cells", "Chapters", "Children", "Children_Cardinality", "ClosingPeriod", "Cluster",
-                "ClusterDistance", "ClusterProbability", "Clusters", "CoalesceEmpty", "Column_Values",
-                "Columns", "Content", "Contingent", "Continuous", "Correlation", "Cousin", "Covariance",
-                "CovarianceN", "Create", "CreatePropertySet", "CrossJoin", "Cube", "Cube_Name", "CurrentMember",
-                "CurrentCube", "Custom", "Cyclical", "DefaultMember", "Default_Member", "DESC",
-                "Descendents", "Description", "Dimension", "Dimension_Unique_Name", "Dimensions",
-                "Discrete", "Discretized", "DrillDownLevel", "DrillDownLevelBottom", "DrillDownLevelTop",
-                "DrillDownMember", "DrillDownMemberBottom", "DrillDownMemberTop", "DrillTrough", "DrillUpLevel",
-                "DrillUpMember", "Drop", "Else", "Empty", "End", "Equal_Areas", "Exclude_Null",
-                "ExcludeEmpty", "Exclusive", "Expression", "Filter", "FirstChild", "FirstRowset", "FirstSibling",
-                "Flattened", "Font_Flags", "Font_Name", "Font_size", "Fore_Color", "Format_String", "Formatted_Value",
-                "Formula", "From", "Generate", "Global", "Head", "Hierarchize", "Hierarchy", "Hierary_Unique_name",
-                "IIF", "IsEmpty", "Include_Null",
-                "Include_Statistics", "Inclusive", "Input_Only", "IsDescendant", "Item", "Lag", "LastChild",
-                "LastPeriods", "LastSibling", "Lead", "Level", "Level_Number", "Level_Unique_Name",
-                "Levels", "LinRegIntercept", "LinRegR2", "LinRegPoint", "LinRegSlope", "LinRegVariance",
-                "Long", "MaxRows", "Median", "Member", "Member_Caption", "Member_Guid", "Member_Name",
-                "Member_Ordinal", "Member_Type", "Member_Unique_Name", "Members", "Microsoft_Clustering",
-                "Microsoft_Decision_Trees", "Mining", "Model", "Model_Existence_Only", "Models", "Move",
-                "MTD", "Name", "Nest", "NextMember", "Non", "NonEmpty", "Normal", "Not", "Ntext",
-                "Nvarchar", "OLAP", "On", "OpeningPeriod", "OpenQuery", "Or", "Ordered", "Ordinal",
-                "Pages", "ParallelPeriod", "Parent", "Parent_Level", "Parent_Unique_Name", "PeriodsToDate", "PMML",
-                "Predict", "Predict_Only", "PredictAdjustedProbability", "PredictHistogram", "Prediction",
-                "PredictionScore", "PredictProbability", "PredictProbabilityStDev", "PredictProbabilityVariance",
-                "PredictStDev", "PredictSupport", "PredictVariance", "PrevMember", "Probability",
-                "Probability_StDev", "Probability_StdDev", "Probability_Variance", "Properties",
-                "Property", "QTD", "RangeMax", "RangeMid", "RangeMin", "Rank", "Recursive", "Refresh",
-                "Related", "Rename", "Rollup", "Rows", "Schema_Name", "Sections", "Select", "Self",
-                "Self_And_After", "Sequence_Time", "Server", "Session", "Set", "SetToArray",
-                "SetToStr", "Shape", "Skip", "Solve_Order", "Sort", "StdDev", "Stdev", "StripCalculatedMembers",
-                "StrToSet", "StrToTuple", "SubSet", "Support", "Tail", "Text", "Thresholds", "ToggleDrillState",
-                "TopCount", "TopPercent", "TopSum", "TupleToStr", "Under", "Uniform", "UniqueName", "Use",
-                "Value", "Var", "Variance", "VarP", "VarianceP", "VisualTotals", "When", "Where", "With", "WTD", "Xor"
-            );
+        assertThat(rows).isNotNull().hasSize(256).extracting(DiscoverKeywordsResponseRow::keyword)
+                .containsExactlyInAnyOrder("$AdjustedProbability", "$Distance", "$Probability", "$ProbabilityStDev",
+                        "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev", "$StdDeV", "$Support", "$Variance",
+                        "AddCalculatedMembers", "Action", "After", "Aggregate", "All", "Alter", "Ancestor", "And",
+                        "Append", "As", "ASC", "Axis", "Automatic", "Back_Color", "BASC", "BDESC", "Before",
+                        "Before_And_After", "Before_And_Self", "Before_Self_After", "BottomCount", "BottomPercent",
+                        "BottomSum", "Break", "Boolean", "Cache", "Calculated", "Call", "Case", "Catalog_Name", "Cell",
+                        "Cell_Ordinal", "Cells", "Chapters", "Children", "Children_Cardinality", "ClosingPeriod",
+                        "Cluster", "ClusterDistance", "ClusterProbability", "Clusters", "CoalesceEmpty",
+                        "Column_Values", "Columns", "Content", "Contingent", "Continuous", "Correlation", "Cousin",
+                        "Covariance", "CovarianceN", "Create", "CreatePropertySet", "CrossJoin", "Cube", "Cube_Name",
+                        "CurrentMember", "CurrentCube", "Custom", "Cyclical", "DefaultMember", "Default_Member", "DESC",
+                        "Descendents", "Description", "Dimension", "Dimension_Unique_Name", "Dimensions", "Discrete",
+                        "Discretized", "DrillDownLevel", "DrillDownLevelBottom", "DrillDownLevelTop", "DrillDownMember",
+                        "DrillDownMemberBottom", "DrillDownMemberTop", "DrillTrough", "DrillUpLevel", "DrillUpMember",
+                        "Drop", "Else", "Empty", "End", "Equal_Areas", "Exclude_Null", "ExcludeEmpty", "Exclusive",
+                        "Expression", "Filter", "FirstChild", "FirstRowset", "FirstSibling", "Flattened", "Font_Flags",
+                        "Font_Name", "Font_size", "Fore_Color", "Format_String", "Formatted_Value", "Formula", "From",
+                        "Generate", "Global", "Head", "Hierarchize", "Hierarchy", "Hierary_Unique_name", "IIF",
+                        "IsEmpty", "Include_Null", "Include_Statistics", "Inclusive", "Input_Only", "IsDescendant",
+                        "Item", "Lag", "LastChild", "LastPeriods", "LastSibling", "Lead", "Level", "Level_Number",
+                        "Level_Unique_Name", "Levels", "LinRegIntercept", "LinRegR2", "LinRegPoint", "LinRegSlope",
+                        "LinRegVariance", "Long", "MaxRows", "Median", "Member", "Member_Caption", "Member_Guid",
+                        "Member_Name", "Member_Ordinal", "Member_Type", "Member_Unique_Name", "Members",
+                        "Microsoft_Clustering", "Microsoft_Decision_Trees", "Mining", "Model", "Model_Existence_Only",
+                        "Models", "Move", "MTD", "Name", "Nest", "NextMember", "Non", "NonEmpty", "Normal", "Not",
+                        "Ntext", "Nvarchar", "OLAP", "On", "OpeningPeriod", "OpenQuery", "Or", "Ordered", "Ordinal",
+                        "Pages", "ParallelPeriod", "Parent", "Parent_Level", "Parent_Unique_Name", "PeriodsToDate",
+                        "PMML", "Predict", "Predict_Only", "PredictAdjustedProbability", "PredictHistogram",
+                        "Prediction", "PredictionScore", "PredictProbability", "PredictProbabilityStDev",
+                        "PredictProbabilityVariance", "PredictStDev", "PredictSupport", "PredictVariance", "PrevMember",
+                        "Probability", "Probability_StDev", "Probability_StdDev", "Probability_Variance", "Properties",
+                        "Property", "QTD", "RangeMax", "RangeMid", "RangeMin", "Rank", "Recursive", "Refresh",
+                        "Related", "Rename", "Rollup", "Rows", "Schema_Name", "Sections", "Select", "Self",
+                        "Self_And_After", "Sequence_Time", "Server", "Session", "Set", "SetToArray", "SetToStr",
+                        "Shape", "Skip", "Solve_Order", "Sort", "StdDev", "Stdev", "StripCalculatedMembers", "StrToSet",
+                        "StrToTuple", "SubSet", "Support", "Tail", "Text", "Thresholds", "ToggleDrillState", "TopCount",
+                        "TopPercent", "TopSum", "TupleToStr", "Under", "Uniform", "UniqueName", "Use", "Value", "Var",
+                        "Variance", "VarP", "VarianceP", "VisualTotals", "When", "Where", "With", "WTD", "Xor");
     }
 
     @Test
@@ -220,41 +209,13 @@ class OtherDiscoverServiceTest {
         when(request.properties()).thenReturn(properties);
 
         List<DiscoverPropertiesResponseRow> rows = service.discoverProperties(request, requestMetaData, userPrincipal);
-        assertThat(rows).isNotNull().hasSize(31)
-            .extracting(DiscoverPropertiesResponseRow::propertyName)
-            .containsExactlyInAnyOrder(
-                "AxisFormat",
-                "BeginRange",
-                "Catalog",
-                "Content",
-                "Cube",
-                "DataSourceInfo",
-                "Deep",
-                "EmitInvisibleMembers",
-                "EndRange",
-                "Format",
-                "LocaleIdentifier",
-                "MDXSupport",
-                "Password",
-                "ProviderName",
-                "ProviderVersion",
-                "ResponseMimeType",
-                "StateSupport",
-                "Timeout",
-                "UserName",
-                "VisualMode",
-                "TableFields",
-                "AdvancedFlag",
-                "SafetyOptions",
-                "MdxMissingMemberMode",
-                "DbpropMsmdMDXCompatibility",
-                "MdpropMdxSubqueries",
-                "ClientProcessID",
-                "SspropInitAppName",
-                "DbpropMsmdSubqueries",
-                "DbpropMsmdActivityID", 
-                "DBMSVersion"
-            );
+        assertThat(rows).isNotNull().hasSize(31).extracting(DiscoverPropertiesResponseRow::propertyName)
+                .containsExactlyInAnyOrder("AxisFormat", "BeginRange", "Catalog", "Content", "Cube", "DataSourceInfo",
+                        "Deep", "EmitInvisibleMembers", "EndRange", "Format", "LocaleIdentifier", "MDXSupport",
+                        "Password", "ProviderName", "ProviderVersion", "ResponseMimeType", "StateSupport", "Timeout",
+                        "UserName", "VisualMode", "TableFields", "AdvancedFlag", "SafetyOptions",
+                        "MdxMissingMemberMode", "DbpropMsmdMDXCompatibility", "MdpropMdxSubqueries", "ClientProcessID",
+                        "SspropInitAppName", "DbpropMsmdSubqueries", "DbpropMsmdActivityID", "DBMSVersion");
     }
 
     @Test
@@ -263,39 +224,17 @@ class OtherDiscoverServiceTest {
         DiscoverSchemaRowsetsRestrictions restrictions = mock(DiscoverSchemaRowsetsRestrictions.class);
         when(request.restrictions()).thenReturn(restrictions);
 
-        List<DiscoverSchemaRowsetsResponseRow> rows = service.discoverSchemaRowsets(request, requestMetaData, userPrincipal);
-        assertThat(rows).isNotNull().hasSize(28)
-            .extracting(DiscoverSchemaRowsetsResponseRow::schemaName)
-            .containsExactlyInAnyOrder(
-                "MDSCHEMA_FUNCTIONS",
-                "MDSCHEMA_DIMENSIONS",
-                "MDSCHEMA_CUBES",
-                "MDSCHEMA_ACTIONS",
-                "DBSCHEMA_TABLES",
-                "DISCOVER_LITERALS",
-                "DISCOVER_KEYWORDS",
-                "DISCOVER_ENUMERATORS",
-                "DISCOVER_SCHEMA_ROWSETS",
-                "DISCOVER_PROPERTIES",
-                "DBSCHEMA_CATALOGS",
-                "DISCOVER_DATASOURCES",
-                "DISCOVER_XML_METADATA",
-                "DISCOVER_CSDL_METADATA",
-                "DBSCHEMA_COLUMNS",
-                "DBSCHEMA_PROVIDER_TYPES",
-                "DBSCHEMA_SCHEMATA",
-                "DBSCHEMA_SOURCE_TABLES",
-                "DBSCHEMA_TABLES_INFO",
-                "MDSCHEMA_HIERARCHIES",
-                "MDSCHEMA_LEVELS",
-                "MDSCHEMA_MEASUREGROUP_DIMENSIONS",
-                "MDSCHEMA_MEASURES",
-                "MDSCHEMA_MEMBERS",
-                "MDSCHEMA_PROPERTIES",
-                "MDSCHEMA_SETS",
-                "MDSCHEMA_KPIS",
-                "MDSCHEMA_MEASUREGROUPS"
-            );
+        List<DiscoverSchemaRowsetsResponseRow> rows = service.discoverSchemaRowsets(request, requestMetaData,
+                userPrincipal);
+        assertThat(rows).isNotNull().hasSize(28).extracting(DiscoverSchemaRowsetsResponseRow::schemaName)
+                .containsExactlyInAnyOrder("MDSCHEMA_FUNCTIONS", "MDSCHEMA_DIMENSIONS", "MDSCHEMA_CUBES",
+                        "MDSCHEMA_ACTIONS", "DBSCHEMA_TABLES", "DISCOVER_LITERALS", "DISCOVER_KEYWORDS",
+                        "DISCOVER_ENUMERATORS", "DISCOVER_SCHEMA_ROWSETS", "DISCOVER_PROPERTIES", "DBSCHEMA_CATALOGS",
+                        "DISCOVER_DATASOURCES", "DISCOVER_XML_METADATA", "DISCOVER_CSDL_METADATA", "DBSCHEMA_COLUMNS",
+                        "DBSCHEMA_PROVIDER_TYPES", "DBSCHEMA_SCHEMATA", "DBSCHEMA_SOURCE_TABLES",
+                        "DBSCHEMA_TABLES_INFO", "MDSCHEMA_HIERARCHIES", "MDSCHEMA_LEVELS",
+                        "MDSCHEMA_MEASUREGROUP_DIMENSIONS", "MDSCHEMA_MEASURES", "MDSCHEMA_MEMBERS",
+                        "MDSCHEMA_PROPERTIES", "MDSCHEMA_SETS", "MDSCHEMA_KPIS", "MDSCHEMA_MEASUREGROUPS");
     }
 
     @Test
@@ -305,7 +244,8 @@ class OtherDiscoverServiceTest {
         when(restrictions.schemaName()).thenReturn(Optional.of("DISCOVER_SCHEMA_ROWSETS"));
         when(request.restrictions()).thenReturn(restrictions);
 
-        List<DiscoverSchemaRowsetsResponseRow> rows = service.discoverSchemaRowsets(request, requestMetaData, userPrincipal);
+        List<DiscoverSchemaRowsetsResponseRow> rows = service.discoverSchemaRowsets(request, requestMetaData,
+                userPrincipal);
         assertThat(rows).isNotNull().hasSize(1);
         assertThat(rows.get(0)).isNotNull();
         assertThat(rows.get(0).schemaName()).isEqualTo("DISCOVER_SCHEMA_ROWSETS");

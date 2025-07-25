@@ -27,17 +27,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResp
 
 public interface ActionService {
 
-    List<MdSchemaActionsResponseRow> getResponses(
-        List<Catalog> catalogs,
-        Optional<String> schemaName,
-        String cubeName,
-        Optional<String> actionName,
-        Optional<ActionTypeEnum> actionType,
-        Optional<String> coordinate,
-        CoordinateTypeEnum coordinateType,
-        InvocationEnum invocation,
-        Optional<CubeSourceEnum> cubeSource,
-        RequestMetaData metaData,
-        UserPrincipal userPrincipal
-    );
+    List<MdSchemaActionsResponseRow> getResponses(List<Catalog> catalogs, Optional<String> schemaName, String cubeName,
+            Optional<String> actionName, Optional<ActionTypeEnum> actionType, Optional<String> coordinate,
+            CoordinateTypeEnum coordinateType, InvocationEnum invocation, Optional<CubeSourceEnum> cubeSource,
+            RequestMetaData metaData, UserPrincipal userPrincipal);
 }

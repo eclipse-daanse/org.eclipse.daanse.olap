@@ -19,20 +19,16 @@ import java.math.BigInteger;
 import org.eclipse.daanse.xmla.api.common.properties.XsdType;
 
 /**
- * Takes a DataType String (null, Integer, Numeric or non-null)
- * and Value Object (Integer, Double, String, other) and
- * canonicalizes them to XSD data type and corresponding object.
+ * Takes a DataType String (null, Integer, Numeric or non-null) and Value Object (Integer, Double,
+ * String, other) and canonicalizes them to XSD data type and corresponding object.
  * <p>
- * If the input DataType is Integer, then it attempts to return
- * an XSD_INT with value java.lang.Integer (and failing that an
- * XSD_LONG (java.lang.Long) or XSD_INTEGER (java.math.BigInteger)).
- * Worst case is the value loses precision with any integral
- * representation and must be returned as a decimal type (Double
- * or java.math.BigDecimal).
+ * If the input DataType is Integer, then it attempts to return an XSD_INT with value
+ * java.lang.Integer (and failing that an XSD_LONG (java.lang.Long) or XSD_INTEGER
+ * (java.math.BigInteger)). Worst case is the value loses precision with any integral representation
+ * and must be returned as a decimal type (Double or java.math.BigDecimal).
  * <p>
- * If the input DataType is Decimal, then it attempts to return
- * an XSD_DOUBLE with value java.lang.Double (and failing that an
- * XSD_DECIMAL (java.math.BigDecimal)).
+ * If the input DataType is Decimal, then it attempts to return an XSD_DOUBLE with value
+ * java.lang.Double (and failing that an XSD_DECIMAL (java.math.BigDecimal)).
  */
 class ValueInfo {
 
@@ -47,11 +43,8 @@ class ValueInfo {
      */
     static String getValueTypeHint(final String dataType) {
         if (dataType != null) {
-            return (dataType.equals("Integer"))
-                ? XsdType.XSD_INTEGER
-                : ((dataType.equals("Numeric"))
-                ? XsdType.XSD_DOUBLE
-                : XsdType.XSD_STRING);
+            return (dataType.equals("Integer")) ? XsdType.XSD_INTEGER
+                    : ((dataType.equals("Numeric")) ? XsdType.XSD_DOUBLE : XsdType.XSD_STRING);
         } else {
             return null;
         }
@@ -162,7 +155,7 @@ class ValueInfo {
                         // Throws ArithmeticException on conversion failure.
                         // The following line is only available in
                         // Java5 and above:
-                        //long lval = bd.longValueExact();
+                        // long lval = bd.longValueExact();
                         long lval = bd.longValue();
 
                         setValueAndType(lval);
@@ -209,11 +202,8 @@ class ValueInfo {
                     this.value = inputValue;
                     this.isDecimal = true;
 
-                } else if (inputValue instanceof Byte
-                    || inputValue instanceof Short
-                    || inputValue instanceof Integer
-                    || inputValue instanceof Long)
-                {
+                } else if (inputValue instanceof Byte || inputValue instanceof Short || inputValue instanceof Integer
+                        || inputValue instanceof Long) {
                     // Convert from byte/short/integer/long to double
                     this.value = ((Number) inputValue).doubleValue();
                     this.valueType = valueTypeHint;
@@ -228,7 +218,7 @@ class ValueInfo {
                     double dval = bd.doubleValue();
                     // make with same scale as Double
                     try {
-                        BigDecimal bd2 =BigDecimal.valueOf(dval);
+                        BigDecimal bd2 = BigDecimal.valueOf(dval);
                         // Can it be a double
                         // Must use compareTo - see BigDecimal.equals
                         if (bd.compareTo(bd2) == 0) {
@@ -327,7 +317,7 @@ class ValueInfo {
                 double dval = bd.doubleValue();
                 // make with same scale as Double
                 try {
-                    BigDecimal bd2 =  BigDecimal.valueOf(dval);
+                    BigDecimal bd2 = BigDecimal.valueOf(dval);
                     // Can it be a double
                     // Must use compareTo - see BigDecimal.equals
                     if (bd.compareTo(bd2) == 0) {
@@ -363,8 +353,9 @@ class ValueInfo {
             }
         }
     }
+
     private void setValueAndType(long lval) {
-        if (! isValidXsdInt(lval)) {
+        if (!isValidXsdInt(lval)) {
             // No, it can not be a integer, must be a long
             this.valueType = XsdType.XSD_LONG;
             this.value = lval;

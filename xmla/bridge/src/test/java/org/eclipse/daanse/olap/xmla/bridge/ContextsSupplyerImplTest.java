@@ -25,16 +25,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
- class ContextsSupplyerImplTest {
+class ContextsSupplyerImplTest {
 
-	    @Mock
-	    private ContextGroup contextGroup;
-		
-		@Test
-		void get_Empty() throws Exception {
-			when(contextGroup.getValidContexts()).thenReturn(List.of());
-			ContextsSupplyerImpl csi= new ContextsSupplyerImpl(contextGroup);
-			assertThat(csi.getContexts()).isNotNull().isEmpty();
-		}
-		
+    @Mock
+    private ContextGroup contextGroup;
+
+    @Test
+    void get_Empty() throws Exception {
+        when(contextGroup.getValidContexts()).thenReturn(List.of());
+        ContextsSupplyerImpl csi = new ContextsSupplyerImpl(contextGroup);
+        assertThat(csi.getContexts()).isNotNull().isEmpty();
+    }
+
 }

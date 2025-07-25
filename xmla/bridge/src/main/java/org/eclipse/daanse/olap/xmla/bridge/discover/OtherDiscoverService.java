@@ -91,16 +91,13 @@ public class OtherDiscoverService {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(OtherDiscoverService.class);
     private static final String DBLITERAL = "DBLITERAL_";
-    private static List<Class<? extends Enum<?>>> enums = List.of(
-        AccessEnum.class,
-        AuthenticationModeEnum.class,
-        ProviderTypeEnum.class,
-        TreeOpEnum.class
-        //mondrian have 4 enums
+    private static List<Class<? extends Enum<?>>> enums = List.of(AccessEnum.class, AuthenticationModeEnum.class,
+            ProviderTypeEnum.class, TreeOpEnum.class
+    // mondrian have 4 enums
     );
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
             .withZone(ZoneId.systemDefault());
-    
+
     private static final String md = """
             <Server>
                 <Name>%s</Name>
@@ -114,38 +111,20 @@ public class OtherDiscoverService {
             """;
 
     private static List<Class<?>> classes = List.of(
-        //DbSchema
-        DbSchemaCatalogsRequest.class,
-        DbSchemaColumnsRequest.class,
-        DbSchemaProviderTypesRequest.class,
-        DbSchemaSchemataRequest.class,
-        DbSchemaSourceTablesRequest.class,
-        DbSchemaTablesRequest.class,
-        DbSchemaTablesInfoRequest.class,
-        //Discover
-        DiscoverDataSourcesRequest.class,
-        DiscoverEnumeratorsRequest.class,
-        DiscoverKeywordsRequest.class,
-        DiscoverLiteralsRequest.class,
-        DiscoverPropertiesRequest.class,
-        DiscoverSchemaRowsetsRequest.class,
-        DiscoverXmlMetaDataRequest.class,
-        DiscoverCsdlMetaDataRequest.class,
-        //MdSchema
-        MdSchemaActionsRequest.class,
-        MdSchemaCubesRequest.class,
-        MdSchemaDimensionsRequest.class,
-        MdSchemaFunctionsRequest.class,
-        MdSchemaHierarchiesRequest.class,
-        MdSchemaKpisRequest.class,
-        MdSchemaLevelsRequest.class,
-        MdSchemaMeasureGroupDimensionsRequest.class,
-        MdSchemaMeasureGroupsRequest.class,
-        MdSchemaMeasuresRequest.class,
-        MdSchemaMembersRequest.class,
-        MdSchemaPropertiesRequest.class,
-        MdSchemaSetsRequest.class
-    );
+            // DbSchema
+            DbSchemaCatalogsRequest.class, DbSchemaColumnsRequest.class, DbSchemaProviderTypesRequest.class,
+            DbSchemaSchemataRequest.class, DbSchemaSourceTablesRequest.class, DbSchemaTablesRequest.class,
+            DbSchemaTablesInfoRequest.class,
+            // Discover
+            DiscoverDataSourcesRequest.class, DiscoverEnumeratorsRequest.class, DiscoverKeywordsRequest.class,
+            DiscoverLiteralsRequest.class, DiscoverPropertiesRequest.class, DiscoverSchemaRowsetsRequest.class,
+            DiscoverXmlMetaDataRequest.class, DiscoverCsdlMetaDataRequest.class,
+            // MdSchema
+            MdSchemaActionsRequest.class, MdSchemaCubesRequest.class, MdSchemaDimensionsRequest.class,
+            MdSchemaFunctionsRequest.class, MdSchemaHierarchiesRequest.class, MdSchemaKpisRequest.class,
+            MdSchemaLevelsRequest.class, MdSchemaMeasureGroupDimensionsRequest.class,
+            MdSchemaMeasureGroupsRequest.class, MdSchemaMeasuresRequest.class, MdSchemaMembersRequest.class,
+            MdSchemaPropertiesRequest.class, MdSchemaSetsRequest.class);
     private ContextListSupplyer contextsListSupplyer;
     private ContextGroupXmlaServiceConfig config;
 
@@ -155,34 +134,30 @@ public class OtherDiscoverService {
 
     }
 
-    public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
         List<DiscoverDataSourcesResponseRow> result = new ArrayList<>();
         List<Catalog> catalogs = this.contextsListSupplyer.get(userPrincipal.roles());
         for (Catalog catalog : catalogs) {
 
-            result.add(new DiscoverDataSourcesResponseRowR(
-            		"DataSource of "+catalog.getName(),
-                Optional.ofNullable(catalog.getDescription()),
-                Optional.empty(),
-                Optional.empty(),
-                null,
-                Optional.empty(),
-                Optional.empty()
-            ));
+            result.add(new DiscoverDataSourcesResponseRowR("DataSource of " + catalog.getName(),
+                    Optional.ofNullable(catalog.getDescription()), Optional.empty(), Optional.empty(), null,
+                    Optional.empty(), Optional.empty()));
         }
         return result;
     }
 
-    public List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
         List<DiscoverEnumeratorsResponseRow> result = new ArrayList<>();
         for (Class c : enums) {
             String enumDescription = getEnumDescription(c.getSimpleName());
 
-			if (enumDescription != null && enumDescription.isEmpty()) {
-				enumDescription = null;
-			}
+            if (enumDescription != null && enumDescription.isEmpty()) {
+                enumDescription = null;
+            }
 
-			Enumerator e = (Enumerator) c.getAnnotation(Enumerator.class);
+            Enumerator e = (Enumerator) c.getAnnotation(Enumerator.class);
             Set<Enum<?>> elements = EnumSet.allOf(c);
             for (Enum<?> en : elements) {
                 Method[] ms = c.getMethods();
@@ -199,22 +174,20 @@ public class OtherDiscoverService {
                 }
                 String elementName = o != null ? o.toString() : en.name();
                 String elementDescription = getEnumValueDescription(c.getSimpleName(), elementName);
-                
-				if (elementDescription != null && elementDescription.isEmpty()) {
-					elementDescription = null;
-				}
-                result.add(new DiscoverEnumeratorsResponseRowR(e.name(),
-                    Optional.ofNullable(enumDescription),
-                    "string",
-                    elementName,
-                    Optional.ofNullable(elementDescription),
-                    Optional.ofNullable(String.valueOf(elementValue))));
+
+                if (elementDescription != null && elementDescription.isEmpty()) {
+                    elementDescription = null;
+                }
+                result.add(new DiscoverEnumeratorsResponseRowR(e.name(), Optional.ofNullable(enumDescription), "string",
+                        elementName, Optional.ofNullable(elementDescription),
+                        Optional.ofNullable(String.valueOf(elementValue))));
             }
         }
         return result;
     }
 
-    public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
         List<DiscoverKeywordsResponseRow> result = new ArrayList<>();
         if (this.contextsListSupplyer.getContexts() != null && !this.contextsListSupplyer.getContexts().isEmpty()) {
             for (String keyword : this.contextsListSupplyer.getContexts().get(0).getKeywordList()) {
@@ -224,97 +197,95 @@ public class OtherDiscoverService {
         return result;
     }
 
-    public List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
         List<DiscoverLiteralsResponseRow> result = new ArrayList<>();
         for (XmlaConstants.Literal anEnum : XmlaConstants.Literal.values()) {
-            result.add(new DiscoverLiteralsResponseRowR(DBLITERAL + anEnum.name(),
-                anEnum.getLiteralValue(),
-                anEnum.getLiteralInvalidChars(),
-                anEnum.getLiteralInvalidStartingChars(),
-                anEnum.getLiteralMaxLength(),
-                LiteralNameEnumValueEnum.fromValue(anEnum.getLiteralNameEnumValue())));
+            result.add(new DiscoverLiteralsResponseRowR(DBLITERAL + anEnum.name(), anEnum.getLiteralValue(),
+                    anEnum.getLiteralInvalidChars(), anEnum.getLiteralInvalidStartingChars(),
+                    anEnum.getLiteralMaxLength(),
+                    LiteralNameEnumValueEnum.fromValue(anEnum.getLiteralNameEnumValue())));
         }
         return result;
     }
 
-    public List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
-        List<String> propertyNames = request.restrictions() == null? List.of() : request.restrictions().propertyName();
+    public List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+        List<String> propertyNames = request.restrictions() == null ? List.of() : request.restrictions().propertyName();
         Optional<String> properetyCatalog = request.properties().catalog();
         List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
-        for (PropertyDefinition propertyDefinition
-            : PropertyDefinition.class.getEnumConstants()) {
-            if ( !propertyNames.isEmpty() && !propertyNames.contains(propertyDefinition.name()) ) {
+        for (PropertyDefinition propertyDefinition : PropertyDefinition.class.getEnumConstants()) {
+            if (!propertyNames.isEmpty() && !propertyNames.contains(propertyDefinition.name())) {
                 continue;
             }
             String propertyValue = "";
             if (propertyDefinition.name().equals(PropertyDefinition.Catalog.name())) {
                 if (properetyCatalog.isPresent()) {
-                	Optional<Context<?>> oContext= contextsListSupplyer.getContext(properetyCatalog.get());
-                	if(oContext.isPresent()) {
-                		propertyValue=oContext.get().getName();
-                	}else {
-                    	propertyValue=contextsListSupplyer.getContexts().getFirst().getName();
+                    Optional<Context<?>> oContext = contextsListSupplyer.getContext(properetyCatalog.get());
+                    if (oContext.isPresent()) {
+                        propertyValue = oContext.get().getName();
+                    } else {
+                        propertyValue = contextsListSupplyer.getContexts().getFirst().getName();
 
-					}
-                	
+                    }
+
                 } else {
 
-                	propertyValue=contextsListSupplyer.getContexts().getFirst().getName();
-                	//                	if (!catalogs.isEmpty()) {
+                    propertyValue = contextsListSupplyer.getContexts().getFirst().getName();
+                    // if (!catalogs.isEmpty()) {
 //                    propertyValue = catalogs.get(0);
                 }
             } else {
                 propertyValue = propertyDefinition.getValue();
             }
-            result.add(new DiscoverPropertiesResponseRowR(
-                propertyDefinition.name(),
-                Optional.ofNullable(propertyDefinition.getDescription()),
-                Optional.of(propertyDefinition.getType().value),
-                AccessEnum.fromValue(propertyDefinition.getAccess().name()),
-                Optional.of(false),
-                Optional.ofNullable(propertyValue)));
+            result.add(new DiscoverPropertiesResponseRowR(propertyDefinition.name(),
+                    Optional.ofNullable(propertyDefinition.getDescription()),
+                    Optional.of(propertyDefinition.getType().value),
+                    AccessEnum.fromValue(propertyDefinition.getAccess().name()), Optional.of(false),
+                    Optional.ofNullable(propertyValue)));
         }
         return result;
     }
 
-    public List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
         Optional<String> schemaName = request.restrictions().schemaName();
         List<DiscoverSchemaRowsetsResponseRow> result = new ArrayList<>();
         for (Class<?> c : classes) {
-            Operation o = (Operation) c.getAnnotation(
-                Operation.class);
-            if(!schemaName.isPresent() || schemaName.get().equals(o.name())) {
+            Operation o = (Operation) c.getAnnotation(Operation.class);
+            if (!schemaName.isPresent() || schemaName.get().equals(o.name())) {
                 String desc = getOperationDescription(o.name());
 
-				if (desc != null && desc.isEmpty()) {
-					desc = null;
-				}
+                if (desc != null && desc.isEmpty()) {
+                    desc = null;
+                }
 
-				Method[] methods = c.getMethods();
+                Method[] methods = c.getMethods();
                 List<Restriction> restrictions = new ArrayList<>();
                 for (Method method : methods) {
                     if (method.getName().equals("restrictions")) {
                         Class<?> cl = method.getReturnType();
                         Method[] restrictionMethods = cl.getMethods();
-                        List<org.eclipse.daanse.xmla.api.annotation.Restriction> rList = Arrays.stream(restrictionMethods).filter(mm -> mm.isAnnotationPresent(org.eclipse.daanse.xmla.api.annotation.Restriction.class))
-                            .map(mm -> mm.getAnnotation(org.eclipse.daanse.xmla.api.annotation.Restriction.class))
-                            .sorted((r1, r2) -> Integer.compare(r1.order(), r2.order())).toList();
+                        List<org.eclipse.daanse.xmla.api.annotation.Restriction> rList = Arrays
+                                .stream(restrictionMethods)
+                                .filter(mm -> mm
+                                        .isAnnotationPresent(org.eclipse.daanse.xmla.api.annotation.Restriction.class))
+                                .map(mm -> mm.getAnnotation(org.eclipse.daanse.xmla.api.annotation.Restriction.class))
+                                .sorted((r1, r2) -> Integer.compare(r1.order(), r2.order())).toList();
                         for (org.eclipse.daanse.xmla.api.annotation.Restriction restriction : rList) {
-                                restrictions.add(new RestrictionR(restriction.name(), restriction.type()));
+                            restrictions.add(new RestrictionR(restriction.name(), restriction.type()));
                         }
                     }
                 }
-                result.add(new DiscoverSchemaRowsetsResponseRowR(o.name(),
-                    Optional.ofNullable(o.guid()),
-                    Optional.ofNullable(restrictions),
-                    Optional.of((desc == null) ? "" : desc),
-                    Optional.empty()));
+                result.add(new DiscoverSchemaRowsetsResponseRowR(o.name(), Optional.ofNullable(o.guid()),
+                        Optional.ofNullable(restrictions), Optional.of((desc == null) ? "" : desc), Optional.empty()));
             }
         }
         return result;
     }
 
-    public List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+    public List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
         List<DiscoverXmlMetaDataResponseRow> result = new ArrayList<>();
         Optional<String> databaseId = request.restrictions().databaseId();
         String date = LocalDateTime.now().format(formatter);
@@ -322,92 +293,99 @@ public class OtherDiscoverService {
             databaseId = request.properties().catalog();
         }
         if (databaseId.isPresent()) {
-            Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(databaseId.get(),userPrincipal.roles());
+            Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(databaseId.get(),
+                    userPrincipal.roles());
             if (oCatalog.isPresent()) {
                 Catalog catalog = oCatalog.get();
-                
-                if(catalog!=null) {
-                    result.add(new DiscoverXmlMetaDataResponseRowR(String.format(md, catalog.getName(), catalog.getName(), date, date)));
+
+                if (catalog != null) {
+                    result.add(new DiscoverXmlMetaDataResponseRowR(
+                            String.format(md, catalog.getName(), catalog.getName(), date, date)));
                 }
             }
         } else {
             List<Catalog> cs = contextsListSupplyer.get(List.of());
             if (cs != null) {
-                //for (Catalog catalog : cs) {
-                //result.add(new DiscoverXmlMetaDataResponseRowR(String.format(md, catalog.getName(), catalog.getName(), date, date)));
-                //}
-                //TODO
+                // for (Catalog catalog : cs) {
+                // result.add(new DiscoverXmlMetaDataResponseRowR(String.format(md, catalog.getName(),
+                // catalog.getName(), date, date)));
+                // }
+                // TODO
                 Catalog catalog = cs.get(0);
-                result.add(new DiscoverXmlMetaDataResponseRowR(String.format(md, catalog.getName(), catalog.getName(), date, date)));
-            }    
+                result.add(new DiscoverXmlMetaDataResponseRowR(
+                        String.format(md, catalog.getName(), catalog.getName(), date, date)));
+            }
         }
         return result;
     }
 
     private String getOperationDescription(String name) {
         switch (name) {
-            case "DBSCHEMA_CATALOGS":
-                return config.dbSchemaCatalogsDescription();
-            case "DISCOVER_DATASOURCES":
-                return config.discoverDataSourcesDescription();
-            case "DISCOVER_ENUMERATORS":
-                return config.discoverEnumeratorsDescription();
-            case "DISCOVER_KEYWORDS":
-                return config.discoverKeywordsDescription();
-            case "DISCOVER_LITERALS":
-                return config.discoverLiteralsDescription();
-            case "DISCOVER_PROPERTIES":
-                return config.discoverPropertiesDescription();
-            case "DISCOVER_SCHEMA_ROWSETS":
-                return config.discoverSchemaRowSetsDescription();
-            case "DISCOVER_XML_METADATA":
-                return config.discoverXmlMetadataDescription();
-            default: return null;
+        case "DBSCHEMA_CATALOGS":
+            return config.dbSchemaCatalogsDescription();
+        case "DISCOVER_DATASOURCES":
+            return config.discoverDataSourcesDescription();
+        case "DISCOVER_ENUMERATORS":
+            return config.discoverEnumeratorsDescription();
+        case "DISCOVER_KEYWORDS":
+            return config.discoverKeywordsDescription();
+        case "DISCOVER_LITERALS":
+            return config.discoverLiteralsDescription();
+        case "DISCOVER_PROPERTIES":
+            return config.discoverPropertiesDescription();
+        case "DISCOVER_SCHEMA_ROWSETS":
+            return config.discoverSchemaRowSetsDescription();
+        case "DISCOVER_XML_METADATA":
+            return config.discoverXmlMetadataDescription();
+        default:
+            return null;
         }
     }
 
     private String getEnumDescription(String name) {
         switch (name) {
-            case "AccessEnum":
-                return config.accessEnumDescription();
-            case "AuthenticationModeEnum":
-                return config.authenticationModeEnumDescription();
-            case "ProviderTypeEnum":
-                return config.providerTypeEnumDescription();
-            case "TreeOpEnum":
-                return config.treeOpEnumDescription();
-            default: return null;
+        case "AccessEnum":
+            return config.accessEnumDescription();
+        case "AuthenticationModeEnum":
+            return config.authenticationModeEnumDescription();
+        case "ProviderTypeEnum":
+            return config.providerTypeEnumDescription();
+        case "TreeOpEnum":
+            return config.treeOpEnumDescription();
+        default:
+            return null;
         }
     }
 
     private String getEnumValueDescription(String name, String value) {
         String v = new StringBuilder().append(name).append(".").append(value).toString();
         switch (v) {
-            case "AuthenticationModeEnum.Unauthenticated":
-                return config.authenticationModeEnumUnauthenticatedDescription();
-            case "AuthenticationModeEnum.Authenticated":
-                return config.authenticationModeEnumAuthenticatedDescription();
-            case "AuthenticationModeEnum.Integrated":
-                return config.authenticationModeEnumIntegratedDescription();
-            case "ProviderTypeEnum.TDP":
-                return config.providerTypeEnumTDPDescription();
-            case "ProviderTypeEnum.MTP":
-                return config.providerTypeEnumMDPDescription();
-            case "ProviderTypeEnum.DMP":
-                return config.providerTypeEnumDMPDescription();
-            case "TreeOpEnum.MDTREEOP_CHILDREN":
-                return config.treeOpEnumMdTreeOpChildrenDescription();
-            case "TreeOpEnum.MDTREEOP_SIBLINGS":
-                return config.treeOpEnumMdTreeOpSiblingsDescription();
-            case "TreeOpEnum.MDTREEOP_PARENT":
-                return config.treeOpEnumMdTreeOpParentDescription();
-            case "TreeOpEnum.MDTREEOP_SELF":
-                return config.treeOpEnumMdTreeOpSelfDescription();
-            case "TreeOpEnum.MDTREEOP_DESCENDANTS":
-                return config.treeOpEnumMdTreeOpDescendantsDescription();
-            case "TreeOpEnum.MDTREEOP_ANCESTORS":
-                return config.treeOpEnumMdTreeOpAncestorsDescription();
-            default: return null;
+        case "AuthenticationModeEnum.Unauthenticated":
+            return config.authenticationModeEnumUnauthenticatedDescription();
+        case "AuthenticationModeEnum.Authenticated":
+            return config.authenticationModeEnumAuthenticatedDescription();
+        case "AuthenticationModeEnum.Integrated":
+            return config.authenticationModeEnumIntegratedDescription();
+        case "ProviderTypeEnum.TDP":
+            return config.providerTypeEnumTDPDescription();
+        case "ProviderTypeEnum.MTP":
+            return config.providerTypeEnumMDPDescription();
+        case "ProviderTypeEnum.DMP":
+            return config.providerTypeEnumDMPDescription();
+        case "TreeOpEnum.MDTREEOP_CHILDREN":
+            return config.treeOpEnumMdTreeOpChildrenDescription();
+        case "TreeOpEnum.MDTREEOP_SIBLINGS":
+            return config.treeOpEnumMdTreeOpSiblingsDescription();
+        case "TreeOpEnum.MDTREEOP_PARENT":
+            return config.treeOpEnumMdTreeOpParentDescription();
+        case "TreeOpEnum.MDTREEOP_SELF":
+            return config.treeOpEnumMdTreeOpSelfDescription();
+        case "TreeOpEnum.MDTREEOP_DESCENDANTS":
+            return config.treeOpEnumMdTreeOpDescendantsDescription();
+        case "TreeOpEnum.MDTREEOP_ANCESTORS":
+            return config.treeOpEnumMdTreeOpAncestorsDescription();
+        default:
+            return null;
         }
     }
 

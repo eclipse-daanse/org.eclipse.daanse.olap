@@ -135,7 +135,6 @@ class MDSchemaDiscoverServiceTest {
     @Mock
     private Cube cube2;
 
-
     @Mock
     private Dimension dimension1;
 
@@ -162,12 +161,11 @@ class MDSchemaDiscoverServiceTest {
 
     @Mock
     private ContextGroup contextGroup;
-    
+
     @Mock
     private RequestMetaData requestMetaData;
     @Mock
     private UserPrincipal userPrincipal;
-    
 
     private MDSchemaDiscoverService service;
 
@@ -179,8 +177,7 @@ class MDSchemaDiscoverServiceTest {
     @BeforeEach
     void setup() {
         /*
-         * empty list, but override with:
-         * when(cls.get()).thenReturn(List.of(context1,context2));`
+         * empty list, but override with: when(cls.get()).thenReturn(List.of(context1,context2));`
          */
 
         cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
@@ -201,7 +198,7 @@ class MDSchemaDiscoverServiceTest {
 
     @Test
     void mdSchemaCubes() {
-    	when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
+        when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
 
         MdSchemaCubesRequest request = mock(MdSchemaCubesRequest.class);
         MdSchemaCubesRestrictions restrictions = mock(MdSchemaCubesRestrictions.class);
@@ -283,33 +280,21 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaDimensionsResponseRow> rows = service.mdSchemaDimensions(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(4);
-        checkMdSchemaDimensionsResponseRow(rows.get(0), "schema2Name",
-            "schema2Name", "cube1Name",
-            "dimension1Name", "dimension1UniqueName",
-            "dimension1Caption", 0, 1,
-            "hierarchy1UniqueName",
-            "cube1Name Cube - dimension1Name Dimension");
+        checkMdSchemaDimensionsResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name", "dimension1Name",
+                "dimension1UniqueName", "dimension1Caption", 0, 1, "hierarchy1UniqueName",
+                "cube1Name Cube - dimension1Name Dimension");
 
-        checkMdSchemaDimensionsResponseRow(rows.get(1), "schema2Name",
-            "schema2Name", "cube2Name",
-            "dimension1Name", "dimension1UniqueName",
-            "dimension1Caption", 0, 1,
-            "hierarchy1UniqueName",
-            "cube2Name Cube - dimension1Name Dimension");
+        checkMdSchemaDimensionsResponseRow(rows.get(1), "schema2Name", "schema2Name", "cube2Name", "dimension1Name",
+                "dimension1UniqueName", "dimension1Caption", 0, 1, "hierarchy1UniqueName",
+                "cube2Name Cube - dimension1Name Dimension");
 
-        checkMdSchemaDimensionsResponseRow(rows.get(2), "schema2Name",
-            "schema2Name", "cube1Name",
-            "dimension2Name", "dimension2UniqueName",
-            "dimension2Caption", 1, 1,
-            "hierarchy1UniqueName",
-            "cube1Name Cube - dimension2Name Dimension");
+        checkMdSchemaDimensionsResponseRow(rows.get(2), "schema2Name", "schema2Name", "cube1Name", "dimension2Name",
+                "dimension2UniqueName", "dimension2Caption", 1, 1, "hierarchy1UniqueName",
+                "cube1Name Cube - dimension2Name Dimension");
 
-        checkMdSchemaDimensionsResponseRow(rows.get(3), "schema2Name",
-            "schema2Name", "cube2Name",
-            "dimension2Name", "dimension2UniqueName",
-            "dimension2Caption", 1, 1,
-            "hierarchy1UniqueName",
-            "cube2Name Cube - dimension2Name Dimension");
+        checkMdSchemaDimensionsResponseRow(rows.get(3), "schema2Name", "schema2Name", "cube2Name", "dimension2Name",
+                "dimension2UniqueName", "dimension2Caption", 1, 1, "hierarchy1UniqueName",
+                "cube2Name Cube - dimension2Name Dimension");
 
     }
 
@@ -324,8 +309,8 @@ class MDSchemaDiscoverServiceTest {
         OperationAtom functionAtom2 = new MethodOperationAtom("functionAtom2Name");
         FunctionMetaData functionMetaData1 = mock(FunctionMetaData.class);
         FunctionMetaData functionMetaData2 = mock(FunctionMetaData.class);
-        when(functionMetaData1.parameterDataTypes()).thenAnswer(setupDummyArrayAnswer(DataType.INTEGER,
-            DataType.MEMBER));
+        when(functionMetaData1.parameterDataTypes())
+                .thenAnswer(setupDummyArrayAnswer(DataType.INTEGER, DataType.MEMBER));
         when(functionMetaData1.returnCategory()).thenReturn(DataType.INTEGER);
         when(functionMetaData1.description()).thenReturn("functionMetaData1Description");
         when(functionMetaData2.parameterDataTypes()).thenAnswer(setupDummyArrayAnswer(DataType.CUBE));
@@ -335,19 +320,17 @@ class MDSchemaDiscoverServiceTest {
         when(functionMetaData1.operationAtom()).thenReturn(functionAtom1);
         when(functionMetaData2.operationAtom()).thenReturn(functionAtom2);
 
-        when(functionService.getFunctionMetaDatas()).thenAnswer(setupDummyListAnswer(functionMetaData1,
-            functionMetaData2));
+        when(functionService.getFunctionMetaDatas())
+                .thenAnswer(setupDummyListAnswer(functionMetaData1, functionMetaData2));
 
         when(request.restrictions()).thenReturn(restrictions);
         when(context1.getFunctionService()).thenReturn(functionService);
         List<MdSchemaFunctionsResponseRow> rows = service.mdSchemaFunctions(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(2);
-        checkMdSchemaFunctionsResponseRow(rows.get(0), "functionAtom1Name",
-            "functionMetaData1Description", "Integer, Member",
-            2, OriginEnum.MSOLAP, "functionAtom1Name");
-        checkMdSchemaFunctionsResponseRow(rows.get(1), "functionAtom2Name",
-            "functionMetaData2Description", "Cube",
-            12, OriginEnum.MSOLAP, "functionAtom2Name");
+        checkMdSchemaFunctionsResponseRow(rows.get(0), "functionAtom1Name", "functionMetaData1Description",
+                "Integer, Member", 2, OriginEnum.MSOLAP, "functionAtom1Name");
+        checkMdSchemaFunctionsResponseRow(rows.get(1), "functionAtom2Name", "functionMetaData2Description", "Cube", 12,
+                OriginEnum.MSOLAP, "functionAtom2Name");
 
     }
 
@@ -398,35 +381,36 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getName()).thenReturn("schema2Name");
 
-        List<MdSchemaHierarchiesResponseRow> rows = service.mdSchemaHierarchies(request, requestMetaData, userPrincipal);
+        List<MdSchemaHierarchiesResponseRow> rows = service.mdSchemaHierarchies(request, requestMetaData,
+                userPrincipal);
         verify(catalog2, times(3)).getName();
         assertThat(rows).isNotNull().hasSize(8);
 
         checkMdSchemaHierarchiesResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name",
-            "dimension1UniqueName", "cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy",
-            "hierarchy1Name", 0, "hierarchy1UniqueName");
+                "dimension1UniqueName", "cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy", "hierarchy1Name", 0,
+                "hierarchy1UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(1), "schema2Name", "schema2Name", "cube1Name",
-            "dimension2UniqueName", "cube1Name Cube - dimension2Name.hierarchy1Name Hierarchy",
-            "hierarchy1Name", 2, "hierarchy1UniqueName");
+                "dimension2UniqueName", "cube1Name Cube - dimension2Name.hierarchy1Name Hierarchy", "hierarchy1Name", 2,
+                "hierarchy1UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(2), "schema2Name", "schema2Name", "cube2Name",
-            "dimension1UniqueName", "cube2Name Cube - dimension1Name.hierarchy1Name Hierarchy",
-            "hierarchy1Name", 0, "hierarchy1UniqueName");
+                "dimension1UniqueName", "cube2Name Cube - dimension1Name.hierarchy1Name Hierarchy", "hierarchy1Name", 0,
+                "hierarchy1UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(3), "schema2Name", "schema2Name", "cube2Name",
-            "dimension2UniqueName", "cube2Name Cube - dimension2Name.hierarchy1Name Hierarchy",
-            "hierarchy1Name", 2, "hierarchy1UniqueName");
+                "dimension2UniqueName", "cube2Name Cube - dimension2Name.hierarchy1Name Hierarchy", "hierarchy1Name", 2,
+                "hierarchy1UniqueName");
 
         checkMdSchemaHierarchiesResponseRow(rows.get(4), "schema2Name", "schema2Name", "cube1Name",
-            "dimension1UniqueName", "cube1Name Cube - dimension1Name.hierarchy2Name Hierarchy",
-            "hierarchy2Name", 1, "hierarchy2UniqueName");
+                "dimension1UniqueName", "cube1Name Cube - dimension1Name.hierarchy2Name Hierarchy", "hierarchy2Name", 1,
+                "hierarchy2UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(5), "schema2Name", "schema2Name", "cube1Name",
-            "dimension2UniqueName", "cube1Name Cube - dimension2Name.hierarchy2Name Hierarchy",
-            "hierarchy2Name", 3, "hierarchy2UniqueName");
+                "dimension2UniqueName", "cube1Name Cube - dimension2Name.hierarchy2Name Hierarchy", "hierarchy2Name", 3,
+                "hierarchy2UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(6), "schema2Name", "schema2Name", "cube2Name",
-            "dimension1UniqueName", "cube2Name Cube - dimension1Name.hierarchy2Name Hierarchy",
-            "hierarchy2Name", 1, "hierarchy2UniqueName");
+                "dimension1UniqueName", "cube2Name Cube - dimension1Name.hierarchy2Name Hierarchy", "hierarchy2Name", 1,
+                "hierarchy2UniqueName");
         checkMdSchemaHierarchiesResponseRow(rows.get(7), "schema2Name", "schema2Name", "cube2Name",
-            "dimension2UniqueName", "cube2Name Cube - dimension2Name.hierarchy2Name Hierarchy",
-            "hierarchy2Name", 3, "hierarchy2UniqueName");
+                "dimension2UniqueName", "cube2Name Cube - dimension2Name.hierarchy2Name Hierarchy", "hierarchy2Name", 3,
+                "hierarchy2UniqueName");
     }
 
     @Test
@@ -449,9 +433,8 @@ class MDSchemaDiscoverServiceTest {
         when(cube1.getKPIs()).thenAnswer(setupDummyListAnswer(kpi1, kpi2));
         when(cube2.getKPIs()).thenAnswer(setupDummyListAnswer(kpi1, kpi2));
 
-
         when(kpi1.getName()).thenReturn("kpi1Name");
-        //when(mappingKpi1.getCaption()).thenReturn("kpi1Caption");
+        // when(mappingKpi1.getCaption()).thenReturn("kpi1Caption");
         when(kpi1.getDescription()).thenReturn("kpi1Description");
         when(kpi1.getDisplayFolder()).thenReturn("kpi1DisplayFolder");
 
@@ -466,7 +449,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(kpi2.getName()).thenReturn("kpi2Name");
 
-        //when(mappingKpi2.getCaption()).thenReturn("kpi2caption");
+        // when(mappingKpi2.getCaption()).thenReturn("kpi2caption");
         when(kpi2.getDescription()).thenReturn("kpi2Description");
         when(kpi2.getDisplayFolder()).thenReturn("kpi2DisplayFolder");
 
@@ -482,27 +465,12 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getName()).thenReturn("foo");
 
-
         List<MdSchemaKpisResponseRow> rows = service.mdSchemaKpis(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(4);
-        checkMdSchemaKpisResponseRow(rows.get(1),
-            "foo", "cube1Name",
-            "cube1Name",
-            "kpi2Name",
-            "kpi2Name",
-            "kpi2Description",
-            "kpi2DisplayFolder",
-            "kpi2Value",
-            "kpi2Goal",
-            "kpi2Status",
-            "kpi2Trend",
-            "kpi2StatusGraphic",
-            "kpi2TrendGraphic",
-            "kpi2Weight",
-            "kpi2CurrentTimeMember",
-            "kpi1Name",
-            ScopeEnum.GLOBAL
-        );
+        checkMdSchemaKpisResponseRow(rows.get(1), "foo", "cube1Name", "cube1Name", "kpi2Name", "kpi2Name",
+                "kpi2Description", "kpi2DisplayFolder", "kpi2Value", "kpi2Goal", "kpi2Status", "kpi2Trend",
+                "kpi2StatusGraphic", "kpi2TrendGraphic", "kpi2Weight", "kpi2CurrentTimeMember", "kpi1Name",
+                ScopeEnum.GLOBAL);
     }
 
     @Test
@@ -552,27 +520,15 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaLevelsResponseRow> rows = service.mdSchemaLevels(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(16);
-        checkMdSchemaLevelsResponseRow(rows.get(0),
-            "schema2Name", "cube1Name",
-            "dimension1UniqueName", "hierarchy1UniqueName",
-            "level1Name", "level1UniqueName",
-            "level1Caption", 0,
-            1, LevelTypeEnum.ALL,
-            "cube1Name Cube - dimension1UniqueName.hierarchy1Name Hierarchy - level1Name Level");
-        checkMdSchemaLevelsResponseRow(rows.get(1),
-            "schema2Name", "cube1Name",
-            "dimension1UniqueName", "hierarchy1UniqueName",
-            "level2Name", "level2UniqueName",
-            "level2Caption", 0,
-            1, LevelTypeEnum.ALL,
-            "level2Description");
-        checkMdSchemaLevelsResponseRow(rows.get(15),
-            "schema2Name", "cube2Name",
-            "dimension2UniqueName", "hierarchy2UniqueName",
-            "level2Name", "level2UniqueName",
-            "level2Caption", 0,
-            1, LevelTypeEnum.ALL,
-            "level2Description");
+        checkMdSchemaLevelsResponseRow(rows.get(0), "schema2Name", "cube1Name", "dimension1UniqueName",
+                "hierarchy1UniqueName", "level1Name", "level1UniqueName", "level1Caption", 0, 1, LevelTypeEnum.ALL,
+                "cube1Name Cube - dimension1UniqueName.hierarchy1Name Hierarchy - level1Name Level");
+        checkMdSchemaLevelsResponseRow(rows.get(1), "schema2Name", "cube1Name", "dimension1UniqueName",
+                "hierarchy1UniqueName", "level2Name", "level2UniqueName", "level2Caption", 0, 1, LevelTypeEnum.ALL,
+                "level2Description");
+        checkMdSchemaLevelsResponseRow(rows.get(15), "schema2Name", "cube2Name", "dimension2UniqueName",
+                "hierarchy2UniqueName", "level2Name", "level2UniqueName", "level2Caption", 0, 1, LevelTypeEnum.ALL,
+                "level2Description");
 
     }
 
@@ -581,13 +537,13 @@ class MDSchemaDiscoverServiceTest {
         when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
 
         MdSchemaMeasureGroupDimensionsRequest request = mock(MdSchemaMeasureGroupDimensionsRequest.class);
-        MdSchemaMeasureGroupDimensionsRestrictions restrictions =
-            mock(MdSchemaMeasureGroupDimensionsRestrictions.class);
+        MdSchemaMeasureGroupDimensionsRestrictions restrictions = mock(
+                MdSchemaMeasureGroupDimensionsRestrictions.class);
 
         when(request.restrictions()).thenReturn(restrictions);
         when(restrictions.catalogName()).thenReturn(Optional.of("foo"));
 
-        //when(catalog1.getName()).thenReturn("schema1Name");
+        // when(catalog1.getName()).thenReturn("schema1Name");
 
         when(catalog2.getName()).thenReturn("schema2Name");
 
@@ -601,18 +557,13 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaMeasureGroupDimensionsResponseRow> rows = service.mdSchemaMeasureGroupDimensions(request, requestMetaData, userPrincipal);
+        List<MdSchemaMeasureGroupDimensionsResponseRow> rows = service.mdSchemaMeasureGroupDimensions(request,
+                requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(4);
-        checkMdSchemaMeasureGroupDimensionsResponseRow(rows.get(0),
-            "schema2Name", "cube1Name",
-            "ONE", "dimension1UniqueName", DimensionCardinalityEnum.MANY,
-            false, false
-        );
-        checkMdSchemaMeasureGroupDimensionsResponseRow(rows.get(3),
-            "schema2Name", "cube2Name",
-            "ONE", "dimension2UniqueName", DimensionCardinalityEnum.MANY,
-            false, false
-        );
+        checkMdSchemaMeasureGroupDimensionsResponseRow(rows.get(0), "schema2Name", "cube1Name", "ONE",
+                "dimension1UniqueName", DimensionCardinalityEnum.MANY, false, false);
+        checkMdSchemaMeasureGroupDimensionsResponseRow(rows.get(3), "schema2Name", "cube2Name", "ONE",
+                "dimension2UniqueName", DimensionCardinalityEnum.MANY, false, false);
     }
 
     @Test
@@ -629,15 +580,14 @@ class MDSchemaDiscoverServiceTest {
         when(cube2.getName()).thenReturn("cube2Name");
 
         when(catalog2.getName()).thenReturn("foo");
-        
+
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
-        
-        List<MdSchemaMeasureGroupsResponseRow> rows = service.mdSchemaMeasureGroups(request, requestMetaData, userPrincipal);
+
+        List<MdSchemaMeasureGroupsResponseRow> rows = service.mdSchemaMeasureGroups(request, requestMetaData,
+                userPrincipal);
         assertThat(rows).isNotNull().hasSize(2);
-        checkMdSchemaMeasureGroupsResponseRow(rows.get(0), "foo", "cube1Name",
-            "", false);
-        checkMdSchemaMeasureGroupsResponseRow(rows.get(1), "foo", "cube2Name",
-            "", false);
+        checkMdSchemaMeasureGroupsResponseRow(rows.get(0), "foo", "cube1Name", "", false);
+        checkMdSchemaMeasureGroupsResponseRow(rows.get(1), "foo", "cube2Name", "", false);
     }
 
     @Test
@@ -666,10 +616,10 @@ class MDSchemaDiscoverServiceTest {
         when(measure2.getCaption()).thenReturn("measure2Caption");
         when(measure1.getPropertyValue(Property.StandardMemberProperty.$visible.getName())).thenReturn(Boolean.TRUE);
         when(measure2.getPropertyValue(Property.StandardMemberProperty.$visible.getName())).thenReturn(Boolean.TRUE);
-        when(measure1.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING.getName())).thenReturn(
-            "formatString1");
-        when(measure2.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING.getName())).thenReturn(
-            "formatString2");
+        when(measure1.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING.getName()))
+                .thenReturn("formatString1");
+        when(measure2.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING.getName()))
+                .thenReturn("formatString2");
 
         when(cube1.getDimensions()).thenAnswer(setupDummyListAnswer(dimension1, dimension2));
         when(cube2.getDimensions()).thenAnswer(setupDummyListAnswer(dimension1, dimension2));
@@ -680,32 +630,24 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaMeasuresResponseRow> rows = service.mdSchemaMeasures(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(4);
-        checkMdSchemaMeasuresResponseRow(rows.get(0),
-            "schema2Name", "schema2Name", "cube1Name", "measure1Name",
-            "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-            LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure1Name Member", true, "", "", "formatString1"
-        );
-        checkMdSchemaMeasuresResponseRow(rows.get(1),
-            "schema2Name", "schema2Name", "cube1Name", "measure2Name",
-            "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-            LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure2Name Member", true, "", "", "formatString2"
-        );
+        checkMdSchemaMeasuresResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name", "measure1Name",
+                "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure1Name Member", true, "", "", "formatString1");
+        checkMdSchemaMeasuresResponseRow(rows.get(1), "schema2Name", "schema2Name", "cube1Name", "measure2Name",
+                "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure2Name Member", true, "", "", "formatString2");
 
-        checkMdSchemaMeasuresResponseRow(rows.get(2),
-            "schema2Name", "schema2Name", "cube2Name", "measure1Name",
-            "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-            LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure1Name Member", true, "", "", "formatString1"
-        );
-        checkMdSchemaMeasuresResponseRow(rows.get(3),
-            "schema2Name", "schema2Name", "cube2Name", "measure2Name",
-            "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-            LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure2Name Member", true, "", "", "formatString2"
-        );
+        checkMdSchemaMeasuresResponseRow(rows.get(2), "schema2Name", "schema2Name", "cube2Name", "measure1Name",
+                "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure1Name Member", true, "", "", "formatString1");
+        checkMdSchemaMeasuresResponseRow(rows.get(3), "schema2Name", "schema2Name", "cube2Name", "measure2Name",
+                "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure2Name Member", true, "", "", "formatString2");
     }
 
     @Test
     void mdSchemaMembers() {
-    	when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
+        when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
 
         MdSchemaMembersRequest request = mock(MdSchemaMembersRequest.class);
         MdSchemaMembersRestrictions restrictions = mock(MdSchemaMembersRestrictions.class);
@@ -752,18 +694,14 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaMembersResponseRow> rows = service.mdSchemaMembers(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(16);
-        checkMdSchemaMembersResponseRow(rows.get(0), "schema2Name", Optional.empty(),
-            "cube1Name", "dimension1UniqueName",
-            "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
-            "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0,
-            Optional.empty(), 0, "measure1Description"
-        );
-        checkMdSchemaMembersResponseRow(rows.get(15), "schema2Name", Optional.empty(),
-                "cube2Name", "dimension1UniqueName",
-                "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
-                "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0,
-                Optional.empty(), 0, "measure1Description"
-            );
+        checkMdSchemaMembersResponseRow(rows.get(0), "schema2Name", Optional.empty(), "cube1Name",
+                "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
+                "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0, Optional.empty(), 0,
+                "measure1Description");
+        checkMdSchemaMembersResponseRow(rows.get(15), "schema2Name", Optional.empty(), "cube2Name",
+                "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
+                "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0, Optional.empty(), 0,
+                "measure1Description");
 
     }
 
@@ -773,8 +711,10 @@ class MDSchemaDiscoverServiceTest {
 
         MdSchemaPropertiesRequest request = mock(MdSchemaPropertiesRequest.class);
         MdSchemaPropertiesRestrictions restrictions = mock(MdSchemaPropertiesRestrictions.class);
-        org.eclipse.daanse.olap.common.AbstractProperty property1 = mock(org.eclipse.daanse.olap.common.AbstractProperty.class);
-        org.eclipse.daanse.olap.common.AbstractProperty property2 = mock(org.eclipse.daanse.olap.common.AbstractProperty.class);
+        org.eclipse.daanse.olap.common.AbstractProperty property1 = mock(
+                org.eclipse.daanse.olap.common.AbstractProperty.class);
+        org.eclipse.daanse.olap.common.AbstractProperty property2 = mock(
+                org.eclipse.daanse.olap.common.AbstractProperty.class);
 
         when(request.restrictions()).thenReturn(restrictions);
         when(restrictions.catalogName()).thenReturn(Optional.of("foo"));
@@ -823,14 +763,14 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaPropertiesResponseRow> rows = service.mdSchemaProperties(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(32);
-        checkMdSchemaPropertiesResponseRow(rows.get(0), "schema2Name", "cube1Name",
-            "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", PropertyTypeEnum.PROPERTY_MEMBER,
-            "property1Name", "property1Caption", LevelDbTypeEnum.DBTYPE_WSTR,
-            "cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy - level1Name Level - property1Name Property",
-            PropertyContentTypeEnum.REGULAR);
-        checkMdSchemaPropertiesResponseRow(rows.get(31), "schema2Name", "cube2Name",
-                "dimension2UniqueName", "hierarchy2UniqueName", "level2UniqueName", PropertyTypeEnum.PROPERTY_MEMBER,
-                "property2Name", "property2Caption", LevelDbTypeEnum.DBTYPE_WSTR,
+        checkMdSchemaPropertiesResponseRow(rows.get(0), "schema2Name", "cube1Name", "dimension1UniqueName",
+                "hierarchy1UniqueName", "level1UniqueName", PropertyTypeEnum.PROPERTY_MEMBER, "property1Name",
+                "property1Caption", LevelDbTypeEnum.DBTYPE_WSTR,
+                "cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy - level1Name Level - property1Name Property",
+                PropertyContentTypeEnum.REGULAR);
+        checkMdSchemaPropertiesResponseRow(rows.get(31), "schema2Name", "cube2Name", "dimension2UniqueName",
+                "hierarchy2UniqueName", "level2UniqueName", PropertyTypeEnum.PROPERTY_MEMBER, "property2Name",
+                "property2Caption", LevelDbTypeEnum.DBTYPE_WSTR,
                 "cube2Name Cube - dimension2Name.hierarchy2Name Hierarchy - level2Name Level - property2Name Property",
                 PropertyContentTypeEnum.REGULAR);
 
@@ -866,12 +806,12 @@ class MDSchemaDiscoverServiceTest {
 
         List<MdSchemaSetsResponseRow> rows = service.mdSchemaSets(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(4);
-        checkMdSchemaSetsResponseRow(rows.get(0), "schema2Name", "cube1Name",
-            "set1Name", ScopeEnum.GLOBAL, "set1Description", Optional.empty(),
-            "", "set1Caption", Optional.empty(), SetEvaluationContextEnum.STATIC);
-        checkMdSchemaSetsResponseRow(rows.get(3), "schema2Name", "cube2Name",
-                "set2Name", ScopeEnum.GLOBAL, "set2Description", Optional.empty(),
-                "", "set2Caption", Optional.empty(), SetEvaluationContextEnum.STATIC);
+        checkMdSchemaSetsResponseRow(rows.get(0), "schema2Name", "cube1Name", "set1Name", ScopeEnum.GLOBAL,
+                "set1Description", Optional.empty(), "", "set1Caption", Optional.empty(),
+                SetEvaluationContextEnum.STATIC);
+        checkMdSchemaSetsResponseRow(rows.get(3), "schema2Name", "cube2Name", "set2Name", ScopeEnum.GLOBAL,
+                "set2Description", Optional.empty(), "", "set2Caption", Optional.empty(),
+                SetEvaluationContextEnum.STATIC);
     }
 
     private static <N> Answer<List<N>> setupDummyListAnswer(N... values) {
@@ -886,19 +826,10 @@ class MDSchemaDiscoverServiceTest {
         return answer;
     }
 
-    private void checkMdSchemaDimensionsResponseRow(
-        MdSchemaDimensionsResponseRow row,
-        String catalogName,
-        String schemaName,
-        String cubeName,
-        String dimensionName,
-        String dimensionUniqueName,
-        String dimensionCaption,
-        int dimensionOrdinal,
-        int dimensionCardinality,
-        String defaultHierarchy,
-        String description
-    ) {
+    private void checkMdSchemaDimensionsResponseRow(MdSchemaDimensionsResponseRow row, String catalogName,
+            String schemaName, String cubeName, String dimensionName, String dimensionUniqueName,
+            String dimensionCaption, int dimensionOrdinal, int dimensionCardinality, String defaultHierarchy,
+            String description) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).contains(schemaName);
@@ -913,15 +844,8 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.description()).contains(description);
     }
 
-    private void checkMdSchemaFunctionsResponseRow(
-        MdSchemaFunctionsResponseRow row,
-        String functionalName,
-        String description,
-        String parameterList,
-        int returnType,
-        OriginEnum origin,
-        String caption
-    ) {
+    private void checkMdSchemaFunctionsResponseRow(MdSchemaFunctionsResponseRow row, String functionalName,
+            String description, String parameterList, int returnType, OriginEnum origin, String caption) {
         assertThat(row).isNotNull();
         assertThat(row.functionalName()).contains(functionalName);
         assertThat(row.description()).contains(description);
@@ -931,11 +855,9 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.caption()).contains(caption);
     }
 
-    private void checkMdSchemaHierarchiesResponseRow(
-        MdSchemaHierarchiesResponseRow row,
-        String catalogName, String schemaName, String cubeName, String dimensionUniqueName,
-        String description, String hierarchyName, int hierarchyOrdinal, String hierarchyUniqueName
-    ) {
+    private void checkMdSchemaHierarchiesResponseRow(MdSchemaHierarchiesResponseRow row, String catalogName,
+            String schemaName, String cubeName, String dimensionUniqueName, String description, String hierarchyName,
+            int hierarchyOrdinal, String hierarchyUniqueName) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).contains(schemaName);
@@ -956,27 +878,11 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.structure()).contains(StructureEnum.HIERARCHY_FULLY_BALANCED);
     }
 
-
-    private void checkMdSchemaKpisResponseRow(
-        MdSchemaKpisResponseRow row,
-        String catalogName,
-        String cubeName,
-        String measureGroupName,
-        String kpiName,
-        String kpiCaption,
-        String kpiDescription,
-        String kpiDisplayFolder,
-        String kpiValue,
-        String kpiGoal,
-        String kpiStatus,
-        String kpiTrend,
-        String kpiStatusGraphic,
-        String kpiTrendGraphic,
-        String kpiWight,
-        String kpiCurrentTimeMember,
-        String kpiParentKpiName,
-        ScopeEnum scope
-    ) {
+    private void checkMdSchemaKpisResponseRow(MdSchemaKpisResponseRow row, String catalogName, String cubeName,
+            String measureGroupName, String kpiName, String kpiCaption, String kpiDescription, String kpiDisplayFolder,
+            String kpiValue, String kpiGoal, String kpiStatus, String kpiTrend, String kpiStatusGraphic,
+            String kpiTrendGraphic, String kpiWight, String kpiCurrentTimeMember, String kpiParentKpiName,
+            ScopeEnum scope) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();
@@ -998,20 +904,10 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.scope()).contains(scope);
     }
 
-    private void checkMdSchemaLevelsResponseRow(
-        MdSchemaLevelsResponseRow row,
-        String catalogName,
-        String cubeName,
-        String dimensionUniqueName,
-        String hierarchyUniqueName,
-        String levelName,
-        String levelUniqueName,
-        String levelCaption,
-        Integer levelNumber,
-        Integer levelCardinality,
-        LevelTypeEnum levelType,
-        String description
-    ) {
+    private void checkMdSchemaLevelsResponseRow(MdSchemaLevelsResponseRow row, String catalogName, String cubeName,
+            String dimensionUniqueName, String hierarchyUniqueName, String levelName, String levelUniqueName,
+            String levelCaption, Integer levelNumber, Integer levelCardinality, LevelTypeEnum levelType,
+            String description) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).contains(catalogName);
@@ -1027,16 +923,10 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.description()).contains(description);
     }
 
-    private void checkMdSchemaMeasureGroupDimensionsResponseRow(
-        MdSchemaMeasureGroupDimensionsResponseRow row,
-        String catalogName,
-        String cubeName,
-        String measureGroupCardinality,
-        String dimensionUniqueName,
-        DimensionCardinalityEnum dimensionCardinality,
-        Boolean dimensionIsVisible,
-        Boolean dimensionIsFactDimension
-    ) {
+    private void checkMdSchemaMeasureGroupDimensionsResponseRow(MdSchemaMeasureGroupDimensionsResponseRow row,
+            String catalogName, String cubeName, String measureGroupCardinality, String dimensionUniqueName,
+            DimensionCardinalityEnum dimensionCardinality, Boolean dimensionIsVisible,
+            Boolean dimensionIsFactDimension) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();
@@ -1049,13 +939,8 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.dimensionIsFactDimension()).contains(dimensionIsFactDimension);
     }
 
-    private void checkMdSchemaMeasureGroupsResponseRow(
-        MdSchemaMeasureGroupsResponseRow row,
-        String catalogName,
-        String cubeName,
-        String description,
-        Boolean isWriteEnabled
-    ) {
+    private void checkMdSchemaMeasureGroupsResponseRow(MdSchemaMeasureGroupsResponseRow row, String catalogName,
+            String cubeName, String description, Boolean isWriteEnabled) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();
@@ -1067,22 +952,11 @@ class MDSchemaDiscoverServiceTest {
 
     }
 
-    private void checkMdSchemaMeasuresResponseRow(
-        MdSchemaMeasuresResponseRow row,
-        String catalogName,
-        String schemaName,
-        String cubeName,
-        String measureName,
-        String measureUniqueName,
-        String measureCaption,
-        MeasureAggregatorEnum mdmeasureAggregator,
-        LevelDbTypeEnum dataType,
-        String description,
-        boolean measureIsVisible,
-        String measureLevelsList,
-        String measureDisplayFolder,
-        String defaultFormatString
-    ) {
+    private void checkMdSchemaMeasuresResponseRow(MdSchemaMeasuresResponseRow row, String catalogName,
+            String schemaName, String cubeName, String measureName, String measureUniqueName, String measureCaption,
+            MeasureAggregatorEnum mdmeasureAggregator, LevelDbTypeEnum dataType, String description,
+            boolean measureIsVisible, String measureLevelsList, String measureDisplayFolder,
+            String defaultFormatString) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).contains(schemaName);
@@ -1099,26 +973,11 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.defaultFormatString()).contains(defaultFormatString);
     }
 
-    private void checkMdSchemaMembersResponseRow(
-        MdSchemaMembersResponseRow row,
-        String catalogName,
-        Optional<String> schemaName,
-        String cubeName,
-        String dimensionUniqueName,
-        String hierarchyUniqueName,
-        String levelUniqueName,
-        int levelNumber,
-        int memberOrdinal,
-        String memberName,
-        String memberUniqueName,
-        MemberTypeEnum memberType,
-        String memberCaption,
-        int childrenCardinality,
-        int parentLevel,
-        Optional<String> oParentUniqueName,
-        int parentCount,
-        String description
-    ) {
+    private void checkMdSchemaMembersResponseRow(MdSchemaMembersResponseRow row, String catalogName,
+            Optional<String> schemaName, String cubeName, String dimensionUniqueName, String hierarchyUniqueName,
+            String levelUniqueName, int levelNumber, int memberOrdinal, String memberName, String memberUniqueName,
+            MemberTypeEnum memberType, String memberCaption, int childrenCardinality, int parentLevel,
+            Optional<String> oParentUniqueName, int parentCount, String description) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEqualTo(schemaName);
@@ -1139,20 +998,10 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.description()).contains(description);
     }
 
-    private void checkMdSchemaPropertiesResponseRow(
-        MdSchemaPropertiesResponseRow row,
-        String catalogName,
-        String cubeName,
-        String dimensionUniqueName,
-        String hierarchyUniqueName,
-        String levelUniqueName,
-        PropertyTypeEnum propertyType,
-        String propertyName,
-        String propertyCaption,
-        LevelDbTypeEnum dbType,
-        String description,
-        PropertyContentTypeEnum propertyContentType
-    ) {
+    private void checkMdSchemaPropertiesResponseRow(MdSchemaPropertiesResponseRow row, String catalogName,
+            String cubeName, String dimensionUniqueName, String hierarchyUniqueName, String levelUniqueName,
+            PropertyTypeEnum propertyType, String propertyName, String propertyCaption, LevelDbTypeEnum dbType,
+            String description, PropertyContentTypeEnum propertyContentType) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();
@@ -1168,19 +1017,9 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.propertyContentType()).contains(propertyContentType);
     }
 
-    private void checkMdSchemaSetsResponseRow(
-        MdSchemaSetsResponseRow row,
-        String catalogName,
-        String cubeName,
-        String setName,
-        ScopeEnum scope,
-        String description,
-        Optional<String> oExpression,
-        String dimension,
-        String setCaption,
-        Optional<String> oSetDisplayFolder,
-        SetEvaluationContextEnum setEvaluationContext
-    ) {
+    private void checkMdSchemaSetsResponseRow(MdSchemaSetsResponseRow row, String catalogName, String cubeName,
+            String setName, ScopeEnum scope, String description, Optional<String> oExpression, String dimension,
+            String setCaption, Optional<String> oSetDisplayFolder, SetEvaluationContextEnum setEvaluationContext) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();

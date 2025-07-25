@@ -208,23 +208,18 @@ public class OlapExecuteService implements ExecuteService {
                 final Connection connection = context.getConnection(userPrincipal.roles());
                 /*
                  * final mondrian.rolap.RolapConnection rolapConnection1 =
-                 * ((mondrian.olap4j.MondrianOlap4jConnection)
-                 * connection).getMondrianConnection(); for(XmlaRequest xmlaRequest:
-                 * currentRequests){
-                 * if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get(
-                 * SESSION_ID))){
-                 * ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED,
-                 * "true"); } }
+                 * ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection(); for(XmlaRequest
+                 * xmlaRequest: currentRequests){
+                 * if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get( SESSION_ID))){
+                 * ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED, "true"); } }
                  */
                 Context<Connection> cont = (Context<Connection>) connection.getContext();
                 for (Statement statement : cont.getStatements(connection)) {
                     statement.cancel();
                 }
                 /*
-                 * for(XmlaRequest xmlaRequest: currentRequests){
-                 * if(xmlaRequest.getSessionId().equals(sessionId)){
-                 * ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED,
-                 * "true"); } }
+                 * for(XmlaRequest xmlaRequest: currentRequests){ if(xmlaRequest.getSessionId().equals(sessionId)){
+                 * ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED, "true"); } }
                  */
             } catch (java.sql.SQLException oe) {
                 throw new XmlaException(CLIENT_FAULT_FC, CODE3238658121, USM_DOM_PARSE_FAULT_FS, oe);
@@ -287,8 +282,7 @@ public class OlapExecuteService implements ExecuteService {
                         && dmvQuery.getTableName().equals(OperationNames.DBSCHEMA_CATALOGS)) {
                     List<DbSchemaCatalogsResponseRow> dbSchemaCatalogsResponseRowSetList = new ArrayList<DbSchemaCatalogsResponseRow>();
                     for (Context c : contextsListSupplyer.getContexts()) {
-                        dbSchemaCatalogsResponseRowSetList
-                                .add(dbSchemaService.dbSchemaCatalogsRow(c));
+                        dbSchemaCatalogsResponseRowSetList.add(dbSchemaService.dbSchemaCatalogsRow(c));
                     }
                     RowSetR rowSet = DiscoveryResponseConvertor
                             .dbSchemaCatalogsResponseRowToRowSet(dbSchemaCatalogsResponseRowSetList);

@@ -82,231 +82,203 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRo
  */
 public class DelegatingDiscoverService implements DiscoverService {
 
-	private DBSchemaDiscoverService dbSchemaService;
-	private MDSchemaDiscoverService mdSchemaService;
-	private OtherDiscoverService otherSchemaService;
+    private DBSchemaDiscoverService dbSchemaService;
+    private MDSchemaDiscoverService mdSchemaService;
+    private OtherDiscoverService otherSchemaService;
 
-	public DelegatingDiscoverService(ContextListSupplyer contextsListSupplyer, ActionService actionService, ContextGroupXmlaServiceConfig config) {
-		this.dbSchemaService = new DBSchemaDiscoverService(contextsListSupplyer);
-		this.mdSchemaService = new MDSchemaDiscoverService(contextsListSupplyer, actionService);
-		this.otherSchemaService = new OtherDiscoverService(contextsListSupplyer, config);
-	}
+    public DelegatingDiscoverService(ContextListSupplyer contextsListSupplyer, ActionService actionService,
+            ContextGroupXmlaServiceConfig config) {
+        this.dbSchemaService = new DBSchemaDiscoverService(contextsListSupplyer);
+        this.mdSchemaService = new MDSchemaDiscoverService(contextsListSupplyer, actionService);
+        this.otherSchemaService = new OtherDiscoverService(contextsListSupplyer, config);
+    }
 
-	@Override
-	public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request,
-                                                            RequestMetaData metaData,
-                                                            UserPrincipal userPrincipal) {
-		return otherSchemaService.dataSources(request, metaData, userPrincipal);
-	}
+    @Override
+    public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+        return otherSchemaService.dataSources(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request,
-                                                              RequestMetaData metaData,
-                                                              UserPrincipal userPrincipal) {
-
-
-        return dbSchemaService.dbSchemaCatalogs(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request,
-                                                            RequestMetaData metaData,
-                                                            UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaColumns(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest request,
-                                                                        RequestMetaData metaData,
-                                                                        UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaProviderTypes(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest request,
-                                                              RequestMetaData metaData,
-                                                              UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaSchemata(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest request,
-                                                                      RequestMetaData metaData,
-                                                                      UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaSourceTables(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaTablesResponseRow> dbSchemaTables(DbSchemaTablesRequest request,
-                                                          RequestMetaData metaData,
-                                                          UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaTables(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest request,
-                                                                  RequestMetaData metaData,
-                                                                  UserPrincipal userPrincipal) {
-
-		return dbSchemaService.dbSchemaTablesInfo(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest request,
-                                                                    RequestMetaData metaData,
-                                                                    UserPrincipal userPrincipal) {
-
-		return otherSchemaService.discoverEnumerators(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request,
-                                                              RequestMetaData metaData,
-                                                              UserPrincipal userPrincipal) {
-
-		return otherSchemaService.discoverKeywords(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest request,
-                                                              RequestMetaData metaData,
-                                                              UserPrincipal userPrincipal) {
-
-		return otherSchemaService.discoverLiterals(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request,
-                                                                  RequestMetaData metaData,
-                                                                  UserPrincipal userPrincipal) {
-
-		return otherSchemaService.discoverProperties(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request,
-                                                                        RequestMetaData metaData,
-                                                                        UserPrincipal userPrincipal) {
-
-		return otherSchemaService.discoverSchemaRowsets(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request,
-                                                            RequestMetaData metaData,
-                                                            UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaActions(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest request,
-                                                        RequestMetaData metaData,
-                                                        UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaCubes(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest request,
-                                                                  RequestMetaData metaData,
-                                                                  UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaDimensions(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request,
-                                                                RequestMetaData metaData,
-                                                                UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaFunctions(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request,
-                                                                    RequestMetaData metaData,
-                                                                    UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaHierarchies(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request,
-                                                      RequestMetaData metaData,
-                                                      UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaKpis(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest request,
-                                                          RequestMetaData metaData,
-                                                          UserPrincipal userPrincipal) {
-
-		return mdSchemaService.mdSchemaLevels(request, metaData, userPrincipal);
-	}
-
-	@Override
-	public List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(
-			MdSchemaMeasureGroupDimensionsRequest request,
-            RequestMetaData metaData,
+    @Override
+    public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request, RequestMetaData metaData,
             UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaMeasureGroupDimensions(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaCatalogs(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request,
-                                                                        RequestMetaData metaData,
-                                                                        UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaMeasureGroups(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaColumns(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest request,
-                                                              RequestMetaData metaData,
-                                                              UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaMeasures(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaProviderTypes(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest request,
-                                                            RequestMetaData metaData,
-                                                            UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaMembers(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaSchemata(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request,
-                                                                  RequestMetaData metaData,
-                                                                  UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaProperties(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaSourceTables(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request,
-                                                      RequestMetaData metaData,
-                                                      UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaTablesResponseRow> dbSchemaTables(DbSchemaTablesRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
 
-		return mdSchemaService.mdSchemaSets(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaTables(request, metaData, userPrincipal);
+    }
 
-	@Override
-	public List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request,
-                                                            RequestMetaData metaData,
-                                                            UserPrincipal userPrincipal) {
+    @Override
+    public List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
 
-		return otherSchemaService.xmlMetaData(request, metaData, userPrincipal);
-	}
+        return dbSchemaService.dbSchemaTablesInfo(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return otherSchemaService.discoverEnumerators(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return otherSchemaService.discoverKeywords(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return otherSchemaService.discoverLiterals(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return otherSchemaService.discoverProperties(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return otherSchemaService.discoverSchemaRowsets(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaActions(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaCubes(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaDimensions(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaFunctions(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaHierarchies(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaKpis(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaLevels(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(
+            MdSchemaMeasureGroupDimensionsRequest request, RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaMeasureGroupDimensions(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaMeasureGroups(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaMeasures(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaMembers(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaProperties(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request, RequestMetaData metaData,
+            UserPrincipal userPrincipal) {
+
+        return mdSchemaService.mdSchemaSets(request, metaData, userPrincipal);
+    }
+
+    @Override
+    public List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request,
+            RequestMetaData metaData, UserPrincipal userPrincipal) {
+
+        return otherSchemaService.xmlMetaData(request, metaData, userPrincipal);
+    }
 
 }

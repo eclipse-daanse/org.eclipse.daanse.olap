@@ -89,7 +89,7 @@ class DbSchemaDiscoverServiceTest {
 
     @Mock
     private Member member;
-    
+
     @Mock
     private Dimension dim1;
 
@@ -98,10 +98,10 @@ class DbSchemaDiscoverServiceTest {
 
     @Mock
     private DatabaseSchema dbSchema1;
-    
+
     @Mock
     private DatabaseSchema dbSchema2;
-    
+
     @Mock
     private Hierarchy hierar1;
 
@@ -113,12 +113,11 @@ class DbSchemaDiscoverServiceTest {
 
     @Mock
     private ContextGroup contextGroup;
-    
+
     @Mock
     private RequestMetaData requestMetaData;
     @Mock
     private UserPrincipal userPrincipal;
-    
 
     private DBSchemaDiscoverService service;
 
@@ -127,8 +126,7 @@ class DbSchemaDiscoverServiceTest {
     @BeforeEach
     void setup() {
         /*
-         * empty list, but override with:
-         * when(cls.get()).thenReturn(List.of(context1,context2));`
+         * empty list, but override with: when(cls.get()).thenReturn(List.of(context1,context2));`
          */
 
         cls = Mockito.spy(new ContextsSupplyerImpl(contextGroup));
@@ -147,7 +145,6 @@ class DbSchemaDiscoverServiceTest {
 
         when(context.getName()).thenReturn("foo");
         when(context.getDescription()).thenReturn(Optional.of("schema2Description"));
-
 
         when(context.getAccessRoles()).thenAnswer(setupDummyListAnswer("role1", "role2"));
 
@@ -179,19 +176,17 @@ class DbSchemaDiscoverServiceTest {
         when(member.getName()).thenReturn("measureName");
 
         when(cub1.getName()).thenReturn("cube1Name");
-        
+
         when(cub1.getDimensions()).thenAnswer(setupDummyListAnswer(dim1));
         when(cub2.getDimensions()).thenAnswer(setupDummyListAnswer(dim1));
-        
 
         when(cub2.getName()).thenReturn("cube2Name");
-        
+
         when(cub1.getMeasures()).thenAnswer(setupDummyListAnswer(member));
         when(cub2.getMeasures()).thenAnswer(setupDummyListAnswer(member));
-        
+
         when(catalog.getCubes()).thenAnswer(setupDummyListAnswer(cub1, cub2));
-        
-        
+
         List<DbSchemaColumnsResponseRow> rows = service.dbSchemaColumns(request, requestMetaData, userPrincipal);
         verify(catalog, times(2)).getName();
         assertThat(rows).isNotNull().hasSize(10);
@@ -200,13 +195,12 @@ class DbSchemaDiscoverServiceTest {
         assertThat(row.tableCatalog()).contains("schema2Name");
         assertThat(row.tableSchema()).isEmpty();
 
-        assertThat(rows)
-            .extracting(DbSchemaColumnsResponseRow::columnName)
-            .contains(Optional.of("hierarchy1Name:(All)!NAME"))
-            .contains(Optional.of("hierarchy1Name:(All)!UNIQUE_NAME"))
-            .contains(Optional.of("hierarchy2Name:(All)!NAME"))
-            .contains(Optional.of("hierarchy2Name:(All)!UNIQUE_NAME"))
-            .contains(Optional.of("Measures:measureName"));
+        assertThat(rows).extracting(DbSchemaColumnsResponseRow::columnName)
+                .contains(Optional.of("hierarchy1Name:(All)!NAME"))
+                .contains(Optional.of("hierarchy1Name:(All)!UNIQUE_NAME"))
+                .contains(Optional.of("hierarchy2Name:(All)!NAME"))
+                .contains(Optional.of("hierarchy2Name:(All)!UNIQUE_NAME"))
+                .contains(Optional.of("Measures:measureName"));
     }
 
     @Test
@@ -218,7 +212,8 @@ class DbSchemaDiscoverServiceTest {
         when(request.restrictions()).thenReturn(restrictions);
         when(restrictions.dataType()).thenReturn(Optional.empty());
 
-        List<DbSchemaProviderTypesResponseRow> rows = service.dbSchemaProviderTypes(request, requestMetaData, userPrincipal);
+        List<DbSchemaProviderTypesResponseRow> rows = service.dbSchemaProviderTypes(request, requestMetaData,
+                userPrincipal);
         assertThat(rows).isNotNull().hasSize(6);
         DbSchemaProviderTypesResponseRow row = rows.get(0);
         assertThat(row).isNotNull();
@@ -310,9 +305,9 @@ class DbSchemaDiscoverServiceTest {
 
         when(catalog.getName()).thenReturn("schema2Name");
         when(catalog.getDatabaseSchemas()).thenAnswer(setupDummyListAnswer(dbSchema1, dbSchema2));
-        
+
         List<DbSchemaSchemataResponseRow> rows = service.dbSchemaSchemata(request, requestMetaData, userPrincipal);
-        
+
         assertThat(rows).isNotNull().hasSize(2);
         DbSchemaSchemataResponseRow row = rows.get(0);
         assertThat(row).isNotNull();
@@ -324,10 +319,8 @@ class DbSchemaDiscoverServiceTest {
         assertThat(row.catalogName()).contains("schema2Name");
         assertThat(row.schemaName()).contains("dbSchema2Name");
 
-        assertThat(rows)
-            .extracting(DbSchemaSchemataResponseRow::schemaName)
-            .contains("dbSchema1Name")
-            .contains("dbSchema2Name");
+        assertThat(rows).extracting(DbSchemaSchemataResponseRow::schemaName).contains("dbSchema1Name")
+                .contains("dbSchema2Name");
     }
 
     @Test
@@ -341,16 +334,17 @@ class DbSchemaDiscoverServiceTest {
         when(restrictions.catalogName()).thenReturn(Optional.of("foo"));
         when(restrictions.tableType()).thenReturn(TableTypeEnum.TABLE);
 
-        List<DbSchemaSourceTablesResponseRow> rows = service.dbSchemaSourceTables(request, requestMetaData, userPrincipal);
+        List<DbSchemaSourceTablesResponseRow> rows = service.dbSchemaSourceTables(request, requestMetaData,
+                userPrincipal);
         assertThat(rows).isNotNull().hasSize(0);
-        //TODO
-        //assertThat(rows).isNotNull().hasSize(2);
-        //DbSchemaSourceTablesResponseRow row = rows.get(0);
-        //assertThat(row).isNotNull();
-        //assertThat(row.catalogName()).contains("tableCatalog");
-        //assertThat(row.schemaName()).contains("tableSchema");
-        //assertThat(row.tableName()).isEqualTo("tableName");
-        //assertThat(row.tableType()).isEqualTo(TableTypeEnum.TABLE);
+        // TODO
+        // assertThat(rows).isNotNull().hasSize(2);
+        // DbSchemaSourceTablesResponseRow row = rows.get(0);
+        // assertThat(row).isNotNull();
+        // assertThat(row.catalogName()).contains("tableCatalog");
+        // assertThat(row.schemaName()).contains("tableSchema");
+        // assertThat(row.tableName()).isEqualTo("tableName");
+        // assertThat(row.tableType()).isEqualTo(TableTypeEnum.TABLE);
     }
 
     @Test
@@ -386,20 +380,21 @@ class DbSchemaDiscoverServiceTest {
 
         List<DbSchemaTablesResponseRow> rows = service.dbSchemaTables(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(10);
-        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE", "schema2Name - cube1Name Cube");
+        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE",
+                "schema2Name - cube1Name Cube");
         checkDbSchemaTablesResponseRow(rows.get(1), "schema2Name", "cube1Name:dim1Name.hierarchy1Name:level1Name",
-            "SYSTEM TABLE", "level1Description");
+                "SYSTEM TABLE", "level1Description");
         checkDbSchemaTablesResponseRow(rows.get(2), "schema2Name", "cube1Name:dim1Name.hierarchy1Name:level2Name",
-            "SYSTEM TABLE", "schema2Name - cube1Name Cube - dim1Name.hierarchy1Name Hierarchy - level2Name Level");
+                "SYSTEM TABLE", "schema2Name - cube1Name Cube - dim1Name.hierarchy1Name Hierarchy - level2Name Level");
         checkDbSchemaTablesResponseRow(rows.get(3), "schema2Name", "cube1Name:dim2Name.hierarchy1Name:level1Name",
-            "SYSTEM TABLE", "level1Description");
+                "SYSTEM TABLE", "level1Description");
         checkDbSchemaTablesResponseRow(rows.get(4), "schema2Name", "cube1Name:dim2Name.hierarchy1Name:level2Name",
-            "SYSTEM TABLE", "schema2Name - cube1Name Cube - dim2Name.hierarchy1Name Hierarchy - level2Name Level");
+                "SYSTEM TABLE", "schema2Name - cube1Name Cube - dim2Name.hierarchy1Name Hierarchy - level2Name Level");
     }
 
     @Test
     void dbSchemaTablesWithDimensionUsage() {
-    	when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog));
+        when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog));
 
         DbSchemaTablesRequest request = mock(DbSchemaTablesRequest.class);
         DbSchemaTablesRestrictions restrictions = mock(DbSchemaTablesRestrictions.class);
@@ -432,20 +427,23 @@ class DbSchemaDiscoverServiceTest {
 
         List<DbSchemaTablesResponseRow> rows = service.dbSchemaTables(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(10);
-        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE", "schema2Name - cube1Name Cube");
+        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE",
+                "schema2Name - cube1Name Cube");
         checkDbSchemaTablesResponseRow(rows.get(1), "schema2Name", "cube1Name:dimension1Name.hierarchy1Name:level1Name",
-            "SYSTEM TABLE", "level1Description");
+                "SYSTEM TABLE", "level1Description");
         checkDbSchemaTablesResponseRow(rows.get(2), "schema2Name", "cube1Name:dimension1Name.hierarchy1Name:level2Name",
-            "SYSTEM TABLE", "schema2Name - cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy - level2Name Level");
+                "SYSTEM TABLE",
+                "schema2Name - cube1Name Cube - dimension1Name.hierarchy1Name Hierarchy - level2Name Level");
         checkDbSchemaTablesResponseRow(rows.get(3), "schema2Name", "cube1Name:dimension2Name.hierarchy1Name:level1Name",
-            "SYSTEM TABLE", "level1Description");
+                "SYSTEM TABLE", "level1Description");
         checkDbSchemaTablesResponseRow(rows.get(4), "schema2Name", "cube1Name:dimension2Name.hierarchy1Name:level2Name",
-            "SYSTEM TABLE", "schema2Name - cube1Name Cube - dimension2Name.hierarchy1Name Hierarchy - level2Name Level");
+                "SYSTEM TABLE",
+                "schema2Name - cube1Name Cube - dimension2Name.hierarchy1Name Hierarchy - level2Name Level");
     }
 
     @Test
     void dbSchemaTablesWithRestriction() {
-    	when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog));
+        when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog));
 
         DbSchemaTablesRequest request = mock(DbSchemaTablesRequest.class);
         DbSchemaTablesRestrictions restrictions = mock(DbSchemaTablesRestrictions.class);
@@ -463,10 +461,11 @@ class DbSchemaDiscoverServiceTest {
 
         List<DbSchemaTablesResponseRow> rows = service.dbSchemaTables(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(2);
-        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE", "schema2Name - cube1Name Cube");
-        checkDbSchemaTablesResponseRow(rows.get(1), "schema2Name", "cube2Name", "TABLE", "schema2Name - cube2Name Cube");
+        checkDbSchemaTablesResponseRow(rows.get(0), "schema2Name", "cube1Name", "TABLE",
+                "schema2Name - cube1Name Cube");
+        checkDbSchemaTablesResponseRow(rows.get(1), "schema2Name", "cube2Name", "TABLE",
+                "schema2Name - cube2Name Cube");
     }
-
 
     @Test
     void dbSchemaTablesInfo() {
@@ -486,21 +485,14 @@ class DbSchemaDiscoverServiceTest {
         when(cub2.getName()).thenReturn("cube2Name");
         List<DbSchemaTablesInfoResponseRow> rows = service.dbSchemaTablesInfo(request, requestMetaData, userPrincipal);
         assertThat(rows).isNotNull().hasSize(2);
-        checkDbSchemaTablesInfoResponseRow(rows.get(0), "schema2Name", "cube1Name", false,
-            TableTypeEnum.TABLE.name(), 1000000l, "schema2Name - cube1Name Cube");
-        checkDbSchemaTablesInfoResponseRow(rows.get(1), "schema2Name", "cube2Name", false,
-            TableTypeEnum.TABLE.name(), 1000000l, "schema2Name - cube2Name Cube");
+        checkDbSchemaTablesInfoResponseRow(rows.get(0), "schema2Name", "cube1Name", false, TableTypeEnum.TABLE.name(),
+                1000000l, "schema2Name - cube1Name Cube");
+        checkDbSchemaTablesInfoResponseRow(rows.get(1), "schema2Name", "cube2Name", false, TableTypeEnum.TABLE.name(),
+                1000000l, "schema2Name - cube2Name Cube");
     }
 
-    private void checkDbSchemaTablesInfoResponseRow(
-        DbSchemaTablesInfoResponseRow row,
-        String catalogName,
-        String tableName,
-        boolean bookmarks,
-        String tableType,
-        long cardinality,
-        String description
-    ) {
+    private void checkDbSchemaTablesInfoResponseRow(DbSchemaTablesInfoResponseRow row, String catalogName,
+            String tableName, boolean bookmarks, String tableType, long cardinality, String description) {
         assertThat(row).isNotNull();
         assertThat(row.catalogName()).contains(catalogName);
         assertThat(row.schemaName()).isEmpty();
@@ -511,11 +503,8 @@ class DbSchemaDiscoverServiceTest {
         assertThat(row.description()).contains(description);
     }
 
-    private void checkDbSchemaTablesResponseRow(
-        DbSchemaTablesResponseRow row,
-        String tableCatalog,
-        String tableName, String tableType, String description
-    ) {
+    private void checkDbSchemaTablesResponseRow(DbSchemaTablesResponseRow row, String tableCatalog, String tableName,
+            String tableType, String description) {
         assertThat(row).isNotNull();
         assertThat(row.tableCatalog()).contains(tableCatalog);
         assertThat(row.tableSchema()).isEmpty();

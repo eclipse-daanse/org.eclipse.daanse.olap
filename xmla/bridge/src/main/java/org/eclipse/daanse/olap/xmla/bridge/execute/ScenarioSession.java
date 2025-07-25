@@ -24,52 +24,45 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.olap.api.result.Scenario;
 
-public class ScenarioSession
-{
+public class ScenarioSession {
 
     private static Map<String, ScenarioSession> SESSIONS = new HashMap<String, ScenarioSession>();
-	private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(1);
+    private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(1);
 
-	
-	private String sessionId;
+    private String sessionId;
     private LocalDateTime checkInTime;
 
     static Runnable timerTask = new Runnable() {
         public void run() {
             List<String> toRemove = new ArrayList<String>();
-            for(Map.Entry<String, ScenarioSession> entry : SESSIONS.entrySet()) {
+            for (Map.Entry<String, ScenarioSession> entry : SESSIONS.entrySet()) {
                 ScenarioSession session = entry.getValue();
 
-                java.time.Duration duration = java.time.Duration.between(
-                        session.getCheckInTime(),
+                java.time.Duration duration = java.time.Duration.between(session.getCheckInTime(),
                         java.time.LocalDateTime.now());
-                //TODO use configuration parameter 3600
-				if (duration.getSeconds() > 3600) {
-					toRemove.add(entry.getKey());
-				}
+                // TODO use configuration parameter 3600
+                if (duration.getSeconds() > 3600) {
+                    toRemove.add(entry.getKey());
+                }
             }
-            for(String sessionId : toRemove) {
+            for (String sessionId : toRemove) {
                 close(sessionId);
             }
         }
     };
 
-    static
-    {
-    	SCHEDULER.scheduleAtFixedRate(timerTask, 0, 1, TimeUnit.MINUTES);
+    static {
+        SCHEDULER.scheduleAtFixedRate(timerTask, 0, 1, TimeUnit.MINUTES);
     }
 
-
-    private ScenarioSession(String sessionId)
-    {
+    private ScenarioSession(String sessionId) {
         this.sessionId = sessionId;
         this.checkInTime = java.time.LocalDateTime.now();
     }
 
-    public static ScenarioSession create(String sessionId)
-    {
-        if(SESSIONS.containsKey(sessionId)) {
-        	SESSIONS.remove(sessionId);            
+    public static ScenarioSession create(String sessionId) {
+        if (SESSIONS.containsKey(sessionId)) {
+            SESSIONS.remove(sessionId);
         }
 
         ScenarioSession session = new ScenarioSession(sessionId);
@@ -79,22 +72,18 @@ public class ScenarioSession
         return session;
     }
 
-    public static ScenarioSession getWithoutCheck(String sessionId)
-    {
+    public static ScenarioSession getWithoutCheck(String sessionId) {
         return SESSIONS.get(sessionId);
     }
 
-
     public static ScenarioSession get(String sessionId) {
-        if(!SESSIONS.containsKey(sessionId)) {
+        if (!SESSIONS.containsKey(sessionId)) {
             throw new RuntimeException("Session with id \"" + sessionId + "\" does not exist");
         }
         return SESSIONS.get(sessionId);
     }
 
-
-    public static void close(String sessionId)
-    {
+    public static void close(String sessionId) {
         SESSIONS.remove(sessionId);
     }
 
@@ -108,7 +97,7 @@ public class ScenarioSession
         return this.scenario;
     }
 
-	public LocalDateTime getCheckInTime() {
-		return checkInTime;
-	}
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
 }

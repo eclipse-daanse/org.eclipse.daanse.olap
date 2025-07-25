@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.CubeLevel;
 import org.eclipse.daanse.olap.api.CubeMember;
 import org.eclipse.daanse.olap.api.LevelProperty;
@@ -21,12 +24,10 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DrillThroughUtils {
 
-    public static boolean isDrillThroughElementsExist(List<OlapElement> drillThroughElements, List<String> coordinateElements, Cube cube) {
+    public static boolean isDrillThroughElementsExist(List<OlapElement> drillThroughElements,
+            List<String> coordinateElements, Cube cube) {
         boolean result = false;
         if (coordinateElements != null && !coordinateElements.isEmpty()) {
             for (String c : coordinateElements) {
@@ -58,16 +59,17 @@ public class DrillThroughUtils {
         return result;
     }
 
-    public static String getDrillThroughQuery(List<String> coordinateElements, List<OlapElement> olapElements,  Cube c) {
-        return getDrillThroughQuery(coordinateElements, olapElements,  c.getName());
+    public static String getDrillThroughQuery(List<String> coordinateElements, List<OlapElement> olapElements, Cube c) {
+        return getDrillThroughQuery(coordinateElements, olapElements, c.getName());
     }
 
-    public static String getDrillThroughQueryByColumns(List<String> coordinateElements, List<String> columns,  String cubeName) {
+    public static String getDrillThroughQueryByColumns(List<String> coordinateElements, List<String> columns,
+            String cubeName) {
         StringBuilder sb = new StringBuilder("DRILLTHROUGH MAXROWS 1000 SELECT ");
         if (!coordinateElements.isEmpty()) {
             sb.append("(");
             boolean flag = true;
-            for(String element : coordinateElements) {
+            for (String element : coordinateElements) {
                 if (flag) {
                     flag = false;
                 } else {
@@ -79,7 +81,7 @@ public class DrillThroughUtils {
         }
         sb.append("FROM ").append(cubeName);
         boolean flag = true;
-        for (String  column : columns) {
+        for (String column : columns) {
             if (flag) {
                 flag = false;
                 sb.append(" RETURN ");
@@ -94,12 +96,13 @@ public class DrillThroughUtils {
 
     }
 
-    public static String getDrillThroughQuery(List<String> coordinateElements, List<OlapElement> olapElements,  String cubeName) {
+    public static String getDrillThroughQuery(List<String> coordinateElements, List<OlapElement> olapElements,
+            String cubeName) {
         StringBuilder sb = new StringBuilder("DRILLTHROUGH MAXROWS 1000 SELECT ");
         if (!coordinateElements.isEmpty()) {
             sb.append("(");
             boolean flag = true;
-            for(String element : coordinateElements) {
+            for (String element : coordinateElements) {
                 if (flag) {
                     flag = false;
                 } else {
@@ -112,9 +115,8 @@ public class DrillThroughUtils {
         sb.append("FROM ").append(cubeName);
         boolean flag = true;
         for (OlapElement olapElement : olapElements) {
-            if (olapElement instanceof PhisicalCubeMeasure
-                || olapElement instanceof CubeLevel
-                || olapElement instanceof LevelProperty) {
+            if (olapElement instanceof PhisicalCubeMeasure || olapElement instanceof CubeLevel
+                    || olapElement instanceof LevelProperty) {
                 if (flag) {
                     flag = false;
                     sb.append(" RETURN ");
@@ -132,20 +134,20 @@ public class DrillThroughUtils {
 //        FROM [C]
     }
 
-    private static boolean isAttributeExist(List<OlapElement> drillThroughElements, String dimensionName, String hierarchyName, String levelValues, Cube cube) {
+    private static boolean isAttributeExist(List<OlapElement> drillThroughElements, String dimensionName,
+            String hierarchyName, String levelValues, Cube cube) {
         if (drillThroughElements != null) {
             for (OlapElement el : drillThroughElements) {
                 if (el instanceof CubeLevel at) {
                     if (at.getDimension() != null && dimensionName.equals(at.getDimension().getName())) {
-                        if (at.getHierarchy() != null &&
-                            hierarchyName.equals(at.getHierarchy().getSubName())) {
+                        if (at.getHierarchy() != null && hierarchyName.equals(at.getHierarchy().getSubName())) {
                             List<Member> ms = cube.getLevelMembers(at, false);
                             if (ms != null) {
                                 for (Member m : ms) {
                                     if (m instanceof CubeMember rolapCubeMember) {
-                                    	if (levelValues.equals(rolapCubeMember.getMemberUniqueName())) {
-                                    		return true;
-                                    	}
+                                        if (levelValues.equals(rolapCubeMember.getMemberUniqueName())) {
+                                            return true;
+                                        }
                                     }
                                 }
                             }
@@ -162,7 +164,7 @@ public class DrillThroughUtils {
         if (attribute != null) {
             String[] ats = attribute.split("\\.");
             if (ats.length > 2) {
-                for (int i =2; i <  ats.length; i++) {
+                for (int i = 2; i < ats.length; i++) {
                     res.add(removeBrackets(ats[i]));
                 }
             }

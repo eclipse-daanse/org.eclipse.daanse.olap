@@ -13,55 +13,53 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge;
 
-import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 
 public abstract class AbstractAction {
 
-	private static String emptyIsNull(String value) {
-		if (value != null && value.isEmpty()) {
-			return null;
-		}
-		return value;
-	}
+    private static String emptyIsNull(String value) {
+        if (value != null && value.isEmpty()) {
+            return null;
+        }
+        return value;
+    }
 
-	public Optional<String> catalogName() {
-		return Optional.ofNullable(emptyIsNull(getConfig().catalogName()));
-	}
+    public Optional<String> catalogName() {
+        return Optional.ofNullable(emptyIsNull(getConfig().catalogName()));
+    }
 
-	public Optional<String> schemaName() {
-		return Optional.ofNullable(emptyIsNull(getConfig().schemaName()));
-	}
+    public Optional<String> schemaName() {
+        return Optional.ofNullable(emptyIsNull(getConfig().schemaName()));
+    }
 
+    public String cubeName() {
+        return getConfig().cubeName();
+    }
 
-	public String cubeName() {
-		return getConfig().cubeName();
-	}
+    public Optional<String> actionName() {
+        return Optional.ofNullable(emptyIsNull(getConfig().actionName()));
+    }
 
-	public Optional<String> actionName() {
-		return Optional.ofNullable(emptyIsNull(getConfig().actionName()));
-	}
+    public Optional<String> actionCaption() {
+        return Optional.ofNullable(emptyIsNull(getConfig().actionCaption()));
+    }
 
-	public Optional<String> actionCaption() {
-		return Optional.ofNullable(emptyIsNull(getConfig().actionCaption()));
-	}
+    public Optional<String> description() {
+        return Optional.ofNullable(emptyIsNull(getConfig().actionDescription()));
+    }
 
-	public Optional<String> description() {
-		return Optional.ofNullable(emptyIsNull(getConfig().actionDescription()));
-	}
+    public String coordinate() {
+        return getConfig().actionCoordinate();
+    }
 
-	public String coordinate() {
-		return getConfig().actionCoordinate();
-	}
+    public CoordinateTypeEnum coordinateType() {
+        return CoordinateTypeEnum.valueOf(emptyIsNull(getConfig().actionCoordinateType()));
+    }
 
-	public CoordinateTypeEnum coordinateType() {
-		return CoordinateTypeEnum.valueOf(emptyIsNull(getConfig().actionCoordinateType()));
-	}
+    public abstract String content(String coordinate, String cubeName);
 
-	public abstract String content(String coordinate, String cubeName);
-
-	protected abstract AbstractActionConfig getConfig();
+    protected abstract AbstractActionConfig getConfig();
 
 }

@@ -13,15 +13,14 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge;
 
+import java.util.Map;
+
 import org.eclipse.daanse.olap.action.api.ReportAction;
-import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
-
-import java.util.Map;
 
 @Component(service = ReportAction.class)
 @Designate(factory = true, ocd = ReportActionConfig.class)

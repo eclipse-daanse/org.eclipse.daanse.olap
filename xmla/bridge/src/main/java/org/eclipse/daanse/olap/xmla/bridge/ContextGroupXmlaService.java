@@ -35,59 +35,58 @@ import org.osgi.service.metatype.annotations.Designate;
 public class ContextGroupXmlaService implements XmlaService {
 
     public static final String REF_NAME_ACTION_SERVICE = "actionService";
-	private ContextGroupXmlaServiceConfig config;
+    private ContextGroupXmlaServiceConfig config;
 
-	@Reference(name = REF_NAME_ACTION_SERVICE)
+    @Reference(name = REF_NAME_ACTION_SERVICE)
     private ActionService actionService;
-	private SessionService sessionService;
+    private SessionService sessionService;
 
-	public ContextGroupXmlaService() {
+    public ContextGroupXmlaService() {
 
-	}
+    }
 
-	@Activate
-	 void activate(ContextGroupXmlaServiceConfig config, Map<String, Object> props) {
-			ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contextGroup);
-			executeService = new OlapExecuteService(contextsListSupplyer, actionService, config);
-			discoverService = new DelegatingDiscoverService(contextsListSupplyer, actionService, config);
-			sessionService = new SessionServiceImpl();
-		}
+    @Activate
+    void activate(ContextGroupXmlaServiceConfig config, Map<String, Object> props) {
+        ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contextGroup);
+        executeService = new OlapExecuteService(contextsListSupplyer, actionService, config);
+        discoverService = new DelegatingDiscoverService(contextsListSupplyer, actionService, config);
+        sessionService = new SessionServiceImpl();
+    }
 
+    public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
+    public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
 
+    private ExecuteService executeService;
+    private DiscoverService discoverService;
+    private ContextGroup contextGroup;
 
-	public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
-	public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
+    /*
+     * target must be configured. no auto fetch of a ContextGroup
+     */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY, name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+    void bindContextGroup(ContextGroup contextGroup) {
+        this.contextGroup = contextGroup;
+    }
 
-	private ExecuteService executeService;
-	private DiscoverService discoverService;
-	private ContextGroup contextGroup;
-
-	/*
-	 * target must be configured. no auto fetch of a ContextGroup
-	 */
-	@Reference(cardinality = ReferenceCardinality.MANDATORY,  name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-	void bindContextGroup(ContextGroup contextGroup) {
-		this.contextGroup = contextGroup;
-	}
-
-    //@Reference(cardinality = ReferenceCardinality.MANDATORY,  name = REF_NAME_ACTION_SERVICE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-    //void bindActionService(ActionService actionService) {
-    //    this.actionService = actionService;
-    //}
+    // @Reference(cardinality = ReferenceCardinality.MANDATORY, name = REF_NAME_ACTION_SERVICE, target =
+    // UnresolvableNamespace.UNRESOLVABLE_FILTER)
+    // void bindActionService(ActionService actionService) {
+    // this.actionService = actionService;
+    // }
 
     @Override
-	public DiscoverService discover() {
-		return discoverService;
-	}
+    public DiscoverService discover() {
+        return discoverService;
+    }
 
-	@Override
-	public ExecuteService execute() {
-		return executeService;
-	}
+    @Override
+    public ExecuteService execute() {
+        return executeService;
+    }
 
-	@Override
-	public SessionService session() {
-		return sessionService;
-	}
+    @Override
+    public SessionService session() {
+        return sessionService;
+    }
 
 }

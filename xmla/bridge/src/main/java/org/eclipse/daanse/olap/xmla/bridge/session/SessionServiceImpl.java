@@ -27,26 +27,26 @@ import org.eclipse.daanse.xmla.model.record.xmla.SessionR;
 
 public class SessionServiceImpl implements SessionService {
 // ToDo independen sessionservice that tracks  session by ServerInstance and User and Role
-	// Component singleton imidiate
-	// not in bridge  daanse.server
-	private Set<String> store = new HashSet<>();
+    // Component singleton imidiate
+    // not in bridge daanse.server
+    private Set<String> store = new HashSet<>();
 
-	@Override
-	public Optional<Session> beginSession(BeginSession beginSession, UserPrincipal userPrincipal) {
+    @Override
+    public Optional<Session> beginSession(BeginSession beginSession, UserPrincipal userPrincipal) {
 
-		String sessionStr = UUID.randomUUID().toString();
-		store.add(sessionStr);
-		return Optional.of(new SessionR(sessionStr, null));
-	}
+        String sessionStr = UUID.randomUUID().toString();
+        store.add(sessionStr);
+        return Optional.of(new SessionR(sessionStr, null));
+    }
 
-	@Override
-	public boolean checkSession(Session session, UserPrincipal userPrincipal) {
-		return store.contains(session.sessionId());
-	}
+    @Override
+    public boolean checkSession(Session session, UserPrincipal userPrincipal) {
+        return store.contains(session.sessionId());
+    }
 
-	@Override
-	public void endSession(EndSession endSession, UserPrincipal userPrincipal) {
-		store.remove(endSession.sessionId());
-	}
+    @Override
+    public void endSession(EndSession endSession, UserPrincipal userPrincipal) {
+        store.remove(endSession.sessionId());
+    }
 
 }

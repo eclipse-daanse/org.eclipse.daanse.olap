@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.olap.xmla.bridge;
 
+import java.util.List;
+
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-
-import java.util.List;
 
 @ObjectClassDefinition()
 public interface DrillThroughActionConfig extends AbstractActionConfig {

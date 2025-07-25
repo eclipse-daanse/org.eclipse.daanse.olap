@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.api;
 
-import java.lang.ref.SoftReference;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;

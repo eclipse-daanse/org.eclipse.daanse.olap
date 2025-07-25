@@ -27,7 +27,6 @@
 
 package org.eclipse.daanse.olap.api;
 
-import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
 

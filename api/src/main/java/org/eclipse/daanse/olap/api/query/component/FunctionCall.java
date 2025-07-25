@@ -27,7 +27,6 @@
 package org.eclipse.daanse.olap.api.query.component;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 
 /**
  * A FunCall is a function applied to a list of operands.

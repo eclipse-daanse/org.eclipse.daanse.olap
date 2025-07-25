@@ -31,7 +31,6 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
 /**

@@ -30,7 +30,6 @@ package org.eclipse.daanse.olap.api.calc.todo;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.calc.TupleCalc;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**

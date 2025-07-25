@@ -28,8 +28,6 @@
  */
 package org.eclipse.daanse.olap.api.monitor.event;
 
-import org.eclipse.daanse.olap.api.CacheControl;
-
 public sealed interface CellCacheEvent extends ExecutionEvent
         permits CellCacheSegmentCreateEvent, CellCacheSegmentDeleteEvent {
     /**

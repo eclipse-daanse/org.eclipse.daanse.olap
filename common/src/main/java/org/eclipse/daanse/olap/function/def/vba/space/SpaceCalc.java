@@ -17,9 +17,10 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.olap.function.def.vba.string.StringCalc;
 
 public class SpaceCalc extends AbstractProfilingNestedStringCalc {
+
+    private static final String WHITESPACE = " ";
 
     protected SpaceCalc(Type type, final IntegerCalc numberCalc) {
         super(type, numberCalc);
@@ -28,12 +29,7 @@ public class SpaceCalc extends AbstractProfilingNestedStringCalc {
     @Override
     public String evaluate(Evaluator evaluator) {
         Integer number = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
-        return space(number);
+        return WHITESPACE.repeat(number);
     }
-
-    public static String space(int number) {
-        return StringCalc.string(number, ' ');
-    }
-
 
 }

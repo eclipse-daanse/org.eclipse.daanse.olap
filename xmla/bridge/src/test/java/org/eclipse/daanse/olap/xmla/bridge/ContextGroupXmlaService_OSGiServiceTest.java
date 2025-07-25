@@ -13,9 +13,6 @@
 */
 package org.eclipse.daanse.olap.xmla.bridge;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.osgi.test.assertj.servicereference.ServiceReferenceAssert.assertThat;
-
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,24 +28,21 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 @ExtendWith(MockitoExtension.class)
 class ContextGroupXmlaService_OSGiServiceTest {
 
-	@Test
-	void serviceExists_configured(
-			@InjectConfiguration(withFactoryConfig = @WithFactoryConfiguration(factoryPid = ContextGroupXmlaService.PID, name = "name1")) Configuration c,
-			@InjectService(cardinality = 0) ServiceAware<XmlaService> saXmlaService) throws Exception {
+    @Test
+    void serviceExists_configured(
+            @InjectConfiguration(withFactoryConfig = @WithFactoryConfiguration(factoryPid = ContextGroupXmlaService.PID, name = "name1")) Configuration c,
+            @InjectService(cardinality = 0) ServiceAware<XmlaService> saXmlaService) throws Exception {
 
-		// Must exist from start
-	    /*
-		assertThat(saXmlaService).isNotNull().extracting(ServiceAware::size).isEqualTo(1);
-		assertThat(saXmlaService.getServiceReference()).isNotNull();
-		XmlaService xmlaService = saXmlaService.waitForService(100);
-
-		assertThat(xmlaService).isNotNull().satisfies(x -> {
-			assertThat(x).isInstanceOf(ContextGroupXmlaService.class);
-			assertThat((ContextGroupXmlaService) x).satisfies(bx -> {
-				assertThat(bx.discover()).isNotNull();
-				assertThat(bx.execute()).isNotNull();
-			});
-		});
-		*/
-	}
+        // Must exist from start
+        /*
+         * assertThat(saXmlaService).isNotNull().extracting(ServiceAware::size).isEqualTo(1);
+         * assertThat(saXmlaService.getServiceReference()).isNotNull(); XmlaService xmlaService =
+         * saXmlaService.waitForService(100);
+         * 
+         * assertThat(xmlaService).isNotNull().satisfies(x -> {
+         * assertThat(x).isInstanceOf(ContextGroupXmlaService.class); assertThat((ContextGroupXmlaService)
+         * x).satisfies(bx -> { assertThat(bx.discover()).isNotNull(); assertThat(bx.execute()).isNotNull();
+         * }); });
+         */
+    }
 }

@@ -13,19 +13,18 @@
 */
 package org.eclipse.daanse.olap.xmla.bridge;
 
-import org.eclipse.daanse.olap.action.api.DrillThroughAction;
-import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.metatype.annotations.Designate;
-import org.osgi.util.converter.Converter;
-import org.osgi.util.converter.Converters;
-
 import static org.eclipse.daanse.olap.xmla.bridge.DrillThroughUtils.getCoordinateElements;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.eclipse.daanse.olap.action.api.DrillThroughAction;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 
 @Component(service = DrillThroughAction.class)
 @Designate(factory = true, ocd = DrillThroughActionConfig.class)
@@ -42,7 +41,8 @@ public class DrillThroughActionImpl extends AbstractAction implements DrillThrou
     @Override
     public String content(String coordinate, String cubeName) {
         List<String> coordinateElements = getCoordinateElements(coordinate);
-        return DrillThroughUtils.getDrillThroughQueryByColumns(coordinateElements, catalogs().orElse(List.of()), cubeName);
+        return DrillThroughUtils.getDrillThroughQueryByColumns(coordinateElements, catalogs().orElse(List.of()),
+                cubeName);
     }
 
     @Override

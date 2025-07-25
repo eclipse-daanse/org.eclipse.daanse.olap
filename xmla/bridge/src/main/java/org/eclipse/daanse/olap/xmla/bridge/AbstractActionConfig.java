@@ -17,28 +17,28 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 
 public @interface AbstractActionConfig {
 
-	@AttributeDefinition(name = "%CATALOG_NAME", required = false)
-	String catalogName();
+    @AttributeDefinition(name = "%CATALOG_NAME", required = false)
+    String catalogName();
 
-	@AttributeDefinition(name = "%SCHEMA_NAME", required = false)
-	String schemaName();
+    @AttributeDefinition(name = "%SCHEMA_NAME", required = false)
+    String schemaName();
 
-	@AttributeDefinition(name = "%CUBE_NAME", required = false)
-	String cubeName();
+    @AttributeDefinition(name = "%CUBE_NAME", required = false)
+    String cubeName();
 
-	@AttributeDefinition(name = "%ACTION_NAME", required = false)
-	String actionName();
+    @AttributeDefinition(name = "%ACTION_NAME", required = false)
+    String actionName();
 
-	@AttributeDefinition(name = "%ACTION_CAPTION", required = false)
-	String actionCaption();
+    @AttributeDefinition(name = "%ACTION_CAPTION", required = false)
+    String actionCaption();
 
-	@AttributeDefinition(name = "%ACTION_DESCRIPTION", required = false)
-	String actionDescription();
+    @AttributeDefinition(name = "%ACTION_DESCRIPTION", required = false)
+    String actionDescription();
 
-	@AttributeDefinition(name = "%ACTION_COORDINATE", required = false)
-	String actionCoordinate();
+    @AttributeDefinition(name = "%ACTION_COORDINATE", required = false)
+    String actionCoordinate();
 
-	@AttributeDefinition(name = "%ACTION_COORDINATE_TYPE", required = false)
-	String actionCoordinateType();
+    @AttributeDefinition(name = "%ACTION_COORDINATE_TYPE", required = false)
+    String actionCoordinateType();
 
 }

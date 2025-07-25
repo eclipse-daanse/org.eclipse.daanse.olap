@@ -103,14 +103,11 @@ import org.slf4j.LoggerFactory;
 
 public class Convertor {
 
-    private static final Logger LOGGER =
-        LoggerFactory.getLogger(Convertor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Convertor.class);
     public static final String SLICER_AXIS = "SlicerAxis";
-    private static XmlaUtil.ElementNameEncoder encoder =
-        XmlaUtil.ElementNameEncoder.INSTANCE;
+    private static XmlaUtil.ElementNameEncoder encoder = XmlaUtil.ElementNameEncoder.INSTANCE;
 
-    protected static final Map<String, Property.StandardMemberProperty> longProps =
-        new HashMap<>();
+    protected static final Map<String, Property.StandardMemberProperty> longProps = new HashMap<>();
 
     static {
         longProps.put("UName", Property.StandardMemberProperty.MEMBER_UNIQUE_NAME);
@@ -141,8 +138,7 @@ public class Convertor {
         cellPropertyMap.put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
     }
 
-    protected static final List<Property> defaultProps =
-        Arrays.asList(
+    protected static final List<Property> defaultProps = Arrays.asList(
             rename(Property.StandardMemberProperty.MEMBER_UNIQUE_NAME, "UName"),
             rename(Property.StandardMemberProperty.MEMBER_CAPTION, "Caption"),
             rename(Property.StandardMemberProperty.LEVEL_UNIQUE_NAME, "LName"),
@@ -158,11 +154,10 @@ public class Convertor {
     private static double DEFAULT_DOUBLE;
 
     private Convertor() {
-        //constructor
+        // constructor
     }
 
-    public static StatementResponse toStatementResponseRowSet(ResultSet rs,
-                                                              int totalCount) throws SQLException {
+    public static StatementResponse toStatementResponseRowSet(ResultSet rs, int totalCount) throws SQLException {
         List<RowSetRow> rowSetRows = new ArrayList<>();
         RowSetR rowSet = new RowSetR(rowSetRows);
         List<SqlColumn> columns = new ArrayList<>();
@@ -172,11 +167,7 @@ public class Convertor {
 
         // populate column defs
         for (int i = 0; i < columnCount; i++) {
-            columns.add(
-                new SqlColumn(
-                    md.getColumnLabel(i + 1),
-                    md.getColumnType(i + 1),
-                    md.getScale(i + 1)));
+            columns.add(new SqlColumn(md.getColumnLabel(i + 1), md.getColumnType(i + 1), md.getScale(i + 1)));
         }
 
         // Populate data; assume that SqlStatement is already positioned
@@ -195,12 +186,7 @@ public class Convertor {
             String countStr = Integer.toString(totalCount);
             List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
             for (SqlColumn column : columns) {
-                rowSetRowItem.add(new RowSetRowItemR(
-                    column.encodedName,
-                    column.name,
-                    countStr,
-                    Optional.empty())
-                );
+                rowSetRowItem.add(new RowSetRowItemR(column.encodedName, column.name, countStr, Optional.empty()));
             }
             rowSetRows.add(new RowSetRowR(rowSetRowItem));
         }
@@ -209,16 +195,12 @@ public class Convertor {
             List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
             for (int i = 0; i < row.length; i++) {
                 Object value = row[i];
-                if(value != null) {
+                if (value != null) {
                     String valueString = value.toString();
                     if (value instanceof Number) {
-                        valueString =
-                            XmlaUtil.normalizeNumericString(valueString);
+                        valueString = XmlaUtil.normalizeNumericString(valueString);
                     }
-                    rowSetRowItem.add(new RowSetRowItemR(
-                            columns.get(i).encodedName,
-                            columns.get(i).name,
-                            valueString,
+                    rowSetRowItem.add(new RowSetRowItemR(columns.get(i).encodedName, columns.get(i).name, valueString,
                             Optional.of(ItemTypeEnum.fromValue(columns.get(i).xsdType))));
                 }
             }
@@ -227,11 +209,8 @@ public class Convertor {
         return new StatementResponseR(null, rowSet);
     }
 
-    public static StatementResponse toStatementResponseMddataset(
-        CellSet cellSet,
-        boolean omitDefaultSlicerInfo,
-        boolean json
-    ) {
+    public static StatementResponse toStatementResponseMddataset(CellSet cellSet, boolean omitDefaultSlicerInfo,
+            boolean json) {
 
         List<String> queryCellPropertyNames = getQueryCellPropertyNames(cellSet);
         OlapInfoR olapInfo = getOlapInfo(cellSet, queryCellPropertyNames, omitDefaultSlicerInfo);
@@ -241,13 +220,7 @@ public class Convertor {
         ExceptionR exception = null;
         MessagesR messages = null;
 
-        MddatasetR mdDataSet = new MddatasetR(
-            olapInfo,
-            axes,
-            cellData,
-            exception,
-            messages
-        );
+        MddatasetR mdDataSet = new MddatasetR(olapInfo, axes, cellData, exception, messages);
 
         return new StatementResponseR(mdDataSet, null);
     }
@@ -280,14 +253,12 @@ public class Convertor {
                 empty = true;
                 continue;
             }
-            dimensionCount +=
-                axis.getPositions().get(0).getMembers().size();
+            dimensionCount += axis.getPositions().get(0).getMembers().size();
         }
 
         // Build a list of the lowest level used on each non-COLUMNS axis.
         Level[] levels = new Level[dimensionCount];
-        List<Column> columnList =
-            new ArrayList<>();
+        List<Column> columnList = new ArrayList<>();
         int memberOrdinal = 0;
         if (!empty) {
             for (int i = axes.size() - 1; i > 0; i--) {
@@ -298,9 +269,7 @@ public class Convertor {
                 for (Position position : positions) {
                     memberOrdinal = z0; // rewind to start
                     for (Member member : position.getMembers()) {
-                        if (jj == 0
-                            || member.getLevel().getDepth()
-                            > levels[memberOrdinal].getDepth()) {
+                        if (jj == 0 || member.getLevel().getDepth() > levels[memberOrdinal].getDepth()) {
                             levels[memberOrdinal] = member.getLevel();
                         }
                         memberOrdinal++;
@@ -310,23 +279,19 @@ public class Convertor {
 
                 // Now we know the lowest levels on this axis, add
                 // properties.
-                List<Property> dimProps =
-                    axis.getAxisMetaData().getProperties();
+                List<Property> dimProps = axis.getAxisMetaData().getProperties();
                 if (dimProps.isEmpty()) {
                     dimProps = MemberCaptionIdArray;
                 }
                 for (int j = z0; j < memberOrdinal; j++) {
                     Level level = levels[j];
                     for (int k = 0; k <= level.getDepth(); k++) {
-                        final Level level2 =
-                            level.getHierarchy().getLevels().get(k);
-                        //if (level2.getLevelType() == Level.Type.ALL) {
-                        //    continue;
-                        //}
+                        final Level level2 = level.getHierarchy().getLevels().get(k);
+                        // if (level2.getLevelType() == Level.Type.ALL) {
+                        // continue;
+                        // }
                         for (Property dimProp : dimProps) {
-                            columnList.add(
-                                new MemberColumn(
-                                    dimProp, level2, j));
+                            columnList.add(new MemberColumn(dimProp, level2, j));
                         }
                     }
                 }
@@ -348,41 +313,39 @@ public class Convertor {
                     }
                     j++;
                 }
-                columnList.add(
-                    new CellColumn(name));
+                columnList.add(new CellColumn(name));
             }
         }
 
-        List<RowSetRow> rowSetRows = empty ? List.of() : getRowSetRows(cellSet, axisCount, cellOrdinal, posList, columnList, members, pos);
+        List<RowSetRow> rowSetRows = empty ? List.of()
+                : getRowSetRows(cellSet, axisCount, cellOrdinal, posList, columnList, members, pos);
         RowSetR rowSet = new RowSetR(rowSetRows);
 
         return new StatementResponseR(null, rowSet);
     }
 
-    private static List<RowSetRow> getRowSetRows(CellSet cellSet, int axisCount, int cellOrdinal, List<Integer> posList, List<Column> columns, Member[] members, int[] pos) {
+    private static List<RowSetRow> getRowSetRows(CellSet cellSet, int axisCount, int cellOrdinal, List<Integer> posList,
+            List<Column> columns, Member[] members, int[] pos) {
         switch (axisCount) {
-            case 0:
-                // For MDX like: SELECT FROM Sales
-                return getRowSetRowList(cellSet.getCell(posList), cellOrdinal, columns, members);
-            default:
-                return getRowSetRowList(cellSet, axisCount - 1, 0, cellOrdinal, columns, members, pos, posList);
+        case 0:
+            // For MDX like: SELECT FROM Sales
+            return getRowSetRowList(cellSet.getCell(posList), cellOrdinal, columns, members);
+        default:
+            return getRowSetRowList(cellSet, axisCount - 1, 0, cellOrdinal, columns, members, pos, posList);
         }
     }
 
-    private static List<RowSetRow> getRowSetRowList(CellSet cellSet, int axis, final int xxx, int cellOrdinal, List<Column> columns, Member[] members, int[] pos, List<Integer> posList) {
+    private static List<RowSetRow> getRowSetRowList(CellSet cellSet, int axis, final int xxx, int cellOrdinal,
+            List<Column> columns, Member[] members, int[] pos, List<Integer> posList) {
         List<RowSetRow> result = new ArrayList<>();
-        final List<Position> positions =
-            cellSet.getAxes().get(axis).getPositions();
+        final List<Position> positions = cellSet.getAxes().get(axis).getPositions();
         int axisLength = axis == 0 ? 1 : positions.size();
 
         for (int i = 0; i < axisLength; i++) {
             final Position position = positions.get(i);
             int ho = xxx;
             final List<Member> membs = position.getMembers();
-            for (int j = 0;
-                 j < membs.size() && ho < members.length;
-                 j++, ho++)
-            {
+            for (int j = 0; j < membs.size() && ho < members.length; j++, ho++) {
                 members[ho] = position.getMembers().get(j);
             }
 
@@ -410,7 +373,8 @@ public class Convertor {
         return result;
     }
 
-    private static List<RowSetRow> getRowSetRowList(Cell cell, int cellOrdinal, List<Column> columns, Member[] members) {
+    private static List<RowSetRow> getRowSetRowList(Cell cell, int cellOrdinal, List<Column> columns,
+            Member[] members) {
         List<RowSetRow> rows = new ArrayList<>();
         ++cellOrdinal;
 //        discard(cellOrdinal);
@@ -441,8 +405,8 @@ public class Convertor {
         } else {
             // The slicer axes contains the default hierarchy
             // of each dimension not seen on another axis.
-            List<Dimension> unseenDimensionList =
-                new ArrayList(cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
+            List<Dimension> unseenDimensionList = new ArrayList(
+                    cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
             for (Hierarchy hier1 : axisHierarchyList) {
                 unseenDimensionList.remove(hier1.getDimension());
             }
@@ -457,15 +421,15 @@ public class Convertor {
     }
 
     private static List<String> getQueryCellPropertyNames(CellSet cellSet) {
-        final boolean matchCase =
-            SystemWideProperties.instance().CaseSensitive;
+        final boolean matchCase = SystemWideProperties.instance().CaseSensitive;
         List<String> queryCellPropertyNames = new ArrayList<>();
         final Statement statement = cellSet.getStatement();
         for (QueryComponent queryPart : statement.getQuery().getCellProperties()) {
             org.eclipse.daanse.olap.api.query.component.CellProperty cellProperty = (org.eclipse.daanse.olap.api.query.component.CellProperty) queryPart;
-            org.eclipse.daanse.olap.api.element.Property property = org.eclipse.daanse.olap.common.StandardProperty.lookup(cellProperty.toString(), matchCase);
-            String propertyName = ((NameSegment)
-                org.eclipse.daanse.olap.common.Util.parseIdentifier(cellProperty.toString()).get(0)).getName();
+            org.eclipse.daanse.olap.api.element.Property property = org.eclipse.daanse.olap.common.StandardProperty
+                    .lookup(cellProperty.toString(), matchCase);
+            String propertyName = ((NameSegment) org.eclipse.daanse.olap.common.Util
+                    .parseIdentifier(cellProperty.toString()).get(0)).getName();
             queryCellPropertyNames.add(propertyName);
         }
         if (queryCellPropertyNames.isEmpty()) {
@@ -483,21 +447,15 @@ public class Convertor {
         for (int i = 0; i < axisCount; i++) {
             pos.add(-1);
         }
-        int[] cellOrdinal = new int[]{0};
+        int[] cellOrdinal = new int[] { 0 };
 
         int axisOrdinal = axisCount - 1;
         cell.addAll(recurse(cellSet, pos, axisOrdinal, cellOrdinal, queryCellPropertyNames, json));
         return new CellDataR(cell, cellSetType);
     }
 
-    private static List<CellType> recurse(
-        CellSet cellSet,
-        List<Integer> pos,
-        int axisOrdinal,
-        int[] cellOrdinal,
-        List<String> queryCellPropertyNames,
-        boolean json
-    ) {
+    private static List<CellType> recurse(CellSet cellSet, List<Integer> pos, int axisOrdinal, int[] cellOrdinal,
+            List<String> queryCellPropertyNames, boolean json) {
         List<CellType> cellList = new ArrayList<>();
         if (axisOrdinal < 0) {
             cellList.addAll(getCellTypeList(cellSet, pos, cellOrdinal[0]++, queryCellPropertyNames, json));
@@ -512,13 +470,8 @@ public class Convertor {
         return cellList;
     }
 
-    private static List<CellType> getCellTypeList(
-        CellSet cellSet,
-        List<Integer> pos,
-        int ordinal,
-        List<String> queryCellPropertyNames,
-        boolean json
-    ) {
+    private static List<CellType> getCellTypeList(CellSet cellSet, List<Integer> pos, int ordinal,
+            List<String> queryCellPropertyNames, boolean json) {
         List<CellType> cellList = new ArrayList<>();
         Cell cell = cellSet.getCell(pos);
 
@@ -554,12 +507,12 @@ public class Convertor {
                     // Return cell without value as in case of AS2005
                     continue;
                 }
-                //final String dataType =
-                //    (String) cell.getPropertyValue(
-                //        Property.StandardCellProperty.DATATYPE.getName());
+                // final String dataType =
+                // (String) cell.getPropertyValue(
+                // Property.StandardCellProperty.DATATYPE.getName());
 
-                //final ValueInfo vi = new ValueInfo(dataType, value);
-                //will always get real datatype (see ValueInfo logic)
+                // final ValueInfo vi = new ValueInfo(dataType, value);
+                // will always get real datatype (see ValueInfo logic)
                 final ValueInfo vi = new ValueInfo(null, value);
 
                 final String valueType = vi.valueType;
@@ -567,28 +520,22 @@ public class Convertor {
                 if (vi.value instanceof Double && (Double) vi.value == Double.POSITIVE_INFINITY) {
                     valueString = "INF";
                 } else if (vi.isDecimal) {
-                    valueString =
-                        XmlaUtil.normalizeNumericString(
-                            vi.value.toString());
+                    valueString = XmlaUtil.normalizeNumericString(vi.value.toString());
                 } else {
                     valueString = vi.value.toString();
                 }
                 val = new ValueR(valueString, ItemTypeEnum.fromValue(valueType), List.of());
             } else {
-                any.add(new CellInfoItemR(cellPropertyMap.get(propertyName).getAlias(),
-                    value.toString(),
-                    Optional.empty()));
+                any.add(new CellInfoItemR(cellPropertyMap.get(propertyName).getAlias(), value.toString(),
+                        Optional.empty()));
             }
         }
         cellList.add(new CellTypeR(val, any, ordinal));
         return cellList;
     }
 
-    private static AxesR getAxes(
-        CellSet cellSet,
-        boolean omitDefaultSlicerInfo,
-        List<Hierarchy> slicerAxisHierarchies
-    ) {
+    private static AxesR getAxes(CellSet cellSet, boolean omitDefaultSlicerInfo,
+            List<Hierarchy> slicerAxisHierarchies) {
         List<Axis> axisList = new ArrayList<>();
         final List<CellSetAxis> axes = cellSet.getAxes();
         for (int i = 0; i < axes.size(); i++) {
@@ -610,10 +557,7 @@ public class Convertor {
             // need to be able to distinguish between the two.
 
             if (!slicerAxisHierarchies.isEmpty()) {
-                axisList.add(getAxis(cellSet,
-                    slicerAxis,
-                    getProps(slicerAxis.getAxisMetaData()),
-                    SLICER_AXIS));
+                axisList.add(getAxis(cellSet, slicerAxis, getProps(slicerAxis.getAxisMetaData()), SLICER_AXIS));
             }
         } else {
             List<Hierarchy> hierarchies = slicerAxisHierarchies;
@@ -625,10 +569,8 @@ public class Convertor {
 
             Map<String, Integer> memberMap = new HashMap<>();
             Member positionMember;
-            final List<Position> slicerPositions =
-                slicerAxis.getPositions();
-            if (slicerPositions != null
-                && !slicerPositions.isEmpty()) {
+            final List<Position> slicerPositions = slicerAxis.getPositions();
+            if (slicerPositions != null && !slicerPositions.isEmpty()) {
                 final Position pos0 = slicerPositions.get(0);
                 int i = 0;
                 for (Member member : pos0.getMembers()) {
@@ -636,16 +578,13 @@ public class Convertor {
                 }
             }
 
-            final List<Member> slicerMembers =
-                slicerPositions.isEmpty()
-                    ? List.of()
+            final List<Member> slicerMembers = slicerPositions.isEmpty() ? List.of()
                     : slicerPositions.get(0).getMembers();
             for (Hierarchy hierarchy : hierarchies) {
                 // Find which member is on the slicer.
                 // If it's not explicitly there, use the default member.
                 Member member = hierarchy.getDefaultMember();
-                final Integer indexPosition =
-                    memberMap.get(hierarchy.getName());
+                final Integer indexPosition = memberMap.get(hierarchy.getName());
                 if (indexPosition != null) {
                     positionMember = slicerMembers.get(indexPosition);
                 } else {
@@ -660,20 +599,14 @@ public class Convertor {
 
                 if (member != null) {
                     if (positionMember != null) {
-                        mem.add(
-                            getMember(
-                                positionMember, null,
-                                slicerPositions.get(0), indexPosition,
+                        mem.add(getMember(positionMember, null, slicerPositions.get(0), indexPosition,
                                 getProps(slicerAxis.getAxisMetaData())));
                     } else {
-                        slicerAxis(
-                            member,
-                            getProps(slicerAxis.getAxisMetaData()));
+                        slicerAxis(member, getProps(slicerAxis.getAxisMetaData()));
                     }
                 } else {
-                    LOGGER.warn(
-                        "Can not create SlicerAxis: null default member for Hierarchy {}",
-                        hierarchy.getUniqueName());
+                    LOGGER.warn("Can not create SlicerAxis: null default member for Hierarchy {}",
+                            hierarchy.getUniqueName());
                 }
             }
         }
@@ -693,18 +626,15 @@ public class Convertor {
                 longProp = prop;
             }
             if (longProp == Property.StandardMemberProperty.DISPLAY_INFO) {
-                Integer childrenCard =
-                    (Integer) member.getPropertyValue(
-                        Property.StandardMemberProperty.CHILDREN_CARDINALITY.getName());
+                Integer childrenCard = (Integer) member
+                        .getPropertyValue(Property.StandardMemberProperty.CHILDREN_CARDINALITY.getName());
                 // NOTE: don't know if this is correct for
                 // SlicerAxis
                 int displayInfo = 0xffff & childrenCard;
-/*
-                    int displayInfo =
-                        calculateDisplayInfo((j == 0 ? null : positions[j - 1]),
-                          (j + 1 == positions.length ? null : positions[j + 1]),
-                          member, k, childrenCard.intValue());
-*/
+                /*
+                 * int displayInfo = calculateDisplayInfo((j == 0 ? null : positions[j - 1]), (j + 1 ==
+                 * positions.length ? null : positions[j + 1]), member, k, childrenCard.intValue());
+                 */
                 value = displayInfo;
             } else if (longProp == Property.StandardMemberProperty.DEPTH) {
                 value = member.getDepth();
@@ -718,25 +648,19 @@ public class Convertor {
                 any.add(new CellInfoItemR(encoder.encode(prop.getName()), value.toString(), Optional.empty()));
             }
         }
-        return new MemberTypeR(any,
-            member.getHierarchy().getUniqueName());
+        return new MemberTypeR(any, member.getHierarchy().getUniqueName());
     }
 
     private static Object getHierarchyProperty(Member member, Property longProp) {
-        IMondrianOlap4jProperty currentProperty =
-            (IMondrianOlap4jProperty) longProp;
+        IMondrianOlap4jProperty currentProperty = (IMondrianOlap4jProperty) longProp;
         String thisHierarchyName = member.getHierarchy().getName();
-        String thatHierarchyName = currentProperty.getLevel()
-            .getHierarchy().getName();
+        String thatHierarchyName = currentProperty.getLevel().getHierarchy().getName();
         if (thisHierarchyName.equals(thatHierarchyName)) {
             try {
                 return member.getPropertyValue(currentProperty.getName());
             } catch (Exception e) {
-                throw new XmlaException(
-                    SERVER_FAULT_FC,
-                    HSB_BAD_PROPERTIES_LIST_CODE,
-                    HSB_BAD_PROPERTIES_LIST_FAULT_FS,
-                    e);
+                throw new XmlaException(SERVER_FAULT_FC, HSB_BAD_PROPERTIES_LIST_CODE, HSB_BAD_PROPERTIES_LIST_FAULT_FS,
+                        e);
             }
         }
         // if property doesn't belong to current hierarchy return null
@@ -747,38 +671,32 @@ public class Convertor {
         Datatype datatype = property.getDatatype();
         if (datatype != null) {
             switch (datatype) {
-                case UNSIGNED_INTEGER:
-                    return RowsetDefinitionType.UNSIGNED_INTEGER.columnType;
-                case DOUBLE:
-                    return RowsetDefinitionType.DOUBLE.columnType;
-                case LARGE_INTEGER:
-                    return RowsetDefinitionType.LONG.columnType;
-                case INTEGER:
-                    return RowsetDefinitionType.INTEGER.columnType;
-                case BOOLEAN:
-                    return RowsetDefinitionType.BOOLEAN.columnType;
-                default:
-                    return RowsetDefinitionType.STRING.columnType;
+            case UNSIGNED_INTEGER:
+                return RowsetDefinitionType.UNSIGNED_INTEGER.columnType;
+            case DOUBLE:
+                return RowsetDefinitionType.DOUBLE.columnType;
+            case LARGE_INTEGER:
+                return RowsetDefinitionType.LONG.columnType;
+            case INTEGER:
+                return RowsetDefinitionType.INTEGER.columnType;
+            case BOOLEAN:
+                return RowsetDefinitionType.BOOLEAN.columnType;
+            default:
+                return RowsetDefinitionType.STRING.columnType;
             }
         }
         return null;
     }
 
-    private static int calculateDisplayInfo(
-        Position prevPosition,
-        Position nextPosition,
-        Member currentMember,
-        int memberOrdinal,
-        int childrenCount
-    ) {
+    private static int calculateDisplayInfo(Position prevPosition, Position nextPosition, Member currentMember,
+            int memberOrdinal, int childrenCount) {
         if (currentMember instanceof PseudoLeafMember) {
             return 0;
         }
         int displayInfo = 0xffff & childrenCount;
 
         if (nextPosition != null) {
-            Member nextMember =
-                nextPosition.getMembers().get(memberOrdinal);
+            Member nextMember = nextPosition.getMembers().get(memberOrdinal);
             String nextParentUName = parentUniqueName(nextMember);
             if (currentMember.equals(nextMember.getParentMember())) {
                 displayInfo |= 0x10000;
@@ -786,11 +704,9 @@ public class Convertor {
         }
         if (prevPosition != null) {
             String currentParentUName = parentUniqueName(currentMember);
-            Member prevMember =
-                prevPosition.getMembers().get(memberOrdinal);
+            Member prevMember = prevPosition.getMembers().get(memberOrdinal);
             String prevParentUName = parentUniqueName(prevMember);
-            if (currentParentUName != null
-                && currentParentUName.equals(prevParentUName)) {
+            if (currentParentUName != null && currentParentUName.equals(prevParentUName)) {
                 displayInfo |= 0x20000;
             }
         }
@@ -808,27 +724,23 @@ public class Convertor {
     private static Object getDefaultValue(Property property) {
         Datatype datatype = property.getDatatype();
         switch (datatype) {
-            case UNSIGNED_INTEGER:
-                return DEFAULT_INT;
-            case DOUBLE:
-                return DEFAULT_DOUBLE;
-            case LARGE_INTEGER:
-                return DEFAULT_LONG;
-            case INTEGER:
-                return DEFAULT_INT;
-            case BOOLEAN:
-                return DEFAULT_BOOLEAN;
-            default:
-                return null;
+        case UNSIGNED_INTEGER:
+            return DEFAULT_INT;
+        case DOUBLE:
+            return DEFAULT_DOUBLE;
+        case LARGE_INTEGER:
+            return DEFAULT_LONG;
+        case INTEGER:
+            return DEFAULT_INT;
+        case BOOLEAN:
+            return DEFAULT_BOOLEAN;
+        default:
+            return null;
         }
     }
 
     private static Axis getAxis(CellSet cellSet, CellSetAxis axis, List<Property> props, String name) {
         List<Type> setType = new ArrayList<>();
-
-
-
-
 
         HashMap<Level, ArrayList<Member>> levelMembers = new HashMap<>();
 
@@ -836,35 +748,24 @@ public class Convertor {
             for (Member member : p.getMembers()) {
                 Level level = member.getLevel();
                 levelMembers.computeIfAbsent(level, k -> new ArrayList<Member>());
-                levelMembers.get(level)
-                    .add(member);
+                levelMembers.get(level).add(member);
             }
         }
         /*
-        mondrian.rolap.RolapConnection rolapConnection =
-            ((mondrian.olap4j.MondrianOlap4jConnection)this.connection).getMondrianConnection();
-        final Statement statement =
-            cellSet.getStatement();
-
-        for(Map.Entry<Level, ArrayList<Member>> entry : levelMembers.entrySet()) {
-            Level level = entry.getKey();
-            ArrayList<Member> members = entry.getValue();
-
-            if (!members.isEmpty()
-                && members.get(0).getLevel().getChildLevel() != null
-                && !members.get(0).getLevel().isAll()) {
-                Locus.execute(
-                    rolapConnection,
-                    "MondrianOlap4jMember.getChildMembers",
-                    new Locus.Action<List<org.eclipse.daanse.olap.api.element.Member>>() {
-                        @Override
-                        public List<org.eclipse.daanse.olap.api.element.Member> execute() {
-                            return
-                                statement.getQuery().getSchemaReader(true).getMemberChildren(members);
-                        }
-                    });
-            }
-        }
+         * mondrian.rolap.RolapConnection rolapConnection =
+         * ((mondrian.olap4j.MondrianOlap4jConnection)this.connection).getMondrianConnection(); final
+         * Statement statement = cellSet.getStatement();
+         * 
+         * for(Map.Entry<Level, ArrayList<Member>> entry : levelMembers.entrySet()) { Level level =
+         * entry.getKey(); ArrayList<Member> members = entry.getValue();
+         * 
+         * if (!members.isEmpty() && members.get(0).getLevel().getChildLevel() != null &&
+         * !members.get(0).getLevel().isAll()) { Locus.execute( rolapConnection,
+         * "MondrianOlap4jMember.getChildMembers", new
+         * Locus.Action<List<org.eclipse.daanse.olap.api.element.Member>>() {
+         * 
+         * @Override public List<org.eclipse.daanse.olap.api.element.Member> execute() { return
+         * statement.getQuery().getSchemaReader(true).getMemberChildren(members); } }); } }
          */
 
         List<Position> positions = axis.getPositions();
@@ -881,8 +782,7 @@ public class Convertor {
             setType.add(tuplesType);
             int k = 0;
             for (Member member : position.getMembers()) {
-                memberList.add(getMember(
-                    member, prevPosition, nextPosition, k++, props));
+                memberList.add(getMember(member, prevPosition, nextPosition, k++, props));
             }
             prevPosition = position;
             position = nextPosition;
@@ -891,31 +791,22 @@ public class Convertor {
         return new AxisR(setType, name);
     }
 
-    private static MemberTypeR getMember(
-        Member member,
-        Position prevPosition,
-        Position nextPosition,
-        int k,
-        List<Property> props
-    ) {
+    private static MemberTypeR getMember(Member member, Position prevPosition, Position nextPosition, int k,
+            List<Property> props) {
         List<CellInfoItem> any = new ArrayList<>();
         for (final Property prop : props) {
             Object value = null;
-            Property longProp = (longProps.get(prop.getName()) != null)
-                ? longProps.get(prop.getName()) : prop;
+            Property longProp = (longProps.get(prop.getName()) != null) ? longProps.get(prop.getName()) : prop;
             if (longProp == Property.StandardMemberProperty.DISPLAY_INFO) {
                 Integer childrenCard = (Integer) member
-                    .getPropertyValue(
-                        Property.StandardMemberProperty.CHILDREN_CARDINALITY.getName());
-                value = calculateDisplayInfo(
-                    prevPosition, nextPosition, member, k, childrenCard);
+                        .getPropertyValue(Property.StandardMemberProperty.CHILDREN_CARDINALITY.getName());
+                value = calculateDisplayInfo(prevPosition, nextPosition, member, k, childrenCard);
             } else if (longProp == Property.StandardMemberProperty.DEPTH) {
                 value = member.getDepth();
             } else {
                 if (longProp instanceof IMondrianOlap4jProperty currentProperty) {
                     String thisHierarchyName = member.getHierarchy().getName();
-                    String thatHierarchyName = currentProperty.getLevel()
-                        .getHierarchy().getName();
+                    String thatHierarchyName = currentProperty.getLevel().getHierarchy().getName();
                     if (thisHierarchyName.equals(thatHierarchyName)) {
                         value = getHierarchyProperty(member, longProp);
                     } else {
@@ -931,30 +822,23 @@ public class Convertor {
             }
             if (value != null) {
                 if (longProp instanceof IMondrianOlap4jProperty) {
-                    any.add(new CellInfoItemR(encoder.encode(prop.getName()),
-                        value.toString(),
-                        Optional.ofNullable(getXsdType(prop))));
+                    any.add(new CellInfoItemR(encoder.encode(prop.getName()), value.toString(),
+                            Optional.ofNullable(getXsdType(prop))));
                 } else {
-                    any.add(new CellInfoItemR(encoder.encode(prop.getName()),
-                        value.toString(),
-                        Optional.empty()));
+                    any.add(new CellInfoItemR(encoder.encode(prop.getName()), value.toString(), Optional.empty()));
                 }
             }
         }
-        return new MemberTypeR(any,
-            member.getHierarchy().getUniqueName());
+        return new MemberTypeR(any, member.getHierarchy().getUniqueName());
 
     }
 
-    private static OlapInfoR getOlapInfo(
-        CellSet cellSet,
-        List<String> queryCellPropertyNames,
-        boolean omitDefaultSlicerInfo
-    ) {
+    private static OlapInfoR getOlapInfo(CellSet cellSet, List<String> queryCellPropertyNames,
+            boolean omitDefaultSlicerInfo) {
         Cube cube = cellSet.getMetaData().getCube();
         String cubeName = cube.getName();
-        Instant lastDataUpdate = Instant.now(); //TODO get from getMondrianOlap4jSchema()
-        Instant lastSchemaUpdate = Instant.now(); //TODO
+        Instant lastDataUpdate = Instant.now(); // TODO get from getMondrianOlap4jSchema()
+        Instant lastSchemaUpdate = Instant.now(); // TODO
         OlapInfoCubeR olapInfoCube = new OlapInfoCubeR(cubeName, lastDataUpdate, lastSchemaUpdate);
         List<OlapInfoCube> cubes = List.of(olapInfoCube);
         CubeInfoR cubeInfo = new CubeInfoR(cubes);
@@ -974,7 +858,8 @@ public class Convertor {
             }
             CellProperty cellProperty = cellPropertyMap.get(cellPropertyName);
             if (cellProperty != null) {
-                Optional<String> oType = cellProperty.getXsdType() != null ? Optional.of(cellProperty.getXsdType()) : Optional.empty();
+                Optional<String> oType = cellProperty.getXsdType() != null ? Optional.of(cellProperty.getXsdType())
+                        : Optional.empty();
                 any.add(new CellInfoItemR(cellProperty.getAlias(), cellPropertyName, oType));
             }
         }
@@ -1000,8 +885,8 @@ public class Convertor {
         } else {
             // The slicer axes contains the default hierarchy
             // of each dimension not seen on another axis.
-            List<Dimension> unseenDimensionList =
-                new ArrayList(cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
+            List<Dimension> unseenDimensionList = new ArrayList(
+                    cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
             for (Hierarchy hier1 : axisHierarchyList) {
                 unseenDimensionList.remove(hier1.getDimension());
             }
@@ -1011,9 +896,10 @@ public class Convertor {
                     hierarchies.add(hierarchy);
                 }
             }
-            axisInfo.add(new AxisInfoR(getHierarchyInfoList(hierarchies, getProps(slicerAxis.getAxisMetaData())), SLICER_AXIS));
+            axisInfo.add(new AxisInfoR(getHierarchyInfoList(hierarchies, getProps(slicerAxis.getAxisMetaData())),
+                    SLICER_AXIS));
         }
-        //slicerAxisHierarchies = hierarchies;
+        // slicerAxisHierarchies = hierarchies;
         return new AxesInfoR(axisInfo);
     }
 
@@ -1073,29 +959,23 @@ public class Convertor {
 
     }
 
-    private static Optional<CellInfoItem> getCellInfoItemProperty(
-        Hierarchy hierarchy,
-        final IMondrianOlap4jProperty prop
-    ) {
+    private static Optional<CellInfoItem> getCellInfoItemProperty(Hierarchy hierarchy,
+            final IMondrianOlap4jProperty prop) {
         String thisHierarchyName = hierarchy.getName();
-        String thatHierarchiName = prop.getLevel()
-            .getHierarchy().getName();
+        String thatHierarchiName = prop.getLevel().getHierarchy().getName();
         if (thisHierarchyName.equals(thatHierarchiName)) {
             return Optional.of(getCellInfoItem(hierarchy, prop));
         }
         return Optional.empty();
     }
 
-    private static CellInfoItem getCellInfoItem(
-        Hierarchy hierarchy,
-        final Property prop
-    ) {
-        final String encodedProp = encoder
-            .encode(prop.getName());
-        final Object[] attributes = getAttributes(
-            prop, hierarchy);
+    private static CellInfoItem getCellInfoItem(Hierarchy hierarchy, final Property prop) {
+        final String encodedProp = encoder.encode(prop.getName());
+        final Object[] attributes = getAttributes(prop, hierarchy);
         String name = attributes != null && attributes.length > 1 ? attributes[1].toString() : null;
-        Optional<String> type =  attributes != null && attributes.length > 3 ? Optional.ofNullable(attributes[3] != null ? attributes[3].toString() : null) : Optional.empty();
+        Optional<String> type = attributes != null && attributes.length > 3
+                ? Optional.ofNullable(attributes[3] != null ? attributes[3].toString() : null)
+                : Optional.empty();
         return new CellInfoItemR(encodedProp, name, type);
     }
 
@@ -1106,9 +986,7 @@ public class Convertor {
         }
         List<Object> values = new ArrayList<>();
         values.add("name");
-        values.add(
-            new StringBuilder(hierarchy.getUniqueName())
-                .append(".")
+        values.add(new StringBuilder(hierarchy.getUniqueName()).append(".")
                 .append(Util.quoteMdxIdentifier(longProp.getName())).toString());
         if (!(longProp instanceof IMondrianOlap4jProperty)) {
             values.add("type");
@@ -1121,7 +999,7 @@ public class Convertor {
         if (queryAxis == null) {
             return defaultProps;
         }
-        List<Property> composite=new ArrayList<Property>();
+        List<Property> composite = new ArrayList<Property>();
         composite.addAll(defaultProps);
         composite.addAll(queryAxis.getProperties());
         return composite;
@@ -1132,8 +1010,7 @@ public class Convertor {
             return true;
         }
         for (Position pos : positions) {
-            if (pos.getMembers().stream()
-                .anyMatch(member -> Objects.nonNull(getHierarchyProperty(member, prop)))) {
+            if (pos.getMembers().stream().anyMatch(member -> Objects.nonNull(getHierarchyProperty(member, prop)))) {
                 return true;
             }
         }
@@ -1165,10 +1042,7 @@ public class Convertor {
         }
     }
 
-    private static Property rename(
-        final Property property,
-        final String name
-    ) {
+    private static Property rename(final Property property, final String name) {
         return new Property() {
             @Override
             public Datatype getDatatype() {
@@ -1200,34 +1074,34 @@ public class Convertor {
      */
     private static String sqlToXsdType(final int sqlType, final int scale) {
         switch (sqlType) {
-            // Integer
-            case Types.INTEGER:
-            case Types.SMALLINT:
-            case Types.TINYINT:
+        // Integer
+        case Types.INTEGER:
+        case Types.SMALLINT:
+        case Types.TINYINT:
+            return XSD_INTEGER;
+        case Types.NUMERIC:
+        case Types.DECIMAL:
+            // Oracle reports all numbers as NUMERIC. We check
+            // the scale of the column and pick the right XSD type.
+            if (scale == 0) {
                 return XSD_INTEGER;
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                // Oracle reports all numbers as NUMERIC. We check
-                // the scale of the column and pick the right XSD type.
-                if (scale == 0) {
-                    return XSD_INTEGER;
-                } else {
-                    return XSD_DECIMAL;
-                }
-            case Types.BIGINT:
-                return XSD_INTEGER_LONG;
-            // Real
-            case Types.DOUBLE:
-            case Types.FLOAT:
-                return XSD_DOUBLE;
-            // Date and time
-            case Types.TIME:
-            case Types.TIMESTAMP:
-            case Types.DATE:
-                return XSD_STRING;
-            // Other
-            default:
-                return XSD_STRING;
+            } else {
+                return XSD_DECIMAL;
+            }
+        case Types.BIGINT:
+            return XSD_INTEGER_LONG;
+        // Real
+        case Types.DOUBLE:
+        case Types.FLOAT:
+            return XSD_DOUBLE;
+        // Date and time
+        case Types.TIME:
+        case Types.TIMESTAMP:
+        case Types.DATE:
+            return XSD_STRING;
+        // Other
+        default:
+            return XSD_STRING;
         }
     }
 
@@ -1238,8 +1112,7 @@ public class Convertor {
 
         protected Column(String name) {
             this.name = name;
-            this.encodedName =
-                XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
+            this.encodedName = XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
         }
 
         public abstract List<RowSetRowItem> getRowSetRowItems(Cell cell, Member[] members);
@@ -1256,12 +1129,10 @@ public class Convertor {
             // replace invalid XML element name, like " ", with "_x0020_" in
             // column headers, otherwise will generate a badly-formatted xml
             // doc.
-            this.encodedName =
-                XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
+            this.encodedName = XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
             this.xsdType = sqlToXsdType(type, scale);
         }
     }
-
 
     static class CellColumn extends Column {
 
@@ -1276,8 +1147,7 @@ public class Convertor {
                 return result;
             }
             Object value = cell.getValue();
-            final String dataType = (String)
-                cell.getPropertyValue(Property.StandardCellProperty.DATATYPE.getName());
+            final String dataType = (String) cell.getPropertyValue(Property.StandardCellProperty.DATATYPE.getName());
 
             final ValueInfo vi = new ValueInfo(dataType, value);
             final String valueType = vi.valueType;
@@ -1289,9 +1159,8 @@ public class Convertor {
                 valueString = XmlaUtil.normalizeNumericString(valueString);
             }
 
-            result.add(new RowSetRowItemR(encodedName, name,
-                valueString,
-                Optional.of(ItemTypeEnum.fromValue(valueType))));
+            result.add(
+                    new RowSetRowItemR(encodedName, name, valueString, Optional.of(ItemTypeEnum.fromValue(valueType))));
             return result;
         }
     }
@@ -1302,11 +1171,8 @@ public class Convertor {
         private final Level level;
         private final int memberOrdinal;
 
-        public MemberColumn(
-            Property property, Level level, int memberOrdinal
-        ) {
-            super(
-                new StringBuilder(level.getUniqueName()).append(".")
+        public MemberColumn(Property property, Level level, int memberOrdinal) {
+            super(new StringBuilder(level.getUniqueName()).append(".")
                     .append(Util.quoteMdxIdentifier(property.getName())).toString());
             this.property = property;
             this.level = level;
@@ -1317,27 +1183,26 @@ public class Convertor {
         public List<RowSetRowItem> getRowSetRowItems(Cell cell, Member[] members) {
             List<RowSetRowItem> result = new ArrayList<>();
 
-            Member member = members[ memberOrdinal ];
+            Member member = members[memberOrdinal];
             final int depth = level.getDepth();
 
-            if ( member.getDepth() < depth ) {
+            if (member.getDepth() < depth) {
                 // This column deals with a level below the current member. There is no value to write.
                 return result;
             }
 
-            while ( member.getDepth() > depth ) {
+            while (member.getDepth() > depth) {
                 member = member.getParentMember();
             }
 
-            final Object propertyValue = member.getPropertyValue( property.getName() );
+            final Object propertyValue = member.getPropertyValue(property.getName());
 
-            if ( propertyValue == null ) {
-              return result;
+            if (propertyValue == null) {
+                return result;
             }
 
-            result.add(new RowSetRowItemR(encodedName, name,
-                    propertyValue.toString(),
-                    Optional.of(ItemTypeEnum.STRING)));
+            result.add(
+                    new RowSetRowItemR(encodedName, name, propertyValue.toString(), Optional.of(ItemTypeEnum.STRING)));
             return result;
         }
     }

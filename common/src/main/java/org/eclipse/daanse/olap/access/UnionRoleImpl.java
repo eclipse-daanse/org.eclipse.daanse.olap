@@ -23,7 +23,7 @@
  *   SmartCity Jena - initial
  */
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.access;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ import org.slf4j.LoggerFactory;
  * Implementation of {@link Role} which combines the privileges of several
  * roles and has the superset of their privileges.
  *
- * @see org.eclipse.daanse.olap.common.RoleImpl#union(java.util.List)
+ * @see org.eclipse.daanse.olap.access.RoleImpl#union(java.util.List)
  *
  * @author jhyde
  * @since Nov 26, 2007

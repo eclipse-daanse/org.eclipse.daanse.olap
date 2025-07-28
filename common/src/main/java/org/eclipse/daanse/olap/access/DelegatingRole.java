@@ -23,7 +23,7 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.access;
 
 import org.eclipse.daanse.olap.api.access.AccessCatalog;
 import org.eclipse.daanse.olap.api.access.AccessCube;
@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.access.AccessHierarchy;
 import org.eclipse.daanse.olap.api.access.AccessMember;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;
 import org.eclipse.daanse.olap.api.element.DatabaseSchema;
@@ -45,7 +46,6 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.api.element.Catalog;
 
 /**
  * DelegatingRole implements {@link Role} by
@@ -97,7 +97,7 @@ public class DelegatingRole implements Role {
      *
      * This implementation returns the same access as the underlying role.
      * Derived class may choose to refine access by creating a subclass of
-     * {@link org.eclipse.daanse.olap.common.RoleImpl.DelegatingHierarchyAccess}.
+     * {@link org.eclipse.daanse.olap.access.RoleImpl.DelegatingHierarchyAccess}.
      */
     @Override
 	public HierarchyAccess getAccessDetails(Hierarchy hierarchy) {

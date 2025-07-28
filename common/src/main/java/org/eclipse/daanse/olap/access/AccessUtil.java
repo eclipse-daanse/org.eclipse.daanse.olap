@@ -10,7 +10,7 @@
 * Contributors:
 *   SmartCity Jena - initial
 */
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.access;
 
 import org.eclipse.daanse.olap.api.access.AccessCube;
 import org.eclipse.daanse.olap.api.access.AccessDimension;
@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.access.AccessMember;
 
 public class AccessUtil {
 
-    static AccessDimension getAccessDimension(AccessCube accessCube) {
+    public static AccessDimension getAccessDimension(AccessCube accessCube) {
         switch (accessCube) {
         case ALL:
             return AccessDimension.ALL;
@@ -32,7 +32,7 @@ public class AccessUtil {
         }
     }
 
-    static AccessMember getAccessMember(AccessDimension access) {
+    public static AccessMember getAccessMember(AccessDimension access) {
         switch (access) {
         case NONE:
             return AccessMember.NONE;
@@ -45,7 +45,7 @@ public class AccessUtil {
         }
     }
 
-    static AccessMember getAccessMember(AccessHierarchy access) {
+    public static AccessMember getAccessMember(AccessHierarchy access) {
         switch (access) {
         case NONE:
             return AccessMember.NONE;

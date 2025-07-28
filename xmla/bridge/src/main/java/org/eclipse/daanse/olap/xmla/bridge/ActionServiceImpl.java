@@ -25,7 +25,7 @@ import java.util.function.Function;
 import org.eclipse.daanse.olap.action.api.ReportAction;
 import org.eclipse.daanse.olap.action.api.UrlAction;
 import org.eclipse.daanse.olap.action.api.XmlaAction;
-import org.eclipse.daanse.olap.api.DrillThroughAction;
+import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.xmla.api.RequestMetaData;

@@ -11,9 +11,7 @@
 *   SmartCity Jena - initial
 */
 
-package org.eclipse.daanse.olap.api;
-
-import org.eclipse.daanse.olap.api.element.OlapElement;
+package org.eclipse.daanse.olap.api.element;
 
 public interface DrillThroughColumn {
       OlapElement getOlapElement();

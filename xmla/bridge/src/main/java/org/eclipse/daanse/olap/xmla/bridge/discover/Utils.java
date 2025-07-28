@@ -29,7 +29,7 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.InternalOperationAt
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.DrillThroughAction;
+import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;

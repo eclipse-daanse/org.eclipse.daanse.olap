@@ -11,12 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.action.api;
+package org.eclipse.daanse.olap.api.action;
 
 import java.util.List;
 import java.util.Optional;
 
-public non-sealed interface DrillThroughAction extends XmlaAction {
+public non-sealed interface DrillThroughAction extends Action {
 
 
     Optional<List<String>> catalogs();

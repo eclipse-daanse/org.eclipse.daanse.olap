@@ -35,7 +35,6 @@
 
   <modules>
     <module>api</module>
-    <module>action</module>
     <module>common</module>
     <module>xmla</module>
     <module>spi</module>

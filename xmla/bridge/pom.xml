@@ -40,19 +40,7 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.olap.action.api</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>

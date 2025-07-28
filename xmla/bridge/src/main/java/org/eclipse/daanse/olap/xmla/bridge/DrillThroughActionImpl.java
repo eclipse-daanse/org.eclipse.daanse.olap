@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.action.api.DrillThroughAction;
+import org.eclipse.daanse.olap.api.action.DrillThroughAction;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.metatype.annotations.Designate;

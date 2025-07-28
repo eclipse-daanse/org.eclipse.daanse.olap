@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge;
 
 import java.util.Map;
 
-import org.eclipse.daanse.olap.action.api.ReportAction;
+import org.eclipse.daanse.olap.api.action.ReportAction;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.metatype.annotations.Designate;

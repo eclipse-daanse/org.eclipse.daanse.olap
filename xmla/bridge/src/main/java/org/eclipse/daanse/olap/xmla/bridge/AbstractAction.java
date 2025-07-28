@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.olap.api.action.CoordinateTypeEnum;
 
 public abstract class AbstractAction {
 

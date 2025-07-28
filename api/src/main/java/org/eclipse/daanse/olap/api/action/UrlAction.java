@@ -11,8 +11,8 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.action.api;
+package org.eclipse.daanse.olap.api.action;
 
-public non-sealed interface UrlAction extends XmlaAction {
+public non-sealed interface UrlAction extends Action {
 
 }

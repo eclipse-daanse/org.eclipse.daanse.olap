@@ -24,7 +24,7 @@
  *   SmartCity Jena - initial
  */
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.access;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +56,9 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.VirtualCube;
+import org.eclipse.daanse.olap.common.OlapElementBase;
+import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

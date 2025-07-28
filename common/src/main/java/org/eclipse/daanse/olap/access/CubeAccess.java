@@ -25,7 +25,7 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.access;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.MdxCubeSlicerHierarchyErrorException;
 import org.eclipse.daanse.olap.exceptions.MdxCubeSlicerMemberErrorException;
 import org.eclipse.daanse.olap.query.component.IdImpl;

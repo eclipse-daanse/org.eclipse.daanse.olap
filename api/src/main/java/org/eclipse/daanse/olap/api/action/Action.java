@@ -11,13 +11,11 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.action.api;
-
-import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+package org.eclipse.daanse.olap.api.action;
 
 import java.util.Optional;
 
-public sealed interface XmlaAction permits DrillThroughAction, ReportAction, UrlAction {
+public sealed interface Action permits DrillThroughAction, ReportAction, UrlAction {
     String content( String coordinate, String cubeName );
     Optional<String> catalogName();
     Optional<String> schemaName();

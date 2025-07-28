@@ -347,4 +347,6 @@ public boolean isOnSameHierarchyChain( Member otherMember ) {
   public boolean isOnSameHierarchyChainInternal( MemberBase otherMember ) {
     return FunUtil.isAncestorOf( otherMember, this, false ) || FunUtil.isAncestorOf( this, otherMember, false );
   }
+
+  public abstract Object getCaptionValue();
 }

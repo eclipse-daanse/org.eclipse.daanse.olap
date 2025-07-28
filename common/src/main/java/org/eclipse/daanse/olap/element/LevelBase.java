@@ -25,7 +25,7 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.element;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -41,6 +41,8 @@ import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
+import org.eclipse.daanse.olap.common.OlapElementBase;
+import org.eclipse.daanse.olap.common.Util;
 /**
  * Skeleton implementation of {@link Level}.
  *

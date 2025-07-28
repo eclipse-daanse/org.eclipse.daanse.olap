@@ -10,11 +10,11 @@
 * Contributors:
 *   SmartCity Jena - initial
 */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.OlapAction;
 
 public interface DrillThroughAction extends OlapAction{
 

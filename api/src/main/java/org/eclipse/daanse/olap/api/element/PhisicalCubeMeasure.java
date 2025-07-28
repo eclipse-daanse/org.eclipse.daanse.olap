@@ -11,9 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.api;
-
-import org.eclipse.daanse.olap.api.element.Measure;
+package org.eclipse.daanse.olap.api.element;
 
 public interface PhisicalCubeMeasure extends Measure {
 

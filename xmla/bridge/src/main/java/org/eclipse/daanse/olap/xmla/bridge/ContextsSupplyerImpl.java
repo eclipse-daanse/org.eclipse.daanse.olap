@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.xmla.bridge;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ContextGroup;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Catalog;
 
 public class ContextsSupplyerImpl implements ContextListSupplyer {

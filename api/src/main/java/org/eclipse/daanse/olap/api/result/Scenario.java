@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.api.result;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.DataTypeJdbc;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**

@@ -1688,7 +1688,7 @@ public class Util {
     public static SQLException close(
         CellSet resultSet,
         org.eclipse.daanse.olap.impl.StatementImpl statement,
-        org.eclipse.daanse.olap.api.Connection connection)
+        org.eclipse.daanse.olap.api.connection.Connection connection)
     {
         SQLException firstException = null;
         if (resultSet != null) {
@@ -2826,7 +2826,7 @@ public class Util {
    * @return Wrapped schema reader
    */
   public static CatalogReader locusCatalogReader(
-      org.eclipse.daanse.olap.api.Connection connection,
+      org.eclipse.daanse.olap.api.connection.Connection connection,
       final CatalogReader schemaReader)
   {
       final org.eclipse.daanse.olap.api.Statement statement = connection.getInternalStatement();

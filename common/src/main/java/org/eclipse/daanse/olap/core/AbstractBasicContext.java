@@ -20,11 +20,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.CatalogCache;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.IAggregationManager;
 import org.eclipse.daanse.olap.api.ResultShepherd;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEndEvent;
@@ -222,7 +222,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 
 
 	@Override
-	public List<Statement> getStatements(org.eclipse.daanse.olap.api.Connection connection) {
+	public List<Statement> getStatements(org.eclipse.daanse.olap.api.connection.Connection connection) {
 		return statements.stream().filter(stmnt -> stmnt.getMondrianConnection().equals(connection))
 				.toList();
 	}

@@ -27,13 +27,18 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.connection;
 
 import java.io.PrintWriter;
 import java.util.Locale;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.CatalogReader;
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.query.component.Expression;

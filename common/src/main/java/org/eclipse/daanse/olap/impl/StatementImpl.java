@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.ConfigConstants;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
@@ -35,10 +35,9 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.common.ConnectionBase;
 import org.eclipse.daanse.olap.common.QueryCanceledException;
 import org.eclipse.daanse.olap.common.QueryTimeoutException;
-
+import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.server.LocusImpl;
 
 public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl implements Statement {

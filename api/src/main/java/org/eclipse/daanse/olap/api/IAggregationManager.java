@@ -15,6 +15,8 @@ package org.eclipse.daanse.olap.api;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.connection.Connection;
+
 public interface IAggregationManager {
 
     void shutdown();

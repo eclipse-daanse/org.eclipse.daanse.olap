@@ -22,7 +22,7 @@
  *   SmartCity Jena - initial
  */
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.connection;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +31,8 @@ import java.util.Set;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParser;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.DatabaseSchema;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.function.FunctionService;
@@ -40,6 +40,8 @@ import org.eclipse.daanse.olap.api.query.ExpressionProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.common.SqlQueryImpl;
+import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.FailedToParseQueryException;
 import org.eclipse.daanse.olap.guard.DatabaseCatalogImpl;
 import org.eclipse.daanse.olap.query.base.ExpressionProviderImpl;

@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.CatalogReader;
-import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.IdentifierSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.connection.Connection;
 
 /**
  * A Catalog is a collection of cubes, shared dimensions, and

@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import org.eclipse.daanse.olap.core.api.Constants;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
@@ -35,12 +36,11 @@ import org.slf4j.LoggerFactory;
 import aQute.bnd.metatype.annotations.Designate;
 
 @Designate(ocd = BasicContextGroupConfig.class, factory = true)
-@Component(service = ContextGroup.class, scope = ServiceScope.SINGLETON)
+@Component(service = ContextGroup.class, scope = ServiceScope.SINGLETON, configurationPid = Constants.BASIC_CONTEXT_GROUP_PID)
 public class BasicContextGroup implements ContextGroup {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContextGroup.class);
-	public static final String PID = "org.eclipse.daanse.olap.core.BasicContextGroup";
-	public static final String REF_NAME_CONTEXTS = "context";
+
 
 
 	private List<Context<?>> contexts = new CopyOnWriteArrayList<Context<?>>();
@@ -55,7 +55,7 @@ public class BasicContextGroup implements ContextGroup {
 	}
 
 //	
-	@Reference(name = REF_NAME_CONTEXTS,cardinality = ReferenceCardinality.MULTIPLE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, policy = ReferencePolicy.DYNAMIC)
+	@Reference(name = Constants.BASIC_CONTEXT_GROUP_REF_NAME_CONTEXTS,cardinality = ReferenceCardinality.MULTIPLE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, policy = ReferencePolicy.DYNAMIC)
 	public void bindContext(Context context) {
 		contexts.add(context);
 		createUniqueCheckedLists();

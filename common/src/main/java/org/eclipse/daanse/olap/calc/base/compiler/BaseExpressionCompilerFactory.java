@@ -28,20 +28,20 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 @Component(scope = ServiceScope.SINGLETON, configurationPid = BaseExpressionCompilerFactory.PID, service = ExpressionCompilerFactory.class)
 public class BaseExpressionCompilerFactory implements ExpressionCompilerFactory {
-	public static final String PID = "org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
+    public static final String PID = "daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory";
 
-	public BaseExpressionCompilerFactory() {
-		this(Map.of());
-	}
+    public BaseExpressionCompilerFactory() {
+        this(Map.of());
+    }
 
-	@Activate
-	public BaseExpressionCompilerFactory(Map<String, Object> map) {
-	}
+    @Activate
+    public BaseExpressionCompilerFactory(Map<String, Object> map) {
+    }
 
-	@Override
-	public ExpressionCompiler createExpressionCompiler(Evaluator evaluator, Validator validator,
-			List<ResultStyle> resultStyles) {
-		return new BetterExpCompiler(evaluator, validator, resultStyles);
-	}
+    @Override
+    public ExpressionCompiler createExpressionCompiler(Evaluator evaluator, Validator validator,
+            List<ResultStyle> resultStyles) {
+        return new BetterExpCompiler(evaluator, validator, resultStyles);
+    }
 
 }

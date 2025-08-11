@@ -24,6 +24,8 @@
   <artifactId>org.eclipse.daanse.olap</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
+  <name>Eclipse Daanse OLAP Processing Engine</name>
+  <description>Comprehensive OLAP (Online Analytical Processing) engine providing multidimensional data processing, cube operations, advanced query execution, intelligent caching, and aggregation management. Includes complete API framework for hierarchical navigation, measure calculations, access control, and XMLA protocol integration for enterprise analytical applications.</description>
 
   <properties>
     <revision>0.0.1-SNAPSHOT</revision>

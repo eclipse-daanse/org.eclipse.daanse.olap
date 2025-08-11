@@ -21,6 +21,8 @@
   </parent>
   <artifactId>org.eclipse.daanse.olap.common</artifactId>
   <packaging>jar</packaging>
+  <name>Eclipse Daanse OLAP Common</name>
+  <description>Common utilities and shared components for OLAP (Online Analytical Processing) operations including caching mechanisms, configuration management, and utility classes. Provides foundational infrastructure used across the Daanse OLAP processing engine components.</description>
 
   <dependencies>
 

@@ -21,6 +21,8 @@
 	</parent>
 	<artifactId>org.eclipse.daanse.olap.api</artifactId>
 	<packaging>jar</packaging>
+	<name>Eclipse Daanse OLAP API</name>
+	<description>Core API definitions for OLAP (Online Analytical Processing) operations including multidimensional data access, query execution, and cube manipulation interfaces. Provides the foundational contracts and service interfaces for the Daanse OLAP processing engine.</description>
 
 	<dependencies>
 		<dependency>

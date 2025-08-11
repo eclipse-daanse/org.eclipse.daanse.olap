@@ -17,7 +17,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String BASIC_CONTEXT_GROUP_PID = "org.eclipse.daanse.olap.core.BasicContextGroup";
+    public static final String BASIC_CONTEXT_GROUP_PID = "daanse.olap.core.BasicContextGroup";
 
     public static final String BASIC_CONTEXT_GROUP_REF_NAME_CONTEXTS = "context";
 }

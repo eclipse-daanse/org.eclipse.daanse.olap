@@ -30,9 +30,12 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.metatype.annotations.Designate;
 
-@Component(service = XmlaService.class)
+@Component(service = XmlaService.class, configurationPid = ContextGroupXmlaService.PID)
 @Designate(factory = true, ocd = ContextGroupXmlaServiceConfig.class)
 public class ContextGroupXmlaService implements XmlaService {
+
+    public static final String PID = "daanse.olap.xmla.bridge.ContextGroupXmlaService";
+    public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
 
     public static final String REF_NAME_ACTION_SERVICE = "actionService";
     private ContextGroupXmlaServiceConfig config;
@@ -52,9 +55,6 @@ public class ContextGroupXmlaService implements XmlaService {
         discoverService = new DelegatingDiscoverService(contextsListSupplyer, actionService, config);
         sessionService = new SessionServiceImpl();
     }
-
-    public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
-    public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
 
     private ExecuteService executeService;
     private DiscoverService discoverService;

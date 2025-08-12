@@ -88,7 +88,7 @@ public class FormatterCreateContext {
             if (formatterClassName != null) {
 
                 formatterAsElement = true;
-                formatterClassName = formatterClassName;
+                this.formatterClassName = formatterClassName;
             }
             return this;
         }

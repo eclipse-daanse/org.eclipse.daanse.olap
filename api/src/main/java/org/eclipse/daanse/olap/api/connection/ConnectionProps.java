@@ -34,7 +34,7 @@ public interface ConnectionProps {
 	 * is not shared with connections which have a textually identical schema.
 	 * Default is "true".
 	 */
-	boolean useSchemaPool();
+	boolean useCatalogCache();
 
 	/**
 	 * The "Locale" property is the requested Locale for the
@@ -46,8 +46,8 @@ public interface ConnectionProps {
 
 
 	/**
-	 * The "PinSchemaTimeout" defines how much time must Mondrian keep a hard
-	 * reference to schema objects within the pool of schemas.
+	 * The "PinSchemaTimeout" defines how much time must Daanse keep a hard
+	 * reference to schema objects within the cache.
 	 *
 	 *
 	 * After the timeout is reached, the hard reference will be cleared and the
@@ -65,14 +65,6 @@ public interface ConnectionProps {
 	 * If the timeout is a negative value, the reference will behave the same as a
 	 *  SoftReference. This is the default behavior.
 	 *
-	 *
-	 * The timeout value must be provided as a String representing both the time
-	 * value and the time unit. For example, 1 second is represented as "1s". Valid
-	 * time units are [d, h, m, s, ms], representing respectively days, hours,
-	 * minutes, seconds and milliseconds.
-	 *
-	 *
-	 * Defaults to "-1s".
 	 */
 	Duration pinSchemaTimeout();
 

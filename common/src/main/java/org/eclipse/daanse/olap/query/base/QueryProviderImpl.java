@@ -135,14 +135,14 @@ public class QueryProviderImpl implements QueryProvider {
     public Query createQuery(Statement statement, SelectStatement selectStatement, boolean strictValidation) {
         Subcube subcube = convertSubcube(selectStatement.selectSubcubeClause());
         List<Formula> formulaList = convertFormulaList(selectStatement.selectWithClauses());
-        List<QueryAxisImpl> axesList = convertQueryAxisList(selectStatement.selectQueryClause());
-        QueryAxisImpl slicerAxis = convertQueryAxis(selectStatement.selectSlicerAxisClause());
+        List<QueryAxis> axesList = convertQueryAxisList(selectStatement.selectQueryClause());
+        QueryAxis slicerAxis = convertQueryAxis(selectStatement.selectSlicerAxisClause());
         List<CellProperty> cellProps = convertParameterList(selectStatement.selectCellPropertyListClause());
 
         return createQuery(
             statement,
             formulaList.toArray(Formula[]::new),
-            axesList.toArray(QueryAxisImpl[]::new),
+            axesList.toArray(QueryAxis[]::new),
             subcube,
             slicerAxis,
             cellProps.toArray(CellProperty[]::new),

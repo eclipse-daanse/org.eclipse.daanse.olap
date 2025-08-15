@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.olap.query.base;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
@@ -65,6 +69,7 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.query.component.CellPropertyImpl;
 import org.eclipse.daanse.olap.query.component.FormulaImpl;
@@ -77,10 +82,6 @@ import org.eclipse.daanse.olap.query.component.StringLiteralImpl;
 import org.eclipse.daanse.olap.query.component.SubcubeImpl;
 import org.eclipse.daanse.olap.query.component.SymbolLiteralImpl;
 import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class MdxToQueryConverter {
 
@@ -134,7 +135,7 @@ public class MdxToQueryConverter {
 		return null;
 	}
 
-	static List<QueryAxisImpl> convertQueryAxisList(SelectQueryClause selectQueryClause) {
+	static List<QueryAxis> convertQueryAxisList(SelectQueryClause selectQueryClause) {
 		switch (selectQueryClause) {
 		case SelectQueryAsteriskClause _UNNAMED:
 			return selectQueryAsteriskClauseToQueryAxisList();
@@ -145,11 +146,11 @@ public class MdxToQueryConverter {
 		}
 	}
 
-	static List<QueryAxisImpl> selectQueryEmptyClauseToQueryAxisList() {
+	static List<QueryAxis> selectQueryEmptyClauseToQueryAxisList() {
 		return List.of();
 	}
 
-	static List<QueryAxisImpl> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
+	static List<QueryAxis> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
 		if (selectQueryAxesClause.selectQueryAxisClauses() != null) {
 			return selectQueryAxesClause.selectQueryAxisClauses().stream()
 					.map(MdxToQueryConverter::selectQueryAxisClauseToQueryAxisList).toList();
@@ -157,7 +158,7 @@ public class MdxToQueryConverter {
 		return List.of();
 	}
 
-	static QueryAxisImpl selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
+	static QueryAxis selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
 		Expression exp = getExpression(selectQueryAxisClause.expression());
 		AxisOrdinal axisOrdinal = getAxisOrdinal(selectQueryAxisClause.axis());
 		List<IdImpl> dimensionProperties = getDimensionProperties(
@@ -179,7 +180,7 @@ public class MdxToQueryConverter {
 		return AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(axis.ordinal());
 	}
 
-	static List<QueryAxisImpl> selectQueryAsteriskClauseToQueryAxisList() {
+	static List<QueryAxis> selectQueryAsteriskClauseToQueryAxisList() {
 		return List.of();
 	}
 
@@ -195,9 +196,9 @@ public class MdxToQueryConverter {
 
 	static Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
 		Subcube subcube = convertSubcube(selectSubcubeClauseStatement.selectSubcubeClause());
-		List<QueryAxisImpl> axes = convertQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
+		List<QueryAxis> axes = convertQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
 		String cubeName = null;
-		QueryAxisImpl slicerAxis = convertQueryAxis(selectSubcubeClauseStatement.selectSlicerAxisClause());
+		QueryAxis slicerAxis = convertQueryAxis(selectSubcubeClauseStatement.selectSlicerAxisClause());
 		return new SubcubeImpl(cubeName, subcube, axes.stream().toArray(QueryAxisImpl[]::new), slicerAxis);
 	}
 

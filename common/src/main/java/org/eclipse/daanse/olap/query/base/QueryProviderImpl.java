@@ -52,25 +52,24 @@ import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 import org.eclipse.daanse.olap.query.component.DmvQueryImpl;
 import org.eclipse.daanse.olap.query.component.DrillThroughImpl;
 import org.eclipse.daanse.olap.query.component.ExplainImpl;
-import org.eclipse.daanse.olap.query.component.QueryAxisImpl;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
 import org.eclipse.daanse.olap.query.component.RefreshImpl;
 import org.eclipse.daanse.olap.query.component.UpdateImpl;
 
 public class QueryProviderImpl implements QueryProvider {
 
-	@Override
-	public QueryComponent createQuery(Statement statement, MdxStatement mdxStatement, boolean strictValidation) {
+    @Override
+    public QueryComponent createQuery(Statement statement, MdxStatement mdxStatement, boolean strictValidation) {
 
-		return switch (mdxStatement) {
-		case SelectStatement select -> createQuery(statement, select, strictValidation);
-		case DrillthroughStatement drillthrougt -> createDrillThrough(statement, drillthrougt, strictValidation);
-		case ExplainStatement explain -> createExplain(statement, explain, strictValidation);
-		case DMVStatement dmv -> createDMV(dmv);
-		case RefreshStatement refresh -> createRefresh(refresh);
-		case UpdateStatement update -> createUpdate(update);
-		};
-	}
+        return switch (mdxStatement) {
+        case SelectStatement select -> createQuery(statement, select, strictValidation);
+        case DrillthroughStatement drillthrougt -> createDrillThrough(statement, drillthrougt, strictValidation);
+        case ExplainStatement explain -> createExplain(statement, explain, strictValidation);
+        case DMVStatement dmv -> createDMV(dmv);
+        case RefreshStatement refresh -> createRefresh(refresh);
+        case UpdateStatement update -> createUpdate(update);
+        };
+    }
 
     @Override
     public Refresh createRefresh(RefreshStatement refreshStatement) {
@@ -94,7 +93,7 @@ public class QueryProviderImpl implements QueryProvider {
         Expression value = MdxToQueryConverter.getExpression(updateClause.valueExp());
         Allocation allocation = updateClause.allocation();
         Expression weight = MdxToQueryConverter.getExpression(updateClause.weight());
-        return  new UpdateImpl.UpdateClauseImpl(tuple, value, allocation, weight);
+        return new UpdateImpl.UpdateClauseImpl(tuple, value, allocation, weight);
     }
 
     @Override
@@ -105,9 +104,7 @@ public class QueryProviderImpl implements QueryProvider {
             dmvStatement.columns().forEach(c -> columns.addAll(convertColumns(c.objectIdentifiers())));
         }
         Expression whereExpression = MdxToQueryConverter.getExpression(dmvStatement.where());
-        return new DmvQueryImpl(tableName,
-            columns,
-            whereExpression);
+        return new DmvQueryImpl(tableName, columns, whereExpression);
     }
 
     @Override
@@ -117,18 +114,17 @@ public class QueryProviderImpl implements QueryProvider {
     }
 
     @Override
-    public DrillThrough createDrillThrough(Statement statement, DrillthroughStatement drillthroughStatement, boolean strictValidation) {
+    public DrillThrough createDrillThrough(Statement statement, DrillthroughStatement drillthroughStatement,
+            boolean strictValidation) {
         Query query = createQuery(statement, drillthroughStatement.selectStatement(), strictValidation);
         List<Expression> returnList = new ArrayList<>();
         if (drillthroughStatement.returnItems() != null) {
-            for ( ReturnItem returnItem : drillthroughStatement.returnItems()) {
+            for (ReturnItem returnItem : drillthroughStatement.returnItems()) {
                 returnList.add(getExpressionByCompoundId(returnItem.compoundId()));
             }
         }
-        return new DrillThroughImpl(query,
-            drillthroughStatement.maxRows().orElse(0),
-            drillthroughStatement.firstRowSet().orElse(0),
-            returnList);
+        return new DrillThroughImpl(query, drillthroughStatement.maxRows().orElse(0),
+                drillthroughStatement.firstRowSet().orElse(0), returnList);
     }
 
     @Override
@@ -139,32 +135,20 @@ public class QueryProviderImpl implements QueryProvider {
         QueryAxis slicerAxis = convertQueryAxis(selectStatement.selectSlicerAxisClause());
         List<CellProperty> cellProps = convertParameterList(selectStatement.selectCellPropertyListClause());
 
-        return createQuery(
-            statement,
-            formulaList.toArray(Formula[]::new),
-            axesList.toArray(QueryAxis[]::new),
-            subcube,
-            slicerAxis,
-            cellProps.toArray(CellProperty[]::new),
-            strictValidation);
+        return createQuery( //
+                statement, //
+                formulaList.toArray(Formula[]::new), //
+                axesList.toArray(QueryAxis[]::new), //
+                subcube, //
+                slicerAxis, //
+                cellProps.toArray(CellProperty[]::new), //
+                strictValidation);
     }
 
     @Override
-    public Query createQuery(Statement statement,
-                             Formula[] formula,
-                             QueryAxis[] axes,
-                             Subcube subcube,
-                             QueryAxis slicerAxis,
-                             CellProperty[] cellProps,
-                             boolean strictValidation) {
-        return new QueryImpl(
-            statement,
-            formula,
-            axes,
-            subcube,
-            slicerAxis,
-            cellProps,
-            strictValidation);
+    public Query createQuery(Statement statement, Formula[] formula, QueryAxis[] axes, Subcube subcube,
+            QueryAxis slicerAxis, CellProperty[] cellProps, boolean strictValidation) {
+        return new QueryImpl(statement, formula, axes, subcube, slicerAxis, cellProps, strictValidation);
     }
 
     }

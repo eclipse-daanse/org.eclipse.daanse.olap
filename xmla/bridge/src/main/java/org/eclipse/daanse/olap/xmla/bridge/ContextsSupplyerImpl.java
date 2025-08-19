@@ -33,12 +33,12 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
 
     @Override
     public List<Catalog> get(List<String> roles) {
-        return getContexts().stream().map(context -> context.getConnection(roles)).map(Connection::getCatalog).toList();
+        return getContexts().stream().map(context -> context.getConnection(new ConnectionPropsR(roles))).map(Connection::getCatalog).toList();
     }
 
     @Override
     public Optional<Catalog> tryGetFirstByName(String catalogName, List<String> roles) {
-        return getContext(catalogName).map(co -> co.getConnection(roles).getCatalog());
+        return getContext(catalogName).map(co -> co.getConnection(new ConnectionPropsR(roles)).getCatalog());
     }
 
     @Override

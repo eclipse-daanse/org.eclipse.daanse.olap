@@ -122,7 +122,6 @@ public interface Context<C extends Connection> {
 	 * Gives access to the  Connection.
 	 */
 	C getConnectionWithDefaultRole();
-	C getConnection(List<String> roles);
 
     C getConnection(ConnectionProps props);
 

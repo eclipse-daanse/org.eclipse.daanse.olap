@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge;
 
 import java.util.Map;
 
+import org.eclipse.daanse.lcid.api.LcidService;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.xmla.bridge.discover.DelegatingDiscoverService;
 import org.eclipse.daanse.olap.xmla.bridge.execute.OlapExecuteService;
@@ -43,7 +44,10 @@ public class ContextGroupXmlaService implements XmlaService {
     @Reference(name = REF_NAME_ACTION_SERVICE)
     private ActionService actionService;
     private SessionService sessionService;
-
+    
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL)
+    private LcidService lcidService;
+    
     public ContextGroupXmlaService() {
 
     }
@@ -51,7 +55,7 @@ public class ContextGroupXmlaService implements XmlaService {
     @Activate
     void activate(ContextGroupXmlaServiceConfig config, Map<String, Object> props) {
         ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contextGroup);
-        executeService = new OlapExecuteService(contextsListSupplyer, actionService, config);
+        executeService = new OlapExecuteService(contextsListSupplyer, actionService, lcidService, config);
         discoverService = new DelegatingDiscoverService(contextsListSupplyer, actionService, config);
         sessionService = new SessionServiceImpl();
     }

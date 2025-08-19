@@ -28,9 +28,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import org.eclipse.daanse.lcid.api.LcidService;
 import org.eclipse.daanse.mdx.model.api.select.Allocation;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Command;
@@ -65,6 +67,7 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.xmla.bridge.ActionService;
+import org.eclipse.daanse.olap.xmla.bridge.ConnectionPropsR;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.olap.xmla.bridge.discover.DBSchemaDiscoverService;
@@ -77,6 +80,7 @@ import org.eclipse.daanse.xmla.api.XmlaException;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.common.properties.OperationNames;
+import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
@@ -183,10 +187,12 @@ public class OlapExecuteService implements ExecuteService {
     private final DBSchemaDiscoverService dbSchemaService;
     private final MDSchemaDiscoverService mdSchemaService;
     private final OtherDiscoverService otherDiscoverService;
+    private final LcidService lcidService;
 
     public OlapExecuteService(ContextListSupplyer contextsListSupplyer, ActionService actionService,
-            ContextGroupXmlaServiceConfig config) {
+            LcidService lcidService, ContextGroupXmlaServiceConfig config) {
         this.contextsListSupplyer = contextsListSupplyer;
+        this.lcidService = lcidService;
         this.config = config;
         dbSchemaService = new DBSchemaDiscoverService(contextsListSupplyer);
         mdSchemaService = new MDSchemaDiscoverService(contextsListSupplyer, actionService);
@@ -205,7 +211,7 @@ public class OlapExecuteService implements ExecuteService {
         // TODO: Context should have cencel with session
         for (Context<?> context : contexts) {
             try {
-                final Connection connection = context.getConnection(userPrincipal.roles());
+                final Connection connection = context.getConnection(new ConnectionPropsR(userPrincipal));
                 /*
                  * final mondrian.rolap.RolapConnection rolapConnection1 =
                  * ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection(); for(XmlaRequest
@@ -247,7 +253,8 @@ public class OlapExecuteService implements ExecuteService {
             Context context = oContext.get();
             String statement = statementRequest.command().statement();
             if (statement != null && statement.length() > 0) {
-                Connection connection = context.getConnection(userPrincipal.roles());
+                Locale locale = getLocale(statementRequest.properties());
+                Connection connection = context.getConnection(new ConnectionPropsR(userPrincipal.roles(), locale));
                 QueryComponent queryComponent = connection.parseStatement(statement);
 
                 if (queryComponent instanceof DrillThrough drillThrough) {
@@ -276,7 +283,7 @@ public class OlapExecuteService implements ExecuteService {
             String statement = statementRequest.command().statement();
             if (statement != null && statement.length() > 0 && contextsListSupplyer.getContexts() != null
                     && !contextsListSupplyer.getContexts().isEmpty()) {
-                Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(userPrincipal.roles());
+                Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionPropsR(userPrincipal));
                 QueryComponent queryComponent = connection.parseStatement(statement);
                 if (queryComponent instanceof DmvQuery dmvQuery
                         && dmvQuery.getTableName().equals(OperationNames.DBSCHEMA_CATALOGS)) {
@@ -293,6 +300,14 @@ public class OlapExecuteService implements ExecuteService {
         }
 
         return new StatementResponseR(null, null);
+    }
+
+    private Locale getLocale(Properties properties) {
+        if (lcidService != null) { 
+            Optional<Locale> oLocale = lcidService.lcidToLocale(properties != null ? properties.localeIdentifier() : Optional.empty());
+            return oLocale.orElse(Locale.getDefault());
+        }
+        return Locale.getDefault();
     }
 
     private StatementResponse executeSqlQuery(SqlQuery sqlQuery) {

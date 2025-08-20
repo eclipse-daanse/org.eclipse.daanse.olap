@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.eclipse.daanse.olap.api.element.DrillThroughAction;
+import org.eclipse.daanse.olap.api.action.Action;
 import org.eclipse.daanse.olap.api.action.ReportAction;
 import org.eclipse.daanse.olap.api.action.UrlAction;
-import org.eclipse.daanse.olap.api.action.Action;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.UserPrincipal;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;

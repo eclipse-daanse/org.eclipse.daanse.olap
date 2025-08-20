@@ -29,7 +29,6 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.InternalOperationAt
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;
@@ -37,6 +36,7 @@ import org.eclipse.daanse.olap.api.element.DatabaseSchema;
 import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.DimensionType;
+import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.KPI;
 import org.eclipse.daanse.olap.api.element.Level;

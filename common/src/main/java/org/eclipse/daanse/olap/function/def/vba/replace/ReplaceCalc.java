@@ -37,23 +37,35 @@ public class ReplaceCalc extends AbstractProfilingNestedStringCalc {
         return replace(expression, find, replace, start, count);
     }
 
-    public static String replace(String expression, String find, String replace, int start /* default 1 */,
-            int count /* default -1 */) {
-        final StringBuilder buf = new StringBuilder(expression);
-        int i = 0;
-        int pos = start - 1;
-        while (true) {
-            if (i++ == count) {
-                break;
-            }
-            final int j = buf.indexOf(find, pos);
-            if (j == -1) {
-                break;
-            }
-            buf.replace(j, j + find.length(), replace);
-            pos = j + replace.length();
+    public static String replace(String expression, String find, String repl, int start, int count) {
+        if (expression == null || find == null || repl == null) return expression;
+        if (find.isEmpty()) return expression;                // avoid infinite loop semantics
+        if (count == 0) return expression;
+
+        final int from = Math.max(0, start - 1);              // 1-based -> 0-based, clamp at 0
+        if (from >= expression.length()) return expression;   // nothing to do
+
+        final String s = expression;
+        final StringBuilder out = new StringBuilder(s.length());
+        out.append(s, 0, from);
+
+        int pos = from;
+        int replaced = 0;
+        final boolean unlimited = (count < 0);
+
+        for (;;) {
+            int idx = s.indexOf(find, pos);
+            if (idx < 0) break;
+            if (!unlimited && replaced == count) break;
+
+            out.append(s, pos, idx);
+            out.append(repl);
+            pos = idx + find.length();
+            replaced++;
         }
-        return buf.toString();
+
+        out.append(s, pos, s.length());
+        return out.toString();
     }
 
 }

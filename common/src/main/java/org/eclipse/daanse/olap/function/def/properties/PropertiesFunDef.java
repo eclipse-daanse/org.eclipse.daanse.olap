@@ -20,11 +20,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
-import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
-import org.eclipse.daanse.olap.common.Util;
-import org.eclipse.daanse.olap.fun.MondrianEvaluationException;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
@@ -46,15 +42,5 @@ public class PropertiesFunDef extends AbstractFunctionDefinition {
         return new PropertiesCalc(call.getType(), memberCalc, stringCalc);
     }
 
-    static Object properties(Member member, String s) {
-        boolean matchCase = SystemWideProperties.instance().CaseSensitive;
-        Object o = member.getPropertyValue(s, matchCase);
-        if (o == null) {
-            if (!Util.isValidProperty(s, member.getLevel())) {
-                throw new MondrianEvaluationException(new StringBuilder("Property '").append(s)
-                        .append("' is not valid for member '").append(member).append("'").toString());
-            }
-        }
-        return o;
-    }
+
 }

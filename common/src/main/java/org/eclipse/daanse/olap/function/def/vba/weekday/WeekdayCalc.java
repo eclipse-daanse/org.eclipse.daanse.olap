@@ -31,7 +31,7 @@ public class WeekdayCalc extends AbstractProfilingNestedIntegerCalc {
     @Override
     public Integer evaluate(Evaluator evaluator) {
         Date date = getChildCalc(0, DateTimeCalc.class).evaluate(evaluator);
-        int firstDayOfWeek = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);
+        int firstDayOfWeek = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int weekday = calendar.get(Calendar.DAY_OF_WEEK);

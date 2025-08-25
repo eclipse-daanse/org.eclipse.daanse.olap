@@ -14,75 +14,75 @@
 package org.eclipse.daanse.olap.function.def.vba.space;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
-import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
-import org.eclipse.daanse.olap.api.function.FunctionResolver;
-import org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion;
-import org.eclipse.daanse.olap.api.function.FunctionService;
-import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.junit.jupiter.api.BeforeAll;
+import org.eclipse.daanse.olap.api.type.StringType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.osgi.test.common.annotation.InjectService;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class SpaceCalcTest {
 
-    @InjectService
-    static FunctionService functionService;
+    private SpaceCalc spaceCalc;
+    private IntegerCalc integerCalc;
+    private Evaluator evaluator;
 
-    static Validator validator = mock(Validator.class);
-    static Expression expression = mock(Expression.class);
-    static ResolvedFunCall resolvedFunCall = mock(ResolvedFunCall.class);
-    static ExpressionCompiler expressionCompiler = mock(ExpressionCompiler.class);
-    static IntegerCalc integerCalc = mock(IntegerCalc.class);
-    static Evaluator evaluator = mock(Evaluator.class);
+    @BeforeEach
+    void setUp() {
+        integerCalc = mock(IntegerCalc.class);
+        evaluator = mock(Evaluator.class);
+        spaceCalc = new SpaceCalc(StringType.INSTANCE, integerCalc);
+    }
 
-    static Calc<?> calc;
+    @ParameterizedTest(name = "{0}: Space({1}) = {2}")
+    @MethodSource("arguments")
+    @DisplayName("Should calculate space correctly")
+    void shouldCalculateSpace(String testName, Integer input, String expected) {
+        when(integerCalc.evaluate(evaluator)).thenReturn(input);
 
-    @BeforeAll
-    static void beforeAll() {
+        String result = spaceCalc.evaluate(evaluator);
 
-        List<Conversion> conversions = List.of();
-        when(validator.canConvert(anyInt(), eq(expression), any(), eq(conversions))).thenReturn(true);
+        assertThat(result).isEqualTo(expected);
+        if (expected.length() > 0) {
+            assertThat(result).hasSize(expected.length());
+            assertThat(result).matches("^ {" + expected.length() + "}$");
+        }
+    }
 
-        
-        FunctionResolver resolver = functionService.getResolvers(SpaceFunDef.atom).getFirst();
-        FunctionDefinition fd = resolver.resolve(new Expression[] { expression }, validator, conversions);
-
-        when(resolvedFunCall.getArg(eq(0))).thenReturn(expression);
-        when(expressionCompiler.compileInteger(expression)).thenReturn(integerCalc);
-
-        calc = fd.compileCall(resolvedFunCall, expressionCompiler);
-
+    static Stream<Arguments> arguments() {
+        return Stream.of(Arguments.of("empty string for zero spaces", 0, ""),
+                Arguments.of("single space for one", 1, " "), Arguments.of("multiple spaces for five", 5, "     "),
+                Arguments.of("large number of spaces", 100, " ".repeat(100)));
     }
 
     @Test
-    void test() {
+    @DisplayName("Should throw exception for negative number")
+    void shouldThrowExceptionForNegativeNumber() {
+        when(integerCalc.evaluate(evaluator)).thenReturn(-1);
 
-        when(integerCalc.evaluate(any())).thenReturn(0);
-        assertThat(calc.evaluate(evaluator)).isEqualTo("");
+        assertThatThrownBy(() -> spaceCalc.evaluate(evaluator)).isInstanceOf(IllegalArgumentException.class);
+    }
 
-        when(integerCalc.evaluate(any())).thenReturn(1);
-        assertThat(calc.evaluate(evaluator)).isEqualTo(" ");
+    @Test
+    @DisplayName("Should throw exception for large negative number")
+    void shouldThrowExceptionForLargeNegativeNumber() {
+        when(integerCalc.evaluate(evaluator)).thenReturn(-10);
 
-        when(integerCalc.evaluate(any())).thenReturn(5);
-        assertThat(calc.evaluate(evaluator)).isEqualTo("     ");
+        assertThatThrownBy(() -> spaceCalc.evaluate(evaluator)).isInstanceOf(IllegalArgumentException.class);
+    }
 
-        when(integerCalc.evaluate(any())).thenReturn(-1);
-        assertThrows(Exception.class, () -> calc.evaluate(evaluator));
-
+    @Test
+    @DisplayName("Should preserve type information")
+    void shouldPreserveTypeInformation() {
+        assertThat(spaceCalc.getType()).isEqualTo(StringType.INSTANCE);
     }
 }

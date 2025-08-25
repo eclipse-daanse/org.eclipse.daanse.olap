@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCa
 public class StrCompCalc extends AbstractProfilingNestedIntegerCalc {
 
     protected StrCompCalc(Type type, final StringCalc string1Calc, final StringCalc string2Calc, final IntegerCalc compareCalc) {
-        super(type, string1Calc, string2Calc);
+        super(type, string1Calc, string2Calc,compareCalc);
     }
 
     @Override

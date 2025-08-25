@@ -22,17 +22,17 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
 
 public class MatchesCalc extends AbstractProfilingNestedBooleanCalc {
 
-    protected MatchesCalc(Type type, StringCalc s0, StringCalc s1) {
-        super(type, s0, s1);
+    protected MatchesCalc(Type type, StringCalc stringCalc, StringCalc regexCalc) {
+        super(type, stringCalc, regexCalc);
     }
 
     @Override
     public Boolean evaluate(Evaluator evaluator) {
-        final StringCalc s0 = getChildCalc(0, StringCalc.class);
-        final StringCalc s1 = getChildCalc(1, StringCalc.class);
-        String str0 = s0.evaluate(evaluator);
-        String str1 = s1.evaluate(evaluator);
-        return Boolean.valueOf(Pattern.matches(str1, str0));
+        final StringCalc stringCalc = getChildCalc(0, StringCalc.class);
+        final StringCalc regexCalc = getChildCalc(1, StringCalc.class);
+        String string = stringCalc.evaluate(evaluator);
+        String regex = regexCalc.evaluate(evaluator);
+        return Boolean.valueOf(Pattern.matches(regex, string));
 
     }
 

@@ -32,7 +32,7 @@ public class LeftCalc extends AbstractProfilingNestedStringCalc {
         return left(string, length);
     }
 
-    public static String left(String string, int length) {
+    private static String left(String string, int length) {
         final int stringLength = string.length();
         if (length >= stringLength) {
             return string;

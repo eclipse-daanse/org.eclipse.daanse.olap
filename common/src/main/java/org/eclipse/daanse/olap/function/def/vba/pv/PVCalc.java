@@ -31,7 +31,7 @@ public class PVCalc extends AbstractProfilingNestedDoubleCalc {
         Double nPer = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         Double pmt = getChildCalc(2, DoubleCalc.class).evaluate(evaluator);
         Double fv = getChildCalc(3, DoubleCalc.class).evaluate(evaluator);
-        Boolean due = getChildCalc(3, BooleanCalc.class).evaluate(evaluator);
+        Boolean due = getChildCalc(4, BooleanCalc.class).evaluate(evaluator);
         return pV(rate, nPer, pmt, fv, due);
     }
 

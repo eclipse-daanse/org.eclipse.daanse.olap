@@ -17,14 +17,18 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
+import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.fun.MondrianEvaluationException;
 
 public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
 
     private MemberCalc memberCalc;
     private StringCalc stringCalc;
-    
+
     protected PropertiesCalc(Type type, MemberCalc memberCalc, StringCalc stringCalc) {
         super(type);
         this.memberCalc = memberCalc;
@@ -33,14 +37,26 @@ public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
 
     @Override
     public Object evaluate(Evaluator evaluator) {
-        return PropertiesFunDef.properties(
-            memberCalc.evaluate(evaluator),
-                stringCalc.evaluate(evaluator));
+        Member member = memberCalc.evaluate(evaluator);
+        String propertyKey = stringCalc.evaluate(evaluator);
+        return properties(member, propertyKey);
+    }
+
+    private static Object properties(Member member, String s) {
+        boolean matchCase = SystemWideProperties.instance().CaseSensitive;
+        Object o = member.getPropertyValue(s, matchCase);
+        if (o == null) {
+            if (!Util.isValidProperty(s, member.getLevel())) {
+                throw new MondrianEvaluationException(new StringBuilder("Property '").append(s)
+                        .append("' is not valid for member '").append(member).append("'").toString());
+            }
+        }
+        return o;
     }
 
     @Override
     public Calc<?>[] getChildCalcs() {
-        return new Calc[] {memberCalc, stringCalc};
+        return new Calc[] { memberCalc, stringCalc };
     }
 
 }

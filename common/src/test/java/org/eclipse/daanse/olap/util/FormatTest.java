@@ -1,27 +1,27 @@
- /*
- * This software is subject to the terms of the Eclipse Public License v1.0
- * Agreement, available at the following URL:
- * http://www.eclipse.org/legal/epl-v10.html.
- * You must accept the terms of that agreement to use this software.
- *
- * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
- *
- * ---- All changes after Fork in 2023 ------------------------
- * 
- * Project: Eclipse daanse
- * 
- * Copyright (c) 2024 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors after Fork in 2023:
- *   SmartCity Jena - initial
- *   Stefan Bischof (bipolis.org) - initial
- */
+/*
+* This software is subject to the terms of the Eclipse Public License v1.0
+* Agreement, available at the following URL:
+* http://www.eclipse.org/legal/epl-v10.html.
+* You must accept the terms of that agreement to use this software.
+*
+* Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
+*
+* ---- All changes after Fork in 2023 ------------------------
+* 
+* Project: Eclipse daanse
+* 
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors after Fork in 2023:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 package org.eclipse.daanse.olap.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.util.Bug;
-import org.eclipse.daanse.olap.util.Format;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -49,31 +47,22 @@ class FormatTest {
     public static final char EA = '\u00e9'; // e acute
     public static final char UC = '\u00FB'; // u circumflex
 
-    private final Format.FormatLocale localeFra = Format.createLocale(
-        '.', // thousandSeparator = ',' in en
-        ',', // decimalPlaceholder = '.' in en
-        "-", // dateSeparator = "/" in en
-        "#", // timeSeparator = ":" in en
-        "FF", // currencySymbol = "$" in en
+    private final Format.FormatLocale localeFra = Format.createLocale('.', // thousandSeparator = ',' in en
+            ',', // decimalPlaceholder = '.' in en
+            "-", // dateSeparator = "/" in en
+            "#", // timeSeparator = ":" in en
+            "FF", // currencySymbol = "$" in en
 //      "#.##0-00FF", // currencyFormat = "$#,##0.##" in en
-        "#,##0.00FF", // currencyFormat = "$#,##0.##" in en
-        new String[] {
-            "", "Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"},
-        new String[] {
-            "", "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi",
-            "Vendredi", "Samedi"},
-        new String[] {
-            "Jan", "Fev", "Mar", "Avr", "Mai", "Jui", "Jui", "Aou",
-            "Sep", "Oct", "Nov", "Dec", ""},
-        new String[] {
-            "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Aout", "Septembre", "Octobre", "Novembre",
-            "Decembre", ""},
-        Locale.FRENCH);
+            "#,##0.00FF", // currencyFormat = "$#,##0.##" in en
+            new String[] { "", "Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam" },
+            new String[] { "", "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" },
+            new String[] { "Jan", "Fev", "Mar", "Avr", "Mai", "Jui", "Jui", "Aou", "Sep", "Oct", "Nov", "Dec", "" },
+            new String[] { "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre",
+                    "Octobre", "Novembre", "Decembre", "" },
+            Locale.FRENCH);
 
     /** Locale gleaned from Java's German locale. */
-    private final Format.FormatLocale localeDe = Format.createLocale(
-        Locale.GERMANY);
+    private final Format.FormatLocale localeDe = Format.createLocale(Locale.GERMANY);
 
     final Number d = new BigDecimal("3141592.653589793");
 
@@ -97,85 +86,34 @@ class FormatTest {
     }
 
     private void checkNumbersInLocale(Format.FormatLocale locale) {
-        //  format         +6          -6           0           .6          null
-        //  ============== =========== ============ =========== =========== ====
-        checkNumbers(
-            "",            "6",        "-6",        "0",        "0.6",      "",
-            locale);
-        checkNumbers(
-            "0",           "6",        "-6",        "0",        "1",        "",
-            locale);
-        checkNumbers(
-            "0.00",        "6.00",     "-6.00",     "0.00",     "0.60",     "",
-            locale);
-        checkNumbers(
-            "#,##0",       "6",        "-6",        "0",        "1",        "",
-            locale);
-        checkNumbers(
-            "#,##0.00;;;N", "6.00",    "-6.00",     "0.00",     "0.60",     "N",
-            locale);
-        checkNumbers(
-            "$#,##0;($#,##0)", "$6",   "($6)",      "$0",       "$1",       "",
-            locale);
-        checkNumbers(
-            "$#,##0.00;($#,##0.00)", "$6.00", "($6.00)", "$0.00", "$0.60",  "",
-            locale);
-        checkNumbers(
-            "0%",          "600%",     "-600%",     "0%",       "60%",      "",
-            locale);
-        checkNumbers(
-            "0.00%",       "600.00%",  "-600.00%",  "0.00%",    "60.00%",   "",
-            locale);
-        checkNumbers(
-            "0.00E+00",    "6.00E+00", "-6.00E+00", "0.00E+00", "6.00E-01", "",
-            locale);
-        checkNumbers(
-            "0.00E-00",    "6.00E00",  "-6.00E00",  "0.00E00",  "6.00E-01", "",
-            locale);
-        checkNumbers(
-            "$#,##0;;\\Z\\e\\r\\o", "$6", "-$6",    "Zero",     "$1",       "",
-            locale);
-        checkNumbers(
-            "#,##0.0 USD", "6.0 USD",  "-6.0 USD",  "0.0 USD",  "0.6 USD",  "",
-            locale);
-        checkNumbers(
-            "General Number", "6",     "-6",        "0",        "0.6",      "",
-            locale);
-        checkNumbers(
-            "Currency",    "$6.00",    "($6.00)",   "$0.00",    "$0.60",    "",
-            locale);
-        checkNumbers(
-            "Fixed",       "6",        "-6",        "0",        "1",        "",
-            locale);
-        checkNumbers(
-            "Standard",    "6",        "-6",        "0",        "1",        "",
-            locale);
-        checkNumbers(
-            "Percent",     "600.00%",  "-600.00%",  "0.00%",    "60.00%",   "",
-            locale);
-        checkNumbers(
-            "Scientific",  "6.00e+00", "-6.00e+00", "0.00e+00", "6.00e-01", "",
-            locale);
-        checkNumbers(
-            "True/False",  "True",     "True",      "False",    "True", "False",
-            locale);
-        checkNumbers(
-            "On/Off",      "On",       "On",        "Off",      "On",     "Off",
-            locale);
-        checkNumbers(
-            "Yes/No",      "Yes",      "Yes",       "No",       "Yes",     "No",
-            locale);
+        // format +6 -6 0 .6 null
+        // ============== =========== ============ =========== =========== ====
+        checkNumbers("", "6", "-6", "0", "0.6", "", locale);
+        checkNumbers("0", "6", "-6", "0", "1", "", locale);
+        checkNumbers("0.00", "6.00", "-6.00", "0.00", "0.60", "", locale);
+        checkNumbers("#,##0", "6", "-6", "0", "1", "", locale);
+        checkNumbers("#,##0.00;;;N", "6.00", "-6.00", "0.00", "0.60", "N", locale);
+        checkNumbers("$#,##0;($#,##0)", "$6", "($6)", "$0", "$1", "", locale);
+        checkNumbers("$#,##0.00;($#,##0.00)", "$6.00", "($6.00)", "$0.00", "$0.60", "", locale);
+        checkNumbers("0%", "600%", "-600%", "0%", "60%", "", locale);
+        checkNumbers("0.00%", "600.00%", "-600.00%", "0.00%", "60.00%", "", locale);
+        checkNumbers("0.00E+00", "6.00E+00", "-6.00E+00", "0.00E+00", "6.00E-01", "", locale);
+        checkNumbers("0.00E-00", "6.00E00", "-6.00E00", "0.00E00", "6.00E-01", "", locale);
+        checkNumbers("$#,##0;;\\Z\\e\\r\\o", "$6", "-$6", "Zero", "$1", "", locale);
+        checkNumbers("#,##0.0 USD", "6.0 USD", "-6.0 USD", "0.0 USD", "0.6 USD", "", locale);
+        checkNumbers("General Number", "6", "-6", "0", "0.6", "", locale);
+        checkNumbers("Currency", "$6.00", "($6.00)", "$0.00", "$0.60", "", locale);
+        checkNumbers("Fixed", "6", "-6", "0", "1", "", locale);
+        checkNumbers("Standard", "6", "-6", "0", "1", "", locale);
+        checkNumbers("Percent", "600.00%", "-600.00%", "0.00%", "60.00%", "", locale);
+        checkNumbers("Scientific", "6.00e+00", "-6.00e+00", "0.00e+00", "6.00e-01", "", locale);
+        checkNumbers("True/False", "True", "True", "False", "True", "False", locale);
+        checkNumbers("On/Off", "On", "On", "Off", "On", "Off", locale);
+        checkNumbers("Yes/No", "Yes", "Yes", "No", "Yes", "No", locale);
     }
 
-    private void checkNumbers(
-        String format,
-        String result6,
-        String resultNeg6,
-        String result0,
-        String resultPoint6,
-        String resultEmpty,
-        Format.FormatLocale locale)
-    {
+    private void checkNumbers(String format, String result6, String resultNeg6, String result0, String resultPoint6,
+            String resultEmpty, Format.FormatLocale locale) {
         checkNumber(locale, format, new BigDecimal("6"), result6);
         checkNumber(locale, format, new BigDecimal("-6"), resultNeg6);
         checkNumber(locale, format, new BigDecimal("0"), result0);
@@ -186,12 +124,7 @@ class FormatTest {
         checkNumber(locale, format, 0L, result0);
     }
 
-    private void checkNumber(
-        Format.FormatLocale locale,
-        String format,
-        Number number,
-        String expectedResult)
-    {
+    private void checkNumber(Format.FormatLocale locale, String format, Number number, String expectedResult) {
         if (locale == localeFra) {
             expectedResult = convertToFrench(expectedResult, format);
         }
@@ -236,8 +169,7 @@ class FormatTest {
         checkFormat(null, new BigDecimal("12.34"), "#.000##", "12.340");
 
         // "Standard" must use thousands separator, and round
-        checkFormat(
-            null, new BigDecimal("1234567.89"), "Standard", "1,234,568");
+        checkFormat(null, new BigDecimal("1234567.89"), "Standard", "1,234,568");
 
         // must use correct alternate for 0
         checkFormat(null, new BigDecimal("0"), "$#,##0;;\\Z\\e\\r\\o", "Zero");
@@ -277,15 +209,14 @@ class FormatTest {
         checkFormat(null, new BigDecimal("-0.0005000001"), "#.0%", "-.1%");
         checkFormat(null, new BigDecimal("-0.00006"), "#.00%", "-.01%");
         checkFormat(null, new BigDecimal("-0.00004"), "#.00%", ".00%");
-        checkFormat(
-            null, new BigDecimal("-0.00006"), "00000.00%", "-00000.01%");
+        checkFormat(null, new BigDecimal("-0.00006"), "00000.00%", "-00000.01%");
         checkFormat(null, new BigDecimal("-0.00004"), "00000.00%", "00000.00%");
     }
 
     /**
-     * When there are format strings for positive and negative numbers, and
-     * a number is too small to appear in either format string, it underflows
-     * to 'Nil', and gets to use a third format.
+     * When there are format strings for positive and negative numbers, and a number
+     * is too small to appear in either format string, it underflows to 'Nil', and
+     * gets to use a third format.
      */
     @Test
     void testNil() {
@@ -302,41 +233,25 @@ class FormatTest {
         checkFormat(null, new BigDecimal("-0.001"), "0.##;(0.##)", "0.");
 
         // Zero value and varying numbers of format strings.
-        checkFormat(
-            null, BigDecimal.ZERO, "\\P\\o\\s", "Pos");
-        checkFormat(
-            null, BigDecimal.ZERO, "\\P\\o\\s;\\N\\e\\g", "Pos");
-        checkFormat(
-            null, BigDecimal.ZERO, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "Zero");
-        checkFormat(
-            null, BigDecimal.ZERO,
-            "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l", "Zero");
+        checkFormat(null, BigDecimal.ZERO, "\\P\\o\\s", "Pos");
+        checkFormat(null, BigDecimal.ZERO, "\\P\\o\\s;\\N\\e\\g", "Pos");
+        checkFormat(null, BigDecimal.ZERO, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "Zero");
+        checkFormat(null, BigDecimal.ZERO, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l", "Zero");
 
         // Small negative value and varying numbers of format strings.
-        checkFormat(
-            null, new BigDecimal("-0.00001"), "\\P\\o\\s", "-Pos");
-        checkFormat(
-            null, new BigDecimal("-0.00001"), "\\P\\o\\s;\\N\\e\\g", "Neg");
-        checkFormat(
-            null, new BigDecimal("-0.00001"),
-            "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "Neg");
-        checkFormat(
-            null, new BigDecimal("-0.00001"),
-            "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l", "Neg");
+        checkFormat(null, new BigDecimal("-0.00001"), "\\P\\o\\s", "-Pos");
+        checkFormat(null, new BigDecimal("-0.00001"), "\\P\\o\\s;\\N\\e\\g", "Neg");
+        checkFormat(null, new BigDecimal("-0.00001"), "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "Neg");
+        checkFormat(null, new BigDecimal("-0.00001"), "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l", "Neg");
 
-        checkFormat(
-            null, new BigDecimal("-0.001"), "\\P\\o\\s;\\N\\e\\g", "Neg");
+        checkFormat(null, new BigDecimal("-0.001"), "\\P\\o\\s;\\N\\e\\g", "Neg");
 
         // In the following two cases, note that a small number uses the 3rd
         // format string (for zero) if it underflows the 1st or 2nd format
         // string (for positive or negative numbers). But if underflow is not
         // possible (as in the case of the 'Neg' format string),
-        checkFormat(
-            null, new BigDecimal("-0.001"), "#.#;(#.#);\\Z\\e\\r\\o",
-            "Zero");
-        checkFormat(
-            null, new BigDecimal("-0.001"), "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o",
-            "Neg");
+        checkFormat(null, new BigDecimal("-0.001"), "#.#;(#.#);\\Z\\e\\r\\o", "Zero");
+        checkFormat(null, new BigDecimal("-0.001"), "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "Neg");
     }
 
     /**
@@ -345,19 +260,12 @@ class FormatTest {
     @Test
     void testNull() {
         // Null value with different numbers of strings
-        checkFormat(
-            null, null, "\\P\\o\\s", "");
-        checkFormat(
-            null, null, "\\P\\o\\s;\\N\\e\\g", "");
-        checkFormat(
-            null, null, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "");
-        checkFormat(
-            null, null, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l",
-            "Null");
-        checkFormat(
-            null, null, "\\P\\o\\s;;;\\N\\u\\l\\l", "Null");
-        checkFormat(
-            null, null, "\\P\\o\\s;;;", "");
+        checkFormat(null, null, "\\P\\o\\s", "");
+        checkFormat(null, null, "\\P\\o\\s;\\N\\e\\g", "");
+        checkFormat(null, null, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o", "");
+        checkFormat(null, null, "\\P\\o\\s;\\N\\e\\g;\\Z\\e\\r\\o;\\N\\u\\l\\l", "Null");
+        checkFormat(null, null, "\\P\\o\\s;;;\\N\\u\\l\\l", "Null");
+        checkFormat(null, null, "\\P\\o\\s;;;", "");
     }
 
     @Test
@@ -369,16 +277,12 @@ class FormatTest {
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-686">
-     * MONDRIAN-686</a>, "Regression: JPivot output invalid - New Variance
-     * Percent column".
+     * MONDRIAN-686</a>, "Regression: JPivot output invalid - New Variance Percent
+     * column".
      */
     @Test
     void testPercentWithStyle() {
-        checkFormat(
-            null,
-            new BigDecimal("0.0364"),
-            "|#.00%|style='green'",
-            "|3.64%|style='green'");
+        checkFormat(null, new BigDecimal("0.0364"), "|#.00%|style='green'", "|3.64%|style='green'");
     }
 
     /**
@@ -388,70 +292,37 @@ class FormatTest {
     @Test
     void testNegativePercentWithStyle() {
         if (Bug.BugMondrian687Fixed) {
-            checkFormat(
-                null,
-                new BigDecimal("-0.0364"),
-                "|#.00%|style=red",
-                "-|3.64%|style=red");
+            checkFormat(null, new BigDecimal("-0.0364"), "|#.00%|style=red", "-|3.64%|style=red");
         } else {
-            checkFormat(
-                null,
-                new BigDecimal("-0.0364"),
-                "|#.00%|style='red'",
-                "|-3.64%|style='red'"); // confirmed on SSAS 2005
+            checkFormat(null, new BigDecimal("-0.0364"), "|#.00%|style='red'", "|-3.64%|style='red'"); // confirmed on
+                                                                                                       // SSAS 2005
         }
 
         // exercise code for long (and int) values
         if (Bug.BugMondrian687Fixed) {
-            checkFormat(
-                null,
-                -364,
-                "|#.00|style=red",
-                "-|364.00|style=red");
+            checkFormat(null, -364, "|#.00|style=red", "-|364.00|style=red");
         } else {
-            checkFormat(
-                null,
-                -364,
-                "|#.00|style=red",
-                "|-364.00|style=red"); // confirmed on SSAS 2005
+            checkFormat(null, -364, "|#.00|style=red", "|-364.00|style=red"); // confirmed on SSAS 2005
         }
 
         // now with multiple alternate formats
-        checkFormat(
-            null,
-            364,
-            "|#.00|style='green';|-#.000|style='red'",
-            "|364.00|style='green'"); // confirmed on SSAS 2005
-        checkFormat(
-            null,
-            -364,
-            "|#.00|style='green';|-#.000|style='red'",
-            "|-364.000|style='red'"); // confirmed on SSAS 2005
+        checkFormat(null, 364, "|#.00|style='green';|-#.000|style='red'", "|364.00|style='green'"); // confirmed on SSAS
+                                                                                                    // 2005
+        checkFormat(null, -364, "|#.00|style='green';|-#.000|style='red'", "|-364.000|style='red'"); // confirmed on
+                                                                                                     // SSAS 2005
     }
 
     /**
-     * Single quotes in format string. SSAS 2005 removes them; Mondrian should
-     * also.
+     * Single quotes in format string. SSAS 2005 removes them; Mondrian should also.
      */
     @Test
     void testSingleQuotes() {
         if (Bug.BugMondrian687Fixed) {
-            checkFormat(
-                null,
-                3.64,
-                "|#.00|style='deep red'",
-                "-|364.00|style=deep red"); // confirmed on SSAS 2005
-            checkFormat(
-                null,
-                3.64,
-                "|#.00|style=\\'deep red\\'",
-                "-|364.00|style='deep red'"); // confirmed on SSAS 2005
+            checkFormat(null, 3.64, "|#.00|style='deep red'", "-|364.00|style=deep red"); // confirmed on SSAS 2005
+            checkFormat(null, 3.64, "|#.00|style=\\'deep red\\'", "-|364.00|style='deep red'"); // confirmed on SSAS
+                                                                                                // 2005
         } else {
-            checkFormat(
-                null,
-                -364,
-                "|#.00|style='deep red'",
-                "|-364.00|style='deep red'");
+            checkFormat(null, -364, "|#.00|style='deep red'", "|-364.00|style='deep red'");
         }
     }
 
@@ -484,14 +355,8 @@ class FormatTest {
         checkFormat(localeFra, d, "#.##0-00 FF", "3141592,654-3141592,654 FF");
     }
 
-    private static Date makeCalendar(
-        final int year,
-        final int month,
-        final int date,
-        final int hourOfDay,
-        final int minute,
-        final int second)
-    {
+    private static Date makeCalendar(final int year, final int month, final int date, final int hourOfDay,
+            final int minute, final int second) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, date, hourOfDay, minute, second);
         return calendar.getTime();
@@ -499,24 +364,23 @@ class FormatTest {
 
     @Test
     void testDates() {
-        checkDate("dd-mmm-yy",     "29-Apr-69",  "29-Avr-69",  "29-Apr.-69");
+        checkDate("dd-mmm-yy", "29-Apr-69", "29-Avr-69", "29-Apr.-69");
         checkDate("h:mm:ss AM/PM", "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
-        checkDate("hh:mm",         "20:09",      "20#09",      "20:09");
-        checkDate(
-            "Long Date",     "Tuesday, April 29, 1969",
-            "Mardi, Avril 29, 1969", "Dienstag, April 29, 1969");
-        checkDate("Medium Date",   "29-Apr-69",  "29-Avr-69",  "29-Apr.-69");
-        checkDate("Short Date",    "4/29/69",    "4-29-69",    "4.29.69");
-        checkDate("Long Time",     "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
-        checkDate("Medium Time",   "8:09 PM",    "8#09 PM",    "8:09 PM");
-        checkDate("Short Time",    "20:09",      "20#09",      "20:09");
+        checkDate("hh:mm", "20:09", "20#09", "20:09");
+        checkDate("Long Date", "Tuesday, April 29, 1969", "Mardi, Avril 29, 1969", "Dienstag, April 29, 1969");
+        checkDate("Medium Date", "29-Apr-69", "29-Avr-69", "29-Apr.-69");
+        checkDate("Short Date", "4/29/69", "4-29-69", "4.29.69");
+        checkDate("Long Time", "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
+        checkDate("Medium Time", "8:09 PM", "8#09 PM", "8:09 PM");
+        checkDate("Short Time", "20:09", "20#09", "20:09");
         checkDate("mmmmm-dd", "April-29", "Avril-29", "April-29");
         checkDate("M-dd", "4-29", "4-29", "4-29");
         checkDate("hh M HH:mm", "20 4 20:09", "20 4 20#09", "20 4 20:09");
         checkDate("MMMMM-dd", "April-29", "Avril-29", "April-29");
         checkDate("MM-dd", "04-29", "04-29", "04-29");
         checkDate("MMM-dd", "Apr-29", "Avr-29", "Apr.-29");
-        checkDate("MMMMM-dd-yyyy HH:mm AM/PM", "April-29-1969 20:09 PM", "Avril-29-1969 20#09 PM", "April-29-1969 20:09 PM");
+        checkDate("MMMMM-dd-yyyy HH:mm AM/PM", "April-29-1969 20:09 PM", "Avril-29-1969 20#09 PM",
+                "April-29-1969 20:09 PM");
     }
 
     private void checkDate(String format, String en, String fr, String de) {
@@ -607,33 +471,19 @@ class FormatTest {
         assertEquals("#,##0.00\\ \\" + Euro, fr.currencyFormat);
         assertEquals(Euro + "", fr.currencySymbol);
         assertEquals("/", fr.dateSeparator);
-        assertEquals(
-            "[, dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]",
-            Arrays.toString(fr.daysOfWeekLong));
-        assertEquals(
-            "[, dim., lun., mar., mer., jeu., ven., sam.]",
-            Arrays.toString(fr.daysOfWeekShort));
-        assertEquals(
-            "[janvier, f" + EA + "vrier, mars, avril, mai, juin,"
-            + " juillet, ao" + UC
-            + "t, septembre, octobre, novembre, d"
-            + EA + "cembre, ]",
-            Arrays.toString(fr.monthsLong));
-        assertEquals(
-            "[janv., f" + EA + "vr., mars, avr., mai, juin,"
-            + " juil., ao" + UC + "t, sept., oct., nov., d"
-            + EA + "c., ]",
-            Arrays.toString(fr.monthsShort));
+        assertEquals("[, dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]",
+                Arrays.toString(fr.daysOfWeekLong));
+        assertEquals("[, dim., lun., mar., mer., jeu., ven., sam.]", Arrays.toString(fr.daysOfWeekShort));
+        assertEquals("[janvier, f" + EA + "vrier, mars, avril, mai, juin," + " juillet, ao" + UC
+                + "t, septembre, octobre, novembre, d" + EA + "cembre, ]", Arrays.toString(fr.monthsLong));
+        assertEquals("[janv., f" + EA + "vr., mars, avr., mai, juin," + " juil., ao" + UC + "t, sept., oct., nov., d"
+                + EA + "c., ]", Arrays.toString(fr.monthsShort));
         assertEquals(',', fr.decimalPlaceholder);
         assertEquals(Nbsp, fr.thousandSeparator);
         assertEquals(":", fr.timeSeparator);
     }
 
-    private void checkFormat(
-        Format.FormatLocale locale,
-        Object o,
-        String formatString)
-    {
+    private void checkFormat(Format.FormatLocale locale, Object o, String formatString) {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
 //        discard(actualResult);
@@ -645,18 +495,12 @@ class FormatTest {
         }
     }
 
-    private void checkFormat(
-        Format.FormatLocale locale,
-        Object o,
-        String formatString,
-        String expectedResult)
-    {
+    private void checkFormat(Format.FormatLocale locale, Object o, String formatString, String expectedResult) {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
         assertEquals(expectedResult, actualResult);
         if (o instanceof BigDecimal bigDecimal) {
-            checkFormat(
-                locale, bigDecimal.doubleValue(), formatString, expectedResult);
+            checkFormat(locale, bigDecimal.doubleValue(), formatString, expectedResult);
 
             // Convert value to various data types and make sure there is no
             // error. Do not check the result -- it might be different because
@@ -763,93 +607,33 @@ class FormatTest {
 
     @Test
     void testFormatThousands() {
-        checkFormat(
-            null,
-            123456.7,
-            "######.00",
-            "123456.70");
-        checkFormat(
-            null,
-            123456,
-            "######",
-            "123456");
-        checkFormat(
-            null,
-            123456.7,
-            "#,##,###.00",
-            "1,23,456.70");
-        checkFormat(
-            null,
-            123456.7,
-            "#,##,###",
-            "1,23,457");
-        checkFormat(
-            null,
-            9123456.7,
-            "#,#.00",
-            "9,123,456.70");
-        checkFormat(
-            null,
-            123456.7,
-            "#,#",
-            "123,457");
-        checkFormat(
-            null,
-            123456789.1,
-            "#,#",
-            "123,456,789");
-        checkFormat(
-            null,
-            123456.7,
-            "##################,#",
-            "123,457");
-        checkFormat(
-            null,
-            123456.7,
-            "#################,#",
-            "123,457");
-        checkFormat(
-            null,
-            123456.7,
-            "###,################",
-            "123,457");
-        checkFormat(
-            null,
-            0.02,
-            "#,###.000",
-            ".020");
-        checkFormat(
-            null,
-            0.02,
-            "#,##0.000",
-            "0.020");
-        checkFormat(
-            null,
-            123456789123l,
-            "#,##,#,##,#,##,#,##",
-            "1,23,4,56,7,89,1,23");
-        checkFormat(
-            null,
-            123456,
-            "#,###;(#,###)",
-            "123,456");
-        checkFormat(
-            null,
-            123456,
-            "\\$ #,###;(\\$ #,###) ",
-            "$ 123,456");
+        checkFormat(null, 123456.7, "######.00", "123456.70");
+        checkFormat(null, 123456, "######", "123456");
+        checkFormat(null, 123456.7, "#,##,###.00", "1,23,456.70");
+        checkFormat(null, 123456.7, "#,##,###", "1,23,457");
+        checkFormat(null, 9123456.7, "#,#.00", "9,123,456.70");
+        checkFormat(null, 123456.7, "#,#", "123,457");
+        checkFormat(null, 123456789.1, "#,#", "123,456,789");
+        checkFormat(null, 123456.7, "##################,#", "123,457");
+        checkFormat(null, 123456.7, "#################,#", "123,457");
+        checkFormat(null, 123456.7, "###,################", "123,457");
+        checkFormat(null, 0.02, "#,###.000", ".020");
+        checkFormat(null, 0.02, "#,##0.000", "0.020");
+        checkFormat(null, 123456789123l, "#,##,#,##,#,##,#,##", "1,23,4,56,7,89,1,23");
+        checkFormat(null, 123456, "#,###;(#,###)", "123,456");
+        checkFormat(null, 123456, "\\$ #,###;(\\$ #,###) ", "$ 123,456");
     }
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-968">
-     * MONDRIAN-968</a>, "Thousands formatting does not work. #,###,, <-
-     * Multiple Comma not rounding".
+     * MONDRIAN-968</a>, "Thousands formatting does not work. #,###,, <- Multiple
+     * Comma not rounding".
      */
     @Test
     void testThousandsThousands() {
         final int i = 1234567890;
         if (false) {
-        checkFormat(null, i, "#,##0,,", "1,235");
+            checkFormat(null, i, "#,##0,,", "1,235");
             return;
         }
         checkFormat(null, i, "#,#", "1,234,567,890");
@@ -867,62 +651,30 @@ class FormatTest {
     }
 
     /**
-     * Tests the international currency symbol parsing
-     * in format strings according to different locales.
+     * Tests the international currency symbol parsing in format strings according
+     * to different locales.
      */
     @Test
     void testCurrency() {
-        checkFormat(
-            localeDe,
-            123456,
-            "Currency",
-            "123.456,00 "+ Euro);
-        checkFormat(
-            localeDe,
-            123456,
-            "###,###.00" + Format.INTL_CURRENCY_SYMBOL,
-            "123.456,00" + Euro);
-        checkFormat(
-            localeFra,
-            123456,
-            "###,###.00" + Format.INTL_CURRENCY_SYMBOL,
-            "123.456,00FF");
-        checkFormat(
-            localeFra,
-            123456,
-            "Currency",
-            "123.456,00FF");
+        checkFormat(localeDe, 123456, "Currency", "123.456,00 " + Euro);
+        checkFormat(localeDe, 123456, "###,###.00" + Format.INTL_CURRENCY_SYMBOL, "123.456,00" + Euro);
+        checkFormat(localeFra, 123456, "###,###.00" + Format.INTL_CURRENCY_SYMBOL, "123.456,00FF");
+        checkFormat(localeFra, 123456, "Currency", "123.456,00FF");
         // Tests whether the format conversion can fallback to
         // the system default locale to resolve the currency
         // symbol it must use.
-        checkFormat(
-            Format.createLocale(Locale.JAPANESE),
-            123456,
-            "Currency",
-            "¤123,456.00");
+        checkFormat(Format.createLocale(Locale.JAPANESE), 123456, "Currency", "¤123,456.00");
 
         // international currency symbol
-        checkFormat(
-            null,
-            new BigDecimal("1.2"),
-            "" + Format.INTL_CURRENCY_SYMBOL + "#",
-            "$1");
+        checkFormat(null, new BigDecimal("1.2"), "" + Format.INTL_CURRENCY_SYMBOL + "#", "$1");
     }
 
     @Test
     void testInfinity() {
-        String[] strings = {"#", "#.#", "#,###.0"};
+        String[] strings = { "#", "#.#", "#,###.0" };
         for (String string : strings) {
-            checkFormat(
-                null,
-                Double.POSITIVE_INFINITY,
-                string,
-                "Infinity");
-            checkFormat(
-                null,
-                Double.NEGATIVE_INFINITY,
-                string,
-                "-Infinity");
+            checkFormat(null, Double.POSITIVE_INFINITY, string, "Infinity");
+            checkFormat(null, Double.NEGATIVE_INFINITY, string, "-Infinity");
         }
     }
 
@@ -934,31 +686,31 @@ class FormatTest {
         StringBuilder result = new StringBuilder();
         format.format(bd, result);
         // It should run without losing precision
-        assertEquals("123"+Nbsp+"456"+Nbsp+"789"+Nbsp+"123"+Nbsp+"456"+Nbsp+"789"+Nbsp+"123"+Nbsp+"456"+Nbsp+"789", result.toString());
+        assertEquals("123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123"
+                + Nbsp + "456" + Nbsp + "789", result.toString());
     }
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-2613">
-     * MONDRIAN-2613</a>,
-     * "ArrayIndexOutOfBoundsException in mondrian.util.Format.formatFd2
-     * formatting a BigDecimal".
+     * MONDRIAN-2613</a>, "ArrayIndexOutOfBoundsException in
+     * mondrian.util.Format.formatFd2 formatting a BigDecimal".
      */
 
     @Test
     void testBigDecimalWithSpecificCustomFormat() {
-      //the format string used in the jira case
-      final String format = "0000000000000";
-      //test data from the jira case
-      checkFormat(null, new BigDecimal("109146240.292"), format, "0000109146240");
-      checkFormat(null, new BigDecimal("0.123"), format, "0000000000000");
-      //additional data
-      checkFormat(null, new BigDecimal("1.1"), format, "0000000000001");
-      checkFormat(null, new BigDecimal("-1.1"), format, "-0000000000001");
-      checkFormat(null, new BigDecimal("0.1"), format, "0000000000000");
-      checkFormat(null, new BigDecimal("-0.1"), format, "0000000000000");
-      checkFormat(null, new BigDecimal("100000000.1"), format, "0000100000000");
-      checkFormat(null, new BigDecimal("-100000000.1"), format, "-0000100000000");
-      checkFormat(null, new BigDecimal("100000001.1"), format, "0000100000001");
-      checkFormat(null, new BigDecimal("100000000.5"), format, "0000100000001");
-      }
+        // the format string used in the jira case
+        final String format = "0000000000000";
+        // test data from the jira case
+        checkFormat(null, new BigDecimal("109146240.292"), format, "0000109146240");
+        checkFormat(null, new BigDecimal("0.123"), format, "0000000000000");
+        // additional data
+        checkFormat(null, new BigDecimal("1.1"), format, "0000000000001");
+        checkFormat(null, new BigDecimal("-1.1"), format, "-0000000000001");
+        checkFormat(null, new BigDecimal("0.1"), format, "0000000000000");
+        checkFormat(null, new BigDecimal("-0.1"), format, "0000000000000");
+        checkFormat(null, new BigDecimal("100000000.1"), format, "0000100000000");
+        checkFormat(null, new BigDecimal("-100000000.1"), format, "-0000100000000");
+        checkFormat(null, new BigDecimal("100000001.1"), format, "0000100000001");
+        checkFormat(null, new BigDecimal("100000000.5"), format, "0000100000001");
+    }
 }

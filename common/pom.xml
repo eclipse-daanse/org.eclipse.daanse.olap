@@ -47,11 +47,6 @@
       <version>${caffeine.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.metatype.annotations</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.api</artifactId>
       <version>0.0.1-SNAPSHOT</version>

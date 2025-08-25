@@ -30,7 +30,7 @@ public class MatchesFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns true if the string matches the regular expression.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL , new FunctionParameterR[] { new FunctionParameterR( DataType.STRING, "String1" ), new FunctionParameterR( DataType.STRING, "String2" ) });
+            DataType.LOGICAL , new FunctionParameterR[] { new FunctionParameterR( DataType.STRING, "String" ), new FunctionParameterR( DataType.STRING, "regex" ) });
 
     public MatchesFunDef() {
         super(functionMetaData);
@@ -38,9 +38,9 @@ public class MatchesFunDef  extends AbstractFunctionDefinition {
 
     @Override
     public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        final StringCalc s1 = compiler.compileString(call.getArg(0));
-        final StringCalc s2 = compiler.compileString(call.getArg(1));
-        return new MatchesCalc(call.getType(), s1, s2);
+        final StringCalc stringCalc = compiler.compileString(call.getArg(0));
+        final StringCalc regexCalc = compiler.compileString(call.getArg(1));
+        return new MatchesCalc(call.getType(), stringCalc, regexCalc);
     }
 
 }

@@ -28,7 +28,7 @@ public class AsinhCalc extends AbstractProfilingNestedDoubleCalc {
     @Override
     public Double evaluate(Evaluator evaluator) {
         Double x = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
-        if (x == FunUtil.DOUBLE_NULL) {
+        if (x == FunUtil.DOUBLE_NULL || x == null) {
             return null;
         }
         return Math.log(x + Math.sqrt(1.0 + (x * x)));

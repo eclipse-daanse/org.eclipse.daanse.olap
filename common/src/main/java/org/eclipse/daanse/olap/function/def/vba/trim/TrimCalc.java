@@ -27,12 +27,9 @@ public class TrimCalc extends AbstractProfilingNestedStringCalc {
     @Override
     public String evaluate(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
-        return trim(string);
-    }
-
-    public static String trim(String string) {
-        // JDK has a method for trim, but not ltrim or rtrim
+        if (string == null) {
+            return null;
+        }
         return string.trim();
     }
-
 }

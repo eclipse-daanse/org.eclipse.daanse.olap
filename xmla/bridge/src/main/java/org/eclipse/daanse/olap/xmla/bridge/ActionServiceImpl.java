@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserPrincipal;
+import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
@@ -82,12 +82,12 @@ public class ActionServiceImpl implements ActionService {
     public List<MdSchemaActionsResponseRow> getResponses(List<Catalog> catalogs, Optional<String> schemaName,
             String cubeName, Optional<String> actionName, Optional<ActionTypeEnum> actionType,
             Optional<String> coordinate, CoordinateTypeEnum coordinateType, InvocationEnum invocation,
-            Optional<CubeSourceEnum> cubeSource, RequestMetaData metaData, UserPrincipal userPrincipal) {
+            Optional<CubeSourceEnum> cubeSource, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
         // TODO: one connection per context not each row
         List<MdSchemaActionsResponseRow> result = new ArrayList<>();
         result.addAll(catalogs.stream()
                 .map(c -> getMdSchemaActionsResponseRow(c, schemaName, cubeName, actionName, actionType, coordinate,
-                        coordinateType, invocation, cubeSource, metaData, userPrincipal))
+                        coordinateType, invocation, cubeSource, metaData, userRolePrincipal))
                 .flatMap(Collection::stream).toList());
 
         if (CoordinateTypeEnum.CELL.equals(coordinateType)) {
@@ -166,7 +166,7 @@ public class ActionServiceImpl implements ActionService {
             Optional<String> oSchemaName, String cubeName, Optional<String> oActionName,
             Optional<ActionTypeEnum> oActionType, Optional<String> oCoordinate, CoordinateTypeEnum coordinateType,
             InvocationEnum invocation, Optional<CubeSourceEnum> oCubeSource, RequestMetaData metaData,
-            UserPrincipal userPrincipal) {
+            UserRolePrincipal userPrincipal) {
         if (catalog != null) {
             return getMdSchemaActionsResponseRow(catalog.getName(), catalog, cubeName, oActionName, oActionType,
                     oCoordinate, coordinateType, invocation, oCubeSource);

@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.connection.ConnectionProps;
-import org.eclipse.daanse.xmla.api.UserPrincipal;
 
 public record ConnectionPropsR(List<String> roles, boolean useCatalogCache, Locale locale, Duration pinSchemaTimeout, Optional<String> aggregateScanSchema, Optional<String> aggregateScanCatalog) implements ConnectionProps {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(-1);
@@ -28,10 +27,6 @@ public record ConnectionPropsR(List<String> roles, boolean useCatalogCache, Loca
         this(roles, true, Locale.getDefault(), DEFAULT_TIMEOUT, Optional.empty(), Optional.empty());
     }
     
-    public ConnectionPropsR(UserPrincipal userPrincipal) {
-        this(userPrincipal.roles(), true, Locale.getDefault(), DEFAULT_TIMEOUT, Optional.empty(), Optional.empty());
-    }
-
     public ConnectionPropsR(List<String> roles, Locale locale) {
         this(roles, true, locale, DEFAULT_TIMEOUT, Optional.empty(), Optional.empty());
     }

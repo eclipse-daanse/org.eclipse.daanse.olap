@@ -48,7 +48,7 @@ import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.xmla.bridge.ActionService;
 import org.eclipse.daanse.olap.xmla.bridge.ContextsSupplyerImpl;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserPrincipal;
+import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.HierarchyOriginEnum;
@@ -165,7 +165,7 @@ class MDSchemaDiscoverServiceTest {
     @Mock
     private RequestMetaData requestMetaData;
     @Mock
-    private UserPrincipal userPrincipal;
+    private UserRolePrincipal userRolePrincipal;
 
     private MDSchemaDiscoverService service;
 
@@ -192,7 +192,7 @@ class MDSchemaDiscoverServiceTest {
         when(request.restrictions()).thenReturn(restrictions);
         when(restrictions.catalogName()).thenReturn(Optional.of("foo"));
         when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
-        List<MdSchemaActionsResponseRow> rows = service.mdSchemaActions(request, requestMetaData, userPrincipal);
+        List<MdSchemaActionsResponseRow> rows = service.mdSchemaActions(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull();
     }
 
@@ -218,7 +218,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaCubesResponseRow> rows = service.mdSchemaCubes(request, requestMetaData, userPrincipal);
+        List<MdSchemaCubesResponseRow> rows = service.mdSchemaCubes(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(2);
 
         MdSchemaCubesResponseRow row = rows.get(0);
@@ -278,7 +278,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaDimensionsResponseRow> rows = service.mdSchemaDimensions(request, requestMetaData, userPrincipal);
+        List<MdSchemaDimensionsResponseRow> rows = service.mdSchemaDimensions(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaDimensionsResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name", "dimension1Name",
                 "dimension1UniqueName", "dimension1Caption", 0, 1, "hierarchy1UniqueName",
@@ -325,7 +325,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(request.restrictions()).thenReturn(restrictions);
         when(context1.getFunctionService()).thenReturn(functionService);
-        List<MdSchemaFunctionsResponseRow> rows = service.mdSchemaFunctions(request, requestMetaData, userPrincipal);
+        List<MdSchemaFunctionsResponseRow> rows = service.mdSchemaFunctions(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(2);
         checkMdSchemaFunctionsResponseRow(rows.get(0), "functionAtom1Name", "functionMetaData1Description",
                 "Integer, Member", 2, OriginEnum.MSOLAP, "functionAtom1Name");
@@ -382,7 +382,7 @@ class MDSchemaDiscoverServiceTest {
         when(catalog2.getName()).thenReturn("schema2Name");
 
         List<MdSchemaHierarchiesResponseRow> rows = service.mdSchemaHierarchies(request, requestMetaData,
-                userPrincipal);
+                userRolePrincipal);
         verify(catalog2, times(3)).getName();
         assertThat(rows).isNotNull().hasSize(8);
 
@@ -465,7 +465,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getName()).thenReturn("foo");
 
-        List<MdSchemaKpisResponseRow> rows = service.mdSchemaKpis(request, requestMetaData, userPrincipal);
+        List<MdSchemaKpisResponseRow> rows = service.mdSchemaKpis(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaKpisResponseRow(rows.get(1), "foo", "cube1Name", "cube1Name", "kpi2Name", "kpi2Name",
                 "kpi2Description", "kpi2DisplayFolder", "kpi2Value", "kpi2Goal", "kpi2Status", "kpi2Trend",
@@ -518,7 +518,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaLevelsResponseRow> rows = service.mdSchemaLevels(request, requestMetaData, userPrincipal);
+        List<MdSchemaLevelsResponseRow> rows = service.mdSchemaLevels(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(16);
         checkMdSchemaLevelsResponseRow(rows.get(0), "schema2Name", "cube1Name", "dimension1UniqueName",
                 "hierarchy1UniqueName", "level1Name", "level1UniqueName", "level1Caption", 0, 1, LevelTypeEnum.ALL,
@@ -558,7 +558,7 @@ class MDSchemaDiscoverServiceTest {
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
         List<MdSchemaMeasureGroupDimensionsResponseRow> rows = service.mdSchemaMeasureGroupDimensions(request,
-                requestMetaData, userPrincipal);
+                requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaMeasureGroupDimensionsResponseRow(rows.get(0), "schema2Name", "cube1Name", "ONE",
                 "dimension1UniqueName", DimensionCardinalityEnum.MANY, false, false);
@@ -584,7 +584,7 @@ class MDSchemaDiscoverServiceTest {
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
         List<MdSchemaMeasureGroupsResponseRow> rows = service.mdSchemaMeasureGroups(request, requestMetaData,
-                userPrincipal);
+                userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(2);
         checkMdSchemaMeasureGroupsResponseRow(rows.get(0), "foo", "cube1Name", "", false);
         checkMdSchemaMeasureGroupsResponseRow(rows.get(1), "foo", "cube2Name", "", false);
@@ -628,7 +628,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaMeasuresResponseRow> rows = service.mdSchemaMeasures(request, requestMetaData, userPrincipal);
+        List<MdSchemaMeasuresResponseRow> rows = service.mdSchemaMeasures(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaMeasuresResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name", "measure1Name",
                 "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
@@ -692,7 +692,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaMembersResponseRow> rows = service.mdSchemaMembers(request, requestMetaData, userPrincipal);
+        List<MdSchemaMembersResponseRow> rows = service.mdSchemaMembers(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(16);
         checkMdSchemaMembersResponseRow(rows.get(0), "schema2Name", Optional.empty(), "cube1Name",
                 "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
@@ -761,7 +761,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaPropertiesResponseRow> rows = service.mdSchemaProperties(request, requestMetaData, userPrincipal);
+        List<MdSchemaPropertiesResponseRow> rows = service.mdSchemaProperties(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(32);
         checkMdSchemaPropertiesResponseRow(rows.get(0), "schema2Name", "cube1Name", "dimension1UniqueName",
                 "hierarchy1UniqueName", "level1UniqueName", PropertyTypeEnum.PROPERTY_MEMBER, "property1Name",
@@ -804,7 +804,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
-        List<MdSchemaSetsResponseRow> rows = service.mdSchemaSets(request, requestMetaData, userPrincipal);
+        List<MdSchemaSetsResponseRow> rows = service.mdSchemaSets(request, requestMetaData, userRolePrincipal);
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaSetsResponseRow(rows.get(0), "schema2Name", "cube1Name", "set1Name", ScopeEnum.GLOBAL,
                 "set1Description", Optional.empty(), "", "set1Caption", Optional.empty(),

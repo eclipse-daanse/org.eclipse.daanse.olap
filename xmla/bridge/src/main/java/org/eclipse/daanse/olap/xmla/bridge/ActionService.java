@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserPrincipal;
+import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
@@ -30,5 +30,5 @@ public interface ActionService {
     List<MdSchemaActionsResponseRow> getResponses(List<Catalog> catalogs, Optional<String> schemaName, String cubeName,
             Optional<String> actionName, Optional<ActionTypeEnum> actionType, Optional<String> coordinate,
             CoordinateTypeEnum coordinateType, InvocationEnum invocation, Optional<CubeSourceEnum> cubeSource,
-            RequestMetaData metaData, UserPrincipal userPrincipal);
+            RequestMetaData metaData, UserRolePrincipal userPrincipal);
 }

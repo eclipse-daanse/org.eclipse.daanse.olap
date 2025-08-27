@@ -19,6 +19,7 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.connection.ConnectionProps;
 import org.eclipse.daanse.olap.api.element.Catalog;
 
 public class ContextsSupplyerImpl implements ContextListSupplyer {
@@ -33,12 +34,12 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
 
     @Override
     public List<Catalog> get(List<String> roles) {
-        return getContexts().stream().map(context -> context.getConnection(new ConnectionPropsR(roles))).map(Connection::getCatalog).toList();
+        return getContexts().stream().map(context -> context.getConnection(new ConnectionProps(roles))).map(Connection::getCatalog).toList();
     }
 
     @Override
     public Optional<Catalog> tryGetFirstByName(String catalogName, List<String> roles) {
-        return getContext(catalogName).map(co -> co.getConnection(new ConnectionPropsR(roles)).getCatalog());
+        return getContext(catalogName).map(co -> co.getConnection(new ConnectionProps(roles)).getCatalog());
     }
 
     @Override

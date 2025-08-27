@@ -43,6 +43,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.connection.ConnectionProps;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
@@ -67,7 +68,6 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.xmla.bridge.ActionService;
-import org.eclipse.daanse.olap.xmla.bridge.ConnectionPropsR;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.olap.xmla.bridge.RoleUtils;
@@ -213,7 +213,7 @@ public class OlapExecuteService implements ExecuteService {
         List<String> roles = RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r));
         for (Context<?> context : contexts) {
             try {
-                final Connection connection = context.getConnection(new ConnectionPropsR(roles));
+                final Connection connection = context.getConnection(new ConnectionProps(roles));
                 /*
                  * final mondrian.rolap.RolapConnection rolapConnection1 =
                  * ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection(); for(XmlaRequest
@@ -256,7 +256,7 @@ public class OlapExecuteService implements ExecuteService {
             String statement = statementRequest.command().statement();
             if (statement != null && statement.length() > 0) {
                 Locale locale = getLocale(statementRequest.properties());
-                Connection connection = context.getConnection(new ConnectionPropsR(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r)), locale));
+                Connection connection = context.getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r)), locale));
                 QueryComponent queryComponent = connection.parseStatement(statement);
 
                 if (queryComponent instanceof DrillThrough drillThrough) {
@@ -285,7 +285,7 @@ public class OlapExecuteService implements ExecuteService {
             String statement = statementRequest.command().statement();
             if (statement != null && statement.length() > 0 && contextsListSupplyer.getContexts() != null
                     && !contextsListSupplyer.getContexts().isEmpty()) {
-                Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionPropsR(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
+                Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
                 QueryComponent queryComponent = connection.parseStatement(statement);
                 if (queryComponent instanceof DmvQuery dmvQuery
                         && dmvQuery.getTableName().equals(OperationNames.DBSCHEMA_CATALOGS)) {

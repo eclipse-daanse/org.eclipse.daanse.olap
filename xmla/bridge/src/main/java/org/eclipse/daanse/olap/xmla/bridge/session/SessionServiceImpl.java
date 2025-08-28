@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.xmla.bridge.session;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -33,8 +32,11 @@ import org.eclipse.daanse.xmla.api.xmla.BeginSession;
 import org.eclipse.daanse.xmla.api.xmla.EndSession;
 import org.eclipse.daanse.xmla.api.xmla.Session;
 import org.eclipse.daanse.xmla.model.record.xmla.SessionR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SessionServiceImpl implements SessionService {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(SessionServiceImpl.class);
 // ToDo independen sessionservice that tracks  session by ServerInstance and User and Role
     // Component singleton imidiate
     // not in bridge daanse.server
@@ -42,7 +44,7 @@ public class SessionServiceImpl implements SessionService {
 
     private ContextListSupplyer contextsListSupplyer;
 
-    public SessionServiceImpl(ContextListSupplyer contextsListSupplyer) {        
+    public SessionServiceImpl(ContextListSupplyer contextsListSupplyer) {
         this.contextsListSupplyer = contextsListSupplyer;
     }
     
@@ -53,9 +55,13 @@ public class SessionServiceImpl implements SessionService {
         Function<String, Boolean> isUserInRoleFunction = r -> userRolePrincipal.hasRole(r);
         for (Context<?> context : contextsListSupplyer.getContexts()) {
             List<String> roles = context.getAccessRoles().stream().filter(r -> isUserInRoleFunction.apply(r)).toList();
-            Connection con = context.getConnection(new ConnectionProps(roles));
-            ((ContextsSupplyerImpl) contextsListSupplyer).getSessionCache()
-            .computeIfAbsent(sessionStr, k -> new HashMap<String, Connection>()).put(context.getName(), con);
+            try {
+                Connection con = context.getConnection(new ConnectionProps(roles));
+                ((ContextsSupplyerImpl) contextsListSupplyer).getSessionCache()
+                .computeIfAbsent(sessionStr, k -> new HashMap<String, Connection>()).put(context.getName(), con);
+            } catch (Exception e) {
+                LOGGER.error("Connection is failed to " + context.getName());
+            }
         }
         store.add(sessionStr);
         return Optional.of(new SessionR(sessionStr, null));

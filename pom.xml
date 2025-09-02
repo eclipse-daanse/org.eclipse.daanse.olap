@@ -41,7 +41,8 @@
     <module>xmla</module>
     <module>spi</module>
     <module>format</module>
- </modules>
+    <module>odc</module>
+  </modules>
 
   <dependencies>
      <dependency>

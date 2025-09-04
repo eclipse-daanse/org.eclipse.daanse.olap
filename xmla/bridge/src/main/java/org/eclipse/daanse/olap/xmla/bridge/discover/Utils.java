@@ -27,8 +27,10 @@ import java.util.stream.Stream;
 import org.eclipse.daanse.mdx.model.api.expression.operation.EmptyOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.InternalOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;
@@ -36,7 +38,6 @@ import org.eclipse.daanse.olap.api.element.DatabaseSchema;
 import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.DimensionType;
-import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.KPI;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -48,7 +49,6 @@ import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.api.result.Property.TypeFlag;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.VarType;
 import org.eclipse.daanse.xmla.api.XmlaConstants;
 import org.eclipse.daanse.xmla.api.XmlaConstants.DBType;
@@ -275,11 +275,11 @@ public class Utils {
                 .map(dbs -> new DbSchemaSchemataResponseRowR(catalog.getName(), dbs.getName(), "")).toList();
     }
 
-    static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Catalog catalog, Optional<String> schemaName,
+    static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Connection connection, Catalog catalog, Optional<String> schemaName,
             Optional<String> cubeName, Optional<String> baseCubeName, Optional<CubeSourceEnum> cubeSource,
             RequestMetaData metaData) {
 
-        return getMdSchemaCubesResponseRow(catalog, cubeName, baseCubeName, cubeSource);
+        return getMdSchemaCubesResponseRow(connection, catalog, cubeName, baseCubeName, cubeSource);
     }
 
     static List<MdSchemaFunctionsResponseRow> getMdSchemaFunctionsResponseRow(Context c, Optional<String> oLibraryName,
@@ -331,9 +331,10 @@ public class Utils {
         return result;
     }
 
-    private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Catalog catalog,
+    private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Connection connection, Catalog catalog,
             Optional<String> cubeName, Optional<String> baseCubeName, Optional<CubeSourceEnum> cubeSource) {
-        List<Cube> cubes = catalog.getCubes();
+        
+        List<Cube> cubes = connection.getCatalogReader().getCubes();
         return Utils.getCubesWithFilter(cubes, cubeName).stream()
                 .flatMap(cube -> getMdSchemaCubesResponseRow(catalog.getName(), cube).stream()).toList();
     }
@@ -358,10 +359,6 @@ public class Utils {
             }
         }
         return List.of();
-    }
-
-    private static List<? extends Cube> getCubeWithFilter(Cube[] cubes, Optional<String> cubeName) {
-        return getCubesWithFilter(Stream.of(cubes).toList(), cubeName);
     }
 
     private static List<? extends Cube> getCubeWithFilter(List<? extends Cube> cubes, Optional<String> cubeName) {
@@ -510,19 +507,19 @@ public class Utils {
                 Optional.empty());
     }
 
-    static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(Catalog catalog, Optional<String> oSchemaName,
+    static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(Connection connection, Catalog catalog, Optional<String> oSchemaName,
             Optional<String> oCubeName, Optional<String> oDimensionUniqueName, Optional<String> oHierarchyUniqueName,
             Optional<String> oLevelName, Optional<String> oLevelUniqueName, Optional<VisibilityEnum> oLevelVisibility,
             RequestMetaData metaData) {
-        return getMdSchemaLevelsResponseRow(catalog.getName(), catalog, oCubeName, oDimensionUniqueName,
+        return getMdSchemaLevelsResponseRow(connection, catalog.getName(), catalog, oCubeName, oDimensionUniqueName,
                 oHierarchyUniqueName, oLevelName, oLevelUniqueName, oLevelVisibility);
     }
 
-    static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(Catalog catalog,
+    static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(Connection connection, Catalog catalog,
             Optional<String> oSchemaName, Optional<String> oCubeName, Optional<String> oDimensionName,
             Optional<String> oDimensionUniqueName, Optional<CubeSourceEnum> cubeSource,
             Optional<VisibilityEnum> oDimensionVisibility, Optional<Boolean> deep, RequestMetaData metaData) {
-        return getMdSchemaDimensionsResponseRow(catalog.getName(), catalog, oCubeName, oDimensionName,
+        return getMdSchemaDimensionsResponseRow(connection, catalog.getName(), catalog, oCubeName, oDimensionName,
                 oDimensionUniqueName, cubeSource, oDimensionVisibility, deep);
 
     }
@@ -642,14 +639,6 @@ public class Utils {
             return kpis.stream().filter(k -> oKpiName.get().equals(k.getName())).toList();
         }
         return kpis;
-    }
-
-    private static List<DrillThroughAction> getMappingDrillThroughActionWithFilter(List<DrillThroughAction> actions,
-            Optional<String> oActionName) {
-        if (oActionName.isPresent()) {
-            return actions.stream().filter(a -> oActionName.get().equals(a.getName())).toList();
-        }
-        return actions;
     }
 
     private static List<MdSchemaMembersResponseRow> getMdSchemaMembersResponseRow(Catalog catalog,
@@ -880,39 +869,39 @@ public class Utils {
                 Optional.of(""));
     }
 
-    private static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(String catalogName,
-            Catalog schema, Optional<String> oCubeName, Optional<String> oDimensionName,
+    private static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(Connection connection, String catalogName,
+            Catalog catalog, Optional<String> oCubeName, Optional<String> oDimensionName,
             Optional<String> oDimensionUniqueName, Optional<CubeSourceEnum> cubeSource,
             Optional<VisibilityEnum> oDimensionVisibility, Optional<Boolean> deep) {
-        List<Cube> cubes = schema.getCubes() == null ? List.of() : schema.getCubes();
+        CatalogReader catalogReader = connection.getCatalogReader();
+        List<Cube> cubes = catalogReader.getCubes();
         return getCubesWithFilter(cubes, oCubeName).stream()
-                .map(c -> getMdSchemaDimensionsResponseRow(catalogName, schema.getName(), c, oDimensionName,
+                .map(c -> getMdSchemaDimensionsResponseRow(catalogReader, catalogName, catalog.getName(), c, oDimensionName,
                         oDimensionUniqueName, cubeSource, oDimensionVisibility, deep))
                 .flatMap(Collection::stream).sorted(Comparator.comparing(r -> r.dimensionUniqueName().orElse("")))
                 .toList();
     }
 
-    private static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(String catalogName,
+    private static List<MdSchemaDimensionsResponseRow> getMdSchemaDimensionsResponseRow(CatalogReader catalogReader, String catalogName,
             String schemaName, Cube cube, Optional<String> oDimensionName, Optional<String> oDimensionUniqueName,
             Optional<CubeSourceEnum> cubeSource, Optional<VisibilityEnum> oDimensionVisibility,
-            Optional<Boolean> deep) {
-        List<? extends Dimension> dimensions = cube.getDimensions() == null ? List.of() : cube.getDimensions();
+            Optional<Boolean> deep) {        
+        List<? extends Dimension> dimensions = catalogReader.getCubeDimensions(cube);        
         return getDimensionsWithFilterByName(getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName),
                 oDimensionName).stream()
-                .map(d -> getMdSchemaDimensionsResponseRow(catalogName, schemaName, cube, d, cubeSource,
+                .map(d -> getMdSchemaDimensionsResponseRow(catalogReader, catalogName, schemaName, cube, d, dimensions.indexOf(d), cubeSource,
                         oDimensionVisibility, deep))
                 .toList();
     }
 
-    private static MdSchemaDimensionsResponseRow getMdSchemaDimensionsResponseRow(String catalogName, String schemaName,
-            Cube cube, Dimension dimension, Optional<CubeSourceEnum> cubeSource,
+    private static MdSchemaDimensionsResponseRow getMdSchemaDimensionsResponseRow(CatalogReader catalogReader, String catalogName, String schemaName,
+            Cube cube, Dimension dimension, int index, Optional<CubeSourceEnum> cubeSource,
             Optional<VisibilityEnum> oDimensionVisibility, Optional<Boolean> deep) {
         String cubeName = cube.getName();
         String desc = dimension.getDescription();
         if (desc == null) {
             desc = cube.getName() + " Cube - " + dimension.getName() + " Dimension";
         }
-        List<? extends Dimension> dimensions = cube.getDimensions() != null ? cube.getDimensions() : List.of();
         // Is this the number of primaryKey members there are??
         // According to microsoft this is:
         // "The number of members in the key attribute."
@@ -926,8 +915,9 @@ public class Utils {
 
         String firstHierarchyUniqueName = null;
         Level lastLevel = null;
-        if (dimension.getHierarchies() != null && dimension.getHierarchies().size() > 0) {
-            Hierarchy firstHierarchy = dimension.getHierarchies().getFirst();
+        List<Hierarchy> hierarchies = catalogReader.getDimensionHierarchies(dimension);
+        if (hierarchies != null && hierarchies.size() > 0) {
+            Hierarchy firstHierarchy = hierarchies.getFirst();
             firstHierarchyUniqueName = firstHierarchy.getUniqueName();
             if (firstHierarchy.getLevels() != null && firstHierarchy.getLevels().size() > 0) {
                 lastLevel = firstHierarchy.getLevels().getLast();
@@ -954,14 +944,14 @@ public class Utils {
 
         if (deep.isPresent() && deep.get()) {
             // TODO add MdSchemaHierarchiesResponse to response
-            getMdSchemaHierarchiesResponseRow(cube, catalogName, schemaName, cubeName, dimension, 0, Optional.empty(),
+            getMdSchemaHierarchiesResponseRow(catalogReader, cube, catalogName, schemaName, cubeName, dimension, 0, Optional.empty(),
                     Optional.empty(), Optional.empty(), Optional.empty(), deep);
         }
 
         return new MdSchemaDimensionsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
                 Optional.ofNullable(cubeName), Optional.ofNullable(dimension.getName()),
                 Optional.ofNullable(dimension.getUniqueName()), Optional.empty(),
-                Optional.ofNullable(dimension.getCaption()), Optional.ofNullable(dimensions.indexOf(dimension)),
+                Optional.ofNullable(dimension.getCaption()), Optional.ofNullable(index),
                 Optional.ofNullable(getDimensionType(dimension.getDimensionType())), Optional.of(dimensionCardinality),
                 Optional.ofNullable(firstHierarchyUniqueName), Optional.of(desc), Optional.of(isVirtual),
                 Optional.of(isReadWrite), Optional.ofNullable(dimensionUniqueSetting), Optional.empty(),
@@ -985,12 +975,13 @@ public class Utils {
         return null;
     }
 
-    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(String catalogName, Catalog schema,
+    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(Connection connection, String catalogName, Catalog catalog,
             Optional<String> oCubeName, Optional<String> oDimensionUniqueName, Optional<String> oHierarchyUniqueName,
             Optional<String> oLevelName, Optional<String> oLevelUniqueName, Optional<VisibilityEnum> oLevelVisibility) {
-        List<Cube> cubes = schema.getCubes() == null ? List.of() : schema.getCubes();
+        CatalogReader catalogReader = connection.getCatalogReader();
+        List<Cube> cubes = catalogReader.getCubes();
         return getCubesWithFilter(cubes, oCubeName).stream().sorted(Comparator.comparing(Cube::getName))
-                .map(cube -> getMdSchemaLevelsResponseRow(catalogName, schema.getName(), cube, oDimensionUniqueName,
+                .map(cube -> getMdSchemaLevelsResponseRow(catalogReader, catalogName, catalog.getName(), cube, oDimensionUniqueName,
                         oHierarchyUniqueName, oLevelName, oLevelUniqueName, oLevelVisibility))
                 .flatMap(Collection::stream).toList();
     }
@@ -1009,12 +1000,12 @@ public class Utils {
         return cubes;
     }
 
-    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(String catalogName, String schemaName,
+    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(CatalogReader catalogReader, String catalogName, String schemaName,
             Cube cube, Optional<String> oDimensionUniqueName, Optional<String> oHierarchyUniqueName,
             Optional<String> oLevelName, Optional<String> oLevelUniqueName, Optional<VisibilityEnum> oLevelVisibility) {
-        List<? extends Dimension> dimensions = cube.getDimensions() == null ? List.of() : cube.getDimensions();
+        List<? extends Dimension> dimensions = catalogReader.getCubeDimensions(cube);
         return getDimensionsWithFilterByUniqueName(dimensions, oDimensionUniqueName).stream()
-                .map(d -> getMdSchemaLevelsResponseRow(cube, catalogName, schemaName, cube.getName(), d,
+                .map(d -> getMdSchemaLevelsResponseRow(catalogReader, cube, catalogName, schemaName, cube.getName(), d,
                         oHierarchyUniqueName, oLevelName, oLevelUniqueName, oLevelVisibility))
                 .flatMap(Collection::stream).toList();
     }
@@ -1035,13 +1026,12 @@ public class Utils {
         return dimensions;
     }
 
-    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(Cube cube, String catalogName,
+    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(CatalogReader catalogReader, Cube cube, String catalogName,
             String schemaName, String cubeName, Dimension dimension, Optional<String> oHierarchyUniqueName,
             Optional<String> oLevelName, Optional<String> oLevelUniqueName, Optional<VisibilityEnum> oLevelVisibility) {
-        List<? extends Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of()
-                : dimension.getHierarchies();
+        List<? extends Hierarchy> hierarchies = catalogReader.getDimensionHierarchies(dimension);
         return getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyUniqueName).stream()
-                .map(h -> getMdSchemaLevelsResponseRow(cube, catalogName, schemaName, cubeName,
+                .map(h -> getMdSchemaLevelsResponseRow(catalogReader, cube, catalogName, schemaName, cubeName,
                         dimension.getUniqueName(), h, oLevelName, oLevelUniqueName, oLevelVisibility))
                 .flatMap(Collection::stream).toList();
     }
@@ -1054,11 +1044,11 @@ public class Utils {
         return hierarchies;
     }
 
-    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(Cube cube, String catalogName,
+    private static List<MdSchemaLevelsResponseRow> getMdSchemaLevelsResponseRow(CatalogReader catalogReader, Cube cube, String catalogName,
             String schemaName, String cubeName, String dimensionUniqueName, Hierarchy h, Optional<String> oLevelName,
             Optional<String> oLevelUniqueName, Optional<VisibilityEnum> oLevelVisibility) {
-        List<? extends Level> levels = h.getLevels() == null ? List.of() : h.getLevels();
-        List<MdSchemaLevelsResponseRow> res = new ArrayList();
+        List<? extends Level> levels = catalogReader.getHierarchyLevels(h);
+        List<MdSchemaLevelsResponseRow> res = new ArrayList<>();
         List<? extends Level> ls = getLevelsWithFilterByUniqueName(getLevelsWithFilterByName(levels, oLevelName),
                 oLevelUniqueName);
         for (Level level : ls) {
@@ -1232,38 +1222,39 @@ public class Utils {
         return result;
     }
 
-    static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(Catalog catalog,
+    static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(Connection connection, Catalog catalog,
             Optional<String> oSchemaName, Optional<String> oCubeName, Optional<CubeSourceEnum> oCubeSource,
             Optional<String> oDimensionUniqueName, Optional<String> oHierarchyName,
             Optional<String> oHierarchyUniqueName, Optional<VisibilityEnum> oHierarchyVisibility,
             Optional<Integer> oHierarchyOrigin, Optional<Boolean> deep, RequestMetaData requestMetaData) {
-        return getMdSchemaHierarchiesResponseRow(catalog.getName(), catalog, oCubeName, oCubeSource,
+        return getMdSchemaHierarchiesResponseRow(connection, catalog.getName(), catalog, oCubeName, oCubeSource,
                 oDimensionUniqueName, oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin,
                 deep);
     }
 
-    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(String catalogName, Catalog s,
+    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(Connection connection, String catalogName, Catalog catalog,
             Optional<String> oCubeName, Optional<CubeSourceEnum> oCubeSource, Optional<String> oDimensionUniqueName,
             Optional<String> oHierarchyName, Optional<String> oHierarchyUniqueName,
             Optional<VisibilityEnum> oHierarchyVisibility, Optional<Integer> oHierarchyOrigin, Optional<Boolean> deep) {
-        List<Cube> cubes = s.getCubes() == null ? List.of() : s.getCubes();
+        CatalogReader catalogReader = connection.getCatalogReader(); 
+        List<Cube> cubes = catalogReader.getCubes();
         return getCubesWithFilter(cubes, oCubeName).stream()
-                .map(c -> getMdSchemaHierarchiesResponseRow(c, catalogName, s.getName(), c, oDimensionUniqueName,
+                .map(c -> getMdSchemaHierarchiesResponseRow(catalogReader, c, catalogName, catalog.getName(), oDimensionUniqueName,
                         oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin, deep))
                 .flatMap(Collection::stream).sorted(Comparator.comparing(r -> r.hierarchyUniqueName().orElse("")))
                 .toList();
     }
 
-    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(Cube cube, String catalogName,
-            String schemaName, Cube c, Optional<String> oDimensionUniqueName, Optional<String> oHierarchyName,
+    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(CatalogReader catalogReader, Cube cube, String catalogName,
+            String schemaName, Optional<String> oDimensionUniqueName, Optional<String> oHierarchyName,
             Optional<String> oHierarchyUniqueName, Optional<VisibilityEnum> oHierarchyVisibility,
             Optional<Integer> oHierarchyOrigin, Optional<Boolean> deep) {
         List<MdSchemaHierarchiesResponseRow> result = new ArrayList<>();
-        List<? extends Dimension> dimensions = c.getDimensions() == null ? List.of() : c.getDimensions();
+        List<? extends Dimension> dimensions = catalogReader.getCubeDimensions(cube);
         int ordinal = 0;
         for (Dimension dimension : dimensions) {
             if (!oDimensionUniqueName.isPresent() || oDimensionUniqueName.get().equals(dimension.getUniqueName())) {
-                result.addAll(getMdSchemaHierarchiesResponseRow(cube, catalogName, schemaName, c.getName(), dimension,
+                result.addAll(getMdSchemaHierarchiesResponseRow(catalogReader, cube, catalogName, schemaName, cube.getName(), dimension,
                         ordinal, oHierarchyName, oHierarchyUniqueName, oHierarchyVisibility, oHierarchyOrigin, deep));
             }
             ordinal += dimension.getHierarchies().size();
@@ -1271,22 +1262,21 @@ public class Utils {
         return result;
     }
 
-    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(Cube cube, String catalogName,
+    private static List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchiesResponseRow(CatalogReader catalogReader, Cube cube, String catalogName,
             String schemaName, String cubeName, Dimension dimension, int ordinal, Optional<String> oHierarchyName,
             Optional<String> oHierarchyUniqueName, Optional<VisibilityEnum> oHierarchyVisibility,
             Optional<Integer> oHierarchyOrigin, Optional<Boolean> deep) {
-        List<? extends Hierarchy> hierarchies = dimension.getHierarchies() == null ? List.of()
-                : dimension.getHierarchies();
+        List<? extends Hierarchy> hierarchies = catalogReader.getDimensionHierarchies(dimension);
 
         return getHierarchiesWithFilterByName(getHierarchiesWithFilterByUniqueName(hierarchies, oHierarchyName),
                 oHierarchyName).stream()
-                .map(h -> getMdSchemaHierarchiesResponseRow(cube, catalogName, schemaName, cubeName, dimension,
+                .map(h -> getMdSchemaHierarchiesResponseRow(catalogReader, cube, catalogName, schemaName, cubeName, dimension,
                         ordinal + hierarchies.indexOf(h), h, oHierarchyVisibility, oHierarchyOrigin, deep))
                 .toList();
 
     }
 
-    private static MdSchemaHierarchiesResponseRow getMdSchemaHierarchiesResponseRow(Cube cube, String catalogName,
+    private static MdSchemaHierarchiesResponseRow getMdSchemaHierarchiesResponseRow(CatalogReader catalogReader, Cube cube, String catalogName,
             String schemaName, String cubeName, Dimension dimension, int ordinal, Hierarchy hierarchy,
             Optional<VisibilityEnum> oHierarchyVisibility, Optional<Integer> oHierarchyOrigin, Optional<Boolean> deep) {
         String desc = hierarchy.getDescription();
@@ -1319,11 +1309,11 @@ public class Utils {
         // TODO ParentChild
         if (deep.isPresent() && deep.get()) {
             // TODO add MdSchemaLevelsResponse to response
-            getMdSchemaLevelsResponseRow(cube, catalogName, schemaName, cubeName, dimension.getUniqueName(), hierarchy,
+            getMdSchemaLevelsResponseRow(catalogReader, cube, catalogName, schemaName, cubeName, dimension.getUniqueName(), hierarchy,
                     Optional.empty(), Optional.empty(), Optional.empty());
         }
 
-        final List<Member> levelMembers = cube.getLevelMembers(hierarchy.getLevels().getFirst(), true);
+        final List<Member> levelMembers = catalogReader.getLevelMembers(hierarchy.getLevels().getFirst(), true);
         return new MdSchemaHierarchiesResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
                 Optional.ofNullable(cubeName), Optional.ofNullable(dimension.getUniqueName()),
                 Optional.ofNullable(hierarchy.getName()), Optional.ofNullable(hierarchy.getUniqueName()),

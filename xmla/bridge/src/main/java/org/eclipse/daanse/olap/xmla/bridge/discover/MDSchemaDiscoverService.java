@@ -34,9 +34,8 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.xmla.bridge.ActionService;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
-import org.eclipse.daanse.olap.xmla.bridge.RoleUtils;
+import org.eclipse.daanse.olap.xmla.bridge.session.SessionServiceImpl;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
@@ -75,9 +74,12 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MDSchemaDiscoverService {
 
+    protected static final Logger LOGGER = LoggerFactory.getLogger(MDSchemaDiscoverService.class);
     private ContextListSupplyer contextsListSupplyer;
     private ActionService actionService;
 
@@ -138,11 +140,15 @@ public class MDSchemaDiscoverService {
         }
 
         if (catalogName != null) {
-            Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(catalogName, metaData.sessionId());
-            if (oCatalog.isPresent()) {
-                Catalog catalog = oCatalog.get();
-                result.addAll(getMdSchemaCubesResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), catalogName), catalog, schemaName, cubeName, baseCubeName, cubeSource,
-                        metaData));
+            try {
+                Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(catalogName, metaData.sessionId());
+                if (oCatalog.isPresent()) {
+                    Catalog catalog = oCatalog.get();
+                    result.addAll(getMdSchemaCubesResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), catalogName), catalog, schemaName, cubeName, baseCubeName, cubeSource,
+                            metaData));
+                }
+            } catch (Exception e) {
+                LOGGER.debug("not able get cube list for " + catalogName);
             }
         } else { // TODO: open Connection here and delegate to row.
 

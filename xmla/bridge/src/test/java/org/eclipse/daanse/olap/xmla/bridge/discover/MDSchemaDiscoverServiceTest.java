@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.xmla.bridge.discover;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -602,7 +603,9 @@ class MDSchemaDiscoverServiceTest {
     @Test
     void mdSchemaMeasures() {
         when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog2));
-
+        when(cls.getConnection(any(), any())).thenReturn(connection);
+        when(connection.getCatalogReader()).thenReturn(catalogReader);
+        
         MdSchemaMeasuresRequest request = mock(MdSchemaMeasuresRequest.class);
         MdSchemaMeasuresRestrictions restrictions = mock(MdSchemaMeasuresRestrictions.class);
 
@@ -614,6 +617,10 @@ class MDSchemaDiscoverServiceTest {
         when(dimension1.getHierarchies()).thenAnswer(setupDummyListAnswer(hierarchy1, hierarchy2));
 
         when(dimension2.getHierarchies()).thenAnswer(setupDummyListAnswer(hierarchy1, hierarchy2));
+        when(level1.getUniqueName()).thenReturn("name");
+        when(hierarchy1.getLevels()).thenAnswer(setupDummyListAnswer(level1));
+        when(hierarchy2.getLevels()).thenAnswer(setupDummyListAnswer(level1));
+        
 
         when(cube1.getName()).thenReturn("cube1Name");
         when(cube2.getName()).thenReturn("cube2Name");
@@ -632,8 +639,7 @@ class MDSchemaDiscoverServiceTest {
 
         when(cube1.getDimensions()).thenAnswer(setupDummyListAnswer(dimension1, dimension2));
         when(cube2.getDimensions()).thenAnswer(setupDummyListAnswer(dimension1, dimension2));
-        when(cube1.getMeasures()).thenAnswer(setupDummyListAnswer(measure1, measure2));
-        when(cube2.getMeasures()).thenAnswer(setupDummyListAnswer(measure1, measure2));
+        when(catalogReader.getLevelMembers(any(Level.class), any(Boolean.class))).thenAnswer(setupDummyListAnswer(measure1, measure2));        
 
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
@@ -641,17 +647,17 @@ class MDSchemaDiscoverServiceTest {
         assertThat(rows).isNotNull().hasSize(4);
         checkMdSchemaMeasuresResponseRow(rows.get(0), "schema2Name", "schema2Name", "cube1Name", "measure1Name",
                 "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure1Name Member", true, "", "", "formatString1");
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure1Name Member", true, "name,name,name,name", "", "formatString1");
         checkMdSchemaMeasuresResponseRow(rows.get(1), "schema2Name", "schema2Name", "cube1Name", "measure2Name",
                 "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure2Name Member", true, "", "", "formatString2");
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube1Name Cube - measure2Name Member", true, "name,name,name,name", "", "formatString2");
 
         checkMdSchemaMeasuresResponseRow(rows.get(2), "schema2Name", "schema2Name", "cube2Name", "measure1Name",
                 "measure1UniqueName", "measure1Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure1Name Member", true, "", "", "formatString1");
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure1Name Member", true, "name,name,name,name", "", "formatString1");
         checkMdSchemaMeasuresResponseRow(rows.get(3), "schema2Name", "schema2Name", "cube2Name", "measure2Name",
                 "measure2UniqueName", "measure2Caption", MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN,
-                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure2Name Member", true, "", "", "formatString2");
+                LevelDbTypeEnum.DBTYPE_WSTR, "cube2Name Cube - measure2Name Member", true, "name,name,name,name", "", "formatString2");
     }
 
     @Test

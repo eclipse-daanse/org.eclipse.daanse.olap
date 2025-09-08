@@ -391,12 +391,12 @@ public class MDSchemaDiscoverService {
                     .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
             if (oContext.isPresent()) {
                 Catalog catalog = oContext.get();
-                result.addAll(getMdSchemaMeasuresResponseRow(catalog, oSchemaName, oCubeName, oMeasureName,
+                result.addAll(getMdSchemaMeasuresResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), catalog.getName()).getCatalogReader(), catalog, oSchemaName, oCubeName, oMeasureName,
                         oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers));
             }
         } else {
             result.addAll(contextsListSupplyer.get(metaData.sessionId()).stream()
-                    .map(c -> getMdSchemaMeasuresResponseRow(c, oSchemaName, oCubeName, oMeasureName,
+                    .map(c -> getMdSchemaMeasuresResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), c.getName()).getCatalogReader(), c, oSchemaName, oCubeName, oMeasureName,
                             oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
                     .flatMap(Collection::stream).toList());
         }

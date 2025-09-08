@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.EmptyOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.InternalOperationAtom;
@@ -1514,26 +1513,26 @@ public class Utils {
         return LevelDbTypeEnum.DBTYPE_WSTR;
     }
 
-    static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(Catalog catalog,
+    static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, Catalog catalog,
             Optional<String> oSchemaName, Optional<String> oCubeName, Optional<String> oMeasureName,
             Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName,
             boolean shouldEmitInvisibleMembers) {
-        return getMdSchemaMeasuresResponseRow(catalog.getName(), catalog, oCubeName, oMeasureName, oMeasureUniqueName,
+        return getMdSchemaMeasuresResponseRow(catalogReader, catalog.getName(), catalog, oCubeName, oMeasureName, oMeasureUniqueName,
                 oMeasureGroupName, shouldEmitInvisibleMembers);
 
     }
 
-    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(String catalogName, Catalog schema,
+    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, String catalogName, Catalog schema,
             Optional<String> oCubeName, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName,
             Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
         List<Cube> cubes = schema.getCubes() == null ? List.of() : schema.getCubes();
         return getCubesWithFilter(cubes, oCubeName).stream()
-                .map(c -> getMdSchemaMeasuresResponseRow(catalogName, schema.getName(), c, oMeasureName,
+                .map(c -> getMdSchemaMeasuresResponseRow(catalogReader, catalogName, schema.getName(), c, oMeasureName,
                         oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
                 .flatMap(Collection::stream).toList();
     }
 
-    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(String catalogName,
+    private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, String catalogName,
             String schemaName, Cube cube, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName,
             Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
         List<MdSchemaMeasuresResponseRow> result = new ArrayList<>();
@@ -1554,8 +1553,11 @@ public class Utils {
             }
         }
         String levelListStr = builder.toString();
+        //get measure level
+        Level measuresLevel = cube.getDimensions().getFirst().getHierarchies().getFirst().getLevels().get(0);
+        List<Member> members = catalogReader.getLevelMembers(measuresLevel, true);
         List<org.eclipse.daanse.olap.api.element.Member> measures = getMeasureWithFilterByUniqueName(
-                getMeasureWithFilterByName(cube.getMeasures(), oMeasureName), oMeasureUniqueName);
+                getMeasureWithFilterByName(members, oMeasureName), oMeasureUniqueName);
         measures.stream().filter(m -> !m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,
                 cube.getName(), levelListStr, shouldEmitInvisibleMembers, m, result));
         measures.stream().filter(m -> m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,

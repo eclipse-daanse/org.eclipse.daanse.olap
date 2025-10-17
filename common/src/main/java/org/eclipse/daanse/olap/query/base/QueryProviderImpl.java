@@ -19,7 +19,7 @@ import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertName
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertParameterList;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxis;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxisList;
-import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertSubcube;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertCubeClause;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.getExpressionByCompoundId;
 
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ public class QueryProviderImpl implements QueryProvider {
 
     @Override
     public Query createQuery(Statement statement, SelectStatement selectStatement, boolean strictValidation) {
-        Subcube subcube = convertSubcube(selectStatement.selectSubcubeClause());
+        Subcube subcube = convertCubeClause(selectStatement.selectCubeClause());
         List<Formula> formulaList = convertFormulaList(selectStatement.selectWithClauses());
         List<QueryAxis> axesList = convertQueryAxisList(selectStatement.selectQueryClause());
         QueryAxis slicerAxis = convertQueryAxis(selectStatement.selectSlicerAxisClause());

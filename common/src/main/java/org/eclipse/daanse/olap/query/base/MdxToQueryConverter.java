@@ -55,9 +55,9 @@ import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryEmptyClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectCubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectCubeClauseName;
+import org.eclipse.daanse.mdx.model.api.select.SelectCubeClauseSubStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -184,26 +184,26 @@ public class MdxToQueryConverter {
         return List.of();
     }
 
-    static Subcube convertSubcube(SelectSubcubeClause selectSubcubeClause) {
+    static Subcube convertCubeClause(SelectCubeClause selectCubeClause) {
 
-        switch (selectSubcubeClause) {
-        case SelectSubcubeClauseName selectSubcubeClauseName:
-            return getSubcubeBySelectSubcubeClauseName(selectSubcubeClauseName);
-        case SelectSubcubeClauseStatement selectSubcubeClauseStatement:
-            return getSubcubeBySelectSubcubeClauseStatement(selectSubcubeClauseStatement);
+        switch (selectCubeClause) {
+        case SelectCubeClauseName selectCubeClauseName:
+            return getSubcubeBySelectCubeClauseName(selectCubeClauseName);
+        case SelectCubeClauseSubStatement selectCubeClauseSubStatement:
+            return getSubcubeBySelectCubeClauseSubStatement(selectCubeClauseSubStatement);
         }
     }
 
-    static Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
-        Subcube subcube = convertSubcube(selectSubcubeClauseStatement.selectSubcubeClause());
-        List<QueryAxis> axes = convertQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
+    static Subcube getSubcubeBySelectCubeClauseSubStatement(SelectCubeClauseSubStatement selectCubeClauseSubStatement) {
+        Subcube subcube = convertCubeClause(selectCubeClauseSubStatement.selectCubeClause());
+        List<QueryAxis> axes = convertQueryAxisList(selectCubeClauseSubStatement.selectQueryClause());
         String cubeName = null;
-        QueryAxis slicerAxis = convertQueryAxis(selectSubcubeClauseStatement.selectSlicerAxisClause());
+        QueryAxis slicerAxis = convertQueryAxis(selectCubeClauseSubStatement.selectSlicerAxisClause());
         return new SubcubeImpl(cubeName, subcube, axes.stream().toArray(QueryAxisImpl[]::new), slicerAxis);
     }
 
-    static Subcube getSubcubeBySelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName) {
-        NameObjectIdentifier nameObjectIdentifier = selectSubcubeClauseName.cubeName();
+    static Subcube getSubcubeBySelectCubeClauseName(SelectCubeClauseName selectCubeClauseName) {
+        NameObjectIdentifier nameObjectIdentifier = selectCubeClauseName.cubeName();
         String cubeName = convertName(nameObjectIdentifier);
         return new SubcubeImpl(cubeName, null, null, null);
     }

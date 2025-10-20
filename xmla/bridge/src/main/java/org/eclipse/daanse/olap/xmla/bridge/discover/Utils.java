@@ -662,6 +662,7 @@ public class Utils {
             Optional<Boolean> emitInvisibleMembers) {
         if (!oMemberUniqueName.isPresent()) {
             // TODO
+            LOGGER.warn("MemberUniqueName is missing");
             return List.of();
         } else {
             if (oLevelUniqueName.isPresent()) {
@@ -718,10 +719,11 @@ public class Utils {
             // The value returned is not used at this point but they are
             // now cached in the SchemaReader.
             List<? extends Level> levels = hierarchy.getLevels() == null ? List.of() : hierarchy.getLevels();
-            return levels.stream()
-                    .map(l -> getMdSchemaMembersResponseRow(catalogName, schemaName, cube,
-                            cube.getLevelMembers(l, true), oMemberUniqueName, oMemberType, emitInvisibleMembers))
-                    .flatMap(Collection::stream).toList();
+            List<Member> members =  levels.stream()
+            .map(l -> cube.getLevelMembers(l, true)).flatMap(Collection::stream).distinct().toList();
+            return getMdSchemaMembersResponseRow(catalogName, schemaName, cube,
+                    members, oMemberUniqueName, oMemberType, emitInvisibleMembers);
+                    
         }
 
     }

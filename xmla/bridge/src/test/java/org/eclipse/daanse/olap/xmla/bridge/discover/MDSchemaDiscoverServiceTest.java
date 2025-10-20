@@ -708,12 +708,12 @@ class MDSchemaDiscoverServiceTest {
         when(catalog2.getCubes()).thenAnswer(setupDummyListAnswer(cube1, cube2));
 
         List<MdSchemaMembersResponseRow> rows = service.mdSchemaMembers(request, requestMetaData);
-        assertThat(rows).isNotNull().hasSize(16);
+        assertThat(rows).isNotNull().hasSize(8);
         checkMdSchemaMembersResponseRow(rows.get(0), "schema2Name", Optional.empty(), "cube1Name",
                 "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
                 "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0, Optional.empty(), 0,
                 "measure1Description");
-        checkMdSchemaMembersResponseRow(rows.get(15), "schema2Name", Optional.empty(), "cube2Name",
+        checkMdSchemaMembersResponseRow(rows.get(7), "schema2Name", Optional.empty(), "cube2Name",
                 "dimension1UniqueName", "hierarchy1UniqueName", "level1UniqueName", 0, 0, "measure1Name",
                 "memberUniqueName", MemberTypeEnum.REGULAR_MEMBER, "measure1Caption", 100, 0, Optional.empty(), 0,
                 "measure1Description");

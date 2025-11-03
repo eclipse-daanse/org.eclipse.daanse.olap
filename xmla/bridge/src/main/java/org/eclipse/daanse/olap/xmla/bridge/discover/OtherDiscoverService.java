@@ -142,8 +142,8 @@ public class OtherDiscoverService {
         for (Catalog catalog : catalogs) {
 
             result.add(new DiscoverDataSourcesResponseRowR("DataSource of " + catalog.getName(),
-                    Optional.ofNullable(catalog.getDescription()), Optional.empty(), Optional.empty(), null,
-                    Optional.empty(), Optional.empty()));
+                    Optional.ofNullable(catalog.getDescription()), Optional.empty(), Optional.of(""),
+                    "Daanse", Optional.of(ProviderTypeEnum.MDP),  Optional.of(AuthenticationModeEnum.UNAUTHENTICATED)));
         }
         return result;
     }

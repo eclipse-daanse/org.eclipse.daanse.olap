@@ -32,6 +32,8 @@ import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextsSupplyerImpl;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
+import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
@@ -115,19 +117,19 @@ class OtherDiscoverServiceTest {
         assertThat(row.dataSourceName()).isEqualTo("DataSource of bar");
         assertThat(row.dataSourceDescription()).contains("barDescription");
         assertThat(row.url()).isEmpty();
-        assertThat(row.dataSourceInfo()).isEmpty();
-        assertThat(row.providerName()).isNull();
-        assertThat(row.providerType()).isEmpty();
-        assertThat(row.authenticationMode()).isEmpty();
+        assertThat(row.dataSourceInfo()).contains("");
+        assertThat(row.providerName()).contains("Daanse");
+        assertThat(row.providerType()).contains(ProviderTypeEnum.MDP);
+        assertThat(row.authenticationMode()).contains(AuthenticationModeEnum.UNAUTHENTICATED);
         row = rows.get(1);
         assertThat(row).isNotNull();
         assertThat(row.dataSourceName()).isEqualTo("DataSource of foo");
         assertThat(row.dataSourceDescription()).contains("fooDescription");
         assertThat(row.url()).isEmpty();
-        assertThat(row.dataSourceInfo()).isEmpty();
-        assertThat(row.providerName()).isNull();
-        assertThat(row.providerType()).isEmpty();
-        assertThat(row.authenticationMode()).isEmpty();
+        assertThat(row.dataSourceInfo()).contains("");
+        assertThat(row.providerName()).contains("Daanse");
+        assertThat(row.providerType()).contains(ProviderTypeEnum.MDP);
+        assertThat(row.authenticationMode()).contains(AuthenticationModeEnum.UNAUTHENTICATED);
 
     }
 

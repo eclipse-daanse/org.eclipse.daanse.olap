@@ -115,6 +115,7 @@ class OtherDiscoverServiceTest {
         when(context2.getName()).thenReturn("foo");
         when(context2.getDescription()).thenReturn(Optional.of("fooDescription"));
         // when(context2.getDataSource()).thenReturn(dataSource);
+
         List<DiscoverDataSourcesResponseRow> rows = service.dataSources(request, requestMetaData);
         verify(context1, times(1)).getName();
         verify(context2, times(1)).getName();

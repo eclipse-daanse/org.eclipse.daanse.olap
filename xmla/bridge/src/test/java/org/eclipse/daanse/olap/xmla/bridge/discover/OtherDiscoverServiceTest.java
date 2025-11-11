@@ -37,6 +37,7 @@ import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRequest;
@@ -98,19 +99,25 @@ class OtherDiscoverServiceTest {
 
     @Test
     void dataSources() throws SQLException {
-        when(cls.get(any())).thenReturn(List.of(catalog1, catalog2));
+        when(cls.getContexts()).thenReturn(List.of(context1, context2));
 
         DiscoverDataSourcesRequest request = mock(DiscoverDataSourcesRequest.class);
+        Properties properties = mock(Properties.class);
+        when(properties.catalog()).thenReturn(Optional.empty()); 
 
-        when(catalog1.getName()).thenReturn("bar");
-        when(catalog1.getDescription()).thenReturn("barDescription");
-        when(catalog2.getName()).thenReturn("foo");
-        when(catalog2.getDescription()).thenReturn("fooDescription");
+        DiscoverDataSourcesRestrictions restrictions = mock(DiscoverDataSourcesRestrictions.class);
+
+        when(request.properties()).thenReturn(properties);
+        when(request.restrictions()).thenReturn(restrictions);
+
+        when(context1.getName()).thenReturn("bar");
+        when(context1.getDescription()).thenReturn(Optional.of("barDescription"));
+        when(context2.getName()).thenReturn("foo");
+        when(context2.getDescription()).thenReturn(Optional.of("fooDescription"));
         // when(context2.getDataSource()).thenReturn(dataSource);
-
         List<DiscoverDataSourcesResponseRow> rows = service.dataSources(request, requestMetaData);
-        verify(catalog1, times(1)).getName();
-        verify(catalog2, times(1)).getName();
+        verify(context1, times(1)).getName();
+        verify(context2, times(1)).getName();
         assertThat(rows).isNotNull().hasSize(2);
         DiscoverDataSourcesResponseRow row = rows.get(0);
         assertThat(row).isNotNull();

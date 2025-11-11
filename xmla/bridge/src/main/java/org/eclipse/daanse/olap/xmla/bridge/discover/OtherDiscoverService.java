@@ -90,6 +90,7 @@ import org.slf4j.LoggerFactory;
 
 public class OtherDiscoverService {
 
+    private static final String DAANSE = "Daanse";
     protected static final Logger LOGGER = LoggerFactory.getLogger(OtherDiscoverService.class);
     private static final String DBLITERAL = "DBLITERAL_";
     private static List<Class<? extends Enum<?>>> enums = List.of(AccessEnum.class, AuthenticationModeEnum.class,
@@ -138,12 +139,25 @@ public class OtherDiscoverService {
     public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request,
             RequestMetaData metaData) {
         List<DiscoverDataSourcesResponseRow> result = new ArrayList<>();
-        List<Catalog> catalogs = this.contextsListSupplyer.get(metaData.sessionId());
-        for (Catalog catalog : catalogs) {
-
-            result.add(new DiscoverDataSourcesResponseRowR("DataSource of " + catalog.getName(),
-                    Optional.ofNullable(catalog.getDescription()), Optional.empty(), Optional.of(""),
-                    "Daanse", Optional.of(ProviderTypeEnum.MDP),  Optional.of(AuthenticationModeEnum.UNAUTHENTICATED)));
+        Optional<String> properetyCatalog = request.properties().catalog();
+        if (!properetyCatalog.isPresent()) {
+            if (request.restrictions() != null && request.restrictions().dataSourceName() != null) {
+                properetyCatalog = Optional.of(request.restrictions().dataSourceName());
+            }
+        }
+        if (!properetyCatalog.isPresent()) {
+            for (Context<?> context : contextsListSupplyer.getContexts()) {
+                result.add(new DiscoverDataSourcesResponseRowR("DataSource of " + context.getName(),
+                        context.getDescription(), Optional.empty(), Optional.of(""),
+                        DAANSE, Optional.of(ProviderTypeEnum.MDP),  Optional.of(AuthenticationModeEnum.UNAUTHENTICATED)));
+            }
+        } else {
+            Optional<Context<?>> oContext = contextsListSupplyer.getContext(properetyCatalog.get());
+            if  (oContext.isPresent()) {
+                result.add(new DiscoverDataSourcesResponseRowR("DataSource of " + oContext.get().getName(),
+                        oContext.get().getDescription(), Optional.empty(), Optional.of(""),
+                        DAANSE, Optional.of(ProviderTypeEnum.MDP),  Optional.of(AuthenticationModeEnum.UNAUTHENTICATED)));
+            }
         }
         return result;
     }

@@ -26,7 +26,6 @@ package org.eclipse.daanse.olap.connection;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParser;
@@ -112,31 +111,27 @@ public abstract class ConnectionBase implements Connection {
 
         MdxParser parser;
         try {
-           parser = getContext().getMdxParserProvider().newParser(queryToParse, funTable.getPropertyWords());
-           MdxStatement mdxStatement = parser.parseMdxStatement();
-           return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
+            parser = getContext().getMdxParserProvider().newParser(queryToParse, funTable.getPropertyWords());
+            MdxStatement mdxStatement = parser.parseMdxStatement();
+            return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
         } catch (MdxParserException mdxPE) {
-            try {
-                parser = getContext().getMdxParserProvider().newParser(queryToParse, Set.of());
-                MdxStatement mdxStatement = parser.parseDMVStatement();
-                return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
-            } catch (MdxParserException mdxPE1) {
-                Optional<SqlGuardFactory> oSqlGuardFactory = getContext().getSqlGuardFactory();
-                if (oSqlGuardFactory.isEmpty()) {
+
+            Optional<SqlGuardFactory> oSqlGuardFactory = getContext().getSqlGuardFactory();
+            if (oSqlGuardFactory.isEmpty()) {
+                throw new FailedToParseQueryException(queryToParse, mdxPE);
+            } else {
+                List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
+                org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl("", ds);
+                SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of(), this.getContext().getDialect());
+                // TODO add white list functions
+                try {
+                    String sanetizedSql = guard.guard(queryToParse);
+                    return new SqlQueryImpl(sanetizedSql, getContext().getDataSource());
+                } catch (UnparsableStatementGuardException uex) {
+                    // when can´t be parse then we decide to throw the exception of MDX
                     throw new FailedToParseQueryException(queryToParse, mdxPE);
-                } else {
-                    List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
-                    org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl("", ds);
-                    SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of(), this.getContext().getDialect() ); //TODO add white list functions
-                    try {
-                        String sanetizedSql= guard.guard(queryToParse);
-                        return new SqlQueryImpl(sanetizedSql, getContext().getDataSource());
-                    } catch (UnparsableStatementGuardException uex) {
-                        // when can´t be parse then we decide to throw the exception of MDX
-                        throw new FailedToParseQueryException(queryToParse, mdxPE);
-                    } catch (GuardException guasdEx) {
-                        throw new FailedToParseQueryException(queryToParse, guasdEx);
-                    }
+                } catch (GuardException guasdEx) {
+                    throw new FailedToParseQueryException(queryToParse, guasdEx);
                 }
             }
         }

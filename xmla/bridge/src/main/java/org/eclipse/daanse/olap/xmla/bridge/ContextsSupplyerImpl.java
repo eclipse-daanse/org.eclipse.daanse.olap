@@ -37,11 +37,12 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
 
     @Override
     public List<Catalog> get(Optional<String> sessionId) {
-        return getContexts().stream().map(context -> getConnection(sessionId, context.getName())).map(Connection::getCatalog).toList();
+        return getContexts().stream().map(context -> getConnection(sessionId, context.getName()))
+                .map(Connection::getCatalog).toList();
     }
 
     @Override
-    public Optional<Catalog> tryGetFirstByName(String catalogName, Optional<String> sessionId) {        
+    public Optional<Catalog> tryGetFirstByName(String catalogName, Optional<String> sessionId) {
         return Optional.of(getConnection(sessionId, catalogName).getCatalog());
     }
 
@@ -64,12 +65,20 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
     @Override
     public Connection getConnection(Optional<String> sessionId, String catalogName) {
         if (sessionId.isPresent() && sessionCache.containsKey(sessionId.get())) {
-            Map<String, Connection> connectionMap =  sessionCache.get(sessionId.get());
+            Map<String, Connection> connectionMap = sessionCache.get(sessionId.get());
             if (connectionMap.containsKey(catalogName)) {
                 return connectionMap.get(catalogName);
             }
+        } else {
+            Connection connection = getContexts().stream().filter(c -> c.getName().equals(catalogName)).findFirst()
+                    .map(context -> {
+                        Connection con = context.getConnection(new ConnectionProps(List.of()));
+                        return con;
+                    }).orElseThrow(() -> new RuntimeException("No context found for catalog " + catalogName));
+            return connection;
         }
-        throw new RuntimeException("Connection is absent in cache for session " + sessionId + " for catalog " + catalogName);
+        throw new RuntimeException(
+                "Connection is absent in cache for session " + sessionId + " for catalog " + catalogName);
     }
 
 }

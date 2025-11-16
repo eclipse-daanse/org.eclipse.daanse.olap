@@ -264,10 +264,8 @@ public class OlapExecuteService implements ExecuteService {
                 } else if (queryComponent instanceof CalculatedFormula calculatedFormula) {
                     return executeCalculatedFormula(connection, calculatedFormula);
                 } else if (queryComponent instanceof DmvQuery dmvQuery) {
-                    return executeDmvQuery(connection, dmvQuery, metaData, statementRequest); // toto:
-                                                                                                             // remove
-                                                                                                             // userRolePrincipal,
-                                                                                                             // metaData,
+                    return executeDmvQuery(connection, dmvQuery, metaData, statementRequest); 
+                    // TODO: remove  userRolePrincipal,  metaData,
                 } else if (queryComponent instanceof Refresh refresh) {
                     return executeRefresh(connection, refresh);
                 } else if (queryComponent instanceof Update update) {
@@ -287,17 +285,42 @@ public class OlapExecuteService implements ExecuteService {
                     && !contextsListSupplyer.getContexts().isEmpty()) {
                 Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
                 QueryComponent queryComponent = connection.parseStatement(statement);
-                if (queryComponent instanceof DmvQuery dmvQuery
-                        && dmvQuery.getTableName().equals(OperationNames.DBSCHEMA_CATALOGS)) {
-                    List<DbSchemaCatalogsResponseRow> dbSchemaCatalogsResponseRowSetList = new ArrayList<DbSchemaCatalogsResponseRow>();
-                    for (Context c : contextsListSupplyer.getContexts()) {
-                        dbSchemaCatalogsResponseRowSetList.add(dbSchemaService.dbSchemaCatalogsRow(c));
+                if (queryComponent instanceof DmvQuery dmvQuery) {
+                    
+                    System.out.println("!!!! use sesscioncach to et the open connection is session exists");
+                    String tableName = dmvQuery.getTableName();
+                    if (tableName.equalsIgnoreCase(OperationNames.DBSCHEMA_CATALOGS)) {
+                        List<DbSchemaCatalogsResponseRow> dbSchemaCatalogsResponseRowSetList = new ArrayList<DbSchemaCatalogsResponseRow>();
+                        for (Context c : contextsListSupplyer.getContexts()) {
+                            dbSchemaCatalogsResponseRowSetList.add(dbSchemaService.dbSchemaCatalogsRow(c));
+                        }
+                        RowSetR rowSet = DiscoveryResponseConvertor
+                                .dbSchemaCatalogsResponseRowToRowSet(dbSchemaCatalogsResponseRowSetList);
+                        return new StatementResponseR(null, filterRowSetByColumns(rowSet, dmvQuery.getColumns(),
+                                dmvQuery.getWhereExpression(), statementRequest.parameters()));
+                    } else if (tableName.equalsIgnoreCase(OperationNames.MDSCHEMA_CUBES)) {
+                        // special case for MDSCHEMA_CUBES without catalog : return from all catalogs
+                        List<RowSetRow> rsrs = new ArrayList<>();
+                        for (Context<?> c : contextsListSupplyer.getContexts()) {
+                            Connection conn = c.getConnection(new ConnectionProps(
+                                    RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
+                            Catalog catalog = conn.getCatalog();
+                            System.out.println("!!!!!!!!!!!!!!!!USE Catalogreader to enforce the roles");
+                            MdSchemaCubesRequest mdSchemaCubesRequest = new MdSchemaCubesRequestR(
+                                    (PropertiesR) statementRequest.properties(),
+                                    new MdSchemaCubesRestrictionsR(null, empty(), empty(), empty(), empty(), empty()));
+                            RowSetR rowSet = DiscoveryResponseConvertor.mdSchemaCubesResponseRowToRowSet(
+                                    mdSchemaService.mdSchemaCubes(mdSchemaCubesRequest, metaData));
+                            rsrs.addAll(rowSet.rowSetRows());
+                        }
+                        RowSetR combinedRowSet = new RowSetR(rsrs);
+                        return new StatementResponseR(null, filterRowSetByColumns(combinedRowSet, dmvQuery.getColumns(),
+                                dmvQuery.getWhereExpression(), statementRequest.parameters()));
+
                     }
-                    RowSetR rowSet = DiscoveryResponseConvertor
-                            .dbSchemaCatalogsResponseRowToRowSet(dbSchemaCatalogsResponseRowSetList);
-                    return new StatementResponseR(null, filterRowSetByColumns(rowSet, dmvQuery.getColumns(),
-                            dmvQuery.getWhereExpression(), statementRequest.parameters()));
+                        
                 }
+//                here
             }
         }
 

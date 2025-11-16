@@ -177,9 +177,11 @@ import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
+import org.slf4j.Logger;
 
 public class OlapExecuteService implements ExecuteService {
 
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(OlapExecuteService.class);
     private static final String MDX_CUBE_0_NOT_FOUND = "MDX cube ''{0}'' not found";
     public static final String SESSION_ID = "sessionId";
     public static final String CODE3238658121 = "3238658121";
@@ -247,14 +249,19 @@ public class OlapExecuteService implements ExecuteService {
     public StatementResponse statement(StatementRequest statementRequest, RequestMetaData metaData,
             UserRolePrincipal userRolePrincipal) {
 
+        String statement = statementRequest.command().statement();
+        if (statement == null || statement.isBlank()) {
+            LOGGER.warn("Empty statement received");
+            return new StatementResponseR(null, null);
+        }
+
         Optional<String> oCatalog = statementRequest.properties().catalog();
+
         if (oCatalog.isPresent()) {
             String catalogName = oCatalog.get();
             Optional<Context<?>> oContext = contextsListSupplyer.getContexts().stream()
                     .filter(ctx -> catalogName.equals(ctx.getName())).findAny();
             Context context = oContext.get();
-            String statement = statementRequest.command().statement();
-            if (statement != null && statement.length() > 0) {
                 Locale locale = getLocale(statementRequest.properties());
                 Connection connection = context.getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r)), locale));
                 QueryComponent queryComponent = connection.parseStatement(statement);
@@ -278,11 +285,11 @@ public class OlapExecuteService implements ExecuteService {
                 } else if (queryComponent instanceof SqlQuery sqlQuery) {
                     return executeSqlQuery(sqlQuery);
                 }
-            }
+            
         } else {
-            String statement = statementRequest.command().statement();
-            if (statement != null && statement.length() > 0 && contextsListSupplyer.getContexts() != null
-                    && !contextsListSupplyer.getContexts().isEmpty()) {
+            if (contextsListSupplyer.getContexts() != null && !contextsListSupplyer.getContexts().isEmpty()) {
+                //TODO: aggregate word from all statements?
+                //or do we have a default context?
                 Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
                 QueryComponent queryComponent = connection.parseStatement(statement);
                 if (queryComponent instanceof DmvQuery dmvQuery) {
@@ -321,10 +328,10 @@ public class OlapExecuteService implements ExecuteService {
                         
                 }
 //                here
-            }
         }
-
+        }
         return new StatementResponseR(null, null);
+
     }
 
     private Locale getLocale(Properties properties) {

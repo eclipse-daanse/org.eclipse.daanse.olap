@@ -122,6 +122,7 @@ import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
 import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataRequestR;
@@ -256,7 +257,10 @@ public class OlapExecuteService implements ExecuteService {
         }
 
         Optional<String> oCatalog = statementRequest.properties().catalog();
-
+        //some clients (Power BI send empty catalog if only one catalog)
+        if (!oCatalog.isPresent() && contextsListSupplyer.getContexts() != null && contextsListSupplyer.getContexts().size() == 1) {
+            oCatalog = Optional.ofNullable(contextsListSupplyer.getContexts().get(0).getName());
+        }
         if (oCatalog.isPresent()) {
             String catalogName = oCatalog.get();
             Optional<Context<?>> oContext = contextsListSupplyer.getContexts().stream()
@@ -271,7 +275,7 @@ public class OlapExecuteService implements ExecuteService {
                 } else if (queryComponent instanceof CalculatedFormula calculatedFormula) {
                     return executeCalculatedFormula(connection, calculatedFormula);
                 } else if (queryComponent instanceof DmvQuery dmvQuery) {
-                    return executeDmvQuery(connection, dmvQuery, metaData, statementRequest); 
+                    return executeDmvQuery(connection, dmvQuery, metaData, statementRequest);
                     // TODO: remove  userRolePrincipal,  metaData,
                 } else if (queryComponent instanceof Refresh refresh) {
                     return executeRefresh(connection, refresh);
@@ -325,7 +329,7 @@ public class OlapExecuteService implements ExecuteService {
                                 dmvQuery.getWhereExpression(), statementRequest.parameters()));
 
                     }
-                        
+
                 }
 //                here
         }
@@ -527,9 +531,8 @@ public class OlapExecuteService implements ExecuteService {
             rowSet = DiscoveryResponseConvertor.dbSchemaTablesResponseRowToRowSet(dbSchemaTablesResponseRows);
             break;
         case OperationNames.DBSCHEMA_CATALOGS:
-
             rowSet = DiscoveryResponseConvertor.dbSchemaCatalogsResponseRowToRowSet(
-                    List.of(dbSchemaService.dbSchemaCatalogsRow(connection.getContext())));
+                    List.of(correctDescription(dbSchemaService.dbSchemaCatalogsRow(connection.getContext()))));
             break;
         case OperationNames.DBSCHEMA_PROVIDER_TYPES:
             DbSchemaProviderTypesRestrictionsR dbSchemaProviderTypesRestrictions = new DbSchemaProviderTypesRestrictionsR(
@@ -730,6 +733,17 @@ public class OlapExecuteService implements ExecuteService {
 
         return new StatementResponseR(null,
                 filterRowSetByColumns(rowSet, columns, dmvQuery.getWhereExpression(), statementRequest.parameters()));
+    }
+
+    private DbSchemaCatalogsResponseRow correctDescription(DbSchemaCatalogsResponseRow r) {
+        if (!r.description().isPresent()) {
+            return new DbSchemaCatalogsResponseRowR(r.catalogName(), Optional.of(""),
+                    r.roles(), r.dateModified(), r.compatibilityLevel(),
+                    r.type(), r.version(), r.databaseId(),
+                    r.dateQueried(), r.currentlyUsed(), r.popularity(),
+                    r.weightedPopularity(), r.clientCacheRefreshPolicy());
+        }
+        return r;
     }
 
     private boolean isCompatible(RowSetRow row, Expression exp, List<ExecuteParameter> parameters) {

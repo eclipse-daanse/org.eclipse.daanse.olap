@@ -19,7 +19,6 @@ import org.eclipse.daanse.olap.xmla.bridge.ActionService;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
@@ -35,6 +34,8 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesReques
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -266,6 +267,13 @@ public class DelegatingDiscoverService implements DiscoverService {
             RequestMetaData metaData) {
 
         return otherSchemaService.xmlMetaData(request, metaData);
+    }
+
+    @Override
+    public List<DiscoverCsdlMetaDataResponseRow> csdlMetaData(DiscoverCsdlMetaDataRequest request,
+            RequestMetaData metaData) {
+
+        return otherSchemaService.csdlMetaData(request, metaData);
     }
 
 }

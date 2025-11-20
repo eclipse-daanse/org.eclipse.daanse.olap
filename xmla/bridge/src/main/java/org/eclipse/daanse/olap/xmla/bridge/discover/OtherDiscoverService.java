@@ -47,6 +47,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSource
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -75,6 +76,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.xmla.Restriction;
+import org.eclipse.daanse.xmla.model.record.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.keywords.DiscoverKeywordsResponseRowR;
@@ -108,6 +110,18 @@ public class OtherDiscoverService {
                 <EditionID>1804890536</EditionID>
             </Server>
             """;
+    private static final String csdlMd = """
+            <Schema
+                xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
+                xmlns:edm_annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
+                xmlns:bi="http://schemas.microsoft.com/sqlbi/2010/10/edm/extensions" bi:Version="2.0" Namespace="Sandbox">
+              <EntityContainer Name="Sandbox">
+                <Documentation>
+                  <Summary>%s</Summary>
+                </Documentation>
+              </EntityContainer>
+            </Schema>
+              """;
 
     private static List<Class<?>> classes = List.of(
             // DbSchema
@@ -288,7 +302,7 @@ public class OtherDiscoverService {
                     }
                 }
                 result.add(new DiscoverSchemaRowsetsResponseRowR(o.name(), Optional.ofNullable(o.guid()),
-                        Optional.ofNullable(restrictions), Optional.of((desc == null) ? "" : desc), Optional.empty()));
+                        Optional.ofNullable(restrictions), Optional.ofNullable(desc), Optional.of(7l)));
             }
         }
         return result;
@@ -323,6 +337,34 @@ public class OtherDiscoverService {
                 Catalog catalog = cs.get(0);
                 result.add(new DiscoverXmlMetaDataResponseRowR(
                         String.format(md, catalog.getName(), catalog.getName(), date, date)));
+            }
+        }
+        return result;
+    }
+
+    public List<DiscoverCsdlMetaDataResponseRow> csdlMetaData(DiscoverCsdlMetaDataRequest request,
+            RequestMetaData metaData) {
+        List<DiscoverCsdlMetaDataResponseRow> result = new ArrayList<>();
+        Optional<String> catalogName = request.restrictions().catalogName();
+        if (!catalogName.isPresent()) {
+            catalogName = request.properties().catalog();
+        }
+        if (catalogName.isPresent()) {
+            Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(catalogName.get(), metaData.sessionId());
+            if (oCatalog.isPresent()) {
+                Catalog catalog = oCatalog.get();
+
+                if (catalog != null) {
+                    //TODO implement CsdlMetaDataResponse
+                    result.add(new DiscoverCsdlMetaDataResponseRowR(String.format(csdlMd, catalog.getName())));
+                }
+            }
+        } else {
+            List<Catalog> cs = contextsListSupplyer.get(metaData.sessionId());
+            if (cs != null) {
+                Catalog catalog = cs.get(0);
+                //TODO implement CsdlMetaDataResponse
+                result.add(new DiscoverCsdlMetaDataResponseRowR(String.format(csdlMd, catalog.getName())));
             }
         }
         return result;

@@ -26,7 +26,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.element.Catalog;
+import org.eclipse.daanse.olap.api.element.DatabaseColumn;
+import org.eclipse.daanse.olap.api.element.DatabaseSchema;
+import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.PropertyDefinition;
@@ -110,18 +114,6 @@ public class OtherDiscoverService {
                 <EditionID>1804890536</EditionID>
             </Server>
             """;
-    private static final String csdlMd = """
-            <Schema
-                xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
-                xmlns:edm_annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
-                xmlns:bi="http://schemas.microsoft.com/sqlbi/2010/10/edm/extensions" bi:Version="2.0" Namespace="Sandbox">
-              <EntityContainer Name="Sandbox">
-                <Documentation>
-                  <Summary>%s</Summary>
-                </Documentation>
-              </EntityContainer>
-            </Schema>
-              """;
 
     private static List<Class<?>> classes = List.of(
             // DbSchema
@@ -346,6 +338,7 @@ public class OtherDiscoverService {
             RequestMetaData metaData) {
         List<DiscoverCsdlMetaDataResponseRow> result = new ArrayList<>();
         Optional<String> catalogName = request.restrictions().catalogName();
+        Optional<String> perspectiveName = request.restrictions().perspectiveName();
         if (!catalogName.isPresent()) {
             catalogName = request.properties().catalog();
         }
@@ -355,16 +348,14 @@ public class OtherDiscoverService {
                 Catalog catalog = oCatalog.get();
 
                 if (catalog != null) {
-                    //TODO implement CsdlMetaDataResponse
-                    result.add(new DiscoverCsdlMetaDataResponseRowR(String.format(csdlMd, catalog.getName())));
+                    result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
                 }
             }
         } else {
             List<Catalog> cs = contextsListSupplyer.get(metaData.sessionId());
             if (cs != null) {
                 Catalog catalog = cs.get(0);
-                //TODO implement CsdlMetaDataResponse
-                result.add(new DiscoverCsdlMetaDataResponseRowR(String.format(csdlMd, catalog.getName())));
+                result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
             }
         }
         return result;

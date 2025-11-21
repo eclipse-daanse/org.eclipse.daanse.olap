@@ -60,7 +60,7 @@ import org.eclipse.daanse.olap.api.type.DecimalType;
 import org.eclipse.daanse.olap.api.type.NumericType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;
-import org.eclipse.daanse.olap.common.SetBase;
+import org.eclipse.daanse.olap.element.SetBase;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.element.OlapMetaData;

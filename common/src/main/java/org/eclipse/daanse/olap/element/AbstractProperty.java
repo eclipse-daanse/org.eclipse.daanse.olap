@@ -10,7 +10,7 @@
 * Contributors:
 *   SmartCity Jena - initial
 */
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.element;
 
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.olap.api.formatter.MemberPropertyFormatter;

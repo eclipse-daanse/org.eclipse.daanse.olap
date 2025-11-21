@@ -60,7 +60,7 @@ public class PropertyImpl implements IMondrianOlap4jProperty {
             : map.entrySet()
             )
         {
-            org.eclipse.daanse.olap.common.AbstractProperty o = e.getValue();
+            org.eclipse.daanse.olap.element.AbstractProperty o = e.getValue();
             if (o.isMemberProperty()
                 && !memberNames.contains(o.getName()))
             {

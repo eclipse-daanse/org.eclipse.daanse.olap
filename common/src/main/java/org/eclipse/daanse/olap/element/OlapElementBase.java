@@ -25,13 +25,14 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.element;
 
 import java.util.Locale;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.element.MetaElement;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.common.Util;
 import org.slf4j.Logger;
 
 /**

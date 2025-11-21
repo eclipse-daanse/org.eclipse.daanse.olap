@@ -75,7 +75,7 @@ import org.eclipse.daanse.olap.api.type.ScalarType;
 import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
-import org.eclipse.daanse.olap.common.AbstractProperty;
+import org.eclipse.daanse.olap.element.AbstractProperty;
 import org.eclipse.daanse.olap.common.ResultStyleException;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.function.def.hierarchy.member.HierarchyCurrentMemberFunDef;

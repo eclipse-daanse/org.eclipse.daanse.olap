@@ -25,7 +25,7 @@
  *   SmartCity Jena - initial
  */
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.element;
 
 import java.util.List;
 

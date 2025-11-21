@@ -27,7 +27,7 @@ package org.eclipse.daanse.olap.format;
 
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
-import org.eclipse.daanse.olap.common.MemberBase;
+import org.eclipse.daanse.olap.element.MemberBase;
 
 /**
  * Default implementation of SPI {@link MemberFormatter}.

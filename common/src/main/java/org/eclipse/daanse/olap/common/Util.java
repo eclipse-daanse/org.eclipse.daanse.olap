@@ -99,7 +99,6 @@ import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
-import org.eclipse.daanse.olap.api.calc.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -2803,7 +2802,7 @@ public class Util {
     printWriter.println( title );
     if ( calc != null ) {
 
-    	if (calc instanceof ProfilingCalc pc) {
+    	if (calc instanceof Calc pc) {
 
 			CalculationProfile calcProfile = pc.getCalculationProfile();
 			spw.write(calcProfile);

@@ -26,7 +26,7 @@ public class UnknownToBooleanCalc extends AbstractProfilingNestedBooleanCalc {
 	}
 
 	@Override
-	public Boolean evaluate(Evaluator evaluator) {
+	public Boolean evaluateInternal(Evaluator evaluator) {
 		Object v0 = getFirstChildCalc().evaluate(evaluator);
 		if (v0 == null) {
 			return FunUtil.BOOLEAN_NULL;

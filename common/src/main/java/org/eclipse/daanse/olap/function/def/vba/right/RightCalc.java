@@ -26,7 +26,7 @@ public class RightCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         Integer length = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         return right(string, length);

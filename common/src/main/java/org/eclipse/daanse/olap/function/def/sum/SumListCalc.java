@@ -31,7 +31,7 @@ public class SumListCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(SumFunDef.TIMING_NAME);
         final int savepoint = evaluator.savepoint();
         try {

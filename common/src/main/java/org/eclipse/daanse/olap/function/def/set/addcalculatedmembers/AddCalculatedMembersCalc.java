@@ -41,7 +41,7 @@ public class AddCalculatedMembersCalc extends AbstractProfilingNestedTupleListCa
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc tc = getChildCalc(0, TupleListCalc.class);
         final TupleList list = tc.evaluate(evaluator);
         if ( tc instanceof LevelMembersCalc ) {

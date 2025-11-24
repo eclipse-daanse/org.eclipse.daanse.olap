@@ -36,7 +36,7 @@ public class UnionCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc listCalc0 = getChildCalc(0, TupleListCalc.class);
         TupleListCalc listCalc1 = getChildCalc(1, TupleListCalc.class);
         TupleList list0 = listCalc0.evaluate(evaluator);

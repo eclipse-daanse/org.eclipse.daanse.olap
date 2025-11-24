@@ -42,7 +42,7 @@ public class ParentFunDef extends AbstractFunctionDefinition {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         return new ParentCalc(call.getType(), memberCalc) {
             @Override
-            public Member evaluate(Evaluator evaluator) {
+            public Member evaluateInternal(Evaluator evaluator) {
                 Member member = memberCalc.evaluate(evaluator);
                 return memberParent(evaluator, member);
             }

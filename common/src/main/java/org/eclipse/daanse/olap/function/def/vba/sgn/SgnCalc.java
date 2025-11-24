@@ -25,7 +25,7 @@ public class SgnCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         Double number = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         // We could use Math.signum(double) from JDK 1.5 onwards.
         if (number < 0.0d) {

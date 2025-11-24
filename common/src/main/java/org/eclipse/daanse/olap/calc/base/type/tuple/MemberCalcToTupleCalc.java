@@ -27,7 +27,7 @@ public class MemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc {
 	}
 
 	@Override
-	public Member[] evaluate(Evaluator evaluator) {
+	public Member[] evaluateInternal(Evaluator evaluator) {
 		final Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
 		if (member == null) {
 			return null;

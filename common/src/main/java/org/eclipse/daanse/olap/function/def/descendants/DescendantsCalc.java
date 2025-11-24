@@ -39,7 +39,7 @@ public class DescendantsCalc extends AbstractProfilingNestedTupleListCalc{
     }
 
     @Override
-    public TupleList evaluate( Evaluator evaluator ) {
+    public TupleList evaluateInternal(Evaluator evaluator ) {
         MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);
       LevelCalc levelCalc = getChildCalc(1, LevelCalc.class);
       final Evaluator context =

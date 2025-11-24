@@ -36,7 +36,7 @@ public class AggregateChildrenCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         Hierarchy hierarchy = getChildCalc(0, HierarchyCalc.class).evaluate(evaluator);
         return aggregateChildren(evaluator, hierarchy, getChildCalc(1, CurrentValueUnknownCalc.class));
     }

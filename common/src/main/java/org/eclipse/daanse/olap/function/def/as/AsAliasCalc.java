@@ -40,7 +40,7 @@ public class AsAliasCalc extends AbstractProfilingNestedTupleIteratorCalc {
 	}
 
 	@Override
-	public TupleIterable evaluate(Evaluator evaluator) {
+	public TupleIterable evaluateInternal(Evaluator evaluator) {
 		Evaluator.NamedSetEvaluator namedSetEvaluator = evaluator.getNamedSetEvaluator(scopedNamedSet, false);
 		return namedSetEvaluator.evaluateTupleIterable(evaluator);
 	}

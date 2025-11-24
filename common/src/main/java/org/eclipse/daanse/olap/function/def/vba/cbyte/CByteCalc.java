@@ -26,7 +26,7 @@ public class CByteCalc extends AbstractProfilingNestedByteCalc {
     }
 
     @Override
-    public Byte evaluate(Evaluator evaluator) {
+    public Byte evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         if (expression instanceof Byte bt) {
             return bt;

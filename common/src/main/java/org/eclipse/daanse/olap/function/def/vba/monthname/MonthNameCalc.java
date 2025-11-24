@@ -32,7 +32,7 @@ public class MonthNameCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Integer month = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         Boolean abbreviate = getChildCalc(1, BooleanCalc.class).evaluate(evaluator);
         return monthName(month, abbreviate);

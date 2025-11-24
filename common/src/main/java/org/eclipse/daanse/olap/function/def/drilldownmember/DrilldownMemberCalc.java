@@ -38,7 +38,7 @@ public class DrilldownMemberCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc tc = getChildCalc(0, TupleListCalc.class);
         TupleList list1;
         TupleList list = tc.evaluate(evaluator);

@@ -34,7 +34,7 @@ public class DistinctCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleList list = tupleListCalc.evaluate(evaluator);
         Set<List<Member>> set = new HashSet<>(list.size());
         TupleList result = list.copyList(list.size());

@@ -31,7 +31,7 @@ public class ParallelPeriodCalc extends AbstractProfilingNestedMemberCalc{
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         Member member;
         MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);
         Integer lagValue = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);

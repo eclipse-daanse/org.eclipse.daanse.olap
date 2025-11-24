@@ -75,7 +75,7 @@ public class MemberArrayValueCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             for (int i = 0; i < memberCalcs.length; i++) {

@@ -27,7 +27,7 @@ public class DateCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.set(Calendar.HOUR_OF_DAY, 0);

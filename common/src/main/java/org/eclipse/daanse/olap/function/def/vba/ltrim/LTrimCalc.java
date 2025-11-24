@@ -25,7 +25,7 @@ public class LTrimCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         int i = 0;
         int n = string.length();

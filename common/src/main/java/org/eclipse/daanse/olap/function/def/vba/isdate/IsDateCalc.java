@@ -31,7 +31,7 @@ public class IsDateCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         // IsDate returns True if Expression represents a valid date, a valid
         // time, or a valid date and time.

@@ -33,7 +33,7 @@ public abstract class BaseIterFilterCalc extends AbstractProfilingNestedTupleIte
     }
 
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
         try {
             // Use a native evaluator, if more efficient.

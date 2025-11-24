@@ -30,7 +30,7 @@ public class ChildrenCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         // Return the list of children. The list is immutable,
         // hence 'false' above.
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);

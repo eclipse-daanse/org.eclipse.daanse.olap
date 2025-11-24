@@ -31,7 +31,7 @@ public class MemberOrderKeyCalc extends AbstractProfilingNestedCalc<OrderKey> {
     }
 
     @Override
-    public OrderKey evaluate(Evaluator evaluator) {
+    public OrderKey evaluateInternal(Evaluator evaluator) {
         return new OrderKey(getChildCalc(0, MemberCalc.class).evaluate(evaluator));
     }
 

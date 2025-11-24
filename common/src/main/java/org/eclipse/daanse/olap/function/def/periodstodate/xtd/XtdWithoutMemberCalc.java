@@ -47,7 +47,7 @@ public class XtdWithoutMemberCalc extends AbstractProfilingNestedTupleListCalc {
 	}
 
 	@Override
-	public TupleList evaluate(Evaluator evaluator) {
+	public TupleList evaluateInternal(Evaluator evaluator) {
 		evaluator.getTiming().markStart(XtdWithoutMemberCalc.TIMING_NAME);
 		try {
 			return new UnaryTupleList(FunUtil.periodsToDate(evaluator, level, null));

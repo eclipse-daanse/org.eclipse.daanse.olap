@@ -45,7 +45,7 @@ public class CrossJoinIterCalc extends AbstractProfilingNestedTupleIteratorCalc 
     }
 
     @Override
-    public TupleIterable evaluate( Evaluator evaluator ) {
+    public TupleIterable evaluateInternal(Evaluator evaluator ) {
 
       // Use a native evaluator, if more efficient.
       // TODO: Figure this out at compile time.

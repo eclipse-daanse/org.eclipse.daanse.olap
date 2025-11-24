@@ -30,7 +30,7 @@ public class HierarchizeCalc extends AbstractProfilingNestedTupleListCalc{
     }
 
     @Override
-  public TupleList evaluate( Evaluator evaluator ) {
+  public TupleList evaluateInternal(Evaluator evaluator ) {
       TupleList list = getChildCalc(0, TupleListCalc.class).evaluate( evaluator );
       return Sorter.hierarchizeTupleList( list, post );
     }

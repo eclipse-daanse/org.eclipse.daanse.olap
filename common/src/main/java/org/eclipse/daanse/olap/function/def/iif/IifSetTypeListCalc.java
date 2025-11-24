@@ -35,7 +35,7 @@ public class IifSetTypeListCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final boolean b = booleanCalc.evaluate(evaluator);
         Calc<?> calc = b ? calc1 : calc2;
         return (TupleList) calc.evaluate(evaluator);

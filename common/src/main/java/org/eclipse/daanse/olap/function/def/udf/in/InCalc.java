@@ -28,7 +28,7 @@ public class InCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);
         final TupleListCalc tupleListCalc = getChildCalc(1, TupleListCalc.class);
         TupleList tupleList = tupleListCalc.evaluate(evaluator);

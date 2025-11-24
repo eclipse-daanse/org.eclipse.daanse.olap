@@ -35,7 +35,7 @@ public class IifSetTypeIterableCalcCalc extends AbstractProfilingNestedTupleIter
     }
 
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         final boolean b = booleanCalc.evaluate(evaluator);
         Calc<?> calc = b ? calc1 : calc2;
         return (TupleIterable) calc.evaluate(evaluator);

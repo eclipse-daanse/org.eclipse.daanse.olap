@@ -43,7 +43,7 @@ public class DefaultMemberFunDef extends AbstractFunctionDefinition {
         final HierarchyCalc hierarchyCalc = compiler.compileHierarchy(call.getArg(0));
         return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] { hierarchyCalc }) {
             @Override
-            public Member evaluate(Evaluator evaluator) {
+            public Member evaluateInternal(Evaluator evaluator) {
                 Hierarchy hierarchy = hierarchyCalc.evaluate(evaluator);
                 return evaluator.getCatalogReader().getHierarchyDefaultMember(hierarchy);
             }

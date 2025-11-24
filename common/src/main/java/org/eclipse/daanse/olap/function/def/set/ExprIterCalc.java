@@ -59,7 +59,7 @@ public class ExprIterCalc  extends AbstractProfilingNestedTupleIteratorCalc {
     }
 
     @Override
-    public TupleIterable evaluate(final Evaluator evaluator) {
+    public TupleIterable evaluateInternal(final Evaluator evaluator) {
         return new AbstractTupleIterable(getType().getArity()) {
             @Override
             public TupleCursor tupleCursor() {

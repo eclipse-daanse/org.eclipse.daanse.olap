@@ -28,7 +28,7 @@ public class UnknownToDateTimeCalc extends AbstractProfilingNestedDateTimeCalc {
 	}
 
 	@Override
-	public Date evaluate(Evaluator evaluator) {
+	public Date evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o == null) {
 			return null;

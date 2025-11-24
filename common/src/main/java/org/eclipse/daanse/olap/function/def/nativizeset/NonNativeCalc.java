@@ -16,11 +16,10 @@ package org.eclipse.daanse.olap.function.def.nativizeset;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
-import org.eclipse.daanse.olap.api.calc.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 
-public class NonNativeCalc<E>  extends AbstractProfilingCalc<E> implements ProfilingCalc<E> {
+public class NonNativeCalc<E>  extends AbstractProfilingCalc<E> implements Calc<E> {
     final Calc<E> parent;
     final boolean nativeEnabled;
 
@@ -33,7 +32,7 @@ public class NonNativeCalc<E>  extends AbstractProfilingCalc<E> implements Profi
     }
 
     @Override
-    public E evaluate(final Evaluator evaluator) {
+    public E  evaluateInternal(final Evaluator evaluator) {
         evaluator.setNativeEnabled(nativeEnabled);
         return parent.evaluate(evaluator);
     }

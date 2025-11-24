@@ -26,7 +26,7 @@ public class FixCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         Object number = getChildCalc(0, Calc.class).evaluate(evaluator);
         if (number instanceof Number num) {
             int v = num.intValue();

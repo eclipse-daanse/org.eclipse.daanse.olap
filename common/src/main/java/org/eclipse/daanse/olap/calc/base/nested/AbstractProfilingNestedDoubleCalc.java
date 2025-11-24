@@ -41,7 +41,7 @@ public abstract class AbstractProfilingNestedDoubleCalc extends AbstractProfilin
 	}
 
 	@Override
-	public Double evaluate(Evaluator evaluator) {
+	public Double evaluateInternal(Evaluator evaluator) {
 		final Double d = evaluate(evaluator);
 		if (d == FunUtil.DOUBLE_NULL) {
 			return null;

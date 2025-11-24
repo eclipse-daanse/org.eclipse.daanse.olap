@@ -29,7 +29,7 @@ public class DimensionDefaultHierarchyCalc extends AbstractProfilingNestedHierar
 	}
 
 	@Override
-	public Hierarchy evaluate(Evaluator evaluator) {
+	public Hierarchy evaluateInternal(Evaluator evaluator) {
 		final DimensionCalc dimensionCalc = getChildCalc(0, DimensionCalc.class);
 		final Dimension dimension = dimensionCalc.evaluate(evaluator);
 		final Hierarchy hierarchy = DimensionUtil.getDimensionDefaultHierarchyOrThrow(dimension);

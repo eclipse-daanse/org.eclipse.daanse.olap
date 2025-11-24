@@ -36,7 +36,7 @@ public class Rank3TupleCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate( Evaluator evaluator ) {
+    public Integer evaluateInternal( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member[] members = getChildCalc(0, TupleCalc.class).evaluate( evaluator );

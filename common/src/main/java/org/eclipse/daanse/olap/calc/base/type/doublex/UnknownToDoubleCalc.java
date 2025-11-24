@@ -28,7 +28,7 @@ public class UnknownToDoubleCalc extends AbstractProfilingNestedDoubleCalc {
 	}
 
 	@Override
-	public Double evaluate(Evaluator evaluator) {
+	public Double evaluateInternal(Evaluator evaluator) {
 
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o == null) {

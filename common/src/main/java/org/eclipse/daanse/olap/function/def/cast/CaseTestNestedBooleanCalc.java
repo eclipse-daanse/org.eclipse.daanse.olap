@@ -34,7 +34,7 @@ public class CaseTestNestedBooleanCalc extends AbstractProfilingNestedBooleanCal
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         for (int i = 0; i < conditionCalcs.length; i++) {
             if (conditionCalcs[i].evaluate(evaluator)) {
                 return (Boolean) exprCalcs[i].evaluate(evaluator);

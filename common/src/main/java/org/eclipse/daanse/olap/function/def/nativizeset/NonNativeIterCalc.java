@@ -27,7 +27,7 @@ public class NonNativeIterCalc extends NonNativeCalc<TupleIterable> implements T
     }
 
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         evaluator.setNativeEnabled(nativeEnabled);
         return parent().evaluate(evaluator);
     }

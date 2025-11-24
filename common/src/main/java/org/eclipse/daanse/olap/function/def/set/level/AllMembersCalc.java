@@ -28,7 +28,7 @@ public class AllMembersCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         Level level = getChildCalc(0, LevelCalc.class).evaluate(evaluator);
         return FunUtil.levelMembers(level, evaluator, true);
     }

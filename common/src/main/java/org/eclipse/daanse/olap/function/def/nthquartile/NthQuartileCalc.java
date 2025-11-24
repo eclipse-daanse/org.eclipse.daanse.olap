@@ -36,7 +36,7 @@ public class NthQuartileCalc extends AbstractProfilingNestedDoubleCalc{
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             evaluator.setNonEmpty(false);

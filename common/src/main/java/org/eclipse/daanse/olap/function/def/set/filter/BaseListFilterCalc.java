@@ -33,7 +33,7 @@ public abstract class BaseListFilterCalc extends AbstractProfilingNestedTupleLis
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         // Use a native evaluator, if more efficient.
         // TODO: Figure this out at compile time.
         CatalogReader schemaReader = evaluator.getCatalogReader();

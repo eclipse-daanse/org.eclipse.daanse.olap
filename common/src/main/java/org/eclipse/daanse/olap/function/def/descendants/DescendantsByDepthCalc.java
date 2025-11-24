@@ -37,7 +37,7 @@ public class DescendantsByDepthCalc extends AbstractProfilingNestedTupleListCalc
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);
         final IntegerCalc depthCalc = getChildCalc(1, IntegerCalc.class);
         final Member member = memberCalc.evaluate(evaluator);

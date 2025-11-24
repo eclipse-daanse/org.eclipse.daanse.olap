@@ -28,7 +28,7 @@ public class HourCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         Date time = getChildCalc(0, DateTimeCalc.class).evaluate(evaluator);
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);

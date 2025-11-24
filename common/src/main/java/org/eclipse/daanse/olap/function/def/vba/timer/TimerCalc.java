@@ -26,7 +26,7 @@ public class TimerCalc extends AbstractProfilingNestedFloatCalc {
     }
 
     @Override
-    public Float evaluate(Evaluator evaluator) {
+    public Float evaluateInternal(Evaluator evaluator) {
         final Calendar calendar = Calendar.getInstance();
         final long now = calendar.getTimeInMillis();
         calendar.set(Calendar.HOUR_OF_DAY, 0);

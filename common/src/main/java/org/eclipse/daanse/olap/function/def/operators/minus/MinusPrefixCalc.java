@@ -27,7 +27,7 @@ public class MinusPrefixCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         final Double v = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         if (v == FunUtil.DOUBLE_NULL || v == null) {
             return FunUtil.DOUBLE_NULL;

@@ -26,7 +26,7 @@ public class IntegerToDoubleCalc extends AbstractProfilingNestedDoubleCalc {
 	}
 
 	@Override
-	public Double evaluate(Evaluator evaluator) {
+	public Double evaluateInternal(Evaluator evaluator) {
 
 		Integer i = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
 		if (i == null) {

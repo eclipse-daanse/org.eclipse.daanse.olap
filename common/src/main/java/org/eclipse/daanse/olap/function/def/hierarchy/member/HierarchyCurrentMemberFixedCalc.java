@@ -32,7 +32,7 @@ public class HierarchyCurrentMemberFixedCalc extends AbstractProfilingNestedMemb
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         HierarchyCurrentMemberCalc.validateSlicerMembers(hierarchy, evaluator);
         return evaluator.getContext(hierarchy);
     }

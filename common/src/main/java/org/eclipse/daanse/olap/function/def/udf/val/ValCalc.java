@@ -26,7 +26,7 @@ public class ValCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Calc<?> doubleCalc = getChildCalc(0, Calc.class);
         Object arg = doubleCalc.evaluate(evaluator);
         if (arg instanceof Number) {

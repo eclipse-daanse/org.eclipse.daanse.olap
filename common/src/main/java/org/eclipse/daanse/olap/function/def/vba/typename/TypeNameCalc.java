@@ -26,7 +26,7 @@ public class TypeNameCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Object varName = getChildCalc(0, Calc.class).evaluate(evaluator);
         // The string returned by TypeName can be any one of the following:
         //

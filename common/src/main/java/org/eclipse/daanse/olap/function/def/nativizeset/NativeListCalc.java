@@ -56,7 +56,7 @@ public class NativeListCalc  extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         return computeTuples(evaluator);
     }
 

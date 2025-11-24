@@ -43,7 +43,7 @@ public class ExistingCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleIterable setTuples = (TupleIterable) getChildCalc(0, TupleIteratorCalc.class).evaluate(evaluator);
 
         TupleList result = TupleCollections.createList(setTuples.getArity());

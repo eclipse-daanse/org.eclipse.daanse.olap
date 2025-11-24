@@ -34,7 +34,7 @@ public class StrToTupleCalc extends AbstractProfilingNestedTupleCalc{
     }
 
     @Override
-    public Member[] evaluate(Evaluator evaluator) {
+    public Member[] evaluateInternal(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         if (string == null) {
             throw FunUtil.newEvalException(

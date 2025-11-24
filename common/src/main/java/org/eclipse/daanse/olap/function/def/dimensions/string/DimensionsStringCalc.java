@@ -30,7 +30,7 @@ public class DimensionsStringCalc extends AbstractProfilingNestedHierarchyCalc {
     }
 
     @Override
-    public Hierarchy evaluate(Evaluator evaluator) {
+    public Hierarchy evaluateInternal(Evaluator evaluator) {
         String dimensionName = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         return findHierarchy(dimensionName, evaluator);
     }

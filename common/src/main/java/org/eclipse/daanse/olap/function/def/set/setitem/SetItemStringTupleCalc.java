@@ -36,7 +36,7 @@ public class SetItemStringTupleCalc extends AbstractProfilingNestedTupleCalc {
     }
     
     @Override
-    public Member[] evaluate(Evaluator evaluator) {
+    public Member[] evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         final TupleList list;
         try {

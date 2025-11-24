@@ -28,7 +28,7 @@ public class DimensionOfLevelCalc extends AbstractProfilingNestedDimensionCalc {
 	}
 
 	@Override
-	public Dimension evaluate(Evaluator evaluator) {
+	public Dimension evaluateInternal(Evaluator evaluator) {
 		Level level = getChildCalc(0, LevelCalc.class).evaluate(evaluator);
 		return level.getDimension();
 	}

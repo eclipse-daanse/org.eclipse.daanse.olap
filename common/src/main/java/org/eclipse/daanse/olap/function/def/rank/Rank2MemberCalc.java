@@ -27,7 +27,7 @@ public class Rank2MemberCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate( Evaluator evaluator ) {
+    public Integer evaluateInternal(Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
 

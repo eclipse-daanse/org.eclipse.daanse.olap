@@ -99,7 +99,7 @@ public class MemberValueCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             final Member member = memberCalc.evaluate(evaluator);

@@ -29,7 +29,7 @@ public class ValCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         // The Val function stops reading the string at the first character it
         // can't recognize as part of a number. Symbols and characters that are

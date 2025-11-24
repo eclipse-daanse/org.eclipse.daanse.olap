@@ -27,7 +27,7 @@ public class CousinCalc extends AbstractProfilingNestedMemberCalc {
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         Member ancestorMember = getChildCalc(1, MemberCalc.class).evaluate(evaluator);
         return FunUtil.cousin(evaluator.getCatalogReader(), member, ancestorMember);

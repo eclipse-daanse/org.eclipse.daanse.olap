@@ -14,12 +14,12 @@
 package org.eclipse.daanse.olap.calc.base;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
-import org.eclipse.daanse.olap.api.calc.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
@@ -42,7 +42,8 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 	 */
 	protected AbstractProfilingNestedCalc(Type type, Calc<?>... childCalcs) {
 		super(type);
-		this.childCalcs = childCalcs;
+
+        this.childCalcs = childCalcs == null ? new Calc<?>[0] : childCalcs;
 	}
 
 	public Calc<?>[] getChildCalcs() {
@@ -72,11 +73,13 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 	}
 
 	@Override
-	protected List<CalculationProfile> getChildProfiles() {
-		List<CalculationProfile> childProfiles = Stream.of(getChildCalcs()).filter(ProfilingCalc.class::isInstance)
-				.map(ProfilingCalc.class::cast).map(ProfilingCalc::getCalculationProfile).toList();
+    protected List<CalculationProfile> getChildProfiles() {
+        Calc<?>[] childCalcs = getChildCalcs();
+        childCalcs = childCalcs == null ? new Calc<?>[0] : childCalcs;
 
-		return childProfiles;
-	}
+        List<CalculationProfile> childProfiles = Stream.of(childCalcs).filter(Objects::nonNull).map(Calc::getCalculationProfile).toList();
+
+        return childProfiles;
+    }
 
 }

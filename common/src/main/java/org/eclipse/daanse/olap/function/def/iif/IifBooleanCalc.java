@@ -25,7 +25,7 @@ public class IifBooleanCalc extends AbstractProfilingNestedBooleanCalc{
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final boolean condition =
             getChildCalc(0, BooleanCalc.class).evaluate(evaluator);
         if (condition) {

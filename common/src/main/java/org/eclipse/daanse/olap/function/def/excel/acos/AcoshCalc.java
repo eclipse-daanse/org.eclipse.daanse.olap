@@ -26,7 +26,7 @@ public class AcoshCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double x = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         if (x == FunUtil.DOUBLE_NULL) {
             return null;

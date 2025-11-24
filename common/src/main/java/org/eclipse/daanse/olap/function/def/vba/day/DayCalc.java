@@ -28,7 +28,7 @@ public class DayCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         Date date = getChildCalc(0, DateTimeCalc.class).evaluate(evaluator);
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

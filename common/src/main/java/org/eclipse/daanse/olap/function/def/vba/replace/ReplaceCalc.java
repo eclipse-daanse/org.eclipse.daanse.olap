@@ -27,7 +27,7 @@ public class ReplaceCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         String expression = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         String find = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         String replace = getChildCalc(2, StringCalc.class).evaluate(evaluator);

@@ -31,7 +31,7 @@ public class LevelsStringCalc extends AbstractProfilingNestedLevelCalc {
     }
 
     @Override
-    public Level evaluate(Evaluator evaluator) {
+    public Level evaluateInternal(Evaluator evaluator) {
         String levelName = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         return findLevel(evaluator, levelName);
     }

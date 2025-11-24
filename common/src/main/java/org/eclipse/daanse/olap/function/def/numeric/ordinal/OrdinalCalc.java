@@ -26,7 +26,7 @@ public class OrdinalCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         final Level level = getChildCalc(0, LevelCalc.class).evaluate(evaluator);
         return level.getDepth();
     }

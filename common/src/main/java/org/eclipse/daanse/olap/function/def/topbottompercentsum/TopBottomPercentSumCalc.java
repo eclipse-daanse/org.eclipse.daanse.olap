@@ -42,7 +42,7 @@ public class TopBottomPercentSumCalc extends AbstractProfilingNestedTupleListCal
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc tupleListCalc = getChildCalc(0, TupleListCalc.class);
         DoubleCalc doubleCalc = getChildCalc(1, DoubleCalc.class);
         Calc<?> calc = getChildCalc(2, Calc.class);

@@ -34,7 +34,7 @@ public class CaseTestGenericCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         for (int i = 0; i < conditionCalcs.length; i++) {
             if (conditionCalcs[i].evaluate(evaluator)) {
                 return exprCalcs[i].evaluate(evaluator);

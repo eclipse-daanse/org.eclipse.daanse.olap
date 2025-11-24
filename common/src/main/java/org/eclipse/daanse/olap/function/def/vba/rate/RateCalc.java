@@ -28,7 +28,7 @@ public class RateCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double nPer = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         Double pmt = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         Double pv = getChildCalc(2, DoubleCalc.class).evaluate(evaluator);

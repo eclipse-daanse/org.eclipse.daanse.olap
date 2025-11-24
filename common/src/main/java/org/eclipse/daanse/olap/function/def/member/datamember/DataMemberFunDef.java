@@ -43,7 +43,7 @@ public class DataMemberFunDef extends AbstractFunctionDefinition {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] { memberCalc }) {
             @Override
-            public Member evaluate(Evaluator evaluator) {
+            public Member evaluateInternal(Evaluator evaluator) {
                 Member member = memberCalc.evaluate(evaluator);
                 return member.getDataMember();
             }

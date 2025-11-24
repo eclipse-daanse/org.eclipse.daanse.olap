@@ -25,7 +25,7 @@ public class IsEmptyCalc extends AbstractProfilingNestedBooleanCalc{
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Object o = getChildCalc(0, Calc.class).evaluate(evaluator);
         return o == null;
     }

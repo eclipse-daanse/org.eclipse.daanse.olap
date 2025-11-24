@@ -33,7 +33,7 @@ public class FormatCalc extends AbstractProfilingNestedStringCalc{
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Calc<?> calc = getChildCalc(0, Calc.class);
         StringCalc stringCalc = getChildCalc(1, StringCalc.class);
         final Object o = calc.evaluate(evaluator);

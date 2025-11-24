@@ -25,7 +25,7 @@ public abstract class AbstractProfilingValueCalc<T> extends AbstractProfilingCal
 	}
 
 	@Override
-	public T evaluate(Evaluator evaluator) {
+	public T evaluateInternal(Evaluator evaluator) {
 		return convertCurrentValue(evaluator.evaluateCurrent());
 	}
 

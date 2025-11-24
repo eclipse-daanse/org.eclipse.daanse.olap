@@ -26,7 +26,7 @@ public class UnknownToIntegerCalc extends AbstractProfilingNestedIntegerCalc {
 	}
 
 	@Override
-	public Integer evaluate(Evaluator evaluator) {
+	public Integer evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o == null) {
 			return null;

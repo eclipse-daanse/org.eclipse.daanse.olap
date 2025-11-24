@@ -28,7 +28,7 @@ public class SubsetCalc extends AbstractProfilingNestedTupleListCalc{
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc tupleListCalc = getChildCalc(0, TupleListCalc.class);
         IntegerCalc startCalc = getChildCalc(1, IntegerCalc.class);
         IntegerCalc countCalc = getChildCalc(2, IntegerCalc.class);

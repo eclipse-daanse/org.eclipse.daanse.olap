@@ -27,7 +27,7 @@ public class NonNativeListCalc extends NonNativeCalc<TupleList> implements Tuple
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         evaluator.setNativeEnabled(nativeEnabled);
         return parent().evaluate(evaluator);
     }

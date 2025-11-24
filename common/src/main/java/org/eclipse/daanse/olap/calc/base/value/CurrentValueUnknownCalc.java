@@ -46,7 +46,7 @@ public class CurrentValueUnknownCalc extends AbstractProfilingNestedUnknownCalc 
 	}
 
 	@Override
-	public Object evaluate(Evaluator evaluator) {
+	public Object evaluateInternal(Evaluator evaluator) {
 		return evaluator.evaluateCurrent();
 	}
 

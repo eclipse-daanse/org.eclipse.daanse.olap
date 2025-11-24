@@ -26,7 +26,7 @@ public class OrStringCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final String s0 = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         final String s1 = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         return s0 + s1;

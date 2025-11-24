@@ -26,7 +26,7 @@ public class UniqueNameCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final Hierarchy hierarchy = getChildCalc(0, HierarchyCalc.class).evaluate(evaluator);
         return hierarchy.getUniqueName();
     }

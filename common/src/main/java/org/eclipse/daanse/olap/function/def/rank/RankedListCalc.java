@@ -37,7 +37,7 @@ public class RankedListCalc extends AbstractProfilingNestedCalc {
     }
 
     @Override
-    public Object evaluate( Evaluator evaluator ) {
+    public Object evaluateInternal( Evaluator evaluator ) {
       // Construct an array containing the value of the expression
       // for each member.
       TupleList tupleList = tupleListCalc.evaluate( evaluator );

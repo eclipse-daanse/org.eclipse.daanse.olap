@@ -26,7 +26,7 @@ public class InStrRevCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         String stringCheck = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         String stringMatch = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         Integer start = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);

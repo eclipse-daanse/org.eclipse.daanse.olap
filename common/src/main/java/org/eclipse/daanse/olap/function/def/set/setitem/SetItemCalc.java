@@ -37,7 +37,7 @@ public class SetItemCalc extends AbstractProfilingNestedMemberCalc{
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         final List<Member> list;
         try {

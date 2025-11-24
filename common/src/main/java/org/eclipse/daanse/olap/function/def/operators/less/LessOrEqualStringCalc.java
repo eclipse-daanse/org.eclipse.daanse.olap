@@ -27,7 +27,7 @@ public class LessOrEqualStringCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final String b0 = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         final String b1 = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         if (b0 == null || b1 == null) {

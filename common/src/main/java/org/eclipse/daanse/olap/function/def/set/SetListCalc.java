@@ -87,10 +87,10 @@ public class SetListCalc  extends AbstractProfilingNestedTupleListCalc {
         if (type instanceof SetType) {
             // TODO use resultStyles
             final TupleListCalc tupleListCalc = compiler.compileList(arg);
-            return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
+            return new AbstractProfilingNestedVoidCalc<>(type, new Calc[] {tupleListCalc}) {
                 // name "Sublist..."
                 @Override
-                public Void evaluate(Evaluator evaluator) {
+                public Void evaluateInternal(Evaluator evaluator) {
                     TupleList list =
                         tupleListCalc.evaluate(evaluator);
                     // Add only tuples which are not null. Tuples with
@@ -113,9 +113,9 @@ public class SetListCalc  extends AbstractProfilingNestedTupleListCalc {
                     new PlainPropertyOperationAtom("Members"),
                     new Expression[] {arg});
             final TupleListCalc tupleListCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
-            return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
+            return new AbstractProfilingNestedVoidCalc<>(type, new Calc[] {tupleListCalc}) {
                 @Override
-                public Void evaluate(Evaluator evaluator) {
+                public Void evaluateInternal(Evaluator evaluator) {
                     TupleList list =
                             tupleListCalc.evaluate(evaluator);
                     result = list;
@@ -124,10 +124,10 @@ public class SetListCalc  extends AbstractProfilingNestedTupleListCalc {
             };
         } else if (type.getArity() == 1 && arg instanceof MemberType) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
-            return new AbstractProfilingNestedVoidCalc(type, new Calc[]{memberCalc}) {
+            return new AbstractProfilingNestedVoidCalc<>(type, new Calc[]{memberCalc}) {
                 final Member[] members = {null};
                 @Override
-                public Void evaluate(Evaluator evaluator) {
+                public Void evaluateInternal(Evaluator evaluator) {
                     // Don't add null or partially null tuple to result.
                     Member member = memberCalc.evaluate(evaluator);
                     if (member == null || member.isNull()) {
@@ -140,9 +140,9 @@ public class SetListCalc  extends AbstractProfilingNestedTupleListCalc {
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
-            return new AbstractProfilingNestedVoidCalc(type, new Calc[]{tupleCalc}) {
+            return new AbstractProfilingNestedVoidCalc<>(type, new Calc[]{tupleCalc}) {
                 @Override
-                public Void evaluate(Evaluator evaluator) {
+                public Void evaluateInternal(Evaluator evaluator) {
                     // Don't add null or partially null tuple to result.
                     Member[] members = tupleCalc.evaluate(evaluator);
                     if (members == null
@@ -158,7 +158,7 @@ public class SetListCalc  extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(final Evaluator evaluator) {
+    public TupleList evaluateInternal(final Evaluator evaluator) {
         result.clear();
         for (VoidCalc voidCalc : voidCalcs) {
             voidCalc.evaluate(evaluator);

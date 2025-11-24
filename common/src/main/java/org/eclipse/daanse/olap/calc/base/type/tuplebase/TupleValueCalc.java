@@ -66,7 +66,7 @@ public class TupleValueCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         final Member[] members = tupleCalc.evaluate(evaluator);
         if ((members == null) || (nullCheck
                 && evaluator.needToReturnNullForUnrelatedDimension(members)))

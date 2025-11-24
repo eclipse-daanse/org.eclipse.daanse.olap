@@ -34,7 +34,7 @@ class XtdWithMemberCalc extends AbstractProfilingNestedTupleListCalc {
 	}
 
 	@Override
-	public TupleList evaluate(Evaluator evaluator) {
+	public TupleList evaluateInternal(Evaluator evaluator) {
 		evaluator.getTiming().markStart(XtdWithMemberCalc.TIMING_NAME);
 		try {
 			MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);

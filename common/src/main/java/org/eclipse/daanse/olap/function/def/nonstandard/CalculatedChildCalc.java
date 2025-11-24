@@ -31,7 +31,7 @@ public class CalculatedChildCalc extends AbstractProfilingNestedMemberCalc {
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         String name = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         return getCalculatedChild(member, name, evaluator);

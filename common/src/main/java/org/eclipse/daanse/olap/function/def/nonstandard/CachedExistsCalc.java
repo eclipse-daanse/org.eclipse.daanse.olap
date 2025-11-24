@@ -41,7 +41,7 @@ public class CachedExistsCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(TIMING_NAME);
         try {
 

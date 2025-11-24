@@ -26,7 +26,7 @@ public class DoubleToBooleanCalc extends AbstractProfilingNestedBooleanCalc {
 	}
 
 	@Override
-	public Boolean evaluate(Evaluator evaluator) {
+	public Boolean evaluateInternal(Evaluator evaluator) {
 		Double v0 = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
 
 		if (Double.isNaN(v0) || v0 == FunUtil.DOUBLE_NULL) {

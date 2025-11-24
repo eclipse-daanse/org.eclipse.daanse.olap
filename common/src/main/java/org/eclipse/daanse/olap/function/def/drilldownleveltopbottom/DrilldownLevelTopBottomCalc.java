@@ -55,7 +55,7 @@ public class DrilldownLevelTopBottomCalc extends AbstractProfilingNestedTupleLis
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         // Use a native evaluator, if more efficient.
         // TODO: Figure this out at compile time.
         TupleListCalc tupleListCalc = getChildCalc(0, TupleListCalc.class);

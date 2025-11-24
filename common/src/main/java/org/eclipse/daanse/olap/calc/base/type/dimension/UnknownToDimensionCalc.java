@@ -27,7 +27,7 @@ public class UnknownToDimensionCalc extends AbstractProfilingNestedDimensionCalc
 	}
 
 	@Override
-	public Dimension evaluate(Evaluator evaluator) {
+	public Dimension evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o instanceof Dimension d) {
 			return d;

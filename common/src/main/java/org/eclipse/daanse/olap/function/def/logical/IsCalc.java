@@ -25,7 +25,7 @@ public class IsCalc extends AbstractProfilingNestedBooleanCalc{
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Object o0 = getChildCalc(0, Calc.class).evaluate(evaluator);
         Object o1 = getChildCalc(1, Calc.class).evaluate(evaluator);
         return o0.equals(o1);

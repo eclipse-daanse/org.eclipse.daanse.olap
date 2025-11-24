@@ -36,7 +36,7 @@ public class GenerateStringCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             StringBuilder buf = new StringBuilder();

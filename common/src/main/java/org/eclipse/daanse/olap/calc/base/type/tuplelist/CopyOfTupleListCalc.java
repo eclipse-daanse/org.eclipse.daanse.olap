@@ -26,7 +26,7 @@ public class CopyOfTupleListCalc extends AbstractProfilingNestedTupleListCalc {
 	}
 
 	@Override
-	public TupleList evaluate(Evaluator evaluator) {
+	public TupleList evaluateInternal(Evaluator evaluator) {
 		final TupleList list = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
 		return list.copyList(-1);
 	}

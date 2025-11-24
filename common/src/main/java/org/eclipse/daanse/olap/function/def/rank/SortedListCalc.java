@@ -56,7 +56,7 @@ public class SortedListCalc extends AbstractProfilingNestedCalc {
     }
 
     @Override
-    public Object evaluate( Evaluator evaluator ) {
+    public Object evaluateInternal( Evaluator evaluator ) {
       // Save the state of the evaluator.
       final int savepoint = evaluator.savepoint();
       Calc<?> keyCalc = getChildCalc(1, Calc.class);

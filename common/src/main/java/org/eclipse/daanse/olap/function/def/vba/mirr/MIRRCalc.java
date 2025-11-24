@@ -26,7 +26,7 @@ public class MIRRCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double[] valueArray = (Double[]) getChildCalc(0).evaluate(evaluator);
         Double financeRate = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         Double reinvestRate = getChildCalc(2, DoubleCalc.class).evaluate(evaluator);

@@ -29,6 +29,7 @@ package org.eclipse.daanse.olap.api.calc;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
 
@@ -127,4 +128,5 @@ public interface Calc<E> {
      */
     ResultStyle getResultStyle();
 
+    CalculationProfile getCalculationProfile();
 }

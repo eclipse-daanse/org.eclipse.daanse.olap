@@ -25,7 +25,7 @@ public class IRRCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double[] valueArray = (Double[]) getChildCalc(0).evaluate(evaluator);
         Double guess = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         

@@ -28,7 +28,7 @@ public class HeadCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             evaluator.setNonEmpty(false);

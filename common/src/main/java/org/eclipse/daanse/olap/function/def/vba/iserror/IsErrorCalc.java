@@ -25,7 +25,7 @@ public class IsErrorCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         return expression instanceof Throwable;
     }

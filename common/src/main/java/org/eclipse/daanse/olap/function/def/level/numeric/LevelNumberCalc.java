@@ -26,7 +26,7 @@ public class LevelNumberCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         final Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return member.getLevel().getDepth();
     }

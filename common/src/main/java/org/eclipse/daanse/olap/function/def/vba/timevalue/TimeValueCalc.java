@@ -28,7 +28,7 @@ public class TimeValueCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         Date time = getChildCalc(0, DateTimeCalc.class).evaluate(evaluator);
         final Calendar calendar = Calendar.getInstance();
         calendar.clear();

@@ -28,7 +28,7 @@ public class TimeSerialCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         Integer hour = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         Integer minute = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         Integer second = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);

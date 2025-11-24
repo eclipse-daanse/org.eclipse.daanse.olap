@@ -28,7 +28,7 @@ public class AllMembersCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         Hierarchy hierarchy = getChildCalc(0, HierarchyCalc.class).evaluate(evaluator);
         return FunUtil.hierarchyMembers(hierarchy, evaluator, true);
     }

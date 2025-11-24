@@ -28,7 +28,7 @@ public class StrToMemberCalc extends AbstractProfilingNestedMemberCalc{
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         String memberName =
             getChildCalc(0, StringCalc.class).evaluate(evaluator);
         if (memberName == null) {

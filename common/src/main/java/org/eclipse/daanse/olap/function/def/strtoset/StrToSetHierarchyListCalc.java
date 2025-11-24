@@ -34,7 +34,7 @@ public class StrToSetHierarchyListCalc extends AbstractProfilingNestedTupleListC
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         String string = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         if (string == null) {
             throw FunUtil.newEvalException(new EmptyExpressionWasSpecifiedException());

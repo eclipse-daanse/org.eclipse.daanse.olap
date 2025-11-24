@@ -21,14 +21,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.profile.CalcEvaluationProfile;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
-import org.eclipse.daanse.olap.api.calc.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.profile.CalcEvaluationProfileR;
 import org.eclipse.daanse.olap.calc.base.profile.CalcProfileR;
 
-public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
+public abstract class AbstractProfilingCalc<T> implements Calc<T> {
 
 	private Type type;
 
@@ -38,7 +38,7 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 	private final List<CalcEvaluationProfile> evaluations = new ArrayList<CalcEvaluationProfile>();
 
 	/**
-	 * Abstract Implementation of {@link ProfilingCalc} that generated a
+	 * Abstract Implementation of {@link Calc} that generated a
 	 * {@link CalculationProfile} while calling
 	 * evaluateWithProfile(Evaluator)
 	 *
@@ -49,12 +49,12 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 	}
 
 	@Override
-	public T evaluateWithProfile(Evaluator evaluator) {
+	public final T evaluate(Evaluator evaluator) {
 		Instant startEval = Instant.now();
 		if (firstEvalStart == null) {
 			firstEvalStart = startEval;
 		}
-		final T evalResult = evaluate(evaluator);
+		final T evalResult = evaluateInternal(evaluator);
 
 		Instant endEval = Instant.now();
 		lastEvalEnd = endEval;
@@ -63,7 +63,9 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 		return evalResult;
 	}
 
-	protected void profileEvaluation(Instant evaluationStart, Instant evaluationEnd, T evaluationResult) {
+	protected abstract T evaluateInternal(Evaluator evaluator);
+
+    protected void profileEvaluation(Instant evaluationStart, Instant evaluationEnd, T evaluationResult) {
 
 		CalcEvaluationProfile evaluationProfile = new CalcEvaluationProfileR(evaluationStart, evaluationEnd,
 				evaluationResult, Map.of());

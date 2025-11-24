@@ -32,7 +32,7 @@ public class DatePartCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         String intervalName = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         Date date = getChildCalc(1, DateTimeCalc.class).evaluate(evaluator);
         int firstDayOfWeek = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);

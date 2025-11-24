@@ -66,7 +66,6 @@ import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
-import org.eclipse.daanse.olap.api.calc.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -113,7 +112,6 @@ import org.eclipse.daanse.olap.common.NameResolverImpl;
 import org.eclipse.daanse.olap.common.ParameterImpl;
 import org.eclipse.daanse.olap.common.ResultStyleException;
 import org.eclipse.daanse.olap.common.StandardProperty;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.common.ValidatorImpl;
 import org.eclipse.daanse.olap.common.Walker;
@@ -123,11 +121,10 @@ import org.eclipse.daanse.olap.exceptions.ParameterIsNotModifiableException;
 import org.eclipse.daanse.olap.exceptions.UnknownParameterException;
 import org.eclipse.daanse.olap.function.def.parameter.ParameterFunDef;
 import org.eclipse.daanse.olap.impl.IdentifierParser;
-import org.eclipse.daanse.olap.util.type.TypeUtil;
-
 import org.eclipse.daanse.olap.server.ExecutionImpl;
 import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.ArrayStack;
+import org.eclipse.daanse.olap.util.type.TypeUtil;
 
 /**
  * Query is an MDX query.
@@ -780,15 +777,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         if (slicerCalc != null) {
             pw.println("Axis (FILTER):");
 
-			if (slicerCalc instanceof ProfilingCalc pc) {
-
-				CalculationProfile calcProfile = pc.getCalculationProfile();
+				CalculationProfile calcProfile = slicerCalc.getCalculationProfile();
 				spw.write(calcProfile);
 
-			} else {
-				pw.println("UNPROFILED: " + slicerCalc.getClass().getName());
 
-			}
             pw.println();
         }
         int i = -1;
@@ -797,15 +789,11 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 			Calc<?> axisCalc = axisCalcs[i];
             pw.println(new StringBuilder("Axis (").append(axis.getAxisName()).append("):").toString());
 
-			if (axisCalc instanceof ProfilingCalc pc) {
 
-				CalculationProfile calcProfile = pc.getCalculationProfile();
+				CalculationProfile calcProfile = axisCalc.getCalculationProfile();
 				spw.write(calcProfile);
 
-			} else {
-				pw.println("UNPROFILED: " + axisCalc.getClass().getName());
 
-			}
 
 
             pw.println();

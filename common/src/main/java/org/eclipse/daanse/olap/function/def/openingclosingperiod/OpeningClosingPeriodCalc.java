@@ -35,7 +35,7 @@ public class OpeningClosingPeriodCalc extends AbstractProfilingNestedMemberCalc{
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(1, MemberCalc.class).evaluate(evaluator);
         LevelCalc levelCalc = getChildCalc(0, LevelCalc.class);
         // If the level argument is present, use it. Otherwise use the

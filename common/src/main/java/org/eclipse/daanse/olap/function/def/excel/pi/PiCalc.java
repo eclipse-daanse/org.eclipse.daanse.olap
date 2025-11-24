@@ -26,7 +26,7 @@ public class PiCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         return Math.PI;
     }
 

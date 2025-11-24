@@ -33,7 +33,7 @@ public class ExistsCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleList leftTuples = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
         if (leftTuples.isEmpty()) {
             return TupleCollections.emptyList(leftTuples.getArity());

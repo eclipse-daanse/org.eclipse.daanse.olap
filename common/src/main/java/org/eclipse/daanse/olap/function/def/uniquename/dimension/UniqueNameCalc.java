@@ -26,7 +26,7 @@ public class UniqueNameCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final Dimension dimension = getChildCalc(0, DimensionCalc.class).evaluate(evaluator);
         return dimension.getUniqueName();
     }

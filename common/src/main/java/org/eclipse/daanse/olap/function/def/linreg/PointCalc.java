@@ -42,7 +42,7 @@ public class PointCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double xPoint = xPointCalc.evaluate(evaluator);
         Value value = LinRegCalc.process(evaluator, tupleListCalc, yCalc, xCalc);
         if (value == null) {

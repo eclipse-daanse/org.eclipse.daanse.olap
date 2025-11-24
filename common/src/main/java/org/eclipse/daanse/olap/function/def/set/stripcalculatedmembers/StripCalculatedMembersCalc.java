@@ -27,7 +27,7 @@ public class StripCalculatedMembersCalc extends AbstractProfilingNestedTupleList
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleList list = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
         return FunUtil.removeCalculatedMembers(list);
     }

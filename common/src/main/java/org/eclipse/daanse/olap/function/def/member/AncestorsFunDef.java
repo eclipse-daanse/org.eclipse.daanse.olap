@@ -49,7 +49,7 @@ public class AncestorsFunDef extends AbstractFunctionDefinition {
             final IntegerCalc distanceCalc = compiler.compileInteger(call.getArg(1));
             return new AncestorsCalc(call.getType(), memberCalc, distanceCalc) {
                 @Override
-                public TupleList evaluate(Evaluator evaluator) {
+                public TupleList evaluateInternal(Evaluator evaluator) {
                     Member member = memberCalc.evaluate(evaluator);
                     Integer distance = distanceCalc.evaluate(evaluator);
                     List<Member> ancestors = new ArrayList<>();

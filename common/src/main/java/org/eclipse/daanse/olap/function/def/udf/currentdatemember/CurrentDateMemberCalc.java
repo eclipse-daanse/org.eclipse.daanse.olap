@@ -45,7 +45,7 @@ public class CurrentDateMemberCalc extends AbstractProfilingNestedCalc<Object> {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         
         
         if (resultDateMember != null) {

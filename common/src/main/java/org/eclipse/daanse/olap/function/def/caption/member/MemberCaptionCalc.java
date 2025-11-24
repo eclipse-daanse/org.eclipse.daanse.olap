@@ -26,7 +26,7 @@ public class MemberCaptionCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return member.getCaption();
     }

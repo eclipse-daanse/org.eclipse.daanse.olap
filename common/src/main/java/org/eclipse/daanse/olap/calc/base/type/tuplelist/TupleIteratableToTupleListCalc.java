@@ -27,7 +27,7 @@ public class TupleIteratableToTupleListCalc extends AbstractProfilingNestedTuple
 	}
 
 	@Override
-	public TupleList evaluate(Evaluator evaluator) {
+	public TupleList evaluateInternal(Evaluator evaluator) {
 		final TupleIterable iterable = getChildCalc(0, TupleIterableCalc.class).evaluate(evaluator);
 
 		// If TupleIteratable is TupleList do not copy.

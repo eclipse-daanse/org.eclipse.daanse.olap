@@ -25,7 +25,7 @@ public class CIntCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         return cInt(expression);
     }

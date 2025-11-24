@@ -27,7 +27,7 @@ public class MinusCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         final Double v0 = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         final Double v1 = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         if (v0 == FunUtil.DOUBLE_NULL || v0 == null) {

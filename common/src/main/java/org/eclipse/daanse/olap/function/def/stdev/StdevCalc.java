@@ -31,7 +31,7 @@ public class StdevCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList(getChildCalc(0, TupleListCalc.class), evaluator);
         final int savepoint = evaluator.savepoint();
         try {

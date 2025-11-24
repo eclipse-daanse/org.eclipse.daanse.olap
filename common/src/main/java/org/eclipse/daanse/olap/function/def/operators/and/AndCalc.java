@@ -26,7 +26,7 @@ public class AndCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         boolean b0 = getChildCalc(0, BooleanCalc.class).evaluate(evaluator);
         // don't short-circuit evaluation if we're evaluating
         // the axes; that way, we can combine all measures

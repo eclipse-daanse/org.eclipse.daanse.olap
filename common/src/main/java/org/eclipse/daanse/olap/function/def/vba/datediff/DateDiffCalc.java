@@ -30,7 +30,7 @@ public class DateDiffCalc extends AbstractProfilingNestedLongCalc {
     }
 
     @Override
-    public Long evaluate(Evaluator evaluator) {
+    public Long evaluateInternal(Evaluator evaluator) {
         String intervalName = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         Date date1 = getChildCalc(1, DateTimeCalc.class).evaluate(evaluator);
         Date date2 = getChildCalc(2, DateTimeCalc.class).evaluate(evaluator);

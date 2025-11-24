@@ -30,7 +30,7 @@ public class NamedSetCurrentNestedTupleCalc extends AbstractProfilingNestedTuple
     }
 
     @Override
-    public Member[] evaluate(Evaluator evaluator) {
+    public Member[] evaluateInternal(Evaluator evaluator) {
         return namedSetExpr.getEval(evaluator).currentTuple();
     }
 

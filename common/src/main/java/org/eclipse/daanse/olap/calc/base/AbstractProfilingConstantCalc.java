@@ -32,7 +32,7 @@ public abstract class AbstractProfilingConstantCalc<T> extends AbstractProfiling
 	}
 
 	@Override
-	public T evaluate(Evaluator evaluator) {
+	public T evaluateInternal(Evaluator evaluator) {
 		return value;
 	}
 

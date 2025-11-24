@@ -28,7 +28,7 @@ public class CoalesceEmptyCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         for (Calc<?> calc : calcs) {
             final Object o = calc.evaluate(evaluator);
             if (o != null) {

@@ -25,7 +25,7 @@ public class RoundCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double number = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         Integer numDigitsAfterDecimal = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
 

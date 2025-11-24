@@ -27,7 +27,7 @@ public class UnknownToLevelCalc extends AbstractProfilingNestedLevelCalc {
 	}
 
 	@Override
-	public Level evaluate(Evaluator evaluator) {
+	public Level evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o instanceof Level lvl) {
 			return lvl;

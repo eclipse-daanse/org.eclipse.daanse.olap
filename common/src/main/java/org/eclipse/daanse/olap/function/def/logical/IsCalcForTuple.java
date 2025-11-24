@@ -27,7 +27,7 @@ public class IsCalcForTuple extends AbstractProfilingNestedBooleanCalc{
     }
     
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Member[] o0 = getChildCalc(0, TupleCalc.class).evaluate(evaluator);
         Member[] o1 = getChildCalc(1, TupleCalc.class).evaluate(evaluator);
         return FunUtil.equalTuple(o0, o1);

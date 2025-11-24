@@ -30,7 +30,7 @@ public class SetCalc extends AbstractProfilingNestedTupleIteratorCalc{
     }
 
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         TupleCalc tupleCalc = getChildCalc(0, TupleCalc.class);
         final Member[] members = tupleCalc.evaluate(evaluator);
         return new ListTupleList(tupleCalc.getType().getArity(), Arrays.asList(members));

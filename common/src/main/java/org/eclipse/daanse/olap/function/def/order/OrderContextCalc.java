@@ -44,7 +44,7 @@ public class OrderContextCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate( Evaluator evaluator ) {
+    public TupleList evaluateInternal(Evaluator evaluator ) {
       // Evaluate each of the members, and set as context in the
       // sub-evaluator.
       for ( int i = 0; i < memberCalcs.length; i++ ) {

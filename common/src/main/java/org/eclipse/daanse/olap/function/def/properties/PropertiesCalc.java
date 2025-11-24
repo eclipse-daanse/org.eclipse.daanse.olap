@@ -36,7 +36,7 @@ public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         Member member = memberCalc.evaluate(evaluator);
         String propertyKey = stringCalc.evaluate(evaluator);
         return properties(member, propertyKey);

@@ -66,7 +66,7 @@ public class OrderCurrentMemberCalc  extends AbstractProfilingNestedTupleListCal
     }
 
     @Override
-    public TupleList evaluate( Evaluator evaluator ) {
+    public TupleList evaluateInternal(Evaluator evaluator ) {
       evaluator.getTiming().markStart( OrderFunDef.TIMING_NAME );
       try {
         final TupleIterable iterable = tupleIteratorCalc.evaluate( evaluator );

@@ -40,7 +40,7 @@ public class NonEmptyCrossJoinCalc extends AbstractProfilingNestedTupleListCalc{
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         CatalogReader schemaReader = evaluator.getCatalogReader();
 
         // Evaluate the arguments in non empty mode, but remove from

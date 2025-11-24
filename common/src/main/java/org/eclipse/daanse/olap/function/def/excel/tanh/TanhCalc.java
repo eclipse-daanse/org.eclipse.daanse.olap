@@ -26,7 +26,7 @@ public class TanhCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double number = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         if (number == FunUtil.DOUBLE_NULL) {
             return null;

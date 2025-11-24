@@ -37,7 +37,7 @@ public class NonEmptyCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         TupleListCalc listCalc1 = getChildCalc(0, TupleListCalc.class);
         TupleListCalc listCalc2 = getChildCalc(1, TupleListCalc.class);

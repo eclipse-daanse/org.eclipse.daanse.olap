@@ -35,7 +35,7 @@ public class Rank3MemberCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate( Evaluator evaluator ) {
+    public Integer evaluateInternal(Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member member = getChildCalc(0, MemberCalc.class).evaluate( evaluator );

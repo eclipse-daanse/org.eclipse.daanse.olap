@@ -29,7 +29,7 @@ public class NamedSetCurrentOrdinalCalc extends AbstractProfilingNestedIntegerCa
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         return namedSetExpr.getEval(evaluator).currentOrdinal();
     }
 }

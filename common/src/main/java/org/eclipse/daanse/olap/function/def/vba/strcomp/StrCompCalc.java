@@ -26,7 +26,7 @@ public class StrCompCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         String string1 = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         String string2 = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         Integer compare = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);

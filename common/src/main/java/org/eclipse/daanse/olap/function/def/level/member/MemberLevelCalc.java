@@ -27,7 +27,7 @@ public class MemberLevelCalc extends AbstractProfilingNestedLevelCalc {
     }
 
     @Override
-    public Level evaluate(Evaluator evaluator) {
+    public Level evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return member.getLevel();
     }

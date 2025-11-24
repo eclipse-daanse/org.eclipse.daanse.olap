@@ -26,7 +26,7 @@ public class StrCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Object number = getChildCalc(0, Calc.class).evaluate(evaluator);
         // When numbers are converted to strings, a leading space is always
         // reserved for the sign of number. If number is positive, the returned

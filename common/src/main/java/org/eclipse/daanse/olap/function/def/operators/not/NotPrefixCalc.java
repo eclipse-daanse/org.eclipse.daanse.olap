@@ -26,7 +26,7 @@ public class NotPrefixCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         return !getChildCalc(0, BooleanCalc.class).evaluate(evaluator);
     }
 }

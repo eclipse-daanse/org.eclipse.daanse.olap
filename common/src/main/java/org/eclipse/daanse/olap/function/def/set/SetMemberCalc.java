@@ -32,7 +32,7 @@ public class SetMemberCalc extends AbstractProfilingNestedTupleIteratorCalc {
 
     // name "Sublist..."// name "Sublist..."
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         final Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return member == null ? TupleCollections.createList(1)
                 : new UnaryTupleList(Collections.singletonList(member));

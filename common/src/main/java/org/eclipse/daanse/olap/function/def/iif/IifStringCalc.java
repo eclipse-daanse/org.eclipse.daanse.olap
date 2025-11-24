@@ -26,7 +26,7 @@ public class IifStringCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final boolean b = getChildCalc(0, BooleanCalc.class).evaluate(evaluator);
         StringCalc calc = b ? getChildCalc(1, StringCalc.class) : getChildCalc(2, StringCalc.class);
         return calc.evaluate(evaluator);

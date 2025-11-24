@@ -30,7 +30,7 @@ public class AncestorLevelCalc extends AbstractProfilingNestedMemberCalc {
 	}
 
 	@Override
-	public Member evaluate(Evaluator evaluator) {
+	public Member evaluateInternal(Evaluator evaluator) {
 		final MemberCalc memberCalc = getChildCalc(0, MemberCalc.class);
 		final LevelCalc levelCalc = getChildCalc(1, LevelCalc.class);
 		

@@ -26,7 +26,7 @@ public class ModCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Object first = getChildCalc(0, Calc.class).evaluate(evaluator);
         Object second = getChildCalc(1, Calc.class).evaluate(evaluator);
         double iFirst;

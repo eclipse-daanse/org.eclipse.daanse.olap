@@ -29,7 +29,7 @@ public class LevelsStringPropertyCalc extends AbstractProfilingNestedLevelCalc {
     }
 
     @Override
-    public Level evaluate(Evaluator evaluator) {
+    public Level evaluateInternal(Evaluator evaluator) {
         Hierarchy hierarchy = getChildCalc(0, HierarchyCalc.class).evaluate(evaluator);
         String name = getChildCalc(1, StringCalc.class).evaluate(evaluator);
         for (Level level : hierarchy.getLevels()) {

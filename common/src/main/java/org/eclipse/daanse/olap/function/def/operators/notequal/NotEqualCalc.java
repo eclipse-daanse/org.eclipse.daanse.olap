@@ -29,7 +29,7 @@ public class NotEqualCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final Double v0 = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         final Double v1 = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         if (Double.isNaN(v0) || Double.isNaN(v1) || v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {

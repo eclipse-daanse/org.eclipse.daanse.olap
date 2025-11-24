@@ -34,7 +34,7 @@ public class AncestorsCalcForLevelType extends AbstractProfilingNestedTupleListC
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         Level level = getChildCalc(1, LevelCalc.class).evaluate(evaluator);
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         int distance = member.getDepth() - level.getDepth();

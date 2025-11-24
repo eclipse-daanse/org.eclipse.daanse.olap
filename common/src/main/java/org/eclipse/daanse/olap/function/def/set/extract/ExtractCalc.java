@@ -37,7 +37,7 @@ public class ExtractCalc extends AbstractProfilingNestedTupleListCalc{
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleList result = TupleCollections.createList(outArity);
         TupleList list = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
         Set<List<Member>> emittedTuples = new HashSet<>();

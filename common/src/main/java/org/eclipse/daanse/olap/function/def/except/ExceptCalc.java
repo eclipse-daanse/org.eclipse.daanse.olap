@@ -32,7 +32,7 @@ public class ExceptCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleList list0 = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
         if (list0.isEmpty()) {
             return list0;

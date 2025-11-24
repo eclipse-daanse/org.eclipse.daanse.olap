@@ -49,7 +49,7 @@ public class ValidMeasureCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         Cube baseCube;
         Cube virtualCube = evaluator.getCube();
         final List<Member> memberList = getCalcsMembers(evaluator);

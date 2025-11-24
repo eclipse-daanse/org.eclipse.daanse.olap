@@ -33,7 +33,7 @@ public class CacheGenericListCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final Object o = evaluator.getCachedResult(cacheDescriptor);
         if (o instanceof TupleList tupleList) {
             return tupleList;

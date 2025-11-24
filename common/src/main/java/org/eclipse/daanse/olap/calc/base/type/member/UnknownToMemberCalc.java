@@ -27,7 +27,7 @@ public class UnknownToMemberCalc extends AbstractProfilingNestedMemberCalc {
 	}
 
 	@Override
-	public Member evaluate(Evaluator evaluator) {
+	public Member evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o instanceof Member m) {
 			return m;

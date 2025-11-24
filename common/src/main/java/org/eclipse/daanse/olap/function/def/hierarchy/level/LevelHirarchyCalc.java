@@ -27,7 +27,7 @@ public class LevelHirarchyCalc extends AbstractProfilingNestedHierarchyCalc {
     }
 
     @Override
-    public Hierarchy evaluate(Evaluator evaluator) {
+    public Hierarchy evaluateInternal(Evaluator evaluator) {
         Level level = getChildCalc(0, LevelCalc.class).evaluate(evaluator);
         return level.getHierarchy();
     }

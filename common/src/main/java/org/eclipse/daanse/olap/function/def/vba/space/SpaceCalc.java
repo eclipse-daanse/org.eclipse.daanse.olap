@@ -27,7 +27,7 @@ public class SpaceCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Integer number = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         return WHITESPACE.repeat(number);
     }

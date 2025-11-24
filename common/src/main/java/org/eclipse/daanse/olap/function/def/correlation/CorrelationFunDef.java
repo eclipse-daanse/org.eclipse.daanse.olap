@@ -41,7 +41,7 @@ public class CorrelationFunDef extends AbstractAggregateFunDef {
                 : new CurrentValueUnknownCalc(call.getType());
         return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] { tupleListCalc, calc1, calc2 }) {
             @Override
-            public Double evaluate(Evaluator evaluator) {
+            public Double evaluateInternal(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);

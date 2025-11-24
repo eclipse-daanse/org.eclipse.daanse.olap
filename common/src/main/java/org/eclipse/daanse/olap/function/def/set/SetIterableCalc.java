@@ -31,7 +31,7 @@ public class SetIterableCalc extends AbstractProfilingNestedTupleIteratorCalc{
     
     // name "Sublist..."
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         return tupleIteratorCalc.evaluate(evaluator);
     }
 

@@ -30,7 +30,7 @@ public class DimensionNumericCalc extends AbstractProfilingNestedHierarchyCalc {
 	}
 
 	@Override
-	public Hierarchy evaluate(Evaluator evaluator) {
+	public Hierarchy evaluateInternal(Evaluator evaluator) {
 		Integer n = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
 		return nthHierarchy(evaluator, n);
 	}

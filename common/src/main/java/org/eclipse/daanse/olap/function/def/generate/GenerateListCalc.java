@@ -46,7 +46,7 @@ public class GenerateListCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleIteratorCalc<?> tupleIteratorCalc = getChildCalc(0, TupleIteratorCalc.class);
         TupleListCalc listCalc2 = getChildCalc(1, TupleListCalc.class);
         final int savepoint = evaluator.savepoint();

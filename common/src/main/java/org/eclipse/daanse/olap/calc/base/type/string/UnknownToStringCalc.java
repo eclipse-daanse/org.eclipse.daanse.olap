@@ -26,7 +26,7 @@ public class UnknownToStringCalc extends AbstractProfilingNestedStringCalc {
 	}
 
 	@Override
-	public String evaluate(Evaluator evaluator) {
+	public String evaluateInternal(Evaluator evaluator) {
 
 		Object o = getFirstChildCalc().evaluate(evaluator);
 

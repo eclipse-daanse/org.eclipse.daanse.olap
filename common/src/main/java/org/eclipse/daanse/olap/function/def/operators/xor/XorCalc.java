@@ -26,7 +26,7 @@ public class XorCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final boolean b0 = getChildCalc(0, BooleanCalc.class).evaluate(evaluator);
         final boolean b1 = getChildCalc(1, BooleanCalc.class).evaluate(evaluator);
         return b0 != b1;

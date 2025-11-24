@@ -32,7 +32,7 @@ public class DateAddCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         String intervalName = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         Double number = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         Date date = getChildCalc(2, DateTimeCalc.class).evaluate(evaluator);

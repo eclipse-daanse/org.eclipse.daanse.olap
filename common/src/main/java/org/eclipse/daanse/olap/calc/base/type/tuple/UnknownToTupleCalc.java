@@ -27,7 +27,7 @@ public class UnknownToTupleCalc extends AbstractProfilingNestedTupleCalc {
 	}
 
 	@Override
-	public Member[] evaluate(Evaluator evaluator) {
+	public Member[] evaluateInternal(Evaluator evaluator) {
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o instanceof Member[] tuple) {
 			return tuple;

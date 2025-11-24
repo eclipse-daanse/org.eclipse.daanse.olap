@@ -27,7 +27,7 @@ public class MatchesCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         final StringCalc stringCalc = getChildCalc(0, StringCalc.class);
         final StringCalc regexCalc = getChildCalc(1, StringCalc.class);
         String string = stringCalc.evaluate(evaluator);

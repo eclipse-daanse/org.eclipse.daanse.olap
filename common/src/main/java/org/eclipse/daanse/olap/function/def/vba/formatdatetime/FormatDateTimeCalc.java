@@ -28,7 +28,7 @@ public class FormatDateTimeCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Date date = getChildCalc(0, DateTimeCalc.class).evaluate(evaluator);
         Integer namedFormat = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         return formatDateTime(date, namedFormat);

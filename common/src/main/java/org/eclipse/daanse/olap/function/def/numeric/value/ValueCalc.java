@@ -28,7 +28,7 @@ public class ValueCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         final int savepoint = evaluator.savepoint();
         evaluator.setContext(member);

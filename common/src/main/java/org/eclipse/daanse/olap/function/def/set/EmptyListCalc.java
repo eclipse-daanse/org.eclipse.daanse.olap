@@ -38,7 +38,7 @@ public class EmptyListCalc  extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         return list;
     }
 }

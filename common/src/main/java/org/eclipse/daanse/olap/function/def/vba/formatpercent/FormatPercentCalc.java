@@ -30,7 +30,7 @@ super(type, expressionCalc, numDigitsAfterDecimalCalc, includeLeadingDigitCalc, 
 }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         Integer numDigitsAfterDecimal = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         Integer includeLeadingDigit = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);

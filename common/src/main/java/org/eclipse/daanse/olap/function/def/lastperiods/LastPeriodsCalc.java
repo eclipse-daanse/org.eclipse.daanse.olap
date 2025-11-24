@@ -33,7 +33,7 @@ public class LastPeriodsCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         Integer indexValue = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
 

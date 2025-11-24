@@ -28,7 +28,7 @@ public class MidCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         String value = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         Integer beginIndex = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         Integer length;

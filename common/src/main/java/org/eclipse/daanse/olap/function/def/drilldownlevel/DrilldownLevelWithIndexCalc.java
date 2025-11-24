@@ -39,7 +39,7 @@ public class DrilldownLevelWithIndexCalc extends AbstractProfilingNestedTupleLis
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         TupleListCalc tupleListCalc = getChildCalc(0, TupleListCalc.class);
         IntegerCalc indexCalc = getChildCalc(1, IntegerCalc.class);
         TupleList list = tupleListCalc.evaluate(evaluator);

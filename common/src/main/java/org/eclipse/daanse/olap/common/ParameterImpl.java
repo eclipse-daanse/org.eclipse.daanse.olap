@@ -307,7 +307,7 @@ public class ParameterImpl
         }
 
         @Override
-		public Object evaluate(Evaluator evaluator) {
+		public Object evaluateInternal(Evaluator evaluator) {
             Object value = evaluator.getParameterValue(slot);
             if (!slot.isParameterSet()) {
                 // save value if not set (setting the default value)
@@ -341,7 +341,7 @@ public class ParameterImpl
         }
 
         @Override
-        public TupleList evaluate(Evaluator evaluator) {
+        public TupleList evaluateInternal(Evaluator evaluator) {
             TupleList value = (TupleList) evaluator.getParameterValue(slot);
             if (!slot.isParameterSet()) {
                 // save value if not set (setting the default value)

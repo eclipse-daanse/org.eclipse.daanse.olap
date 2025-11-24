@@ -25,7 +25,7 @@ public class LenCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         String value = getChildCalc(0, StringCalc.class).evaluate(evaluator);
         if (value == null) {
             return 0;

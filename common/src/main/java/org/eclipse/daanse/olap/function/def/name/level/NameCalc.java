@@ -26,7 +26,7 @@ public class NameCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final Level level = getChildCalc(0, LevelCalc.class).evaluate(evaluator);
         return level.getName();
     }

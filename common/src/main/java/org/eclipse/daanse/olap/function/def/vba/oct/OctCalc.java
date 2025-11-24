@@ -26,7 +26,7 @@ public class OctCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Object number = getChildCalc(0, Calc.class).evaluate(evaluator);
         if (number instanceof Number num) {
             return Integer.toOctalString(num.intValue());

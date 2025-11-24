@@ -25,7 +25,7 @@ public class IsArrayCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         //Object varName = getChildCalc(0, Calc.class).evaluate(evaluator);
         // arrays are not supported at present
         return false;

@@ -25,7 +25,7 @@ public class CDblCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         if (expression instanceof Number number) {
             return number.doubleValue();

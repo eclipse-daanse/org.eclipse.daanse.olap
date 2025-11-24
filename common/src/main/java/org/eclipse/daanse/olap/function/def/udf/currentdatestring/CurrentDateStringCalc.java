@@ -30,7 +30,7 @@ public class CurrentDateStringCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         StringCalc stringCalc = getChildCalc(0, StringCalc.class);
         
         final Locale locale = Locale.getDefault();

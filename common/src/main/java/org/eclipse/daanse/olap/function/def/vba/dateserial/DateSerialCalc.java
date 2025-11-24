@@ -28,7 +28,7 @@ public class DateSerialCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         Integer year = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         Integer month = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         Integer day = getChildCalc(2, IntegerCalc.class).evaluate(evaluator);

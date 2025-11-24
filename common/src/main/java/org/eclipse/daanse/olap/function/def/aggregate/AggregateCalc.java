@@ -66,7 +66,7 @@ public class AggregateCalc  extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(TIMING_NAME);
         final int savepoint = evaluator.savepoint();
         try {

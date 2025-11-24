@@ -25,7 +25,7 @@ public class Atan2Calc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Double x = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         Double y = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         return Math.atan2(y, x);

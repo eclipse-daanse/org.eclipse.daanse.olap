@@ -31,7 +31,7 @@ public class SetToStrCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         final TupleList list = getChildCalc(0, TupleListCalc.class).evaluate(evaluator);
         if (list.getArity() == 1) {
             return memberSetToStr(list.slice(0));

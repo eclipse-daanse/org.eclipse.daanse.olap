@@ -32,7 +32,7 @@ public class LastNonEmptyCalc extends AbstractProfilingNestedMemberCalc {
     }
 
     @Override
-    public Member evaluate(Evaluator evaluator) {
+    public Member evaluateInternal(Evaluator evaluator) {
         final TupleListCalc tupleListCalc = getChildCalc(0, TupleListCalc.class);
         final Calc<?> memberCalc = getChildCalc(1, Calc.class);
         TupleList tupleList = tupleListCalc.evaluate(evaluator);

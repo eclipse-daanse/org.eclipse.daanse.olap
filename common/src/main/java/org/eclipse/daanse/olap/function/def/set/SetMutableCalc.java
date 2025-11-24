@@ -35,7 +35,7 @@ public class SetMutableCalc extends AbstractProfilingNestedTupleIteratorCalc {
 
     // name "Sublist..."
     @Override
-    public TupleIterable evaluate(Evaluator evaluator) {
+    public TupleIterable evaluateInternal(Evaluator evaluator) {
         TupleList list = tupleListCalc.evaluate(evaluator);
         TupleList result = list.copyList(list.size());
         // Add only tuples which are not null. Tuples with

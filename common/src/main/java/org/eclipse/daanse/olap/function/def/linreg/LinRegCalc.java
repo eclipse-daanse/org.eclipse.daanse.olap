@@ -48,7 +48,7 @@ public class LinRegCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         Value value = process(evaluator, tupleListCalc, yCalc, xCalc);
         if (value == null) {
             return FunUtil.DOUBLE_NULL;

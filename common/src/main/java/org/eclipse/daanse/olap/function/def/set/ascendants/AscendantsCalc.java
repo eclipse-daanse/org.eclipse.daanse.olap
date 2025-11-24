@@ -33,7 +33,7 @@ public class AscendantsCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return new UnaryTupleList(ascendants(evaluator.getCatalogReader(), member));
     }

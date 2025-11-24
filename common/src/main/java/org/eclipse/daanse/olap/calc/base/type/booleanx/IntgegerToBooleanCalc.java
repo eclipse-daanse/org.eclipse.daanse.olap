@@ -26,7 +26,7 @@ public class IntgegerToBooleanCalc extends AbstractProfilingNestedBooleanCalc {
 	}
 
 	@Override
-	public Boolean evaluate(Evaluator evaluator) {
+	public Boolean evaluateInternal(Evaluator evaluator) {
 		Integer v0 = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
 		if (v0 == null) {
 			return FunUtil.BOOLEAN_NULL;

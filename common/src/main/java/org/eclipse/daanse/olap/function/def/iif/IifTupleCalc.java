@@ -34,7 +34,7 @@ public class IifTupleCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         final boolean b = booleanCalc.evaluate(evaluator);
         Calc<?> calc = b ? calc1 : calc2;
         return calc.evaluate(evaluator);

@@ -28,7 +28,7 @@ public class IsNullCalc extends AbstractProfilingNestedBooleanCalc {
     }
 
     @Override
-    public Boolean evaluate(Evaluator evaluator) {
+    public Boolean evaluateInternal(Evaluator evaluator) {
         Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         return member.isNull() || nonAllWithNullKey((KeyMember) member);
     }

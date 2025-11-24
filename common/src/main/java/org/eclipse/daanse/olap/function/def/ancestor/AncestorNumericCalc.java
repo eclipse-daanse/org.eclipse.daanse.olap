@@ -28,7 +28,7 @@ public class AncestorNumericCalc extends AbstractProfilingNestedMemberCalc {
 	}
 
 	@Override
-	public Member evaluate(Evaluator evaluator) {
+	public Member evaluateInternal(Evaluator evaluator) {
 		Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
 		Integer distance = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
 		return FunUtil.ancestor(evaluator, member, distance, null);

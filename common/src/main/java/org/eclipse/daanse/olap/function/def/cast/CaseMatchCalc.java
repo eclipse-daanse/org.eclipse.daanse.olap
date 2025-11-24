@@ -36,7 +36,7 @@ public class CaseMatchCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Object evaluateInternal(Evaluator evaluator) {
         Object value = valueCalc.evaluate(evaluator);
         for (int i = 0; i < matchCalcs.length; i++) {
             Object match = matchCalcs[i].evaluate(evaluator);

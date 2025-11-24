@@ -31,7 +31,7 @@ public class CDateCalc extends AbstractProfilingNestedDateTimeCalc {
     }
 
     @Override
-    public Date evaluate(Evaluator evaluator) {
+    public Date evaluateInternal(Evaluator evaluator) {
         Object expression = getChildCalc(0, Calc.class).evaluate(evaluator);
         String str = String.valueOf(expression);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");

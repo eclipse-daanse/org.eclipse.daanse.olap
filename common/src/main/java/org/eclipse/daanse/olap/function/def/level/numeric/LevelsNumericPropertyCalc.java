@@ -31,7 +31,7 @@ public class LevelsNumericPropertyCalc extends AbstractProfilingNestedLevelCalc 
     }
 
     @Override
-    public Level evaluate(Evaluator evaluator) {
+    public Level evaluateInternal(Evaluator evaluator) {
         Hierarchy hierarchy = getChildCalc(0, HierarchyCalc.class).evaluate(evaluator);
         Integer ordinal = getChildCalc(1, IntegerCalc.class).evaluate(evaluator);
         return nthLevel(hierarchy, ordinal);

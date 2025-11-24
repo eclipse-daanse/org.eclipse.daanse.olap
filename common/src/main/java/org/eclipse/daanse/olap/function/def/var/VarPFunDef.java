@@ -43,7 +43,7 @@ public class VarPFunDef extends AbstractAggregateFunDef {
                 : new CurrentValueUnknownCalc(call.getType());
             return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, calc}) {
                 @Override
-                public Double evaluate(Evaluator evaluator) {
+                public Double evaluateInternal(Evaluator evaluator) {
                     TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
                     final int savepoint = evaluator.savepoint();
                     try {

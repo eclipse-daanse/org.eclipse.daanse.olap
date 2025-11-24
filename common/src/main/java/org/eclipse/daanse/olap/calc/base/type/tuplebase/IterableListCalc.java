@@ -52,7 +52,7 @@ public class IterableListCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         // A TupleIterCalc is allowed to return a list. If so, save the copy.
         final TupleIterable iterable = tupleIteratorCalc.evaluate(evaluator);
         if (iterable instanceof TupleList tupleList) {

@@ -27,7 +27,7 @@ public class StringCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Integer number = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         String character = getChildCalc(1, org.eclipse.daanse.olap.api.calc.StringCalc.class).evaluate(evaluator);
         return string(number, character.charAt(0));

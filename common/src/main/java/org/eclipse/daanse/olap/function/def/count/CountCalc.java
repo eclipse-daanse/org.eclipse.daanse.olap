@@ -35,7 +35,7 @@ public class CountCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     @Override
-    public Integer evaluate(Evaluator evaluator) {
+    public Integer evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(CountFunDef.TIMING_NAME);
         final int savepoint = evaluator.savepoint();
         try {

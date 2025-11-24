@@ -25,7 +25,7 @@ public class ChrCalc extends AbstractProfilingNestedStringCalc {
     }
 
     @Override
-    public String evaluate(Evaluator evaluator) {
+    public String evaluateInternal(Evaluator evaluator) {
         Integer charCode = getChildCalc(0, IntegerCalc.class).evaluate(evaluator);
         return new String(new char[] { (char) (int)charCode });
     }

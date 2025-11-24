@@ -30,7 +30,7 @@ public class RangeCalc extends AbstractProfilingNestedTupleListCalc {
     }
 
     @Override
-    public TupleList evaluate(Evaluator evaluator) {
+    public TupleList evaluateInternal(Evaluator evaluator) {
         final Member member0 = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
         final Member member1 = getChildCalc(1, MemberCalc.class).evaluate(evaluator);
         if (member0.isNull() || member1.isNull()) {

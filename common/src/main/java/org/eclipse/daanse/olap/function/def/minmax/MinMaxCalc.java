@@ -35,7 +35,7 @@ public class MinMaxCalc extends AbstractProfilingNestedDoubleCalc {
     }
 
     @Override
-    public Double evaluate(Evaluator evaluator) {
+    public Double evaluateInternal(Evaluator evaluator) {
         evaluator.getTiming().markStart(TIMING_NAME);
         final int savepoint = evaluator.savepoint();
         Calc<?> calc = getChildCalc(1, Calc.class);

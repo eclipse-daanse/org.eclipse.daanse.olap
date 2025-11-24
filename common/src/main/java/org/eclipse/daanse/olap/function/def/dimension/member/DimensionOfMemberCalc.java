@@ -28,7 +28,7 @@ public class DimensionOfMemberCalc extends AbstractProfilingNestedDimensionCalc 
 	}
 
 	@Override
-	public Dimension evaluate(Evaluator evaluator) {
+	public Dimension evaluateInternal(Evaluator evaluator) {
 		Member member = getChildCalc(0, MemberCalc.class).evaluate(evaluator);
 		return member.getDimension();
 	}

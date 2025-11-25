@@ -40,7 +40,7 @@ class NowCalcTest {
 
     @Test
     @DisplayName("Should return current date and time")
-    void shouldReturnCurrentDateTime() throws InterruptedException {
+    void shouldReturnCurrentDateTime() throws Exception {
         Instant beforeCall = Instant.now();
         Thread.sleep(100);
         Date result = nowCalc.evaluate(evaluator);
@@ -53,7 +53,7 @@ class NowCalcTest {
 
     @Test
     @DisplayName("Should return different timestamps on subsequent calls")
-    void shouldReturnDifferentTimestampsOnSubsequentCalls() throws InterruptedException {
+    void shouldReturnDifferentTimestampsOnSubsequentCalls() throws Exception {
         Date result1 = nowCalc.evaluate(evaluator);
 
         // Sleep for a small amount to ensure time difference
@@ -94,7 +94,7 @@ class NowCalcTest {
 
     @Test
     @DisplayName("Should return dates that advance in time")
-    void shouldReturnDatesThatAdvanceInTime() throws InterruptedException {
+    void shouldReturnDatesThatAdvanceInTime() throws Exception {
         Date[] results = new Date[5];
 
         for (int i = 0; i < 5; i++) {

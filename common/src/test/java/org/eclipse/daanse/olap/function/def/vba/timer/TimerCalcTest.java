@@ -66,7 +66,7 @@ class TimerCalcTest {
 
     @Test
     @DisplayName("Should return different values on consecutive calls")
-    void shouldReturnDifferentValuesOnConsecutiveCalls() throws InterruptedException {
+    void shouldReturnDifferentValuesOnConsecutiveCalls() throws Exception {
         Float result1 = timerCalc.evaluate(evaluator);
 
         // Sleep for a small amount to ensure time difference
@@ -142,7 +142,7 @@ class TimerCalcTest {
 
     @Test
     @DisplayName("Should be monotonically increasing within same day")
-    void shouldBeMonotonicallyIncreasingWithinSameDay() throws InterruptedException {
+    void shouldBeMonotonicallyIncreasingWithinSameDay() throws Exception {
         Float result1 = timerCalc.evaluate(evaluator);
 
         Thread.sleep(10); // 10ms

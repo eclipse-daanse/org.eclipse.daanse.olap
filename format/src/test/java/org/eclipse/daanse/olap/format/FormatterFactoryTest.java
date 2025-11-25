@@ -21,9 +21,7 @@
 
 package org.eclipse.daanse.olap.format;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.daanse.olap.api.formatter.CellFormatter;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
@@ -43,7 +41,7 @@ class FormatterFactoryTest {
      * </p>
      */
     @Test
-    void testShouldCreateFormatterByClassName() {
+    void shouldCreateFormatterByClassName() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("org.eclipse.daanse.rolap.common.format.CellFormatterTestImpl")
@@ -65,12 +63,12 @@ class FormatterFactoryTest {
         MemberPropertyFormatter propertyFormatter =
             factory.createPropertyFormatter(propertyFormatterContext);
 
-        assertNotNull(cellFormatter);
-        assertNotNull(memberFormatter);
-        assertNotNull(propertyFormatter);
-        assertTrue(cellFormatter instanceof CellFormatterTestImpl);
-        assertTrue(memberFormatter instanceof MemberFormatterTestImpl);
-        assertTrue(propertyFormatter instanceof PropertyFormatterTestImpl);
+        assertThat(cellFormatter).isNotNull();
+        assertThat(memberFormatter).isNotNull();
+        assertThat(propertyFormatter).isNotNull();
+        assertThat(cellFormatter).isInstanceOf(CellFormatterTestImpl.class);
+        assertThat(memberFormatter).isInstanceOf(MemberFormatterTestImpl.class);
+        assertThat(propertyFormatter).isInstanceOf(PropertyFormatterTestImpl.class);
     }
 
     /**
@@ -82,7 +80,7 @@ class FormatterFactoryTest {
      */
     @Test
     @Disabled //has not been fixed during creating Daanse project
-    void testShouldCreateFormatterByScript() {
+    void shouldCreateFormatterByScript() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name")
                 .script("return null;", "JavaScript")
@@ -95,9 +93,9 @@ class FormatterFactoryTest {
         MemberPropertyFormatter propertyFormatter =
             factory.createPropertyFormatter(context);
 
-        assertNotNull(cellFormatter);
-        assertNotNull(memberFormatter);
-        assertNotNull(propertyFormatter);
+        assertThat(cellFormatter).isNotNull();
+        assertThat(memberFormatter).isNotNull();
+        assertThat(propertyFormatter).isNotNull();
     }
 
     /**
@@ -108,7 +106,7 @@ class FormatterFactoryTest {
      * </p>
      */
     @Test
-    void testShouldCreateFormatterByClassNameIfBothSpecified() {
+    void shouldCreateFormatterByClassNameIfBothSpecified() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("org.eclipse.daanse.rolap.common.format.CellFormatterTestImpl")
@@ -133,12 +131,12 @@ class FormatterFactoryTest {
         MemberPropertyFormatter propertyFormatter =
             factory.createPropertyFormatter(propertyFormatterContext);
 
-        assertNotNull(cellFormatter);
-        assertNotNull(memberFormatter);
-        assertNotNull(propertyFormatter);
-        assertTrue(cellFormatter instanceof CellFormatterTestImpl);
-        assertTrue(memberFormatter instanceof MemberFormatterTestImpl);
-        assertTrue(propertyFormatter instanceof PropertyFormatterTestImpl);
+        assertThat(cellFormatter).isNotNull();
+        assertThat(memberFormatter).isNotNull();
+        assertThat(propertyFormatter).isNotNull();
+        assertThat(cellFormatter).isInstanceOf(CellFormatterTestImpl.class);
+        assertThat(memberFormatter).isInstanceOf(MemberFormatterTestImpl.class);
+        assertThat(propertyFormatter).isInstanceOf(PropertyFormatterTestImpl.class);
     }
 
     /**
@@ -150,14 +148,14 @@ class FormatterFactoryTest {
      * </p>
      */
     @Test
-    void testShouldReturnNullIfEmptyContext() {
+    void shouldReturnNullIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 
         CellFormatter cellFormatter =
             factory.createCellFormatter(context);
 
-        assertNull(cellFormatter);
+        assertThat(cellFormatter).isNull();
     }
 
     /**
@@ -171,7 +169,7 @@ class FormatterFactoryTest {
      * </p>
      */
     @Test
-    void testShouldReturnDefaultFormatterIfEmptyContext() {
+    void shouldReturnDefaultFormatterIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 
@@ -180,9 +178,9 @@ class FormatterFactoryTest {
         MemberFormatter memberFormatter =
             factory.createRolapMemberFormatter(context);
 
-        assertNotNull(propertyFormatter);
-        assertNotNull(memberFormatter);
-        assertTrue(propertyFormatter instanceof PropertyFormatterAdapter);
-        assertTrue(memberFormatter instanceof DefaultRolapMemberFormatter);
+        assertThat(propertyFormatter).isNotNull();
+        assertThat(memberFormatter).isNotNull();
+        assertThat(propertyFormatter).isInstanceOf(PropertyFormatterAdapter.class);
+        assertThat(memberFormatter).isInstanceOf(DefaultRolapMemberFormatter.class);
     }
 }

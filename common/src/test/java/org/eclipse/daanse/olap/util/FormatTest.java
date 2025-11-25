@@ -24,7 +24,7 @@
 */
 package org.eclipse.daanse.olap.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -76,12 +76,12 @@ class FormatTest {
      * Exhaustive tests on various numbers.
      */
     @Test
-    void testNumbers() {
+    void numbers() {
         checkNumbersInLocale(null);
     }
 
     @Test
-    void testFrenchNumbers() {
+    void frenchNumbers() {
         checkNumbersInLocale(localeFra);
     }
 
@@ -146,7 +146,7 @@ class FormatTest {
     }
 
     @Test
-    void testTrickyNumbers() {
+    void trickyNumbers() {
         checkFormat(null, new BigDecimal("40.385"), "##0.0#", "40.39");
         checkFormat(null, new BigDecimal("40.386"), "##0.0#", "40.39");
         checkFormat(null, new BigDecimal("40.384"), "##0.0#", "40.38");
@@ -195,7 +195,7 @@ class FormatTest {
      * MONDRIAN-186</a>, "Small negative numbers are printed as '-0'".
      */
     @Test
-    void testSmallNegativeNumbers() {
+    void smallNegativeNumbers() {
         checkFormat(null, new BigDecimal("-0.006"), "#.0", ".0");
         checkFormat(null, new BigDecimal("-0.006"), "#.00", "-.01");
         checkFormat(null, new BigDecimal("-0.0500001"), "#.0", "-.1");
@@ -219,7 +219,7 @@ class FormatTest {
      * gets to use a third format.
      */
     @Test
-    void testNil() {
+    void nil() {
         // The +ve format gives "-0.01", but the negative format gives "0.0",
         // so we move onto the "Nil" format.
         checkFormat(null, new BigDecimal("-0.001"), "0.##;(0.##);Nil", "Nil");
@@ -269,7 +269,7 @@ class FormatTest {
     }
 
     @Test
-    void testNegativeZero() {
+    void negativeZero() {
         checkFormat(null, new BigDecimal("-0.0"), "#0.000", "0.000");
         checkFormat(null, new BigDecimal("-0.0"), "#0", "0");
         checkFormat(null, new BigDecimal("-0.0"), "#0.0", "0.0");
@@ -281,7 +281,7 @@ class FormatTest {
      * column".
      */
     @Test
-    void testPercentWithStyle() {
+    void percentWithStyle() {
         checkFormat(null, new BigDecimal("0.0364"), "|#.00%|style='green'", "|3.64%|style='green'");
     }
 
@@ -290,7 +290,7 @@ class FormatTest {
      * MONDRIAN-687</a>, "Format treats negative numbers differently than SSAS".
      */
     @Test
-    void testNegativePercentWithStyle() {
+    void negativePercentWithStyle() {
         if (Bug.BugMondrian687Fixed) {
             checkFormat(null, new BigDecimal("-0.0364"), "|#.00%|style=red", "-|3.64%|style=red");
         } else {
@@ -316,7 +316,7 @@ class FormatTest {
      * Single quotes in format string. SSAS 2005 removes them; Mondrian should also.
      */
     @Test
-    void testSingleQuotes() {
+    void singleQuotes() {
         if (Bug.BugMondrian687Fixed) {
             checkFormat(null, 3.64, "|#.00|style='deep red'", "-|364.00|style=deep red"); // confirmed on SSAS 2005
             checkFormat(null, 3.64, "|#.00|style=\\'deep red\\'", "-|364.00|style='deep red'"); // confirmed on SSAS
@@ -327,13 +327,13 @@ class FormatTest {
     }
 
     @Test
-    void testNegativePercent() {
+    void negativePercent() {
         checkFormat(null, new BigDecimal("-0.0364"), "#.00%", "-3.64%");
         checkFormat(null, new BigDecimal("0.0364"), "#.00%", "3.64%");
     }
 
     @Test
-    void testNumberRoundingBug() {
+    void numberRoundingBug() {
         checkFormat(null, new BigDecimal("0.50"), "0", "1");
         checkFormat(null, new BigDecimal("-1.5"), "0", "-2");
         checkFormat(null, new BigDecimal("-0.50"), "0", "-1");
@@ -347,7 +347,7 @@ class FormatTest {
     }
 
     @Test
-    void testCurrencyBug() {
+    void currencyBug() {
         // The following case illustrates an outstanding bug.
         // Should be able to override '.' to '-',
         // so result should be '3.141.592-65 FF',
@@ -363,7 +363,7 @@ class FormatTest {
     }
 
     @Test
-    void testDates() {
+    void dates() {
         checkDate("dd-mmm-yy", "29-Apr-69", "29-Avr-69", "29-Apr.-69");
         checkDate("h:mm:ss AM/PM", "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
         checkDate("hh:mm", "20:09", "20#09", "20:09");
@@ -395,7 +395,7 @@ class FormatTest {
     }
 
     @Test
-    void testAllTokens() {
+    void allTokens() {
         for (Format.Token fe : Format.getTokenList()) {
             Object o;
             if (fe.isNumeric()) {
@@ -412,7 +412,7 @@ class FormatTest {
     }
 
     @Test
-    void testTrickyDates() {
+    void trickyDates() {
         // All examples have been checked with Excel2003 and AS2005.
 
         checkFormat(null, date2, "y", "250");
@@ -466,21 +466,20 @@ class FormatTest {
     }
 
     @Test
-    void testFrenchLocale() {
+    void frenchLocale() {
         Format.FormatLocale fr = Format.createLocale(Locale.FRANCE);
-        assertEquals("#,##0.00\\ \\" + Euro, fr.currencyFormat);
-        assertEquals(Euro + "", fr.currencySymbol);
-        assertEquals("/", fr.dateSeparator);
-        assertEquals("[, dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]",
-                Arrays.toString(fr.daysOfWeekLong));
-        assertEquals("[, dim., lun., mar., mer., jeu., ven., sam.]", Arrays.toString(fr.daysOfWeekShort));
-        assertEquals("[janvier, f" + EA + "vrier, mars, avril, mai, juin," + " juillet, ao" + UC
-                + "t, septembre, octobre, novembre, d" + EA + "cembre, ]", Arrays.toString(fr.monthsLong));
-        assertEquals("[janv., f" + EA + "vr., mars, avr., mai, juin," + " juil., ao" + UC + "t, sept., oct., nov., d"
-                + EA + "c., ]", Arrays.toString(fr.monthsShort));
-        assertEquals(',', fr.decimalPlaceholder);
-        assertEquals(Nbsp, fr.thousandSeparator);
-        assertEquals(":", fr.timeSeparator);
+        assertThat(fr.currencyFormat).isEqualTo("#,##0.00\\ \\" + Euro);
+        assertThat(fr.currencySymbol).isEqualTo(Euro + "");
+        assertThat(fr.dateSeparator).isEqualTo("/");
+        assertThat(Arrays.toString(fr.daysOfWeekLong)).isEqualTo("[, dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]");
+        assertThat(Arrays.toString(fr.daysOfWeekShort)).isEqualTo("[, dim., lun., mar., mer., jeu., ven., sam.]");
+        assertThat(Arrays.toString(fr.monthsLong)).isEqualTo("[janvier, f" + EA + "vrier, mars, avril, mai, juin," + " juillet, ao" + UC
+                + "t, septembre, octobre, novembre, d" + EA + "cembre, ]");
+        assertThat(Arrays.toString(fr.monthsShort)).isEqualTo("[janv., f" + EA + "vr., mars, avr., mai, juin," + " juil., ao" + UC + "t, sept., oct., nov., d"
+                + EA + "c., ]");
+        assertThat(fr.decimalPlaceholder).isEqualTo(',');
+        assertThat(fr.thousandSeparator).isEqualTo(Nbsp);
+        assertThat(fr.timeSeparator).isEqualTo(":");
     }
 
     private void checkFormat(Format.FormatLocale locale, Object o, String formatString) {
@@ -498,7 +497,7 @@ class FormatTest {
     private void checkFormat(Format.FormatLocale locale, Object o, String formatString, String expectedResult) {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
         if (o instanceof BigDecimal bigDecimal) {
             checkFormat(locale, bigDecimal.doubleValue(), formatString, expectedResult);
 
@@ -510,19 +509,19 @@ class FormatTest {
     }
 
     @Test
-    void testCache() {
+    void cache() {
         StringBuilder buf = new StringBuilder(Format.CACHE_LIMIT * 2 + 10);
         buf.append("0.");
         for (int i = 0; i < Format.CACHE_LIMIT * 2; ++i) {
             final Format format = Format.get(buf.toString(), null);
             final String s = format.format(i);
-            assertEquals(i + ".", s);
+            assertThat(s).isEqualTo(i + ".");
             buf.append("#");
         }
     }
 
     @Test
-    void testString() {
+    void string() {
         // Excel2003
         checkFormat(null, "This Is A Test", ">", "THIS IS A TEST");
 
@@ -578,7 +577,7 @@ class FormatTest {
     }
 
     @Test
-    void testNonNumericValuesUsingNumericFormat() {
+    void nonNumericValuesUsingNumericFormat() {
         // All of the following have been checked in Excel 2003.
 
         // string value printed using a numeric format
@@ -606,7 +605,7 @@ class FormatTest {
     }
 
     @Test
-    void testFormatThousands() {
+    void formatThousands() {
         checkFormat(null, 123456.7, "######.00", "123456.70");
         checkFormat(null, 123456, "######", "123456");
         checkFormat(null, 123456.7, "#,##,###.00", "1,23,456.70");
@@ -630,7 +629,7 @@ class FormatTest {
      * Comma not rounding".
      */
     @Test
-    void testThousandsThousands() {
+    void thousandsThousands() {
         final int i = 1234567890;
         if (false) {
             checkFormat(null, i, "#,##0,,", "1,235");
@@ -655,7 +654,7 @@ class FormatTest {
      * to different locales.
      */
     @Test
-    void testCurrency() {
+    void currency() {
         checkFormat(localeDe, 123456, "Currency", "123.456,00 " + Euro);
         checkFormat(localeDe, 123456, "###,###.00" + Format.INTL_CURRENCY_SYMBOL, "123.456,00" + Euro);
         checkFormat(localeFra, 123456, "###,###.00" + Format.INTL_CURRENCY_SYMBOL, "123.456,00FF");
@@ -670,7 +669,7 @@ class FormatTest {
     }
 
     @Test
-    void testInfinity() {
+    void infinity() {
         String[] strings = { "#", "#.#", "#,###.0" };
         for (String string : strings) {
             checkFormat(null, Double.POSITIVE_INFINITY, string, "Infinity");
@@ -680,14 +679,14 @@ class FormatTest {
 
     // PDI-16761
     @Test
-    void testBigDecimalJavaFormat() {
+    void bigDecimalJavaFormat() {
         BigDecimal bd = new BigDecimal("123456789123456789123456789");
         Format.BasicFormat format = new Format.JavaFormat(Locale.FRENCH);
         StringBuilder result = new StringBuilder();
         format.format(bd, result);
         // It should run without losing precision
-        assertEquals("123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123"
-                + Nbsp + "456" + Nbsp + "789", result.toString());
+        assertThat(result.toString()).isEqualTo("123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123" + Nbsp + "456" + Nbsp + "789" + Nbsp + "123"
+                + Nbsp + "456" + Nbsp + "789");
     }
 
     /**
@@ -697,7 +696,7 @@ class FormatTest {
      */
 
     @Test
-    void testBigDecimalWithSpecificCustomFormat() {
+    void bigDecimalWithSpecificCustomFormat() {
         // the format string used in the jira case
         final String format = "0000000000000";
         // test data from the jira case

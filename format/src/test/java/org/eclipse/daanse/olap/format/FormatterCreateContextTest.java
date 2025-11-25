@@ -21,7 +21,7 @@
 
 package org.eclipse.daanse.olap.format;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 class FormatterCreateContextTest {
 
 	@Test
-    void testElementDataShouldSupersedeAttributeData() {
+    void elementDataShouldSupersedeAttributeData() {
 
         FormatterCreateContext context1 =
             new FormatterCreateContext.Builder("elementName")
@@ -46,8 +46,8 @@ class FormatterCreateContextTest {
                 .formatterAttr("attributeClassName")
                 .build();
 
-        assertEquals("elementClassName", context1.getFormatterClassName());
-        assertEquals("attributeClassName", context2.getFormatterClassName());
-        assertEquals("attributeClassName", context3.getFormatterClassName());
+        assertThat(context1.getFormatterClassName()).isEqualTo("elementClassName");
+        assertThat(context2.getFormatterClassName()).isEqualTo("attributeClassName");
+        assertThat(context3.getFormatterClassName()).isEqualTo("attributeClassName");
     }
 }

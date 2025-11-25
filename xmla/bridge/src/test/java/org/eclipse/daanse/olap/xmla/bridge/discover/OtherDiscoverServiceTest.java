@@ -20,7 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +56,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
@@ -98,7 +96,7 @@ class OtherDiscoverServiceTest {
     }
 
     @Test
-    void dataSources() throws SQLException {
+    void dataSources() throws Exception {
         when(cls.getContexts()).thenReturn(List.of(context1, context2));
 
         DiscoverDataSourcesRequest request = mock(DiscoverDataSourcesRequest.class);

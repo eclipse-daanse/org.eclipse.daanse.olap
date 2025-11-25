@@ -14,7 +14,7 @@
 package org.eclipse.daanse.olap.function.def.vba.space;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
@@ -92,7 +92,7 @@ class SpaceResolverTest {
         List<Conversion> conversions = List.of();
         Expression[] args = {};
 
-        assertThrows(Exception.class, () -> spaceResolver.resolve(args, validator, conversions));
+        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
     }
 
     @Test
@@ -102,7 +102,7 @@ class SpaceResolverTest {
         Expression[] args = { expression, expression };
         when(validator.canConvert(anyInt(), any(Expression.class), any(), eq(conversions))).thenReturn(true);
 
-        assertThrows(Exception.class, () -> spaceResolver.resolve(args, validator, conversions));
+        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
     }
 
     @Test
@@ -113,7 +113,7 @@ class SpaceResolverTest {
 
         Expression[] args = { expression };
 
-        assertThrows(Exception.class, () -> spaceResolver.resolve(args, validator, conversions));
+        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
     }
 
     @Test

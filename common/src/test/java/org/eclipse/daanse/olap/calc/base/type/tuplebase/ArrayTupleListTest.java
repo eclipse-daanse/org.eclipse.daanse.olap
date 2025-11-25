@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.olap.calc.base.type.tuplebase;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.ListAssert.assertThatList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.common.ResourceLimitExceededException;
@@ -29,7 +29,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 class ArrayTupleListTest {
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         SystemWideProperties.instance().populateInitial();
     }
 
@@ -48,8 +48,8 @@ class ArrayTupleListTest {
         atlList = new ArrayTupleList(2, 10);
         addTuplesToList(atlList, count);
 
-        assertThatList(atlList).hasSize(count).anySatisfy(tuple -> assertEquals(tuple.get(0), m1))
-                .anySatisfy(tuple -> assertEquals(tuple.get(1), m2));
+        assertThatList(atlList).hasSize(count).anySatisfy(tuple -> assertThat(m1).isEqualTo(tuple.get(0)))
+                .anySatisfy(tuple -> assertThat(m2).isEqualTo(tuple.get(1)));
     }
 
     @Test

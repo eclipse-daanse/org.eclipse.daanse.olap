@@ -25,7 +25,7 @@
 
 package org.eclipse.daanse.olap.format;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,13 +94,11 @@ class DefaultFormatterTest {
      * as well as scientific notations.
      */
     @Test
-    void testNumberFormatting() {
+    void numberFormatting() {
         for (Map.Entry<Object, String> entry : VALUES.entrySet()) {
             String formatted = formatter.format(entry.getKey());
 
-            assertEquals(
-                entry.getValue(), formatted,
-                "Value type: " + entry.getKey().getClass().toString());
+            assertThat(formatted).as("Value type: " + entry.getKey().getClass().toString()).isEqualTo(entry.getValue());
         }
     }
 }

@@ -57,7 +57,7 @@ class TimeCalcTest {
 
     @Test
     @DisplayName("Should return different times on consecutive calls")
-    void shouldReturnDifferentTimesOnConsecutiveCalls() throws InterruptedException {
+    void shouldReturnDifferentTimesOnConsecutiveCalls() throws Exception {
         Date result1 = timeCalc.evaluate(evaluator);
 
         // Sleep for a small amount to ensure time difference

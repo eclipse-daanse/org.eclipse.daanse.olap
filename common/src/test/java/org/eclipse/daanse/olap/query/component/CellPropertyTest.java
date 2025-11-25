@@ -28,8 +28,7 @@
 
 package org.eclipse.daanse.olap.query.component;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,18 +49,18 @@ class CellPropertyTest{
     }
 
     @Test
-    void testIsNameEquals() {
-        assertTrue(cellProperty.isNameEquals("Format_String"));
+    void isNameEquals() {
+        assertThat(cellProperty.isNameEquals("Format_String")).isTrue();
     }
 
     @Test
-    void testIsNameEqualsDoesCaseInsensitiveMatch() {
-        assertTrue(cellProperty.isNameEquals("format_string"));
+    void isNameEqualsDoesCaseInsensitiveMatch() {
+        assertThat(cellProperty.isNameEquals("format_string")).isTrue();
     }
 
     @Test
-    void testIsNameEqualsParameterShouldNotBeQuoted() {
-        assertFalse(cellProperty.isNameEquals("[Format_String]"));
+    void isNameEqualsParameterShouldNotBeQuoted() {
+        assertThat(cellProperty.isNameEquals("[Format_String]")).isFalse();
     }
 
 }

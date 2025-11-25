@@ -26,11 +26,9 @@
 
 package org.eclipse.daanse.olap.query.component;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,35 +62,26 @@ import org.junit.jupiter.api.Test;
  class UtilTestCase{
 
     @Test
-     void testQuoteMdxIdentifier() {
-        assertEquals(
-            "[San Francisco]", Util.quoteMdxIdentifier("San Francisco"));
-        assertEquals(
-            "[a [bracketed]] string]",
-            Util.quoteMdxIdentifier("a [bracketed] string"));
-        assertEquals(
-            "[Store].[USA].[California]",
-            Util.quoteMdxIdentifier(
+     void quoteMdxIdentifier() {
+        assertThat(Util.quoteMdxIdentifier("San Francisco")).isEqualTo("[San Francisco]");
+        assertThat(Util.quoteMdxIdentifier("a [bracketed] string")).isEqualTo("[a [bracketed]] string]");
+        assertThat(Util.quoteMdxIdentifier(
                 Arrays.<Segment>asList(
-                    new IdImpl.NameSegmentImpl("Store"),
-                    new IdImpl.NameSegmentImpl("USA"),
-                    new IdImpl.NameSegmentImpl("California"))));
+                        new IdImpl.NameSegmentImpl("Store"),
+                        new IdImpl.NameSegmentImpl("USA"),
+                        new IdImpl.NameSegmentImpl("California")))).isEqualTo("[Store].[USA].[California]");
     }
 
     @Test
-     void testQuoteJava() {
-        assertEquals(
-            "\"San Francisco\"", Util.quoteJavaString("San Francisco"));
-        assertEquals(
-            "\"null\"", Util.quoteJavaString("null"));
-        assertEquals(
-            "null", Util.quoteJavaString(null));
-        assertEquals(
-            "\"a\\\\b\\\"c\"", Util.quoteJavaString("a\\b\"c"));
+     void quoteJava() {
+        assertThat(Util.quoteJavaString("San Francisco")).isEqualTo("\"San Francisco\"");
+        assertThat(Util.quoteJavaString("null")).isEqualTo("\"null\"");
+        assertThat(Util.quoteJavaString(null)).isEqualTo("null");
+        assertThat(Util.quoteJavaString("a\\b\"c")).isEqualTo("\"a\\\\b\\\"c\"");
     }
 
     @Test
-     void testBufReplace() {
+     void bufReplace() {
         // Replace with longer string. Search pattern at beginning & end.
         checkReplace("xoxox", "x", "yy", "yyoyyoyy");
 
@@ -123,8 +112,8 @@ import org.junit.jupiter.api.Test;
     }
 
     @Test
-     void testCompareKey() {
-    	assertEquals(true, Util.compareKey(Boolean.FALSE, Boolean.TRUE) < 0);
+     void compareKey() {
+        assertThat(Util.compareKey(Boolean.FALSE, Boolean.TRUE) < 0).isTrue();
     }
 
     private static void checkReplace(
@@ -132,94 +121,86 @@ import org.junit.jupiter.api.Test;
     {
         // Check whether the JDK does what we expect. (If it doesn't it's
         // probably a bug in the test, not the JDK.)
-        assertEquals(expected, original.replaceAll(seek, replace));
+        assertThat(original.replaceAll(seek, replace)).isEqualTo(expected);
 
         // Check the StringBuilder version of replace.
         String modified = original.replace(seek, replace);
-        assertEquals(expected, modified);
+        assertThat(modified).isEqualTo(expected);
 
         // Check the String version of replace.
-        assertEquals(expected, original.replace(seek, replace));
+        assertThat(original.replace(seek, replace)).isEqualTo(expected);
     }
 
     @Test
-     void testImplode() {
+     void implode() {
         List<Segment> fooBar = Arrays.<Segment>asList(
             new IdImpl.NameSegmentImpl("foo", Quoting.UNQUOTED),
             new IdImpl.NameSegmentImpl("bar", Quoting.UNQUOTED));
-        assertEquals("[foo].[bar]", Util.implode(fooBar));
+        assertThat(Util.implode(fooBar)).isEqualTo("[foo].[bar]");
 
         List<Segment> empty = Collections.emptyList();
-        assertEquals("", Util.implode(empty));
+        assertThat(Util.implode(empty)).isEqualTo("");
 
         List<Segment> nasty = Arrays.<Segment>asList(
             new IdImpl.NameSegmentImpl("string", Quoting.UNQUOTED),
             new IdImpl.NameSegmentImpl("with", Quoting.UNQUOTED),
             new IdImpl.NameSegmentImpl("a [bracket] in it", Quoting.UNQUOTED));
-        assertEquals(
-            "[string].[with].[a [bracket]] in it]",
-            Util.implode(nasty));
+        assertThat(Util.implode(nasty)).isEqualTo("[string].[with].[a [bracket]] in it]");
     }
 
     @Test
-     void testParseIdentifier() {
+     void parseIdentifier() {
         List<Segment> strings =
                 Util.parseIdentifier("[string].[with].[a [bracket]] in it]");
-        assertEquals(3, strings.size());
-        assertEquals("a [bracket] in it", name(strings, 2));
+        assertThat(strings.size()).isEqualTo(3);
+        assertThat(name(strings, 2)).isEqualTo("a [bracket] in it");
 
         strings =
             Util.parseIdentifier("[Worklog].[All].[calendar-[LANGUAGE]].js]");
-        assertEquals(3, strings.size());
-        assertEquals("calendar-[LANGUAGE].js", name(strings, 2));
+        assertThat(strings.size()).isEqualTo(3);
+        assertThat(name(strings, 2)).isEqualTo("calendar-[LANGUAGE].js");
 
         // allow spaces before, after and between
         strings = Util.parseIdentifier("  [foo] . [bar].[baz]  ");
-        assertEquals(3, strings.size());
+        assertThat(strings.size()).isEqualTo(3);
         final int index = 0;
-        assertEquals("foo", name(strings, index));
+        assertThat(name(strings, index)).isEqualTo("foo");
 
         // first segment not quoted
         strings = Util.parseIdentifier("Time.1997.[Q3]");
-        assertEquals(3, strings.size());
-        assertEquals("Time", name(strings, 0));
-        assertEquals("1997", name(strings, 1));
-        assertEquals("Q3", name(strings, 2));
+        assertThat(strings.size()).isEqualTo(3);
+        assertThat(name(strings, 0)).isEqualTo("Time");
+        assertThat(name(strings, 1)).isEqualTo("1997");
+        assertThat(name(strings, 2)).isEqualTo("Q3");
 
         // spaces ignored after unquoted segment
         strings = Util.parseIdentifier("[Time . Weekly ] . 1997 . [Q3]");
-        assertEquals(3, strings.size());
-        assertEquals("Time . Weekly ", name(strings, 0));
-        assertEquals("1997", name(strings, 1));
-        assertEquals("Q3", name(strings, 2));
+        assertThat(strings.size()).isEqualTo(3);
+        assertThat(name(strings, 0)).isEqualTo("Time . Weekly ");
+        assertThat(name(strings, 1)).isEqualTo("1997");
+        assertThat(name(strings, 2)).isEqualTo("Q3");
 
         // identifier ending in '.' is invalid
         try {
             strings = Util.parseIdentifier("[foo].[bar].");
             fail("expected exception, got " + strings);
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                "Expected identifier after '.', "
-                + "in member identifier '[foo].[bar].'",
-                e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("Expected identifier after '.', "
+                    + "in member identifier '[foo].[bar].'");
         }
 
         try {
             strings = Util.parseIdentifier("[foo].[bar");
             fail("expected exception, got " + strings);
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                "Expected ']', in member identifier '[foo].[bar'",
-                e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("Expected ']', in member identifier '[foo].[bar'");
         }
 
         try {
             strings = Util.parseIdentifier("[Foo].[Bar], [Baz]");
             fail("expected exception, got " + strings);
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                "Invalid member identifier '[Foo].[Bar], [Baz]'",
-                e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("Invalid member identifier '[Foo].[Bar], [Baz]'");
         }
     }
 
@@ -229,7 +210,7 @@ import org.junit.jupiter.api.Test;
     }
 
     @Test
-     void testReplaceProperties() {
+     void replaceProperties() {
         Map<String, String> map = new HashMap<>();
         map.put("foo", "bar");
         map.put("empty", "");
@@ -237,149 +218,118 @@ import org.junit.jupiter.api.Test;
         map.put("foobarbaz", "bang!");
         map.put("malformed${foo", "groovy");
 
-        assertEquals(
-            "abarb",
-            Util.replaceProperties("a${foo}b", map));
-        assertEquals(
-            "twicebarbar",
-            Util.replaceProperties("twice${foo}${foo}", map));
-        assertEquals(
-            "bar at start",
-            Util.replaceProperties("${foo} at start", map));
-        assertEquals(
-            "xyz",
-            Util.replaceProperties("x${empty}y${empty}${empty}z", map));
-        assertEquals(
-            "x${nonexistent}bar",
-            Util.replaceProperties("x${nonexistent}${foo}", map));
+        assertThat(Util.replaceProperties("a${foo}b", map)).isEqualTo("abarb");
+        assertThat(Util.replaceProperties("twice${foo}${foo}", map)).isEqualTo("twicebarbar");
+        assertThat(Util.replaceProperties("${foo} at start", map)).isEqualTo("bar at start");
+        assertThat(Util.replaceProperties("x${empty}y${empty}${empty}z", map)).isEqualTo("xyz");
+        assertThat(Util.replaceProperties("x${nonexistent}${foo}", map)).isEqualTo("x${nonexistent}bar");
 
         // malformed tokens are left as is
-        assertEquals(
-            "${malformedbarbar",
-            Util.replaceProperties("${malformed${foo}${foo}", map));
+        assertThat(Util.replaceProperties("${malformed${foo}${foo}", map)).isEqualTo("${malformedbarbar");
 
         // string can contain '$'
-        assertEquals("x$foo", Util.replaceProperties("x$foo", map));
+        assertThat(Util.replaceProperties("x$foo", map)).isEqualTo("x$foo");
 
         // property with empty name is always ignored -- even if it's in the map
-        assertEquals("${}", Util.replaceProperties("${}", map));
+        assertThat(Util.replaceProperties("${}", map)).isEqualTo("${}");
         map.put("", "v");
-        assertEquals("${}", Util.replaceProperties("${}", map));
+        assertThat(Util.replaceProperties("${}", map)).isEqualTo("${}");
 
         // if a property's value is null, it's as if it doesn't exist
-        assertEquals("${null}", Util.replaceProperties("${null}", map));
+        assertThat(Util.replaceProperties("${null}", map)).isEqualTo("${null}");
 
         // nested properties are expanded, but not recursively
-        assertEquals(
-            "${foobarbaz}",
-            Util.replaceProperties("${foo${foo}baz}", map));
+        assertThat(Util.replaceProperties("${foo${foo}baz}", map)).isEqualTo("${foobarbaz}");
     }
 
     @Test
-     void testAreOccurrencesEqual() {
-        assertFalse(Util.areOccurencesEqual(Collections.<String>emptyList()));
-        assertTrue(Util.areOccurencesEqual(Arrays.asList("x")));
-        assertTrue(Util.areOccurencesEqual(Arrays.asList("x", "x")));
-        assertFalse(Util.areOccurencesEqual(Arrays.asList("x", "y")));
-        assertFalse(Util.areOccurencesEqual(Arrays.asList("x", "y", "x")));
-        assertTrue(Util.areOccurencesEqual(Arrays.asList("x", "x", "x")));
-        assertFalse(Util.areOccurencesEqual(Arrays.asList("x", "x", "y", "z")));
+     void areOccurrencesEqual() {
+        assertThat(Util.areOccurencesEqual(Collections.<String>emptyList())).isFalse();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x"))).isTrue();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x", "x"))).isTrue();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x", "y"))).isFalse();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x", "y", "x"))).isFalse();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x", "x", "x"))).isTrue();
+        assertThat(Util.areOccurencesEqual(Arrays.asList("x", "x", "y", "z"))).isFalse();
     }
 
     /**
      * Unit test for {@link mondrian.util.ArrayStack}.
      */
     @Test
-     void testArrayStack() {
+     void arrayStack() {
         final ArrayStack<String> stack = new ArrayStack<>();
-        assertEquals(0, stack.size());
+        assertThat(stack.size()).isEqualTo(0);
         stack.add("a");
-        assertEquals(1, stack.size());
-        assertEquals("a", stack.peek());
+        assertThat(stack.size()).isEqualTo(1);
+        assertThat(stack.peek()).isEqualTo("a");
         stack.push("b");
-        assertEquals(2, stack.size());
-        assertEquals("b", stack.peek());
-        assertEquals("b", stack.pop());
-        assertEquals(1, stack.size());
+        assertThat(stack.size()).isEqualTo(2);
+        assertThat(stack.peek()).isEqualTo("b");
+        assertThat(stack.pop()).isEqualTo("b");
+        assertThat(stack.size()).isEqualTo(1);
         stack.add(0, "z");
-        assertEquals("a", stack.peek());
-        assertEquals(2, stack.size());
+        assertThat(stack.peek()).isEqualTo("a");
+        assertThat(stack.size()).isEqualTo(2);
         stack.push(null);
-        assertEquals(3, stack.size());
-        assertEquals(Arrays.asList("z", "a", null), stack);
+        assertThat(stack.size()).isEqualTo(3);
+        assertThat(stack).isEqualTo(Arrays.asList("z", "a", null));
         String z = "";
         for (String s : stack) {
             z += s;
         }
-        assertEquals("zanull", z);
+        assertThat(z).isEqualTo("zanull");
         stack.clear();
-        try {
-            String x = stack.peek();
-            fail("expected error, got " + x);
-        } catch (EmptyStackException e) {
-            // ok
-        }
-        try {
-            String x = stack.pop();
-            fail("expected error, got " + x);
-        } catch (EmptyStackException e) {
-            // ok
-        }
+        assertThatThrownBy(() -> stack.peek()).isInstanceOf(EmptyStackException.class);
+        assertThatThrownBy(() -> stack.pop()).isInstanceOf(EmptyStackException.class);
     }
 
     /**
      * Tests {@link Util#appendArrays(Object[], Object[][])}.
      */
     @Test
-     void testAppendArrays() {
+     void appendArrays() {
         String[] a0 = {"a", "b", "c"};
         String[] a1 = {"foo", "bar"};
         String[] empty = {};
 
         final String[] strings1 = Util.appendArrays(a0, a1);
-        assertEquals(5, strings1.length);
-        assertEquals(
-            Arrays.asList("a", "b", "c", "foo", "bar"),
-            Arrays.asList(strings1));
+        assertThat(strings1.length).isEqualTo(5);
+        assertThat(Arrays.asList(strings1)).isEqualTo(Arrays.asList("a", "b", "c", "foo", "bar"));
 
         final String[] strings2 = Util.appendArrays(
             empty, a0, empty, a1, empty);
-        assertEquals(
-            Arrays.asList("a", "b", "c", "foo", "bar"),
-            Arrays.asList(strings2));
+        assertThat(Arrays.asList(strings2)).isEqualTo(Arrays.asList("a", "b", "c", "foo", "bar"));
 
         Number[] n0 = {Math.PI};
         Integer[] i0 = {123, null, 45};
         Float[] f0 = {0f};
 
         final Number[] numbers = Util.appendArrays(n0, i0, f0);
-        assertEquals(5, numbers.length);
-        assertEquals(
-            Arrays.asList((Number) Math.PI, 123, null, 45, 0f),
-            Arrays.asList(numbers));
+        assertThat(numbers.length).isEqualTo(5);
+        assertThat(Arrays.asList(numbers)).isEqualTo(Arrays.asList((Number) Math.PI, 123, null, 45, 0f));
     }
 
     @Test
-     void testCanCast() {
-        assertTrue(Util.canCast(Collections.EMPTY_LIST, Integer.class));
-        assertTrue(Util.canCast(Collections.EMPTY_LIST, String.class));
-        assertTrue(Util.canCast(Collections.EMPTY_SET, String.class));
-        assertTrue(Util.canCast(Arrays.asList(1, 2), Integer.class));
-        assertTrue(Util.canCast(Arrays.asList(1, 2), Number.class));
-        assertFalse(Util.canCast(Arrays.asList(1, 2), String.class));
-        assertTrue(Util.canCast(Arrays.asList(1, null, 2d), Number.class));
-        assertTrue(
-            Util.canCast(
+     void canCast() {
+        assertThat(Util.canCast(Collections.EMPTY_LIST, Integer.class)).isTrue();
+        assertThat(Util.canCast(Collections.EMPTY_LIST, String.class)).isTrue();
+        assertThat(Util.canCast(Collections.EMPTY_SET, String.class)).isTrue();
+        assertThat(Util.canCast(Arrays.asList(1, 2), Integer.class)).isTrue();
+        assertThat(Util.canCast(Arrays.asList(1, 2), Number.class)).isTrue();
+        assertThat(Util.canCast(Arrays.asList(1, 2), String.class)).isFalse();
+        assertThat(Util.canCast(Arrays.asList(1, null, 2d), Number.class)).isTrue();
+        assertThat(Util.canCast(
                 new HashSet<Object>(Arrays.asList(1, null, 2d)),
-                Number.class));
-        assertFalse(Util.canCast(Arrays.asList(1, null, 2d), Integer.class));
+                Number.class)).isTrue();
+        assertThat(Util.canCast(Arrays.asList(1, null, 2d), Integer.class)).isFalse();
     }
 
     /**
      * Unit test for {@link Util#parseLocale(String)} method.
      */
     @Test
-     void testParseLocale() {
+     void parseLocale() {
         Locale[] locales = {
             Locale.CANADA,
             Locale.CANADA_FRENCH,
@@ -388,14 +338,14 @@ import org.junit.jupiter.api.Test;
             Locale.TRADITIONAL_CHINESE,
         };
         for (Locale locale : locales) {
-            assertEquals(locale, Util.parseLocale(locale.toString()));
+            assertThat(Util.parseLocale(locale.toString())).isEqualTo(locale);
         }
         // Example locale names in Locale.toString() javadoc.
         String[] localeNames = {
             "en", "de_DE", "_GB", "en_US_WIN", "de__POSIX", "fr__MAC"
         };
         for (String localeName : localeNames) {
-            assertEquals(localeName, Util.parseLocale(localeName).toString());
+            assertThat(Util.parseLocale(localeName).toString()).isEqualTo(localeName);
         }
     }
 
@@ -407,31 +357,29 @@ import org.junit.jupiter.api.Test;
             + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             + "abcdefghijklmnopqrstuvwxyz"
             + "$_";
-        assertTrue(moniker.length() > 0);
+        assertThat(moniker.length() > 0).isTrue();
         // all chars are valid
         for (int i = 0; i < moniker.length(); i++) {
-            assertTrue( validChars.indexOf(moniker.charAt(i)) >= 0,moniker);
+            assertThat(validChars.indexOf(moniker.charAt(i)) >= 0).as(moniker).isTrue();
         }
         // does not start with digit
-        assertFalse(digits.indexOf(moniker.charAt(0)) >= 0,moniker);
+        assertThat(digits.indexOf(moniker.charAt(0)) >= 0).as(moniker).isFalse();
     }
 
 
 
     @Test
-     void testCartesianProductList() {
+     void cartesianProductList() {
         final CartesianProductList<String> list =
             new CartesianProductList<>(
                 Arrays.asList(
                     Arrays.asList("a", "b"),
                     Arrays.asList("1", "2", "3")));
-        assertEquals(6, list.size());
-        assertFalse(list.isEmpty());
+        assertThat(list.size()).isEqualTo(6);
+        assertThat(list.isEmpty()).isFalse();
         checkCartesianListContents(list);
 
-        assertEquals(
-            "[[a, 1], [a, 2], [a, 3], [b, 1], [b, 2], [b, 3]]",
-            list.toString());
+        assertThat(list.toString()).isEqualTo("[[a, 1], [a, 2], [a, 3], [b, 1], [b, 2], [b, 3]]");
 
         // One element empty
         final CartesianProductList<String> list2 =
@@ -439,8 +387,8 @@ import org.junit.jupiter.api.Test;
                 Arrays.asList(
                     Arrays.<String>asList(),
                     Arrays.asList("1", "2", "3")));
-        assertTrue(list2.isEmpty());
-        assertEquals("[]", list2.toString());
+        assertThat(list2.isEmpty()).isTrue();
+        assertThat(list2.toString()).isEqualTo("[]");
         checkCartesianListContents(list2);
 
         // Other component empty
@@ -449,15 +397,15 @@ import org.junit.jupiter.api.Test;
                 Arrays.asList(
                     Arrays.asList("a", "b"),
                     Arrays.<String>asList()));
-        assertTrue(list3.isEmpty());
-        assertEquals("[]", list3.toString());
+        assertThat(list3.isEmpty()).isTrue();
+        assertThat(list3.toString()).isEqualTo("[]");
         checkCartesianListContents(list3);
 
         // Zeroary
         final CartesianProductList<String> list4 =
             new CartesianProductList<>(
                 Collections.<List<String>>emptyList());
-        assertFalse(list4.isEmpty());
+        assertThat(list4.isEmpty()).isFalse();
 //        assertEquals("[[]]", list4.toString());
         checkCartesianListContents(list4);
 
@@ -466,7 +414,7 @@ import org.junit.jupiter.api.Test;
             new CartesianProductList<>(
                 Collections.singletonList(
                     Arrays.asList("a", "b")));
-        assertEquals("[[a], [b]]", list5.toString());
+        assertThat(list5.toString()).isEqualTo("[[a], [b]]");
         checkCartesianListContents(list5);
 
         // 3-ary
@@ -476,18 +424,16 @@ import org.junit.jupiter.api.Test;
                     Arrays.asList("a", "b", "c", "d"),
                     Arrays.asList("1", "2"),
                     Arrays.asList("x", "y", "z")));
-        assertEquals(24, list6.size()); // 4 * 2 * 3
-        assertFalse(list6.isEmpty());
-        assertEquals("[a, 1, x]", list6.get(0).toString());
-        assertEquals("[a, 1, y]", list6.get(1).toString());
-        assertEquals("[d, 2, z]", list6.get(23).toString());
+        assertThat(list6.size()).isEqualTo(24); // 4 * 2 * 3
+        assertThat(list6.isEmpty()).isFalse();
+        assertThat(list6.get(0).toString()).isEqualTo("[a, 1, x]");
+        assertThat(list6.get(1).toString()).isEqualTo("[a, 1, y]");
+        assertThat(list6.get(23).toString()).isEqualTo("[d, 2, z]");
         checkCartesianListContents(list6);
 
         final Object[] strings = new Object[6];
         list6.getIntoArray(1, strings);
-        assertEquals(
-            "[a, 1, y, null, null, null]",
-            Arrays.asList(strings).toString());
+        assertThat(Arrays.asList(strings).toString()).isEqualTo("[a, 1, y, null, null, null]");
 
         CartesianProductList<Object> list7 =
             new CartesianProductList<>(
@@ -502,13 +448,9 @@ import org.junit.jupiter.api.Test;
                         "c",
                         "d")));
         list7.getIntoArray(1, strings);
-        assertEquals(
-            "[1, bb, bbb, null, null, null]",
-            Arrays.asList(strings).toString());
+        assertThat(Arrays.asList(strings).toString()).isEqualTo("[1, bb, bbb, null, null, null]");
         list7.getIntoArray(5, strings);
-        assertEquals(
-            "[2a, null, 2c, bb, bbb, null]",
-            Arrays.asList(strings).toString());
+        assertThat(Arrays.asList(strings).toString()).isEqualTo("[2a, null, 2c, bb, bbb, null]");
         checkCartesianListContents(list7);
     }
 
@@ -517,82 +459,82 @@ import org.junit.jupiter.api.Test;
         for (List<T> ts : list) {
             arrayList.add(ts);
         }
-        assertEquals(arrayList, list);
+        assertThat(list).isEqualTo(arrayList);
     }
 
     /**
      * Unit test for {@link ByteString}.
      */
     @Test
-     void testByteString() {
+     void byteString() {
         final ByteString empty0 = new ByteString(new byte[]{});
         final ByteString empty1 = new ByteString(new byte[]{});
-        assertEquals(empty0, empty1);
-        assertEquals(empty0.hashCode(), empty1.hashCode());
-        assertEquals("", empty0.toString());
-        assertEquals(0, empty0.length());
-        assertEquals(0, empty0.compareTo(empty0));
-        assertEquals(0, empty0.compareTo(empty1));
+        assertThat(empty1).isEqualTo(empty0);
+        assertThat(empty1.hashCode()).isEqualTo(empty0.hashCode());
+        assertThat(empty0.toString()).isEqualTo("");
+        assertThat(empty0.length()).isEqualTo(0);
+        assertThat(empty0.compareTo(empty0)).isEqualTo(0);
+        assertThat(empty0.compareTo(empty1)).isEqualTo(0);
 
         final ByteString two =
             new ByteString(new byte[]{ (byte) 0xDE, (byte) 0xAD});
-        assertNotEquals(empty0, two);
-        assertNotEquals(two, empty0);
-        assertEquals("dead", two.toString());
-        assertEquals(2, two.length());
-        assertEquals(0, two.compareTo(two));
-        assertTrue(empty0.compareTo(two) < 0);
-        assertTrue(two.compareTo(empty0) > 0);
+        assertThat(two).isNotEqualTo(empty0);
+        assertThat(empty0).isNotEqualTo(two);
+        assertThat(two.toString()).isEqualTo("dead");
+        assertThat(two.length()).isEqualTo(2);
+        assertThat(two.compareTo(two)).isEqualTo(0);
+        assertThat(empty0.compareTo(two) < 0).isTrue();
+        assertThat(two.compareTo(empty0) > 0).isTrue();
 
         final ByteString three =
             new ByteString(new byte[]{ (byte) 0xDE, (byte) 0x02, (byte) 0xAD});
-        assertEquals(3, three.length());
-        assertEquals("de02ad", three.toString());
-        assertTrue(two.compareTo(three) < 0);
-        assertTrue(three.compareTo(two) > 0);
-        assertEquals(0x02, three.byteAt(1));
+        assertThat(three.length()).isEqualTo(3);
+        assertThat(three.toString()).isEqualTo("de02ad");
+        assertThat(two.compareTo(three) < 0).isTrue();
+        assertThat(three.compareTo(two) > 0).isTrue();
+        org.junit.jupiter.api.Assertions.assertEquals(0x02, three.byteAt(1));
 
         final HashSet<ByteString> set = new HashSet<>(Arrays.asList(empty0, two, three, two, empty1, three));
-        assertEquals(3, set.size());
+        assertThat(set.size()).isEqualTo(3);
     }
 
     /**
      * Unit test for {@link Util#binarySearch}.
      */
     @Test
-     void testBinarySearch() {
+     void binarySearch() {
         final String[] abce = {"a", "b", "c", "e"};
-        assertEquals(0, Util.binarySearch(abce, 0, 4, "a"));
-        assertEquals(1, Util.binarySearch(abce, 0, 4, "b"));
-        assertEquals(1, Util.binarySearch(abce, 1, 4, "b"));
-        assertEquals(-4, Util.binarySearch(abce, 0, 4, "d"));
-        assertEquals(-4, Util.binarySearch(abce, 1, 4, "d"));
-        assertEquals(-4, Util.binarySearch(abce, 2, 4, "d"));
-        assertEquals(-4, Util.binarySearch(abce, 2, 3, "d"));
-        assertEquals(-4, Util.binarySearch(abce, 2, 3, "e"));
-        assertEquals(-4, Util.binarySearch(abce, 2, 3, "f"));
-        assertEquals(-5, Util.binarySearch(abce, 0, 4, "f"));
-        assertEquals(-5, Util.binarySearch(abce, 2, 4, "f"));
+        assertThat(Util.binarySearch(abce, 0, 4, "a")).isEqualTo(0);
+        assertThat(Util.binarySearch(abce, 0, 4, "b")).isEqualTo(1);
+        assertThat(Util.binarySearch(abce, 1, 4, "b")).isEqualTo(1);
+        assertThat(Util.binarySearch(abce, 0, 4, "d")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 1, 4, "d")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 2, 4, "d")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 2, 3, "d")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 2, 3, "e")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 2, 3, "f")).isEqualTo(-4);
+        assertThat(Util.binarySearch(abce, 0, 4, "f")).isEqualTo(-5);
+        assertThat(Util.binarySearch(abce, 2, 4, "f")).isEqualTo(-5);
     }
 
     /**
      * Unit test for {@link mondrian.util.ArraySortedSet}.
      */
     @Test
-     void testArraySortedSet() {
+     void arraySortedSet() {
         String[] abce = {"a", "b", "c", "e"};
         final SortedSet<String> abceSet =
             new ArraySortedSet<>(abce);
 
         // test size, isEmpty, contains
-        assertEquals(4, abceSet.size());
-        assertFalse(abceSet.isEmpty());
-        assertEquals("a", abceSet.first());
-        assertEquals("e", abceSet.last());
-        assertTrue(abceSet.contains("a"));
-        assertFalse(abceSet.contains("aa"));
-        assertFalse(abceSet.contains("z"));
-        assertFalse(abceSet.contains(null));
+        assertThat(abceSet.size()).isEqualTo(4);
+        assertThat(abceSet.isEmpty()).isFalse();
+        assertThat(abceSet.first()).isEqualTo("a");
+        assertThat(abceSet.last()).isEqualTo("e");
+        assertThat(abceSet.contains("a")).isTrue();
+        assertThat(abceSet.contains("aa")).isFalse();
+        assertThat(abceSet.contains("z")).isFalse();
+        assertThat(abceSet.contains(null)).isFalse();
         checkToString("[a, b, c, e]", abceSet);
 
         // test iterator
@@ -600,7 +542,7 @@ import org.junit.jupiter.api.Test;
         for (String s : abceSet) {
             z += s + ";";
         }
-        assertEquals("a;b;c;e;", z);
+        assertThat(z).isEqualTo("a;b;c;e;");
 
         // empty set
         String[] empty = {};
@@ -610,76 +552,66 @@ import org.junit.jupiter.api.Test;
         for (String s : emptySet) {
             ++n;
         }
-        assertEquals(0, n);
-        assertEquals(0, emptySet.size());
-        assertTrue(emptySet.isEmpty());
-        try {
-            String s = emptySet.first();
-            fail("expected exception, got " + s);
-        } catch (NoSuchElementException e) {
-            // ok
-        }
-        try {
-            String s = emptySet.last();
-            fail("expected exception, got " + s);
-        } catch (NoSuchElementException e) {
-            // ok
-        }
-        assertFalse(emptySet.contains("a"));
-        assertFalse(emptySet.contains("aa"));
-        assertFalse(emptySet.contains("z"));
+        assertThat(n).isEqualTo(0);
+        assertThat(emptySet.size()).isEqualTo(0);
+        assertThat(emptySet.isEmpty()).isTrue();
+        assertThatThrownBy(() -> emptySet.first()).isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> emptySet.last()).isInstanceOf(NoSuchElementException.class);
+        assertThat(emptySet.contains("a")).isFalse();
+        assertThat(emptySet.contains("aa")).isFalse();
+        assertThat(emptySet.contains("z")).isFalse();
         checkToString("[]", emptySet);
 
         // same hashCode etc. as similar hashset
         final HashSet<String> abcHashset = new HashSet<>(Arrays.asList(abce));
-        assertEquals(abcHashset, abceSet);
-        assertEquals(abceSet, abcHashset);
-        assertEquals(abceSet.hashCode(), abcHashset.hashCode());
+        assertThat(abceSet).isEqualTo(abcHashset);
+        assertThat(abcHashset).isEqualTo(abceSet);
+        assertThat(abcHashset.hashCode()).isEqualTo(abceSet.hashCode());
 
         // subset to end
         final Set<String> subsetEnd = new ArraySortedSet<>(abce, 1, 4);
         checkToString("[b, c, e]", subsetEnd);
-        assertEquals(3, subsetEnd.size());
-        assertFalse(subsetEnd.isEmpty());
-        assertTrue(subsetEnd.contains("c"));
-        assertFalse(subsetEnd.contains("a"));
-        assertFalse(subsetEnd.contains("z"));
+        assertThat(subsetEnd.size()).isEqualTo(3);
+        assertThat(subsetEnd.isEmpty()).isFalse();
+        assertThat(subsetEnd.contains("c")).isTrue();
+        assertThat(subsetEnd.contains("a")).isFalse();
+        assertThat(subsetEnd.contains("z")).isFalse();
 
         // subset from start
         final Set<String> subsetStart = new ArraySortedSet<>(abce, 0, 2);
         checkToString("[a, b]", subsetStart);
-        assertEquals(2, subsetStart.size());
-        assertFalse(subsetStart.isEmpty());
-        assertTrue(subsetStart.contains("a"));
-        assertFalse(subsetStart.contains("c"));
+        assertThat(subsetStart.size()).isEqualTo(2);
+        assertThat(subsetStart.isEmpty()).isFalse();
+        assertThat(subsetStart.contains("a")).isTrue();
+        assertThat(subsetStart.contains("c")).isFalse();
 
         // subset from neither start or end
         final Set<String> subset = new ArraySortedSet<>(abce, 1, 2);
         checkToString("[b]", subset);
-        assertEquals(1, subset.size());
-        assertFalse(subset.isEmpty());
-        assertTrue(subset.contains("b"));
-        assertFalse(subset.contains("a"));
-        assertFalse(subset.contains("e"));
+        assertThat(subset.size()).isEqualTo(1);
+        assertThat(subset.isEmpty()).isFalse();
+        assertThat(subset.contains("b")).isTrue();
+        assertThat(subset.contains("a")).isFalse();
+        assertThat(subset.contains("e")).isFalse();
 
         // empty subset
         final Set<String> subsetEmpty = new ArraySortedSet<>(abce, 1, 1);
         checkToString("[]", subsetEmpty);
-        assertEquals(0, subsetEmpty.size());
-        assertTrue(subsetEmpty.isEmpty());
-        assertFalse(subsetEmpty.contains("e"));
+        assertThat(subsetEmpty.size()).isEqualTo(0);
+        assertThat(subsetEmpty.isEmpty()).isTrue();
+        assertThat(subsetEmpty.contains("e")).isFalse();
 
         // subsets based on elements, not ordinals
-        assertEquals(abceSet.subSet("a", "c"), subsetStart);
-        assertEquals("[a, b, c]", abceSet.subSet("a", "d").toString());
-        assertNotEquals(abceSet.subSet("a", "e"), subsetStart);
-        assertNotEquals(abceSet.subSet("b", "c"), subsetStart);
-        assertEquals("[c, e]", abceSet.subSet("c", "z").toString());
-        assertEquals("[e]", abceSet.subSet("d", "z").toString());
-        assertNotEquals(abceSet.subSet("e", "c"), subsetStart);
-        assertEquals("[]", abceSet.subSet("e", "c").toString());
-        assertNotEquals(abceSet.subSet("z", "c"), subsetStart);
-        assertEquals("[]", abceSet.subSet("z", "c").toString());
+        assertThat(subsetStart).isEqualTo(abceSet.subSet("a", "c"));
+        assertThat(abceSet.subSet("a", "d").toString()).isEqualTo("[a, b, c]");
+        assertThat(subsetStart).isNotEqualTo(abceSet.subSet("a", "e"));
+        assertThat(subsetStart).isNotEqualTo(abceSet.subSet("b", "c"));
+        assertThat(abceSet.subSet("c", "z").toString()).isEqualTo("[c, e]");
+        assertThat(abceSet.subSet("d", "z").toString()).isEqualTo("[e]");
+        assertThat(subsetStart).isNotEqualTo(abceSet.subSet("e", "c"));
+        assertThat(abceSet.subSet("e", "c").toString()).isEqualTo("[]");
+        assertThat(subsetStart).isNotEqualTo(abceSet.subSet("z", "c"));
+        assertThat(abceSet.subSet("z", "c").toString()).isEqualTo("[]");
 
         // merge
         final ArraySortedSet<String> ar1 = new ArraySortedSet<>(abce);
@@ -697,16 +629,16 @@ import org.junit.jupiter.api.Test;
     }
 
     private void checkToString(String expected, Set<String> set) {
-        assertEquals(expected, set.toString());
+        assertThat(set.toString()).isEqualTo(expected);
 
         final List<String> list = new ArrayList<>(set);
-        assertEquals(expected, list.toString());
+        assertThat(list.toString()).isEqualTo(expected);
 
         list.clear();
         for (String s : set) {
             list.add(s);
         }
-        assertEquals(expected, list.toString());
+        assertThat(list.toString()).isEqualTo(expected);
     }
 
 
@@ -731,7 +663,7 @@ import org.junit.jupiter.api.Test;
     }
 
     @Test
-     void testRolapUtilComparator() throws Exception {
+     void rolapUtilComparator() throws Exception {
         final Comparable[] compArray =
             new Comparable[] {
                 "1",
@@ -743,11 +675,10 @@ import org.junit.jupiter.api.Test;
         Util.binarySearch(
             compArray, 0, compArray.length,
             (Comparable)Util.sqlNullValue);
-        assertTrue(true);
     }
 
     @Test
-     void testByteMatcher() throws Exception {
+     void byteMatcher() throws Exception {
         final ByteMatcher bm = new ByteMatcher(new byte[] {(byte)0x2A});
         final byte[] bytesNotPresent =
             new byte[] {(byte)0x2B, (byte)0x2C};
@@ -757,10 +688,10 @@ import org.junit.jupiter.api.Test;
             new byte[] {(byte)0x2B, (byte)0x2C, (byte)0x2A};
         final byte[] bytesPresentFirst =
                 new byte[] {(byte)0x2A, (byte)0x2C, (byte)0x2B};
-        assertEquals(-1, bm.match(bytesNotPresent));
-        assertEquals(1, bm.match(bytesPresent));
-        assertEquals(2, bm.match(bytesPresentLast));
-        assertEquals(0, bm.match(bytesPresentFirst));
+        assertThat(bm.match(bytesNotPresent)).isEqualTo(-1);
+        assertThat(bm.match(bytesPresent)).isEqualTo(1);
+        assertThat(bm.match(bytesPresentLast)).isEqualTo(2);
+        assertThat(bm.match(bytesPresentFirst)).isEqualTo(0);
     }
 
     /**
@@ -769,7 +700,7 @@ import org.junit.jupiter.api.Test;
      * its source list upon creation.
      */
     @Test
-     void testNullValuesMap() throws Exception {
+     void nullValuesMap() throws Exception {
         class BaconationException extends RuntimeException {};
         Map<String, Object> nullValuesMap =
             Util.toNullValuesMap(
@@ -788,19 +719,13 @@ import org.junit.jupiter.api.Test;
                         throw new BaconationException();
                     }
                 });
-        try {
-            // This should fail. Sanity check.
-            nullValuesMap.entrySet().iterator().next();
-            fail();
-        } catch (BaconationException e) {
-            // no op.
-        }
+        assertThatThrownBy(() -> nullValuesMap.entrySet().iterator().next()).isInstanceOf(BaconationException.class);
         // None of the above operations should trigger an iteration.
-        assertFalse(nullValuesMap.entrySet().isEmpty());
-        assertTrue(nullValuesMap.containsKey("CHUNKY"));
-        assertTrue(nullValuesMap.containsValue(null));
-        assertFalse(nullValuesMap.containsKey(null));
-        assertFalse(nullValuesMap.keySet().contains("Something"));
+        assertThat(nullValuesMap.entrySet().isEmpty()).isFalse();
+        assertThat(nullValuesMap.containsKey("CHUNKY")).isTrue();
+        assertThat(nullValuesMap.containsValue(null)).isTrue();
+        assertThat(nullValuesMap.containsKey(null)).isFalse();
+        assertThat(nullValuesMap.keySet().contains("Something")).isFalse();
     }
 
 

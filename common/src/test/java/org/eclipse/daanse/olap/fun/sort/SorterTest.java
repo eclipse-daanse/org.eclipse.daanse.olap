@@ -31,7 +31,6 @@ package org.eclipse.daanse.olap.fun.sort;
 import static java.util.Arrays.asList;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -56,6 +55,7 @@ import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
 import org.eclipse.daanse.olap.server.ExecutionImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -64,6 +64,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class SorterTest {
+
+    private AutoCloseable mocks;
 
     @Mock
     Evaluator evaluator;
@@ -103,9 +105,9 @@ class SorterTest {
     ArgumentCaptor<Comparator<?>> comparatorCaptor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
         when(sortKeySpec1.getKey()).thenReturn(calc1);
         when(sortKeySpec2.getKey()).thenReturn(calc2);
         when(evaluator.getQuery()).thenReturn(query);
@@ -129,7 +131,7 @@ class SorterTest {
     // |Not-OrderByKey| BreakTupleComparator|HierarchicalTupleComparator |
     // +--------------+---------------------+------------------------------+
     @Test
-    void testComparatorSelectionBrkOrderByKey() {
+    void comparatorSelectionBrkOrderByKey() {
         setupSortKeyMocks(true, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec1);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec2);
@@ -144,7 +146,7 @@ class SorterTest {
     }
 
     @Test
-    void testComparatorSelectionBrkNotOrderByKey() {
+    void comparatorSelectionBrkNotOrderByKey() {
         setupSortKeyMocks(false, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec1);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec2);
@@ -160,7 +162,7 @@ class SorterTest {
     }
 
     @Test
-    void testComparatorSelectionNotBreakingOrderByKey() {
+    void comparatorSelectionNotBreakingOrderByKey() {
         calc1 = mock(MemberOrderKeyCalc.class);
         calc2 = mock(MemberOrderKeyCalc.class);
         when(sortKeySpec1.getKey()).thenReturn(calc1);
@@ -180,19 +182,19 @@ class SorterTest {
     }
 
     @Test
-    void testComparatorSelectionNotBreaking() {
+    void comparatorSelectionNotBreaking() {
         setupSortKeyMocks(false, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec1);
         Sorter.applySortSpecToComparator(evaluator, 2, comparatorChain, sortKeySpec2);
         verify(comparatorChain, times(2)).thenComparing(comparatorCaptor.capture());
 
 //    verify( comparatorChain, times( 2 ) ).addComparator( comparatorCaptor.capture(), eq( false ) );
-        assertTrue(comparatorCaptor.getAllValues().get(0) instanceof HierarchicalTupleComparator);
-        assertTrue(comparatorCaptor.getAllValues().get(1) instanceof HierarchicalTupleComparator);
+        assertThat(comparatorCaptor.getAllValues().get(0)).isInstanceOf(HierarchicalTupleComparator.class);
+        assertThat(comparatorCaptor.getAllValues().get(1)).isInstanceOf(HierarchicalTupleComparator.class);
     }
 
     @Test
-    void testSortTuplesBreakingByKey() {
+    void sortTuplesBreakingByKey() {
         TupleList tupleList = genList();
         setupSortKeyMocks(true, Sorter.SorterFlag.BASC, Sorter.SorterFlag.BDESC);
 
@@ -203,11 +205,11 @@ class SorterTest {
         verify(calc1, atLeastOnce()).dependsOn(hierarchy2);
         verify(calc2, atLeastOnce()).dependsOn(hierarchy2);
         verify(calc2, atLeastOnce()).dependsOn(hierarchy1);
-        assertTrue(result.size() == 1000);
+        assertThat(result.size()).isEqualTo(1000);
     }
 
     @Test
-    void testCancel() {
+    void cancel() {
         setupSortKeyMocks(true, Sorter.SorterFlag.ASC, Sorter.SorterFlag.DESC);
         // pass in a null tupleList, and an iterable. cancel should be checked while
         // generating the list
@@ -242,6 +244,11 @@ class SorterTest {
         TupleList tupleList = TupleCollections.createList(2);
         range(0, 1000).forEach(i -> tupleList.add(asList(member1, member2)));
         return tupleList;
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        mocks.close();
     }
 
 }

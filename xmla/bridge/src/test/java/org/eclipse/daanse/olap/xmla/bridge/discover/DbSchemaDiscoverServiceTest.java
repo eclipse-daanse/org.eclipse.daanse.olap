@@ -20,7 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +66,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
@@ -320,7 +318,7 @@ class DbSchemaDiscoverServiceTest {
     }
 
     @Test
-    void dbSchemaSourceTables() throws SQLException {
+    void dbSchemaSourceTables() throws Exception {
         when(cls.tryGetFirstByName(any(), any())).thenReturn(Optional.of(catalog));
 
         DbSchemaSourceTablesRequest request = mock(DbSchemaSourceTablesRequest.class);

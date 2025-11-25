@@ -41,14 +41,14 @@ import org.junit.jupiter.api.Test;
 class CancellationCheckerTest {
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         SystemWideProperties.instance().populateInitial();
     }
 
     private ExecutionImpl excMock = mock(ExecutionImpl.class);
 
     @Test
-    void testCheckCancelOrTimeoutWithIntExecution() {
+    void checkCancelOrTimeoutWithIntExecution() {
         int currentIteration = 10;
         prepareCheckCancelOrTimeoutInterval(1);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -56,7 +56,7 @@ class CancellationCheckerTest {
     }
 
     @Test
-    void testCheckCancelOrTimeoutWithLongExecution() {
+    void checkCancelOrTimeoutWithLongExecution() {
         long currentIteration = 10L;
         prepareCheckCancelOrTimeoutInterval(1);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -64,7 +64,7 @@ class CancellationCheckerTest {
     }
 
     @Test
-    void testCheckCancelOrTimeoutLongMoreThanIntExecution() {
+    void checkCancelOrTimeoutLongMoreThanIntExecution() {
         long currentIteration = 2147483648L;
         prepareCheckCancelOrTimeoutInterval(1);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -72,7 +72,7 @@ class CancellationCheckerTest {
     }
 
     @Test
-    void testCheckCancelOrTimeoutMaxLongExecution() {
+    void checkCancelOrTimeoutMaxLongExecution() {
         long currentIteration = 9223372036854775807L;
         prepareCheckCancelOrTimeoutInterval(1);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -80,7 +80,7 @@ class CancellationCheckerTest {
     }
 
     @Test
-    void testCheckCancelOrTimeoutNoExecution_IntervalZero() {
+    void checkCancelOrTimeoutNoExecutionIntervalZero() {
         int currentIteration = 10;
         prepareCheckCancelOrTimeoutInterval(0);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -88,7 +88,7 @@ class CancellationCheckerTest {
     }
 
     @Test
-    void testCheckCancelOrTimeoutNoExecutionEvenIntervalOddIteration() {
+    void checkCancelOrTimeoutNoExecutionEvenIntervalOddIteration() {
         int currentIteration = 3;
         prepareCheckCancelOrTimeoutInterval(10);
         CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);

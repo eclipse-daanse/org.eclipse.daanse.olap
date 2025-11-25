@@ -24,13 +24,12 @@
 
 package org.eclipse.daanse.olap.function.def.iif;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
@@ -64,7 +63,7 @@ class IifFunDefTest {
   }
 
   @Test
-  void testGetResultType() {
+  void getResultType() {
     ResultStyle actualResStyle = null;
     ResultStyle expectedResStyle = setListCalc.getResultStyle();
     // Compile calculation for IIf function for (<Logical Expression>, <SetType>, <SetType>) params
@@ -73,10 +72,10 @@ class IifFunDefTest {
     try {
       actualResStyle = calc.getResultStyle();
     } catch ( Exception e ) {
-      fail( "Should not have thrown any exception." );
+      org.junit.jupiter.api.Assertions.fail( "Should not have thrown any exception." );
     }
-    assertNotNull( actualResStyle );
-    assertEquals( expectedResStyle, actualResStyle );
+    org.junit.jupiter.api.Assertions.assertNotNull( actualResStyle );
+    org.junit.jupiter.api.Assertions.assertEquals( expectedResStyle, actualResStyle );
 
   }
 

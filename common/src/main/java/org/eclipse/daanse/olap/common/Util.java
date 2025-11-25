@@ -167,7 +167,7 @@ public class Util {
     private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
 
     public static final Logger PROFILE_LOGGER =
-            LoggerFactory.getLogger("mondrian.profile");
+            LoggerFactory.getLogger("daanse.profile");
 
     /**
      * Special value which indicates that a {@code double} computation has returned the MDX null value. See {@link
@@ -2501,7 +2501,7 @@ public class Util {
     {
         if (url.startsWith("jdbc:mondrian:")) {
             return "Provider=Mondrian; "
-                + url.substring("jdbc:mondrian:".length());
+                + url.substring("jdbc:daanse:".length());
         }
         return null;
     }

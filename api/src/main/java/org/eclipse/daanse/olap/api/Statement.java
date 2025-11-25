@@ -74,7 +74,7 @@ public interface Statement  {
      *
      * @return connection
      */
-    Connection getMondrianConnection();
+    Connection getDaanseConnection();
 
 
     void setQuery(Query query);

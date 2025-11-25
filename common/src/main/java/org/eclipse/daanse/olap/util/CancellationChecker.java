@@ -50,8 +50,8 @@ public class CancellationChecker {
   public static void checkCancelOrTimeout(
       long currentIteration, Execution execution)
   {
-    if (execution != null && execution.getMondrianStatement() != null) {
-      int checkCancelOrTimeoutInterval = execution.getMondrianStatement().getMondrianConnection().getContext()
+    if (execution != null && execution.getDaanseStatement() != null) {
+      int checkCancelOrTimeoutInterval = execution.getDaanseStatement().getDaanseConnection().getContext()
               .getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class);
       synchronized (execution) {
         if (checkCancelOrTimeoutInterval > 0

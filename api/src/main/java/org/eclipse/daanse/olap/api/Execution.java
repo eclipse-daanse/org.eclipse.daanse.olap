@@ -34,7 +34,7 @@ public interface Execution {
 
     void cancelSqlStatements();
 
-    Statement getMondrianStatement();
+    Statement getDaanseStatement();
 
     void setOutOfMemory(String string);
 

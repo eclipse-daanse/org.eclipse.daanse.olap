@@ -32,10 +32,10 @@ package org.eclipse.daanse.olap.fun;
  *
  * @author jhyde, 14 June, 2002
  */
-public class MondrianEvaluationException extends RuntimeException {
-    public MondrianEvaluationException() {
+public class DaanseEvaluationException extends RuntimeException {
+    public DaanseEvaluationException() {
     }
-    public MondrianEvaluationException(String s) {
+    public DaanseEvaluationException(String s) {
         super(s);
     }
 }

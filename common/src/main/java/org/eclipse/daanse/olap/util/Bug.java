@@ -1,5 +1,4 @@
  /*
- * This software is subject to the terms of the Eclipse Public License v1.0
  * Agreement, available at the following URL:
  * http://www.eclipse.org/legal/epl-v10.html.
  * You must accept the terms of that agreement to use this software.
@@ -86,7 +85,7 @@ public class Bug {
      * "NON EMPTY when hierarchy's default member is not 'all'"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian229Fixed = false;
+    public static final boolean Bug229Fixed = false;
 
     // Properties relating to checkin 7641.
     // This is part of the junit test Checkin_7641 that
@@ -103,7 +102,7 @@ public class Bug {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-207">MONDRIAN-207,
      * "IS EMPTY and IS NULL"</a> is fixed.
      */
-    public static final boolean BugMondrian207Fixed = false;
+    public static final boolean Bug207Fixed = false;
 
     /**
      * Whether
@@ -111,7 +110,7 @@ public class Bug {
      * "Make Native NonEmpty consistant with MSAS"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian446Fixed = false;
+    public static final boolean Bug446Fixed = false;
 
     /**
      * Whether
@@ -119,7 +118,7 @@ public class Bug {
      * "Predicate references RolapStar.Column when used in AggStar"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian313Fixed = false;
+    public static final boolean Bug313Fixed = false;
 
     /**
      * Whether
@@ -127,7 +126,7 @@ public class Bug {
      * "Predicate sometimes has null RolapStar.Column"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian314Fixed = false;
+    public static final boolean Bug314Fixed = false;
 
     /**
      * Whether
@@ -135,7 +134,7 @@ public class Bug {
      * "CrossJoin no empty optimizer eliminates calculated member"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian328Fixed = false;
+    public static final boolean Bug328Fixed = false;
 
     /**
      * Whether
@@ -144,7 +143,7 @@ public class Bug {
      * is fixed.
      *
      */
-    public static final boolean BugMondrian361Fixed = false;
+    public static final boolean Bug361Fixed = false;
 
     /**
      * Whether
@@ -152,7 +151,7 @@ public class Bug {
      * "Parent-child hierarchies: &lt;Join&gt; used in dimension"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian441Fixed = false;
+    public static final boolean Bug441Fixed = false;
 
     /**
      * Whether
@@ -160,14 +159,14 @@ public class Bug {
      * "HighCardinalityTest test cases disabled"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian486Fixed = false;
+    public static final boolean Bug486Fixed = false;
 
     /**
      * Whether bug <a href="http://jira.pentaho.com/browse/MONDRIAN-495">
      * MONDRIAN-495, "Table filter concept does not support dialects."</a>
      * is fixed.
      */
-    public static final boolean BugMondrian495Fixed = false;
+    public static final boolean Bug495Fixed = false;
 
     /**
      * Whether
@@ -175,7 +174,7 @@ public class Bug {
      * "RolapResultTest disabled"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian503Fixed = false;
+    public static final boolean Bug503Fixed = false;
 
     /**
      * Whether
@@ -185,7 +184,7 @@ public class Bug {
      * generally, if the regions overlap, then mondrian counts the overlaps
      * twice, whereas SSAS 2005 does not.
      */
-    public static final boolean BugMondrian555Fixed = false;
+    public static final boolean Bug555Fixed = false;
 
     /**
      * Whether
@@ -195,14 +194,14 @@ public class Bug {
      * results where the Gender.M values are returned before the Gender.F
      * values.
      */
-    public static final boolean BugMondrian584Fixed = false;
+    public static final boolean Bug584Fixed = false;
 
     /**
      * Whether
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-641">bug MONDRIAN-641,
      * "Large NON EMPTY result performs poorly with ResultStyle.ITERABLE"</a>
      */
-    public static final boolean BugMondrian641Fixed = false;
+    public static final boolean Bug641Fixed = false;
 
     /**
      * Whether
@@ -210,7 +209,7 @@ public class Bug {
      * "AS operator has lower precedence than required by MDX specification"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian648Fixed = false;
+    public static final boolean Bug648Fixed = false;
 
     /**
      * Whether
@@ -218,7 +217,7 @@ public class Bug {
      * "Format treats negative numbers differently than SSAS"</a>
      * is fixed.
      */
-    public static final boolean BugMondrian687Fixed = false;
+    public static final boolean Bug687Fixed = false;
 
     /**
      * Whether bug
@@ -226,7 +225,7 @@ public class Bug {
      * "When joining a shared dimension into a cube at a level
      * other than its leaf level, Mondrian gives wrong results"</a> is fixed.
      */
-    public static final boolean BugMondrian747Fixed = false;
+    public static final boolean Bug747Fixed = false;
 
     /**
      * Whether
@@ -234,28 +233,28 @@ public class Bug {
      * "use dynamic parameters and PreparedStatement for frequently executed SQL
      * patterns"</a> is fixed.
      */
-    public static final boolean BugMondrian759Fixed = false;
+    public static final boolean Bug759Fixed = false;
 
     /**
      * Whether
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-785">bug MONDRIAN-785,
      * "Native evaluation does not respect ordering"</a> is fixed.
      */
-    public static final boolean BugMondrian785Fixed = false;
+    public static final boolean Bug785Fixed = false;
 
     /**
      * Whether
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1001">bug MONDRIAN-1001,
      * "Tests disabled due to property trigger issues"</a> is fixed.
      */
-    public static final boolean BugMondrian1001Fixed = false;
+    public static final boolean Bug1001Fixed = false;
 
     /**
      * Whether
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-2452">bug MONDRIAN-1001,
      * "Tests disabled due to property trigger issues"</a> is fixed.
      */
-    public static final boolean BugMondrian2452Fixed = false;
+    public static final boolean Bug2452Fixed = false;
 
     /**
      * Whether
@@ -263,7 +262,7 @@ public class Bug {
      * "Error when using aggregation tables with a hierarchy that has a visible
      * level behind restricted"</a> is fixed.
      */
-    public static final boolean BugMondrian2440Fixed = false;
+    public static final boolean Bug2440Fixed = false;
     /**
      * Whether RolapCubeMember and RolapMember have been fully segregated; any
      * piece of code should be working with one or the other, not both.
@@ -296,7 +295,7 @@ public class Bug {
      * org.eclipse.daanse.olap.api.MappingLevel.Level#DEBUG or higher), we expect the suite to
      * take a long time, so we enable the tests.
      *
-     * Fixing either {@link #BugMondrian759Fixed MONDRIAN-759} or
+     * Fixing either {@link #Bug759Fixed MONDRIAN-759} or
      * <a href="http://issues.eigenbase.org/browse/FRG-400">FRG-400, "rewrite
      * statements containing literals to use internally-managed dynamic
      * parameters instead"</a> would solve the problem.
@@ -305,9 +304,9 @@ public class Bug {
      */
     public static boolean avoidSlowTestOnLucidDB(Dialect dialect) {
         return
-            !BugMondrian759Fixed
+            !Bug759Fixed
             && dialect.getDialectName().equals("luciddb")
-            && !LoggerFactory.getLogger("mondrian.test.PerformanceTest")
+            && !LoggerFactory.getLogger("daanse.test.PerformanceTest")
                 .isDebugEnabled();
     }
 }

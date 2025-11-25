@@ -52,7 +52,7 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
 import org.eclipse.daanse.olap.api.result.Datatype;
-import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
+import org.eclipse.daanse.olap.api.result.IDaanseOlap4jProperty;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
@@ -652,7 +652,7 @@ public class Convertor {
     }
 
     private static Object getHierarchyProperty(Member member, Property longProp) {
-        IMondrianOlap4jProperty currentProperty = (IMondrianOlap4jProperty) longProp;
+        IDaanseOlap4jProperty currentProperty = (IDaanseOlap4jProperty) longProp;
         String thisHierarchyName = member.getHierarchy().getName();
         String thatHierarchyName = currentProperty.getLevel().getHierarchy().getName();
         if (thisHierarchyName.equals(thatHierarchyName)) {
@@ -804,7 +804,7 @@ public class Convertor {
             } else if (longProp == Property.StandardMemberProperty.DEPTH) {
                 value = member.getDepth();
             } else {
-                if (longProp instanceof IMondrianOlap4jProperty currentProperty) {
+                if (longProp instanceof IDaanseOlap4jProperty currentProperty) {
                     String thisHierarchyName = member.getHierarchy().getName();
                     String thatHierarchyName = currentProperty.getLevel().getHierarchy().getName();
                     if (thisHierarchyName.equals(thatHierarchyName)) {
@@ -821,7 +821,7 @@ public class Convertor {
                 value = getDefaultValue(prop);
             }
             if (value != null) {
-                if (longProp instanceof IMondrianOlap4jProperty) {
+                if (longProp instanceof IDaanseOlap4jProperty) {
                     any.add(new CellInfoItemR(encoder.encode(prop.getName()), value.toString(),
                             Optional.ofNullable(getXsdType(prop))));
                 } else {
@@ -944,7 +944,7 @@ public class Convertor {
         for (Hierarchy hierarchy : hierarchies) {
             List<CellInfoItem> ciiList = new ArrayList<>();
             for (final Property prop : props) {
-                if (prop instanceof IMondrianOlap4jProperty iMondrianProp) {
+                if (prop instanceof IDaanseOlap4jProperty iMondrianProp) {
                     Optional<CellInfoItem> op = getCellInfoItemProperty(hierarchy, iMondrianProp);
                     if (op.isPresent()) {
                         ciiList.add(op.get());
@@ -960,7 +960,7 @@ public class Convertor {
     }
 
     private static Optional<CellInfoItem> getCellInfoItemProperty(Hierarchy hierarchy,
-            final IMondrianOlap4jProperty prop) {
+            final IDaanseOlap4jProperty prop) {
         String thisHierarchyName = hierarchy.getName();
         String thatHierarchiName = prop.getLevel().getHierarchy().getName();
         if (thisHierarchyName.equals(thatHierarchiName)) {
@@ -988,7 +988,7 @@ public class Convertor {
         values.add("name");
         values.add(new StringBuilder(hierarchy.getUniqueName()).append(".")
                 .append(Util.quoteMdxIdentifier(longProp.getName())).toString());
-        if (!(longProp instanceof IMondrianOlap4jProperty)) {
+        if (!(longProp instanceof IDaanseOlap4jProperty)) {
             values.add("type");
             values.add(getXsdType(longProp));
         }
@@ -1006,7 +1006,7 @@ public class Convertor {
     }
 
     private static boolean isValidProp(List<Position> positions, Property prop) {
-        if (!(prop instanceof IMondrianOlap4jProperty)) {
+        if (!(prop instanceof IDaanseOlap4jProperty)) {
             return true;
         }
         for (Position pos : positions) {

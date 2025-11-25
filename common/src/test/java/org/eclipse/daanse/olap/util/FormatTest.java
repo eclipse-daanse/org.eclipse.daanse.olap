@@ -291,7 +291,7 @@ class FormatTest {
      */
     @Test
     void negativePercentWithStyle() {
-        if (Bug.BugMondrian687Fixed) {
+        if (Bug.Bug687Fixed) {
             checkFormat(null, new BigDecimal("-0.0364"), "|#.00%|style=red", "-|3.64%|style=red");
         } else {
             checkFormat(null, new BigDecimal("-0.0364"), "|#.00%|style='red'", "|-3.64%|style='red'"); // confirmed on
@@ -299,7 +299,7 @@ class FormatTest {
         }
 
         // exercise code for long (and int) values
-        if (Bug.BugMondrian687Fixed) {
+        if (Bug.Bug687Fixed) {
             checkFormat(null, -364, "|#.00|style=red", "-|364.00|style=red");
         } else {
             checkFormat(null, -364, "|#.00|style=red", "|-364.00|style=red"); // confirmed on SSAS 2005
@@ -317,7 +317,7 @@ class FormatTest {
      */
     @Test
     void singleQuotes() {
-        if (Bug.BugMondrian687Fixed) {
+        if (Bug.Bug687Fixed) {
             checkFormat(null, 3.64, "|#.00|style='deep red'", "-|364.00|style=deep red"); // confirmed on SSAS 2005
             checkFormat(null, 3.64, "|#.00|style=\\'deep red\\'", "-|364.00|style='deep red'"); // confirmed on SSAS
                                                                                                 // 2005
@@ -403,7 +403,7 @@ class FormatTest {
             } else if (fe.isDate()) {
                 o = date;
             } else if (fe.isString()) {
-                o = "mondrian";
+                o = "daanse";
             } else {
                 o = d;
             }

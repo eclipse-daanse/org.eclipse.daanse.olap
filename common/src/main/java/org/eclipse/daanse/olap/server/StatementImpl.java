@@ -85,7 +85,7 @@ public abstract class StatementImpl implements Statement {
         if (this.execution != null) {
             throw new AssertionError();
         }
-        if (execution.getMondrianStatement() != this) {
+        if (execution.getDaanseStatement() != this) {
             throw new AssertionError();
         }
         this.execution = execution;
@@ -141,12 +141,12 @@ public abstract class StatementImpl implements Statement {
 
     @Override
 	public CatalogReader getCatalogReader() {
-        return getMondrianConnection().getCatalogReader().withLocus();
+        return getDaanseConnection().getCatalogReader().withLocus();
     }
 
     @Override
 	public Catalog getCatalog() {
-        return getMondrianConnection().getCatalog();
+        return getDaanseConnection().getCatalog();
     }
 
 

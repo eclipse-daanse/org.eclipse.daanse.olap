@@ -56,7 +56,7 @@ public abstract class ResultBase implements Result {
 
     protected ResultBase(Execution execution, Axis[] axes) {
         this.execution = execution;
-        this.statement = execution.getMondrianStatement();
+        this.statement = execution.getDaanseStatement();
         this.query = statement.getQuery();
         assert query != null;
         this.axes =

@@ -89,11 +89,11 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
         }
 
         protected Member resolveMember(Hierarchy expectedHierarchy) {
-            final List<Segment> mondrianSegmentList =
+            final List<Segment> segmentList =
                 Util.convert(this.segmentList);
             Member member =
                 (Member) Util.lookupCompound(
-                    schemaReader, cube, mondrianSegmentList, !ignoreInvalid,
+                    schemaReader, cube, segmentList, !ignoreInvalid,
                     DataType.MEMBER);
             if (member == null) {
                 assert ignoreInvalid;
@@ -102,9 +102,9 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
                 } else {
                     // Guess the intended hierarchy from the largest valid
                     // prefix.
-                    for (int i = mondrianSegmentList.size() - 1; i > 0; --i) {
+                    for (int i = segmentList.size() - 1; i > 0; --i) {
                         List<Segment> partialName =
-                            mondrianSegmentList.subList(0, i);
+                            segmentList.subList(0, i);
                         OlapElement olapElement =
                             schemaReader.lookupCompound(
                                 cube, partialName, false, DataType.UNKNOWN);
@@ -113,7 +113,7 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
                         }
                     }
                     throw new MdxChildObjectNotFoundException(
-                        Util.implode(mondrianSegmentList),
+                        Util.implode(segmentList),
                         cube.getQualifiedName());
                 }
             }

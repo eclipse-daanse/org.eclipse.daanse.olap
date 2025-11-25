@@ -458,7 +458,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         return createValidator(
-                statement.getMondrianConnection().getContext().getFunctionService(),
+                statement.getDaanseConnection().getContext().getFunctionService(),
             false,
             resolvedIdentifiers);
     }
@@ -497,7 +497,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
     public Connection getConnection() {
-        return statement.getMondrianConnection();
+        return statement.getDaanseConnection();
     }
 
     /**
@@ -1489,7 +1489,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         List<ResultStyle> resultStyleList)
     {
 
-		ExpressionCompilerFactory factory = statement.getMondrianConnection().getContext()
+		ExpressionCompilerFactory factory = statement.getDaanseConnection().getContext()
 				.getExpressionCompilerFactory();
 		ExpressionCompiler compiler = factory.createExpressionCompiler(evaluator, validator, resultStyleList);
 

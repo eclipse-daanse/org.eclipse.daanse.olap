@@ -153,7 +153,7 @@ public class ExecutionImpl implements Execution{
   }
 
   public void tracePhase( int hitCount, int missCount, int pendingCount ) {
-    final Connection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getDaanseConnection();
     final Context context = connection.getContext();
     final int hitCountInc = hitCount - this.cellCacheHitCount;
     final int missCountInc = missCount - this.cellCacheMissCount;
@@ -388,7 +388,7 @@ public class ExecutionImpl implements Execution{
     return startTime;
   }
 
-  public Statement getMondrianStatement() {
+  public Statement getDaanseStatement() {
     return statement;
   }
 
@@ -425,7 +425,7 @@ public class ExecutionImpl implements Execution{
   }
 
   private void fireExecutionEndEvent() {
-    final Connection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getDaanseConnection();
     final Context context = connection.getContext();
 
 	ExecutionEndEvent endEvent = new ExecutionEndEvent(
@@ -445,7 +445,7 @@ public class ExecutionImpl implements Execution{
   }
 
   private void fireExecutionStartEvent() {
-    final Connection connection = statement.getMondrianConnection();
+    final Connection connection = statement.getDaanseConnection();
     final Context context = connection.getContext();
 
 

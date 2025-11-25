@@ -102,8 +102,8 @@ class CancellationCheckerTest {
         when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL,
                 ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(i);
         when(rolapConnection.getContext()).thenReturn(context);
-        when(statement.getMondrianConnection()).thenReturn(rolapConnection);
-        when(excMock.getMondrianStatement()).thenReturn(statement);
+        when(statement.getDaanseConnection()).thenReturn(rolapConnection);
+        when(excMock.getDaanseStatement()).thenReturn(statement);
     }
 
 }

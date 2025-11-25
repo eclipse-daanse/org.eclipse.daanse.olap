@@ -75,17 +75,17 @@ import org.slf4j.LoggerFactory;
  * @author jhyde
  * @since 22 December, 2002
  */
-public abstract class MondrianPropertiesBase extends Properties {
+public abstract class DaansePropertiesBase extends Properties {
 
     private final transient PropertySource propertySource;
     private int populateCount;
 
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(MondrianPropertiesBase.class);
+        LoggerFactory.getLogger(DaansePropertiesBase.class);
 
-    protected static final String MONDRIAN_DOT_PROPERTIES = "mondrian.properties";
+    protected static final String MONDRIAN_DOT_PROPERTIES = "daanse.properties";
 
-    protected MondrianPropertiesBase(PropertySource propertySource) {
+    protected DaansePropertiesBase(PropertySource propertySource) {
         this.propertySource = propertySource;
     }
 
@@ -254,7 +254,7 @@ public abstract class MondrianPropertiesBase extends Properties {
         } else {
             // Then try load it from classloader
             url =
-                MondrianPropertiesBase.class.getClassLoader().getResource(
+                DaansePropertiesBase.class.getClassLoader().getResource(
                     MONDRIAN_DOT_PROPERTIES);
         }
 
@@ -262,7 +262,7 @@ public abstract class MondrianPropertiesBase extends Properties {
             load(new UrlPropertySource(url));
         } else {
             LOGGER.warn(
-                "mondrian.properties can't be found under '{}' or classloader",
+                "daanse.properties can't be found under '{}' or classloader",
                 new File(".").getAbsolutePath());
         }
 
@@ -273,7 +273,7 @@ public abstract class MondrianPropertiesBase extends Properties {
         {
             String key = (String) keys.nextElement();
             String value = System.getProperty(key);
-            if (key.startsWith("mondrian.")) {
+            if (key.startsWith("daanse.")) {
                 // NOTE: the super allows us to bybase calling triggers
                 // Is this the correct behavior?
                 if (LOGGER.isDebugEnabled()) {

@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.result;
 
 import org.eclipse.daanse.olap.api.element.Level;
 
-public interface IMondrianOlap4jProperty extends Property{
+public interface IDaanseOlap4jProperty extends Property{
     /**
      * @return Level
      */

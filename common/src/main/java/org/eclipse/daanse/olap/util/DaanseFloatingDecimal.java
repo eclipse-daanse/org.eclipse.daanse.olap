@@ -36,7 +36,7 @@ package org.eclipse.daanse.olap.util;
  *
  * @author tkafalas
  */
-class MondrianFloatingDecimal {
+class DaanseFloatingDecimal {
     boolean isExceptional;
     boolean isNegative;
     int decExponent;
@@ -47,7 +47,7 @@ class MondrianFloatingDecimal {
 
     private static final int MAX_SIGNIFICANT_DIGITS = 19;
 
-    public MondrianFloatingDecimal(double d) {
+    public DaanseFloatingDecimal(double d) {
         if (d < 0) {
             isNegative = true;
             d = -d;

@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
-import org.eclipse.daanse.olap.fun.MondrianEvaluationException;
+import org.eclipse.daanse.olap.fun.DaanseEvaluationException;
 import org.eclipse.daanse.olap.function.def.drilldownlevel.DrilldownLevelCalc;
 import org.eclipse.daanse.olap.function.def.drilldownmember.DrilldownMemberCalc;
 import org.eclipse.daanse.olap.function.def.set.level.LevelMembersCalc;
@@ -81,7 +81,7 @@ public class AddCalculatedMembersCalc extends AbstractProfilingNestedTupleListCa
             if (hierarchy == null) {
                 hierarchy = member.getHierarchy();
             } else if (hierarchy != member.getHierarchy()) {
-                throw new MondrianEvaluationException(
+                throw new DaanseEvaluationException(
                         new StringBuilder("Only members from the same hierarchy are allowed in the ")
                                 .append("AddCalculatedMembers set: ").append(hierarchy).append(" vs ")
                                 .append(member.getHierarchy()).toString());

@@ -176,7 +176,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 					connections.size());
 		}
 		statements.add( statement);
-		final Connection connection = statement.getMondrianConnection();
+		final Connection connection = statement.getDaanseConnection();
 
 		MdxStatementStartEvent mdxStatementStartEvent = new MdxStatementStartEvent(new MdxStatementEventCommon(
 				new ConnectionEventCommon(
@@ -198,7 +198,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 			throw new OlapRuntimeException("Server already shutdown.");
 		}
 		statements.remove(statement);
-		final Connection connection = statement.getMondrianConnection();
+		final Connection connection = statement.getDaanseConnection();
 
 
 		MdxStatementEndEvent mdxStatementEndEvent = new MdxStatementEndEvent(
@@ -223,7 +223,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 
 	@Override
 	public List<Statement> getStatements(org.eclipse.daanse.olap.api.connection.Connection connection) {
-		return statements.stream().filter(stmnt -> stmnt.getMondrianConnection().equals(connection))
+		return statements.stream().filter(stmnt -> stmnt.getDaanseConnection().equals(connection))
 				.toList();
 	}
 

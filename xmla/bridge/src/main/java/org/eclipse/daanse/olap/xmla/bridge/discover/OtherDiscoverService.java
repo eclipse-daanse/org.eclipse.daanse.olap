@@ -95,7 +95,6 @@ public class OtherDiscoverService {
     private static final String DBLITERAL = "DBLITERAL_";
     private static List<Class<? extends Enum<?>>> enums = List.of(AccessEnum.class, AuthenticationModeEnum.class,
             ProviderTypeEnum.class, TreeOpEnum.class
-    // mondrian have 4 enums
     );
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
             .withZone(ZoneId.systemDefault());

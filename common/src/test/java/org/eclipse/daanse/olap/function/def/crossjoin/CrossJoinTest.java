@@ -135,8 +135,8 @@ public class CrossJoinTest {
         Context context = mock(Context.class);
         when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(0);
         when(rolapConnection.getContext()).thenReturn(context);
-        when(statement.getMondrianConnection()).thenReturn(rolapConnection);
-        when(excMock.getMondrianStatement()).thenReturn(statement);
+        when(statement.getDaanseConnection()).thenReturn(rolapConnection);
+        when(excMock.getDaanseStatement()).thenReturn(statement);
       CrossJoinIterCalc calc =
         new CrossJoinIterCalc( getResolvedFunCall(), null, crossJoinFunDef.getCtag() );
 

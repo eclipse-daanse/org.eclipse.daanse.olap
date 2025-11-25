@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
-import org.eclipse.daanse.olap.fun.MondrianEvaluationException;
+import org.eclipse.daanse.olap.fun.DaanseEvaluationException;
 
 public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
 
@@ -47,7 +47,7 @@ public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
         Object o = member.getPropertyValue(s, matchCase);
         if (o == null) {
             if (!Util.isValidProperty(s, member.getLevel())) {
-                throw new MondrianEvaluationException(new StringBuilder("Property '").append(s)
+                throw new DaanseEvaluationException(new StringBuilder("Property '").append(s)
                         .append("' is not valid for member '").append(member).append("'").toString());
             }
         }

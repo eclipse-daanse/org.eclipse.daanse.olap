@@ -386,7 +386,7 @@ public class Format {
                 } else {
                     i = 0;
                     if (formats[0].isApplicableTo(n)) {
-                        if (!Bug.BugMondrian687Fixed) {
+                        if (!Bug.Bug687Fixed) {
                             // Special case for format strings with style,
                             // like "|#|style='red'". JPivot expects the
                             // '-' to immediately precede the digits, viz
@@ -451,7 +451,7 @@ public class Format {
                 } else {
                     i = 0;
                     if (formats[0].isApplicableTo(n)) {
-                        if (!Bug.BugMondrian687Fixed) {
+                        if (!Bug.Bug687Fixed) {
                             // Special case for format strings with style,
                             // like "|#|style='red'". JPivot expects the
                             // '-' to immediately precede the digits, viz
@@ -736,7 +736,7 @@ public class Format {
      * prints numbers with a given number of decimal places, leading zeroes, in
      * exponential notation, etc.
      *
-     * It is implemented using {@link MondrianFloatingDecimal}.
+     * It is implemented using {@link DaanseFloatingDecimal}.
      */
     static class NumericFormat extends JavaFormat
     {
@@ -893,14 +893,14 @@ public class Format {
         @Override
 		void format(double n, StringBuilder buf)
         {
-            MondrianFloatingDecimal fd = new MondrianFloatingDecimal(n);
+            DaanseFloatingDecimal fd = new DaanseFloatingDecimal(n);
             shift(fd, decimalShift);
             final int formatDigitsRightOfPoint =
                 zeroesRightOfPoint + digitsRightOfPoint;
             if (n == 0.0 || (n < 0 && !shows(fd, formatDigitsRightOfPoint))) {
                 // Underflow of negative number. Make it zero, so there is no
                 // '-' sign.
-                fd = new MondrianFloatingDecimal(0);
+                fd = new DaanseFloatingDecimal(0);
             }
             formatFd0(
                 fd,
@@ -922,7 +922,7 @@ public class Format {
             if (n >= 0) {
                 return true;
             }
-            MondrianFloatingDecimal fd = new MondrianFloatingDecimal(n);
+            DaanseFloatingDecimal fd = new DaanseFloatingDecimal(n);
             shift(fd, decimalShift);
             final int formatDigitsRightOfPoint =
                 zeroesRightOfPoint + digitsRightOfPoint;
@@ -930,7 +930,7 @@ public class Format {
         }
 
         private static boolean shows(
-            MondrianFloatingDecimal fd,
+            DaanseFloatingDecimal fd,
             int formatDigitsRightOfPoint)
         {
             final int i0 = - fd.decExponent - formatDigitsRightOfPoint;
@@ -946,8 +946,8 @@ public class Format {
         @Override
 		void format(long n, StringBuilder buf)
         {
-            MondrianFloatingDecimal fd =
-                new MondrianFloatingDecimal(n);
+            DaanseFloatingDecimal fd =
+                new DaanseFloatingDecimal(n);
             shift(fd, decimalShift);
             formatFd0(
                 fd,
@@ -2973,7 +2973,7 @@ public class Format {
     }
 
     private static void shift(
-        MondrianFloatingDecimal fd,
+        DaanseFloatingDecimal fd,
         int i)
     {
         if (fd.isExceptional
@@ -2987,7 +2987,7 @@ public class Format {
 
     /** Formats a floating decimal to a given buffer. */
     private static void formatFd0(
-        MondrianFloatingDecimal fd,
+        DaanseFloatingDecimal fd,
         StringBuilder buf,
         int minDigitsLeftOfDecimal,
         char decimalChar, // '.' or ','
@@ -3033,7 +3033,7 @@ public class Format {
 
     /** Formats a floating decimal to a given char array. */
     private static int formatFd1(
-        MondrianFloatingDecimal fd,
+        DaanseFloatingDecimal fd,
         char[] result,
         int i,
         int minDigitsLeftOfDecimal,
@@ -3086,7 +3086,7 @@ public class Format {
     }
 
     static int formatFd2(
-        MondrianFloatingDecimal fd,
+        DaanseFloatingDecimal fd,
         char[] result,
         int i,
         int minDigitsLeftOfDecimal,

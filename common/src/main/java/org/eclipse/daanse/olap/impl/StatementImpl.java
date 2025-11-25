@@ -98,7 +98,7 @@ public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl 
                 connection.parseStatement(mdx);
         } catch (OlapRuntimeException e) {
             throw new RuntimeException(
-                "mondrian gave exception while parsing query", e);
+                "daanse gave exception while parsing query", e);
         }
         return executeQuery(parseTree, tabFields, rowCountSlot);
     }
@@ -199,7 +199,7 @@ public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl 
                 e.getMessage(), e);
         } catch (OlapRuntimeException e) {
             throw new RuntimeException(
-                "mondrian gave exception while executing query", e);
+                "daanse gave exception while executing query", e);
         }
         return openCellSet;
     }
@@ -225,7 +225,7 @@ public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl 
                 });
         } catch (OlapRuntimeException e) {
             throw new RuntimeException(
-                "mondrian gave exception while parsing query", e);
+                "daanse gave exception while parsing query", e);
         }
     }
 
@@ -249,7 +249,7 @@ public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl 
     }
 
     @Override
-    public Connection getMondrianConnection() {
+    public Connection getDaanseConnection() {
         return connection;
     }
 }

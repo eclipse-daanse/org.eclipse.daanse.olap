@@ -21,7 +21,7 @@ public interface IAggregationManager {
 
     void shutdown();
 
-    ISegmentCacheManager getCacheMgr(Connection mondrianConnection);
+    ISegmentCacheManager getCacheMgr(Connection connection);
 
     CacheControl getCacheControl(Connection rolapConnection, PrintWriter pw);
 

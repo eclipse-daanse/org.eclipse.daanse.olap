@@ -23,7 +23,7 @@ import java.io.File;
  * properties using the inherited {@link java.util.Properties#getProperty(String)}
  * method, we recommend that you use methods in this class.
  */
-public class SystemWideProperties extends MondrianPropertiesBase {
+public class SystemWideProperties extends DaansePropertiesBase {
     /**
      * Properties, drawn from {@link System#getProperties},
      * plus the contents of "mondrian.properties" if it
@@ -42,29 +42,29 @@ public class SystemWideProperties extends MondrianPropertiesBase {
 
     public void populateInitial() {
         CaseSensitive =
-            this.getBoolean("mondrian.olap.case.sensitive", false);
+            this.getBoolean("daanse.olap.case.sensitive", false);
         CaseSensitiveMdxInstr =
-            this.getBoolean("mondrian.olap.case.sensitive.CaseSensitiveMdxInstr", false);
+            this.getBoolean("daanse.olap.case.sensitive.CaseSensitiveMdxInstr", false);
         CompareSiblingsByOrderKey =
-            this.getBoolean("mondrian.rolap.compareSiblingsByOrderKey", false);
+            this.getBoolean("daanse.rolap.compareSiblingsByOrderKey", false);
         EnableExpCache =
-            this.getBoolean("mondrian.expCache.enable", true);
+            this.getBoolean("daanse.expCache.enable", true);
         EnableNativeNonEmpty =
-            this.getBoolean("mondrian.native.nonempty.enable", true);
+            this.getBoolean("daanse.native.nonempty.enable", true);
         EnableNonEmptyOnAllAxis =
-            this.getBoolean("mondrian.rolap.nonempty", false);
+            this.getBoolean("daanse.rolap.nonempty", false);
         EnableRolapCubeMemberCache =
-            this.getBoolean("mondrian.rolap.EnableRolapCubeMemberCache", true);
+            this.getBoolean("daanse.rolap.EnableRolapCubeMemberCache", true);
         EnableTriggers =
-            this.getBoolean("mondrian.olap.triggers.enable", true);
+            this.getBoolean("daanse.olap.triggers.enable", true);
         FilterChildlessSnowflakeMembers =
-            this.getBoolean("mondrian.rolap.FilterChildlessSnowflakeMembers", true);
+            this.getBoolean("daanse.rolap.FilterChildlessSnowflakeMembers", true);
         MaxConstraints =
-            this.getInteger("mondrian.rolap.maxConstraints", 1000);
+            this.getInteger("daanse.rolap.maxConstraints", 1000);
         NullMemberRepresentation =
-            getProperty("mondrian.olap.NullMemberRepresentation", "#null");
+            getProperty("daanse.olap.NullMemberRepresentation", "#null");
         ResultLimit =
-            this.getInteger("mondrian.result.limit", 0);
+            this.getInteger("daanse.result.limit", 0);
 
     }
 
@@ -87,7 +87,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * case-sensitive matching when looking up identifiers. The default is
      * false.
      */
-    @PropertyAnnotation(path = "mondrian.olap.case.sensitive")
+    @PropertyAnnotation(path = "daanse.olap.case.sensitive")
     public transient Boolean CaseSensitive;
 
 
@@ -97,7 +97,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      *                 Default value is false.
      *
      */
-    @PropertyAnnotation(path = "mondrian.olap.case.sensitive.CaseSensitiveMdxInstr")
+    @PropertyAnnotation(path = "daanse.olap.case.sensitive.CaseSensitiveMdxInstr")
     public transient Boolean CaseSensitiveMdxInstr;
 
 
@@ -106,7 +106,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * compared according to order key value fetched from their ordinal
      * expression.  The default is false (only database ORDER BY is used).
      */
-    @PropertyAnnotation(path = "mondrian.rolap.compareSiblingsByOrderKey")
+    @PropertyAnnotation(path = "daanse.rolap.compareSiblingsByOrderKey")
     public transient Boolean CompareSiblingsByOrderKey;
 
 
@@ -117,14 +117,14 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * Order([Product].MEMBERS, [Measures].[Unit Sales])) would perform
      * many redundant sorts. The default is true.
      */
-    @PropertyAnnotation(path = "mondrian.expCache.enable")
+    @PropertyAnnotation(path = "daanse.expCache.enable")
     public transient Boolean EnableExpCache;
 
     /**
      * If enabled some NON EMPTY set operations like member.children,
      * level.members and member descendants will be computed in SQL.
      */
-    @PropertyAnnotation(path = "mondrian.native.nonempty.enable")
+    @PropertyAnnotation(path = "daanse.native.nonempty.enable")
     public transient Boolean EnableNativeNonEmpty;
     /**
      * Boolean property that controls whether each query axis implicit has the
@@ -146,7 +146,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * construct, and we may obsolete this cache and this
      * property.
      */
-    @PropertyAnnotation(path = "mondrian.rolap.EnableRolapCubeMemberCache")
+    @PropertyAnnotation(path = "daanse.rolap.EnableRolapCubeMemberCache")
     public transient Boolean EnableRolapCubeMemberCache;
 
 
@@ -159,7 +159,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * MondrianProperties.instance().populate(null) or
      * MondrianProperties.instance().QueryLimit.set(50).
      */
-    @PropertyAnnotation(path = "mondrian.olap.triggers.enable")
+    @PropertyAnnotation(path = "daanse.olap.triggers.enable")
     public transient Boolean EnableTriggers;
 
 
@@ -180,7 +180,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * table, during your ETL process, and to set this property to
      * {@code false}.
      */
-    @PropertyAnnotation(path = "mondrian.rolap.FilterChildlessSnowflakeMembers")
+    @PropertyAnnotation(path = "daanse.rolap.FilterChildlessSnowflakeMembers")
     public transient Boolean FilterChildlessSnowflakeMembers;
 
     /**
@@ -197,7 +197,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * Other: 10,000
      *
      */
-    @PropertyAnnotation(path = "mondrian.rolap.maxConstraints")
+    @PropertyAnnotation(path = "daanse.rolap.maxConstraints")
     public transient Integer MaxConstraints;
 
 
@@ -216,7 +216,7 @@ public class SystemWideProperties extends MondrianPropertiesBase {
      * Integer property that, if set to a value greater than zero, limits the
      * maximum size of a result set.
      */
-    @PropertyAnnotation(path = "mondrian.result.limit")
+    @PropertyAnnotation(path = "daanse.result.limit")
     public transient Integer ResultLimit;
 
 }

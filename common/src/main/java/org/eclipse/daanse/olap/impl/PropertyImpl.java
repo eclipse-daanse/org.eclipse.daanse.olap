@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.result.Datatype;
-import org.eclipse.daanse.olap.api.result.IMondrianOlap4jProperty;
+import org.eclipse.daanse.olap.api.result.IDaanseOlap4jProperty;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.common.StandardProperty;
 
-public class PropertyImpl implements IMondrianOlap4jProperty {
+public class PropertyImpl implements IDaanseOlap4jProperty {
 
     /**
      * Map of member properties that are built into Mondrian but are not in the

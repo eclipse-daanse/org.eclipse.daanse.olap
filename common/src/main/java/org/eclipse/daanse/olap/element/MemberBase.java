@@ -43,7 +43,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.fun.FunUtil;
 
-//import mondrian.util.Bug;
 /**
  * MemberBase is a partial implementation of {@link Member}.
  *

@@ -132,7 +132,7 @@ public class FunUtil extends Util {
   public static RuntimeException newEvalException(
 		  FunctionMetaData functionMetaData ,
     String message ) {
-    return new MondrianEvaluationException( message );
+    return new DaanseEvaluationException( message );
   }
 
   /**
@@ -142,7 +142,7 @@ public class FunUtil extends Util {
    * @return Exception that can be used as a cell result
    */
   public static RuntimeException newEvalException( Throwable throwable ) {
-    return new MondrianEvaluationException(
+    return new DaanseEvaluationException(
       new StringBuilder(throwable.getClass().getName()).append(": ").append(throwable.getMessage()).toString() );
   }
 
@@ -156,7 +156,7 @@ public class FunUtil extends Util {
   public static RuntimeException newEvalException(
     String message,
     Throwable throwable ) {
-    return new MondrianEvaluationException(
+    return new DaanseEvaluationException(
       new StringBuilder(message)
         .append(": ").append(Util.getErrorMessage( throwable )).toString() );
   }
@@ -273,7 +273,7 @@ public class FunUtil extends Util {
   /**
    * Throws an error if the expressions don't have the same hierarchy.
    *
-   * @throws MondrianEvaluationException if expressions don't have the same hierarchy
+   * @throws DaanseEvaluationException if expressions don't have the same hierarchy
    */
   public static void checkCompatible( Expression left, Expression right, FunctionDefinition funDef ) {
     final Type leftType = TypeUtil.stripSetType( left.getType() );

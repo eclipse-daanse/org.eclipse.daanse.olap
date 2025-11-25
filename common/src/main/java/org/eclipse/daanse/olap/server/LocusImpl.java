@@ -122,7 +122,7 @@ public class LocusImpl implements Locus {
     }
 
     public final Context getContext() {
-        return getExecution().getMondrianStatement().getMondrianConnection().getContext();
+        return getExecution().getDaanseStatement().getDaanseConnection().getContext();
     }
 
     @Override

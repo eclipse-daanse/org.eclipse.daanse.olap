@@ -114,8 +114,8 @@ class SorterTest {
         when(evaluator.getQuery()).thenReturn(query);
         when(query.getStatement()).thenReturn(statement);
         when(statement.getCurrentExecution()).thenReturn(execution);
-        when(execution.getMondrianStatement()).thenReturn(statement);
-        when(statement.getMondrianConnection()).thenReturn(rolapConnection);
+        when(execution.getDaanseStatement()).thenReturn(statement);
+        when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(rolapConnection.getContext()).thenReturn(context);
         when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL,
                 ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(1000);

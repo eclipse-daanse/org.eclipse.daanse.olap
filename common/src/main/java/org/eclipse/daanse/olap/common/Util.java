@@ -33,10 +33,6 @@ import static org.eclipse.daanse.olap.fun.FunUtil.DOUBLE_EMPTY;
 import java.io.*;
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -148,6 +144,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.eclipse.daanse.olap.server.ExecutionImpl;
+import org.eclipse.daanse.olap.server.LocusCatalogReaderWrapper;
 import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.ArraySortedSet;
 import org.eclipse.daanse.olap.util.ConcatenableList;
@@ -2817,12 +2814,15 @@ public class Util {
   }
 
   /**
-   * Wraps a schema reader in a proxy so that each call to schema reader
-   * has a locus for profiling purposes.
+   * Wraps a CatalogReader so that each call has a locus for profiling purposes.
    *
-   * @param connection Connection
-   * @param schemaReader Schema reader
-   * @return Wrapped schema reader
+   * <p>This method creates a {@link LocusCatalogReaderWrapper} that automatically
+   * manages the Locus context using {@link LocusImpl#execute} for every method
+   * call on the CatalogReader interface.
+   *
+   * @param connection Connection providing execution context
+   * @param schemaReader CatalogReader to wrap
+   * @return Wrapped CatalogReader with automatic Locus management
    */
   public static CatalogReader locusCatalogReader(
       org.eclipse.daanse.olap.api.connection.Connection connection,
@@ -2831,33 +2831,7 @@ public class Util {
       final org.eclipse.daanse.olap.api.Statement statement = connection.getInternalStatement();
       final ExecutionImpl execution = new ExecutionImpl(statement,
           ExecuteDurationUtil.executeDurationValue(connection.getContext()));
-      final Locus locus =
-          new LocusImpl(
-              execution,
-              "Schema reader",
-              null);
-      return (CatalogReader) Proxy.newProxyInstance(
-          CatalogReader.class.getClassLoader(),
-          new Class[]{CatalogReader.class},
-          new InvocationHandler() {
-              @Override
-              public Object invoke(
-                  Object proxy,
-                  Method method,
-                  Object[] args)
-                  throws Throwable
-              {
-                  LocusImpl.push(locus);
-                  try {
-                      return method.invoke(schemaReader, args);
-                  } catch (InvocationTargetException e) {
-                      throw e.getCause();
-                  } finally {
-                      LocusImpl.pop(locus);
-                  }
-              }
-          }
-      );
+      return new LocusCatalogReaderWrapper(execution, "Schema reader", schemaReader);
   }
 
     /**

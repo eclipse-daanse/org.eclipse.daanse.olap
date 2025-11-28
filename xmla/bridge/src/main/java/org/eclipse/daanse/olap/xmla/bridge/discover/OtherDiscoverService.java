@@ -26,7 +26,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.element.Catalog;
+import org.eclipse.daanse.olap.api.element.DatabaseColumn;
+import org.eclipse.daanse.olap.api.element.DatabaseSchema;
+import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.olap.xmla.bridge.RoleUtils;
@@ -49,6 +53,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSource
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -77,6 +82,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.xmla.Restriction;
+import org.eclipse.daanse.xmla.model.record.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.keywords.DiscoverKeywordsResponseRowR;
@@ -290,7 +296,7 @@ public class OtherDiscoverService {
                     }
                 }
                 result.add(new DiscoverSchemaRowsetsResponseRowR(o.name(), Optional.ofNullable(o.guid()),
-                        Optional.ofNullable(restrictions), Optional.of((desc == null) ? "" : desc), Optional.empty()));
+                        Optional.ofNullable(restrictions), Optional.ofNullable(desc), Optional.of(7l)));
             }
         }
         return result;
@@ -325,6 +331,33 @@ public class OtherDiscoverService {
                 Catalog catalog = cs.get(0);
                 result.add(new DiscoverXmlMetaDataResponseRowR(
                         String.format(md, catalog.getName(), catalog.getName(), date, date)));
+            }
+        }
+        return result;
+    }
+
+    public List<DiscoverCsdlMetaDataResponseRow> csdlMetaData(DiscoverCsdlMetaDataRequest request,
+            RequestMetaData metaData) {
+        List<DiscoverCsdlMetaDataResponseRow> result = new ArrayList<>();
+        Optional<String> catalogName = request.restrictions().catalogName();
+        Optional<String> perspectiveName = request.restrictions().perspectiveName();
+        if (!catalogName.isPresent()) {
+            catalogName = request.properties().catalog();
+        }
+        if (catalogName.isPresent()) {
+            Optional<Catalog> oCatalog = contextsListSupplyer.tryGetFirstByName(catalogName.get(), metaData.sessionId());
+            if (oCatalog.isPresent()) {
+                Catalog catalog = oCatalog.get();
+
+                if (catalog != null) {
+                    result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
+                }
+            }
+        } else {
+            List<Catalog> cs = contextsListSupplyer.get(metaData.sessionId());
+            if (cs != null) {
+                Catalog catalog = cs.get(0);
+                result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
             }
         }
         return result;

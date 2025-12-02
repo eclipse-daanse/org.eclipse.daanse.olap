@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.api;
 
+import org.eclipse.daanse.olap.api.execution.Execution;
+
 public interface ISegmentCacheIndex {
 
 	void cancelExecutionSegments(Execution executionImpl);

@@ -31,7 +31,6 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIterator;
 import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.common.Util;
 
 /**
  * Implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleList} based on a list of

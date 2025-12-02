@@ -50,7 +50,7 @@ public class UtilCompatibleJdk16 implements UtilCompatible  {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Util.class);
     private final static String executionStatementCleanupException =
-        "An exception was encountered while trying to cleanup an execution context. A statement failed to cancel gracefully. Locus was : \"{0}\".";
+        "An exception was encountered while trying to cleanup an execution context. A statement failed to cancel gracefully. ExecutionContext was : \"{0}\".";
 
     @Override
     public void cancelStatement(Statement stmt) {

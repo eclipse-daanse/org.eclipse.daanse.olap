@@ -22,7 +22,6 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
-
 import org.eclipse.daanse.olap.util.CartesianProductList;
 
 public class ImmutableListCalc extends BaseListCalc {

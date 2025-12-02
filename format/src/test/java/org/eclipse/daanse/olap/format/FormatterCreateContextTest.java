@@ -23,7 +23,6 @@ package org.eclipse.daanse.olap.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import org.junit.jupiter.api.Test;
 
 class FormatterCreateContextTest {

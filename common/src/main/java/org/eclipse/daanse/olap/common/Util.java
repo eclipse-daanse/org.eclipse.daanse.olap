@@ -30,7 +30,16 @@ package org.eclipse.daanse.olap.common;
 
 import static org.eclipse.daanse.olap.fun.FunUtil.DOUBLE_EMPTY;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
@@ -82,7 +91,6 @@ import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.IdentifierSegment;
 import org.eclipse.daanse.olap.api.KeyIdentifierSegment;
-import org.eclipse.daanse.olap.api.Locus;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameIdentifierSegment;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -124,6 +132,8 @@ import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eclipse.daanse.olap.exceptions.MdxCantFindMemberException;
 import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
 import org.eclipse.daanse.olap.exceptions.MemberNotFoundException;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
+import org.eclipse.daanse.olap.execution.ExecutionCatalogReaderWrapper;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.function.def.member.validmeasure.ValidMeasureFunDef;
@@ -140,16 +150,12 @@ import org.eclipse.daanse.olap.query.component.NamedSetExpressionImpl;
 import org.eclipse.daanse.olap.query.component.QueryPrintWriter;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
 import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eclipse.daanse.olap.server.ExecutionImpl;
-import org.eclipse.daanse.olap.server.LocusCatalogReaderWrapper;
-import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.ArraySortedSet;
 import org.eclipse.daanse.olap.util.ConcatenableList;
 import org.eclipse.daanse.olap.util.UtilCompatible;
 import org.eclipse.daanse.olap.util.UtilCompatibleJdk16;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility functions used throughout mondrian. All methods are static.
@@ -2817,21 +2823,20 @@ public class Util {
    * Wraps a CatalogReader so that each call has a locus for profiling purposes.
    *
    * <p>This method creates a {@link LocusCatalogReaderWrapper} that automatically
-   * manages the Locus context using {@link LocusImpl#execute} for every method
-   * call on the CatalogReader interface.
+   * manages the execution context for every method call on the CatalogReader interface.
    *
    * @param connection Connection providing execution context
    * @param schemaReader CatalogReader to wrap
-   * @return Wrapped CatalogReader with automatic Locus management
+   * @return Wrapped CatalogReader with automatic execution context management
    */
-  public static CatalogReader locusCatalogReader(
+  public static CatalogReader executionCatalogReader(
       org.eclipse.daanse.olap.api.connection.Connection connection,
       final CatalogReader schemaReader)
   {
       final org.eclipse.daanse.olap.api.Statement statement = connection.getInternalStatement();
       final ExecutionImpl execution = new ExecutionImpl(statement,
           ExecuteDurationUtil.executeDurationValue(connection.getContext()));
-      return new LocusCatalogReaderWrapper(execution, "Schema reader", schemaReader);
+      return new ExecutionCatalogReaderWrapper(execution, "Schema reader", schemaReader);
   }
 
     /**

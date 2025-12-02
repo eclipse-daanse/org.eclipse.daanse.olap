@@ -13,9 +13,11 @@
  */
 package org.eclipse.daanse.olap.api;
 
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
+
 public interface CacheCommand<T> extends Message {
-	
-	Locus getLocus();
-	
+
+	ExecutionContext getExecutionContext();
+
     T call() throws Exception;
 }

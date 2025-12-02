@@ -16,18 +16,17 @@ package org.eclipse.daanse.olap.function.def.set.filter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractTupleCursor;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractTupleIterable;
-
-import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 
 public class IterIterFilterCalc extends BaseIterFilterCalc
@@ -59,7 +58,7 @@ public class IterIterFilterCalc extends BaseIterFilterCalc
                     @Override
                     public boolean forward() {
                         int currentIteration = 0;
-                        Execution execution = LocusImpl.peek().getExecution();
+                        Execution execution = ExecutionContext.current().getExecution();
                         while (cursor.forward()) {
                             CancellationChecker.checkCancelOrTimeout(
                                 currentIteration++, execution);

@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipse.daanse.olap.check.instance.tutorial.access.cataloggrand;
+package org.eclipse.daanse.olap.check.instance.tutorial.access.membergrand;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheck;
 import org.eclipse.daanse.olap.check.model.check.CubeAttribute;
 import org.eclipse.daanse.olap.check.model.check.CubeAttributeCheck;
@@ -32,6 +32,7 @@ import org.eclipse.daanse.olap.check.model.check.OlapCheckFactory;
 import org.eclipse.daanse.olap.check.model.check.OlapCheckModel;
 import org.eclipse.daanse.olap.check.model.check.QueryCheck;
 import org.eclipse.daanse.olap.check.model.check.QueryLanguage;
+import org.eclipse.daanse.olap.check.model.check.RoleAccessCheck;
 import org.eclipse.daanse.olap.check.model.check.RoleCheck;
 import org.osgi.service.component.annotations.Component;
 
@@ -42,52 +43,40 @@ public class CatalogCheckSupplier implements org.eclipse.daanse.olap.check.model
     @Override
     public OlapCheckModel get() {
         OlapCheckModel model = FACTORY.createOlapCheckModel();
-        model.setName("Access Catalog Gran Catalog Checks");
-        model.setDescription("Comprehensive checks for Access Catalog Gran catalog - logistics and package delivery analysis");
+        model.setName("Daanse Tutorial - Access Member Grant Catalog Checks");
+        model.setDescription("Comprehensive checks for Daanse Tutorial - Access Member Grant catalog - logistics and package delivery analysis");
         //ConnectionConfig connectionConfig = FACTORY.createConnectionConfig();
         //connectionConfig.setCatalogName("Daanse Tutorial - Access Catalog Gran");
         //connectionConfig.getRoles().add("role1");
         //model.setConnectionConfig(connectionConfig);
         // Create catalog check
         CatalogCheck catalogCheck = FACTORY.createCatalogCheck();
-        catalogCheck.setName("Catalog Check");
-        catalogCheck.setDescription("Demonstrates access control with catalog grants and roles");
-        catalogCheck.setCatalogName("Daanse Tutorial - Access Catalog Gran");
+        catalogCheck.setName("Daanse Tutorial - Access Member Grant Catalog Check");
+        catalogCheck.setDescription("Demonstrates access control with member grants and roles");
+        catalogCheck.setCatalogName("Daanse Tutorial - Access Member Grant");
         catalogCheck.setEnabled(true);
         // Add database schema check with detailed column checks
         catalogCheck.getDatabaseSchemaChecks().add(createDatabaseSchemaCheck());
         // Add cube check
         catalogCheck.getCubeChecks().add(createCubeCheck());
         // Add role check
-        RoleCheck roleAllCheck = FACTORY.createRoleCheck();
-        roleAllCheck.setName("roleAll Check");
-        roleAllCheck.setRoleName("roleAll");
-        catalogCheck.getRoleChecks().add(roleAllCheck);
-
-        RoleCheck roleAllDimWithCubeGrandCheck = FACTORY.createRoleCheck();
-        roleAllDimWithCubeGrandCheck.setName("roleAllDimWithCubeGrand Check");
-        roleAllDimWithCubeGrandCheck.setRoleName("roleAllDimWithCubeGrand");
-        catalogCheck.getRoleChecks().add(roleAllDimWithCubeGrandCheck);
-
-        RoleCheck roleNoneCheck = FACTORY.createRoleCheck();
-        roleNoneCheck.setName("roleNone Check");
-        roleNoneCheck.setRoleName("roleNone");
-        catalogCheck.getRoleChecks().add(roleNoneCheck);
-
+        RoleCheck role1Check = FACTORY.createRoleCheck();
+        role1Check.setName("role1 Check");
+        role1Check.setRoleName("role1");
+        catalogCheck.getRoleChecks().add(role1Check);
         // Add query checks at catalog level
         catalogCheck.getQueryChecks().addAll(java.util.List.of(
-            createQueryCheckForRoleAll(),
-            createQueryCheckForRoleAllDimWithCubeGrand(),
-            createQueryCheckForRoleNone()
+            createQueryCheckForRole1()
         ));
+        RoleAccessCheck roleAccessCheck = FACTORY.createRoleAccessCheck();
         model.getCatalogChecks().add(catalogCheck);
         return model;
     }
 
     private DatabaseSchemaCheck createDatabaseSchemaCheck() {
         DatabaseSchemaCheck schemaCheck = FACTORY.createDatabaseSchemaCheck();
-        schemaCheck.setName("Daanse Tutorial - Access Catalog Grand Database Schema Check");
-        schemaCheck.setDescription("Verify database tables and columns exist for Daanse Tutorial - Access Catalog Grand");
+        schemaCheck.setName("Daanse Tutorial - Access Member Grant Database Schema Check");
+        schemaCheck.setDescription("Verify database tables and columns exist for Daanse Tutorial - Access Member Grant");
         schemaCheck.setEnabled(true);
         // Check parcels fact table with columns
         DatabaseTableCheck factTableCheck = FACTORY.createDatabaseTableCheck();
@@ -112,8 +101,8 @@ public class CatalogCheckSupplier implements org.eclipse.daanse.olap.check.model
     }
     private CubeCheck createCubeCheck() {
         CubeCheck cubeCheck = FACTORY.createCubeCheck();
-        cubeCheck.setName("Access Catalog Grant Cube Check");
-        cubeCheck.setDescription("Verify Access Catalog Gran cube structure with all dimensions and measures");
+        cubeCheck.setName("Daanse Tutorial - Access Member Grant Cube Check");
+        cubeCheck.setDescription("Verify Daanse Tutorial - Access Member Grant cube structure with all dimensions and measures");
         cubeCheck.setCubeName("Cube1");
         cubeCheck.setEnabled(true);
         // Add cube attribute checks
@@ -145,12 +134,11 @@ public class CatalogCheckSupplier implements org.eclipse.daanse.olap.check.model
         HierarchyCheck hierarchyCheck = FACTORY.createHierarchyCheck();
         hierarchyCheck.setName("Hierarchy1 Hierarchy Check");
         hierarchyCheck.setEnabled(true);
-        hierarchyCheck.setHierarchyName("Hierarchy1");
         
         HierarchyAttributeCheck hasAllCheck = FACTORY.createHierarchyAttributeCheck();
-        hasAllCheck.setName("Hierarchy1 HasAll Check");
+        hasAllCheck.setName("Hierarchy HasAll Check");
         hasAllCheck.setAttributeType(HierarchyAttribute.HAS_ALL);
-        hasAllCheck.setExpectedBoolean(false);
+        hasAllCheck.setExpectedBoolean(true);
         hierarchyCheck.getHierarchyAttributeChecks().add(hasAllCheck);
         
         LevelCheck levelCheck = FACTORY.createLevelCheck();
@@ -158,10 +146,6 @@ public class CatalogCheckSupplier implements org.eclipse.daanse.olap.check.model
         levelCheck.setLevelName("Level1");
         levelCheck.setDescription("Verify level Level1 exists");
         levelCheck.setEnabled(true);
-        
-        //LevelAttributeCheck levelAttributeCheck = FACTORY.createLevelAttributeCheck();
-        //TODO add column type
-        //levelCheck.getLevelAttributeChecks().add(levelAttributeCheck);
         
         hierarchyCheck.getLevelChecks().add(levelCheck);
         dimCheck.getHierarchyChecks().add(hierarchyCheck);
@@ -188,39 +172,15 @@ public class CatalogCheckSupplier implements org.eclipse.daanse.olap.check.model
         measureCheck.getMeasureAttributeChecks().add(aggregatorCheck);
         return measureCheck;
     }
-    private QueryCheck createQueryCheckForRoleAll() {
+    private QueryCheck createQueryCheckForRole1() {
         QueryCheck queryCheck = FACTORY.createQueryCheck();
         queryCheck.setName("Measure Query Check");
         queryCheck.setDescription("Verify MDX query returns Measure data");
-        queryCheck.setQuery("SELECT FROM [Cube1] WHERE ([Measures].[Measure1])");
+        queryCheck.setQuery("SELECT NON EMPTY Hierarchize(AddCalculatedMembers({DrilldownLevel({[Dimension1].[Hierarchy1].[All Hierarchy1s]})})) DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS  FROM [Cube1] WHERE ([Measures].[Measure1])");
         queryCheck.setQueryLanguage(QueryLanguage.MDX);
         queryCheck.setExpectedColumnCount(1);
         queryCheck.setEnabled(true);
-        queryCheck.getRoles().add("roleAll");
-        return queryCheck;
-    }
-
-    private QueryCheck createQueryCheckForRoleAllDimWithCubeGrand() {
-        QueryCheck queryCheck = FACTORY.createQueryCheck();
-        queryCheck.setName("Measure Query Check");
-        queryCheck.setDescription("Verify MDX query returns Measure data");
-        queryCheck.setQuery("SELECT FROM [Cube1] WHERE ([Measures].[Measure1])");
-        queryCheck.setQueryLanguage(QueryLanguage.MDX);
-        queryCheck.setExpectedColumnCount(1);
-        queryCheck.setEnabled(true);
-        queryCheck.getRoles().add("roleAllDimWithCubeGrand");
-        return queryCheck;
-    }
-
-    private QueryCheck createQueryCheckForRoleNone() {
-        QueryCheck queryCheck = FACTORY.createQueryCheck();
-        queryCheck.setName("Measure Query Check");
-        queryCheck.setDescription("Verify MDX query returns Measure data");
-        queryCheck.setQuery("SELECT FROM [Cube1] WHERE ([Measures].[Measure1])");
-        queryCheck.setQueryLanguage(QueryLanguage.MDX);
-        queryCheck.setExpectedColumnCount(0);
-        queryCheck.setEnabled(true);
-        queryCheck.getRoles().add("roleNone");
+        queryCheck.getRoles().add("role1");
         return queryCheck;
     }
 

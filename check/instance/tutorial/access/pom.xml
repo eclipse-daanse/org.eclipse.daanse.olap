@@ -25,5 +25,12 @@
 
   <modules>
     <module>cataloggrand</module>
+    <module>columngrand</module>
+    <module>cubegrand</module>
+    <module>databasegrand</module>
+    <module>defaultrolegrand</module>
+    <module>dimensiongrand</module>
+    <module>hierarchygrand</module>
+    <module>membergrand</module>
   </modules>
 </project>

@@ -311,6 +311,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cubeChecks" upperBound="-1" eType="#//CubeCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="catalogAttributeChecks" upperBound="-1" eType="#//CatalogAttributeCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="databaseSchemaChecks" upperBound="-1" eType="#//DatabaseSchemaCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roleChecks" upperBound="-1" eType="#//RoleCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="queryChecks" upperBound="-1" eType="#//QueryCheck" containment="true"/>
   </eClassifiers>
 
@@ -333,6 +334,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="namedSetChecks" upperBound="-1" eType="#//NamedSetCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="drillThroughActionChecks" upperBound="-1" eType="#//DrillThroughActionCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cubeAttributeChecks" upperBound="-1" eType="#//CubeAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <!-- Role Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="RoleCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 
   <eClassifiers xsi:type="ecore:EClass" name="CubeAttributeCheck">
@@ -497,6 +503,7 @@
   <!-- Query Check -->
   <eClassifiers xsi:type="ecore:EClass" name="QueryCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roles" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryLanguage" eType="#//QueryLanguage" defaultValueLiteral="MDX"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedRowCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedColumnCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>

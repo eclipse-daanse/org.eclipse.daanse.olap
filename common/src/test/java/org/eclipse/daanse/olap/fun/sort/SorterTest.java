@@ -54,7 +54,7 @@ import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
-import org.eclipse.daanse.olap.server.ExecutionImpl;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

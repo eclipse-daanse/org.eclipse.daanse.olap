@@ -14,16 +14,15 @@
 package org.eclipse.daanse.olap.function.def.generate;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
-
 import org.eclipse.daanse.olap.util.CancellationChecker;
 
 public class GenerateStringCalc extends AbstractProfilingNestedStringCalc {

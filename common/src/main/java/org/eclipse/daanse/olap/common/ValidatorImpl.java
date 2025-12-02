@@ -35,9 +35,9 @@ import java.util.Map;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
+import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -59,9 +59,8 @@ import org.eclipse.daanse.olap.query.component.NumericLiteralImpl;
 import org.eclipse.daanse.olap.query.component.QueryAxisImpl;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
 import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;
-import org.eclipse.daanse.olap.util.type.TypeUtil;
-
 import org.eclipse.daanse.olap.util.ArrayStack;
+import org.eclipse.daanse.olap.util.type.TypeUtil;
 
 /**
  * Default implementation of {@link org.eclipse.daanse.olap.api.Validator}.

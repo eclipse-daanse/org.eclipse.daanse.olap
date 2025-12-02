@@ -29,9 +29,8 @@ import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.query.component.QueryAxisImpl;
-
-import org.eclipse.daanse.olap.server.ExecutionImpl;
 
 public class CellSetImpl extends ExecutionImpl implements CellSet {
 

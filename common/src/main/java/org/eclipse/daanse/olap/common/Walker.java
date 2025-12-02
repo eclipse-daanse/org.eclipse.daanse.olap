@@ -32,7 +32,6 @@ package org.eclipse.daanse.olap.common;
 import java.util.Enumeration;
 
 import org.eclipse.daanse.olap.api.Walkable;
-
 import org.eclipse.daanse.olap.util.ArrayStack;
 
 /**

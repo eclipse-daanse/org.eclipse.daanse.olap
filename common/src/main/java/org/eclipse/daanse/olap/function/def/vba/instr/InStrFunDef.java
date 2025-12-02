@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.function.def.vba.instr;
 
 import org.eclipse.daanse.olap.api.calc.Calc;
-import org.eclipse.daanse.olap.api.calc.DateTimeCalc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;

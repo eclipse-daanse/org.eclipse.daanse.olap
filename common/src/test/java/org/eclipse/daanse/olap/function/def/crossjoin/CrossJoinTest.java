@@ -63,8 +63,8 @@ import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
-import  org.eclipse.daanse.olap.server.ExecutionImpl;
-import  org.eclipse.daanse.olap.server.LocusImpl;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -155,14 +155,10 @@ public class CrossJoinTest {
     String e3 = "{[k, l], [m, n]}";
     assertEquals( e3, s3 );
 
-    String s = LocusImpl.execute(
-      execution, "CrossJoinTest", new LocusImpl.Action<String>() {
-        @Override
-		public String execute() {
-          TupleIterable iterable = calc.makeIterable( l4, l3 );
-          return CrossJoinTest.this.toString( iterable );
-        }
-      } );
+    String s = ExecutionContext.where(execution.asContext(), () -> {
+      TupleIterable iterable = calc.makeIterable( l4, l3 );
+      return CrossJoinTest.this.toString( iterable );
+    });
     String e =
       "{[U, V, k, l], [U, V, m, n], [W, X, k, l], "
         + "[W, X, m, n], [Y, Z, k, l], [Y, Z, m, n]}";
@@ -181,22 +177,18 @@ public class CrossJoinTest {
   private Integer crossJoinIterCalcIterate(
     final TupleList list1, final TupleList list2,
     final ExecutionImpl execution ) {
-    return LocusImpl.execute(
-      execution, "CrossJoinTest", new LocusImpl.Action<Integer>() {
-        @Override
-		public Integer execute() {
-          TupleIterable iterable =
-            new CrossJoinIterCalc(
-              getResolvedFunCall(), null, crossJoinFunDef.getCtag() ).makeIterable( list1, list2 );
-          TupleCursor tupleCursor = iterable.tupleCursor();
-          // total count of all iterations
-          int counter = 0;
-          while ( tupleCursor.forward() ) {
-            counter++;
-          }
-          return Integer.valueOf( counter );
-        }
-      } );
+    return ExecutionContext.where(execution.asContext(), () -> {
+      TupleIterable iterable =
+        new CrossJoinIterCalc(
+          getResolvedFunCall(), null, crossJoinFunDef.getCtag() ).makeIterable( list1, list2 );
+      TupleCursor tupleCursor = iterable.tupleCursor();
+      // total count of all iterations
+      int counter = 0;
+      while ( tupleCursor.forward() ) {
+        counter++;
+      }
+      return Integer.valueOf( counter );
+    });
   }
 
   ////////////////////////////////////////////////////////////////////////

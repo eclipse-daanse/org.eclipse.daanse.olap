@@ -12,7 +12,7 @@
 */
 package org.eclipse.daanse.olap.api.monitor.event;
 
-import org.eclipse.daanse.olap.api.Execution;
+import org.eclipse.daanse.olap.api.execution.Execution;
 
 public record ExecutionEndEvent(ExecutionEventCommon executionEventCommon, int phaseCount, Execution.State state,
         int cellCacheHitCount, int cellCacheMissCount, int cellCachePendingCount, int expCacheHitCount,

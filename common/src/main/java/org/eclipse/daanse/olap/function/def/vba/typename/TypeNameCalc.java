@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.function.def.vba.typename;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.Type;
-import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
 public class TypeNameCalc extends AbstractProfilingNestedStringCalc {

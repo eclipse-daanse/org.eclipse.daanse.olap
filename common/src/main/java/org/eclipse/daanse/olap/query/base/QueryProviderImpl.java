@@ -14,12 +14,12 @@
 package org.eclipse.daanse.olap.query.base;
 
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertColumns;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertCubeClause;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertFormulaList;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertName;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertParameterList;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxis;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxisList;
-import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertCubeClause;
 import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.getExpressionByCompoundId;
 
 import java.util.ArrayList;

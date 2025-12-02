@@ -78,6 +78,7 @@ import org.eclipse.daanse.olap.api.element.MetaData;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
@@ -119,10 +120,9 @@ import org.eclipse.daanse.olap.element.OlapMetaData;
 import org.eclipse.daanse.olap.exceptions.MdxAxisShowSubtotalsNotSupportedException;
 import org.eclipse.daanse.olap.exceptions.ParameterIsNotModifiableException;
 import org.eclipse.daanse.olap.exceptions.UnknownParameterException;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.def.parameter.ParameterFunDef;
 import org.eclipse.daanse.olap.impl.IdentifierParser;
-import org.eclipse.daanse.olap.server.ExecutionImpl;
-import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.ArrayStack;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
 
@@ -964,18 +964,11 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             throw new ParameterIsNotModifiableException(
                 parameterName, param.getScope().name());
         }
-        final Object value2 =
-        LocusImpl.execute(
-            new ExecutionImpl(statement, ExecuteDurationUtil.executeDurationValue(getConnection().getContext())),
-            "Query.quickParse",
-            new LocusImpl.Action<Object>() {
-                @Override
-				public Object execute() {
-                    return quickParse(
-                        parameterName, param.getType(), value, QueryImpl.this);
-                }
-            }
-        );
+        final ExecutionImpl execution = new ExecutionImpl(statement,
+            ExecuteDurationUtil.executeDurationValue(getConnection().getContext()));
+        final Object value2 = ExecutionContext.where(execution.asContext(), () -> {
+            return quickParse(parameterName, param.getType(), value, QueryImpl.this);
+        });
         param.setValue(value2);
     }
 

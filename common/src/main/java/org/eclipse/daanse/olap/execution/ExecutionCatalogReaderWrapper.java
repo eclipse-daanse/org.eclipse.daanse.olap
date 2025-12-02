@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.server;
+package org.eclipse.daanse.olap.execution;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,6 @@ import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameResolver;
 import org.eclipse.daanse.olap.api.NameSegment;
@@ -42,40 +41,42 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
- * Decorator for {@link CatalogReader} that wraps each method call with Locus context.
+ * Decorator for {@link CatalogReader} that wraps each method call with ExecutionContext.
  *
  * <p>This class replaces the InvocationHandler-based Proxy approach to provide
  * better type safety, debuggability, and performance. Each method call is
- * automatically wrapped with {@link LocusImpl#execute} to ensure proper
- * Locus tracking for profiling and monitoring.
+ * automatically wrapped with {@link ExecutionContext#where} to ensure proper
+ * execution context propagation using ScopedValues.
  *
  * <p>Usage:
  * <pre>
- * CatalogReader reader = new LocusCatalogReaderWrapper(
+ * CatalogReader reader = new ExecutionCatalogReaderWrapper(
  *     execution, "Schema reader", delegateReader);
  * </pre>
  *
- * @see org.eclipse.daanse.olap.common.Util#locusCatalogReader
+ * @see org.eclipse.daanse.olap.common.Util#executionCatalogReader
  */
-public class LocusCatalogReaderWrapper implements CatalogReader {
+public class ExecutionCatalogReaderWrapper implements CatalogReader {
 
     private final Execution execution;
     private final String component;
     private final CatalogReader delegate;
 
     /**
-     * Creates a wrapper that adds Locus context to all CatalogReader operations.
+     * Creates a wrapper that adds ExecutionContext to all CatalogReader operations.
      *
-     * @param execution Execution context for Locus
+     * @param execution Execution context
      * @param component Component name for profiling (e.g., "Schema reader")
      * @param delegate The actual CatalogReader to delegate to
      * @throws NullPointerException if any parameter is null
      */
-    public LocusCatalogReaderWrapper(
+    public ExecutionCatalogReaderWrapper(
             Execution execution,
             String component,
             CatalogReader delegate) {
@@ -86,67 +87,67 @@ public class LocusCatalogReaderWrapper implements CatalogReader {
 
     @Override
     public Catalog getCatalog() {
-        return LocusImpl.execute(execution, component, () -> delegate.getCatalog());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCatalog());
     }
 
     @Override
     public Role getRole() {
-        return LocusImpl.execute(execution, component, () -> delegate.getRole());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getRole());
     }
 
     @Override
     public List<Dimension> getCubeDimensions(Cube cube) {
-        return LocusImpl.execute(execution, component, () -> delegate.getCubeDimensions(cube));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCubeDimensions(cube));
     }
 
     @Override
     public List<Hierarchy> getDimensionHierarchies(Dimension dimension) {
-        return LocusImpl.execute(execution, component, () -> delegate.getDimensionHierarchies(dimension));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getDimensionHierarchies(dimension));
     }
 
     @Override
     public List<Member> getHierarchyRootMembers(Hierarchy hierarchy) {
-        return LocusImpl.execute(execution, component, () -> delegate.getHierarchyRootMembers(hierarchy));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getHierarchyRootMembers(hierarchy));
     }
 
     @Override
     public int getChildrenCountFromCache(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.getChildrenCountFromCache(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getChildrenCountFromCache(member));
     }
 
     @Override
     public int getLevelCardinality(Level level, boolean approximate, boolean materialize) {
-        return LocusImpl.execute(execution, component, () -> delegate.getLevelCardinality(level, approximate, materialize));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getLevelCardinality(level, approximate, materialize));
     }
 
     @Override
     public Member substitute(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.substitute(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.substitute(member));
     }
 
     @Override
     public List<Member> getMemberChildren(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberChildren(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberChildren(member));
     }
 
     @Override
     public List<Member> getMemberChildren(Member member, Evaluator context) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberChildren(member, context));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberChildren(member, context));
     }
 
     @Override
     public List<Member> getMemberChildren(List<Member> members) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberChildren(members));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberChildren(members));
     }
 
     @Override
     public List<Member> getMemberChildren(List<Member> members, Evaluator context) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberChildren(members, context));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberChildren(members, context));
     }
 
     @Override
     public void getParentChildContributingChildren(Member dataMember, Hierarchy hierarchy, List<Member> list) {
-        LocusImpl.execute(execution, component, () -> {
+        ExecutionContext.where(execution.asContext(), () -> {
             delegate.getParentChildContributingChildren(dataMember, hierarchy, list);
             return null;
         });
@@ -154,12 +155,12 @@ public class LocusCatalogReaderWrapper implements CatalogReader {
 
     @Override
     public Member getMemberParent(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberParent(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberParent(member));
     }
 
     @Override
     public void getMemberAncestors(Member member, List<Member> ancestorList) {
-        LocusImpl.execute(execution, component, () -> {
+        ExecutionContext.where(execution.asContext(), () -> {
             delegate.getMemberAncestors(member, ancestorList);
             return null;
         });
@@ -167,42 +168,42 @@ public class LocusCatalogReaderWrapper implements CatalogReader {
 
     @Override
     public int getMemberDepth(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberDepth(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberDepth(member));
     }
 
     @Override
     public Member getMemberByUniqueName(List<Segment> uniqueNameParts, boolean failIfNotFound, MatchType matchType) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberByUniqueName(uniqueNameParts, failIfNotFound, matchType));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberByUniqueName(uniqueNameParts, failIfNotFound, matchType));
     }
 
     @Override
     public Member getMemberByUniqueName(List<Segment> uniqueNameParts, boolean failIfNotFound) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberByUniqueName(uniqueNameParts, failIfNotFound));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberByUniqueName(uniqueNameParts, failIfNotFound));
     }
 
     @Override
     public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, DataType category, MatchType matchType) {
-        return LocusImpl.execute(execution, component, () -> delegate.lookupCompound(parent, names, failIfNotFound, category, matchType));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.lookupCompound(parent, names, failIfNotFound, category, matchType));
     }
 
     @Override
     public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, DataType category) {
-        return LocusImpl.execute(execution, component, () -> delegate.lookupCompound(parent, names, failIfNotFound, category));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.lookupCompound(parent, names, failIfNotFound, category));
     }
 
     @Override
     public Member getCalculatedMember(List<Segment> nameParts) {
-        return LocusImpl.execute(execution, component, () -> delegate.getCalculatedMember(nameParts));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCalculatedMember(nameParts));
     }
 
     @Override
     public NamedSet getNamedSet(List<Segment> nameParts) {
-        return LocusImpl.execute(execution, component, () -> delegate.getNamedSet(nameParts));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getNamedSet(nameParts));
     }
 
     @Override
     public void getMemberRange(Level level, Member startMember, Member endMember, List<Member> list) {
-        LocusImpl.execute(execution, component, () -> {
+        ExecutionContext.where(execution.asContext(), () -> {
             delegate.getMemberRange(level, startMember, endMember, list);
             return null;
         });
@@ -210,132 +211,132 @@ public class LocusCatalogReaderWrapper implements CatalogReader {
 
     @Override
     public Member getLeadMember(Member member, int n) {
-        return LocusImpl.execute(execution, component, () -> delegate.getLeadMember(member, n));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getLeadMember(member, n));
     }
 
     @Override
     public int compareMembersHierarchically(Member m1, Member m2) {
-        return LocusImpl.execute(execution, component, () -> delegate.compareMembersHierarchically(m1, m2));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.compareMembersHierarchically(m1, m2));
     }
 
     @Override
     public OlapElement getElementChild(OlapElement parent, Segment name, MatchType matchType) {
-        return LocusImpl.execute(execution, component, () -> delegate.getElementChild(parent, name, matchType));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getElementChild(parent, name, matchType));
     }
 
     @Override
     public OlapElement getElementChild(OlapElement parent, Segment name) {
-        return LocusImpl.execute(execution, component, () -> delegate.getElementChild(parent, name));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getElementChild(parent, name));
     }
 
     @Override
     public List<Member> getLevelMembers(Level level, boolean includeCalculated) {
-        return LocusImpl.execute(execution, component, () -> delegate.getLevelMembers(level, includeCalculated));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getLevelMembers(level, includeCalculated));
     }
 
     @Override
     public List<Member> getLevelMembers(Level level, boolean includeCalculated, Evaluator context) {
-        return LocusImpl.execute(execution, component, () -> delegate.getLevelMembers(level, includeCalculated, context));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getLevelMembers(level, includeCalculated, context));
     }
 
     @Override
     public List<Member> getLevelMembers(Level level, Evaluator context) {
-        return LocusImpl.execute(execution, component, () -> delegate.getLevelMembers(level, context));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getLevelMembers(level, context));
     }
 
     @Override
     public List<Level> getHierarchyLevels(Hierarchy hierarchy) {
-        return LocusImpl.execute(execution, component, () -> delegate.getHierarchyLevels(hierarchy));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getHierarchyLevels(hierarchy));
     }
 
     @Override
     public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
-        return LocusImpl.execute(execution, component, () -> delegate.getHierarchyDefaultMember(hierarchy));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getHierarchyDefaultMember(hierarchy));
     }
 
     @Override
     public boolean isDrillable(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.isDrillable(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.isDrillable(member));
     }
 
     @Override
     public boolean isVisible(Member member) {
-        return LocusImpl.execute(execution, component, () -> delegate.isVisible(member));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.isVisible(member));
     }
 
     @Override
     public List<Cube> getCubes() {
-        return LocusImpl.execute(execution, component, () -> delegate.getCubes());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCubes());
     }
 
     @Override
     public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
-        return LocusImpl.execute(execution, component, () -> delegate.getCalculatedMembers(hierarchy));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCalculatedMembers(hierarchy));
     }
 
     @Override
     public List<Member> getCalculatedMembers(Level level) {
-        return LocusImpl.execute(execution, component, () -> delegate.getCalculatedMembers(level));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCalculatedMembers(level));
     }
 
     @Override
     public List<Member> getCalculatedMembers() {
-        return LocusImpl.execute(execution, component, () -> delegate.getCalculatedMembers());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getCalculatedMembers());
     }
 
     @Override
     public Member lookupMemberChildByName(Member parent, Segment childName, MatchType matchType) {
-        return LocusImpl.execute(execution, component, () -> delegate.lookupMemberChildByName(parent, childName, matchType));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.lookupMemberChildByName(parent, childName, matchType));
     }
 
     @Override
     public List<Member> lookupMemberChildrenByNames(Member parent, List<NameSegment> childNames, MatchType matchType) {
-        return LocusImpl.execute(execution, component, () -> delegate.lookupMemberChildrenByNames(parent, childNames, matchType));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.lookupMemberChildrenByNames(parent, childNames, matchType));
     }
 
     @Override
     public NativeEvaluator getNativeSetEvaluator(FunctionDefinition fun, Expression[] args, Evaluator evaluator, Calc calc) {
-        return LocusImpl.execute(execution, component, () -> delegate.getNativeSetEvaluator(fun, args, evaluator, calc));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getNativeSetEvaluator(fun, args, evaluator, calc));
     }
 
     @Override
     public Parameter getParameter(String name) {
-        return LocusImpl.execute(execution, component, () -> delegate.getParameter(name));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getParameter(name));
     }
 
     @Override
     @Deprecated
     public DataSource getDataSource() {
-        return LocusImpl.execute(execution, component, () -> delegate.getDataSource());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getDataSource());
     }
 
     @Override
     public CatalogReader withoutAccessControl() {
-        return LocusImpl.execute(execution, component, () -> delegate.withoutAccessControl());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.withoutAccessControl());
     }
 
     @Override
     public CatalogReader withLocus() {
-        return LocusImpl.execute(execution, component, () -> delegate.withLocus());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.withLocus());
     }
 
     @Override
     public List<NameResolver.Namespace> getNamespaces() {
-        return LocusImpl.execute(execution, component, () -> delegate.getNamespaces());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getNamespaces());
     }
 
     @Override
     public Map<? extends Member, AccessMember> getMemberChildrenWithDetails(Member member, Evaluator evaluator) {
-        return LocusImpl.execute(execution, component, () -> delegate.getMemberChildrenWithDetails(member, evaluator));
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getMemberChildrenWithDetails(member, evaluator));
     }
 
     @Override
     public Context<?> getContext() {
-        return LocusImpl.execute(execution, component, () -> delegate.getContext());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getContext());
     }
 
     @Override
     public List<? extends DatabaseSchema> getDatabaseSchemas() {
-        return LocusImpl.execute(execution, component, () -> delegate.getDatabaseSchemas());
+        return ExecutionContext.where(execution.asContext(), () -> delegate.getDatabaseSchemas());
     }
 }

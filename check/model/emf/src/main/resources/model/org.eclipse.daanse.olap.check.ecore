@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="check" nsURI="https://www.daanse.org/spec/org.eclipse.daanse.olap.check"
+    nsPrefix="olapcheck">
+
+  <!-- ==================== ENUMERATIONS ==================== -->
+
+  <eClassifiers xsi:type="ecore:EEnum" name="MatchMode">
+    <eLiterals name="EQUALS" value="0"/>
+    <eLiterals name="CONTAINS" value="1"/>
+    <eLiterals name="REGEX" value="2"/>
+    <eLiterals name="STARTS_WITH" value="3"/>
+    <eLiterals name="ENDS_WITH" value="4"/>
+    <eLiterals name="NOT_EQUALS" value="5"/>
+    <eLiterals name="NOT_CONTAINS" value="6"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="CatalogAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="DESCRIPTION" value="1"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="CubeAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="CUBE_TYPE" value="5"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DimensionAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="DIMENSION_TYPE" value="5"/>
+    <eLiterals name="ORDINAL" value="6"/>
+    <eLiterals name="IS_VIRTUAL" value="7"/>
+    <eLiterals name="CARDINALITY" value="8"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="HierarchyAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="HAS_ALL" value="5"/>
+    <eLiterals name="ALL_MEMBER_NAME" value="6"/>
+    <eLiterals name="ALL_MEMBER_UNIQUE_NAME" value="7"/>
+    <eLiterals name="DEFAULT_MEMBER" value="8"/>
+    <eLiterals name="DISPLAY_FOLDER" value="9"/>
+    <eLiterals name="ORIGIN" value="10"/>
+    <eLiterals name="CARDINALITY" value="11"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="LevelAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="DEPTH" value="5"/>
+    <eLiterals name="LEVEL_TYPE" value="6"/>
+    <eLiterals name="IS_ALL" value="7"/>
+    <eLiterals name="IS_UNIQUE" value="8"/>
+    <eLiterals name="ORDINAL" value="9"/>
+    <eLiterals name="CARDINALITY" value="10"/>
+    <eLiterals name="MEMBERS_WITH_DATA" value="11"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="MemberAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="MEMBER_TYPE" value="5"/>
+    <eLiterals name="IS_CALCULATED" value="6"/>
+    <eLiterals name="IS_DATA_MEMBER" value="7"/>
+    <eLiterals name="PARENT_UNIQUE_NAME" value="8"/>
+    <eLiterals name="PARENT_COUNT" value="9"/>
+    <eLiterals name="CHILDREN_CARDINALITY" value="10"/>
+    <eLiterals name="ORDINAL" value="11"/>
+    <eLiterals name="DEPTH" value="12"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="MeasureAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="UNIQUE_NAME" value="1"/>
+    <eLiterals name="CAPTION" value="2"/>
+    <eLiterals name="DESCRIPTION" value="3"/>
+    <eLiterals name="VISIBLE" value="4"/>
+    <eLiterals name="AGGREGATOR" value="5"/>
+    <eLiterals name="DATA_TYPE" value="6"/>
+    <eLiterals name="EXPRESSION" value="7"/>
+    <eLiterals name="FORMAT_STRING" value="8"/>
+    <eLiterals name="MEASURE_GROUP_NAME" value="9"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DimensionType">
+    <eLiterals name="STANDARD" value="0"/>
+    <eLiterals name="TIME" value="1"/>
+    <eLiterals name="MEASURES" value="2"/>
+    <eLiterals name="GEOGRAPHY" value="3"/>
+    <eLiterals name="ORGANIZATION" value="4"/>
+    <eLiterals name="BILL_OF_MATERIALS" value="5"/>
+    <eLiterals name="ACCOUNTS" value="6"/>
+    <eLiterals name="CUSTOMERS" value="7"/>
+    <eLiterals name="PRODUCTS" value="8"/>
+    <eLiterals name="SCENARIO" value="9"/>
+    <eLiterals name="UTILITY" value="10"/>
+    <eLiterals name="CURRENCY" value="11"/>
+    <eLiterals name="RATES" value="12"/>
+    <eLiterals name="CHANNEL" value="13"/>
+    <eLiterals name="PROMOTION" value="14"/>
+    <eLiterals name="UNKNOWN" value="15"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="LevelType">
+    <eLiterals name="REGULAR" value="0"/>
+    <eLiterals name="ALL" value="1"/>
+    <eLiterals name="NULL" value="2"/>
+    <eLiterals name="TIME_YEARS" value="3"/>
+    <eLiterals name="TIME_HALF_YEARS" value="4"/>
+    <eLiterals name="TIME_QUARTERS" value="5"/>
+    <eLiterals name="TIME_MONTHS" value="6"/>
+    <eLiterals name="TIME_WEEKS" value="7"/>
+    <eLiterals name="TIME_DAYS" value="8"/>
+    <eLiterals name="TIME_HOURS" value="9"/>
+    <eLiterals name="TIME_MINUTES" value="10"/>
+    <eLiterals name="TIME_SECONDS" value="11"/>
+    <eLiterals name="TIME_UNDEFINED" value="12"/>
+    <eLiterals name="GEO_CONTINENT" value="13"/>
+    <eLiterals name="GEO_REGION" value="14"/>
+    <eLiterals name="GEO_COUNTRY" value="15"/>
+    <eLiterals name="GEO_STATE" value="16"/>
+    <eLiterals name="GEO_COUNTY" value="17"/>
+    <eLiterals name="GEO_CITY" value="18"/>
+    <eLiterals name="GEO_POINT" value="19"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="MemberType">
+    <eLiterals name="REGULAR" value="0"/>
+    <eLiterals name="ALL" value="1"/>
+    <eLiterals name="MEASURE" value="2"/>
+    <eLiterals name="FORMULA" value="3"/>
+    <eLiterals name="UNKNOWN" value="4"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="CubeType">
+    <eLiterals name="CUBE" value="0"/>
+    <eLiterals name="VIRTUAL_CUBE" value="1"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="AggregatorType">
+    <eLiterals name="SUM" value="0"/>
+    <eLiterals name="COUNT" value="1"/>
+    <eLiterals name="MIN" value="2"/>
+    <eLiterals name="MAX" value="3"/>
+    <eLiterals name="AVG" value="4"/>
+    <eLiterals name="DISTINCT_COUNT" value="5"/>
+    <eLiterals name="NONE" value="6"/>
+    <eLiterals name="CALCULATED" value="7"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="INTEGER" value="0"/>
+    <eLiterals name="NUMERIC" value="1"/>
+    <eLiterals name="CURRENCY" value="2"/>
+    <eLiterals name="PERCENT" value="3"/>
+    <eLiterals name="STRING" value="4"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="KPIAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="DESCRIPTION" value="1"/>
+    <eLiterals name="DISPLAY_FOLDER" value="2"/>
+    <eLiterals name="VALUE" value="3"/>
+    <eLiterals name="GOAL" value="4"/>
+    <eLiterals name="STATUS" value="5"/>
+    <eLiterals name="TREND" value="6"/>
+    <eLiterals name="WEIGHT" value="7"/>
+    <eLiterals name="CURRENT_TIME_MEMBER" value="8"/>
+    <eLiterals name="STATUS_GRAPHIC" value="9"/>
+    <eLiterals name="TREND_GRAPHIC" value="10"/>
+    <eLiterals name="PARENT_KPI_NAME" value="11"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="NamedSetAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="CAPTION" value="1"/>
+    <eLiterals name="DESCRIPTION" value="2"/>
+    <eLiterals name="DISPLAY_FOLDER" value="3"/>
+    <eLiterals name="IS_DYNAMIC" value="4"/>
+    <eLiterals name="EXPRESSION" value="5"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DrillThroughActionAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="CAPTION" value="1"/>
+    <eLiterals name="DESCRIPTION" value="2"/>
+    <eLiterals name="IS_DEFAULT" value="3"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseSchemaAttribute">
+    <eLiterals name="NAME" value="0"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseTableAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="DESCRIPTION" value="1"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseColumnAttribute">
+    <eLiterals name="NAME" value="0"/>
+    <eLiterals name="TYPE" value="1"/>
+    <eLiterals name="NULLABLE" value="2"/>
+    <eLiterals name="COLUMN_SIZE" value="3"/>
+    <eLiterals name="DECIMAL_DIGITS" value="4"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="PropertyValueType">
+    <eLiterals name="STRING" value="0"/>
+    <eLiterals name="INTEGER" value="1"/>
+    <eLiterals name="DOUBLE" value="2"/>
+    <eLiterals name="BOOLEAN" value="3"/>
+    <eLiterals name="AUTO" value="4"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="QuantifierType">
+    <eLiterals name="FORALL" value="0"/>
+    <eLiterals name="EXISTS" value="1"/>
+    <eLiterals name="EXISTS_UNIQUE" value="2"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="QuantifierScope">
+    <eLiterals name="CUBES" value="0"/>
+    <eLiterals name="DIMENSIONS" value="1"/>
+    <eLiterals name="HIERARCHIES" value="2"/>
+    <eLiterals name="LEVELS" value="3"/>
+    <eLiterals name="MEMBERS" value="4"/>
+    <eLiterals name="MEASURES" value="5"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="ElementType">
+    <eLiterals name="CATALOG" value="0"/>
+    <eLiterals name="CUBE" value="1"/>
+    <eLiterals name="DIMENSION" value="2"/>
+    <eLiterals name="HIERARCHY" value="3"/>
+    <eLiterals name="LEVEL" value="4"/>
+    <eLiterals name="MEMBER" value="5"/>
+    <eLiterals name="MEASURE" value="6"/>
+    <eLiterals name="KPI" value="7"/>
+    <eLiterals name="NAMED_SET" value="8"/>
+    <eLiterals name="DRILL_THROUGH_ACTION" value="9"/>
+    <eLiterals name="DATABASE_SCHEMA" value="10"/>
+    <eLiterals name="DATABASE_TABLE" value="11"/>
+    <eLiterals name="DATABASE_COLUMN" value="12"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="SkipReason">
+    <eLiterals name="DISABLED" value="0"/>
+    <eLiterals name="CONDITION_NOT_MET" value="1"/>
+    <eLiterals name="TIMEOUT" value="2"/>
+    <eLiterals name="DEPENDENCY_FAILED" value="3"/>
+    <eLiterals name="ELEMENT_NOT_FOUND" value="4"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="CheckStatus">
+    <eLiterals name="SUCCESS" value="0"/>
+    <eLiterals name="FAILURE" value="1"/>
+    <eLiterals name="SKIPPED" value="2"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EEnum" name="QueryLanguage">
+    <eLiterals name="MDX" value="0"/>
+    <eLiterals name="SQL" value="1"/>
+    <eLiterals name="DAX" value="2"/>
+  </eClassifiers>
+
+  <!-- ==================== ROOT MODEL ==================== -->
+
+  <eClassifiers xsi:type="ecore:EClass" name="OlapCheckModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectionConfig" eType="#//ConnectionConfig" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="catalogChecks" upperBound="-1" eType="#//CatalogCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionConfig">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roles" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <!-- ==================== CHECK CLASSES ==================== -->
+
+  <eClassifiers xsi:type="ecore:EClass" name="OlapCheck" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong" defaultValueLiteral="-1"/>
+  </eClassifiers>
+
+  <!-- Catalog Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="CatalogCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cubeChecks" upperBound="-1" eType="#//CubeCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="catalogAttributeChecks" upperBound="-1" eType="#//CatalogAttributeCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseSchemaChecks" upperBound="-1" eType="#//DatabaseSchemaCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryChecks" upperBound="-1" eType="#//QueryCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CatalogAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//CatalogAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Cube Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="CubeCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeType" eType="#//CubeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensionChecks" upperBound="-1" eType="#//DimensionCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measureChecks" upperBound="-1" eType="#//MeasureCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kpiChecks" upperBound="-1" eType="#//KPICheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namedSetChecks" upperBound="-1" eType="#//NamedSetCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="drillThroughActionChecks" upperBound="-1" eType="#//DrillThroughActionCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cubeAttributeChecks" upperBound="-1" eType="#//CubeAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CubeAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//CubeAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Dimension Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="DimensionCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchyChecks" upperBound="-1" eType="#//HierarchyCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensionAttributeChecks" upperBound="-1" eType="#//DimensionAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DimensionAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DimensionAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedDimensionType" eType="#//DimensionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Hierarchy Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchyCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="levelChecks" upperBound="-1" eType="#//LevelCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchyAttributeChecks" upperBound="-1" eType="#//HierarchyAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchyAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//HierarchyAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Level Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="LevelCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberChecks" upperBound="-1" eType="#//MemberCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="levelAttributeChecks" upperBound="-1" eType="#//LevelAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="LevelAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//LevelAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedLevelType" eType="#//LevelType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Member Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="MemberCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyChecks" upperBound="-1" eType="#//PropertyCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberAttributeChecks" upperBound="-1" eType="#//MemberAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="MemberAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//MemberAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedMemberType" eType="#//MemberType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Property Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedDouble" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueType" eType="#//PropertyValueType" defaultValueLiteral="AUTO"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Measure Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measureAttributeChecks" upperBound="-1" eType="#//MeasureAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//MeasureAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedAggregator" eType="#//AggregatorType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedDataType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- KPI Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="KPICheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kpiName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kpiAttributeChecks" upperBound="-1" eType="#//KPIAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="KPIAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//KPIAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- NamedSet Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="NamedSetCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namedSetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namedSetAttributeChecks" upperBound="-1" eType="#//NamedSetAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="NamedSetAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//NamedSetAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- DrillThroughAction Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="DrillThroughActionCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionAttributeChecks" upperBound="-1" eType="#//DrillThroughActionAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DrillThroughActionAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DrillThroughActionAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Query Check -->
+  <eClassifiers xsi:type="ecore:EClass" name="QueryCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryLanguage" eType="#//QueryLanguage" defaultValueLiteral="MDX"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedRowCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedColumnCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxExecutionTimeMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cellChecks" upperBound="-1" eType="#//CellValueCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CellValueCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coordinates" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedNumericValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkFormattedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+  </eClassifiers>
+
+  <!-- Count Checks -->
+  <eClassifiers xsi:type="ecore:EClass" name="CountCheck" abstract="true" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CubeCountCheck" eSuperTypes="#//CountCheck"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DimensionCountCheck" eSuperTypes="#//CountCheck"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchyCountCheck" eSuperTypes="#//CountCheck"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LevelCountCheck" eSuperTypes="#//CountCheck"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MemberCountCheck" eSuperTypes="#//CountCheck"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureCountCheck" eSuperTypes="#//CountCheck"/>
+
+  <!-- Database Schema Checks -->
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schemaAttributeChecks" upperBound="-1" eType="#//DatabaseSchemaAttributeCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableChecks" upperBound="-1" eType="#//DatabaseTableCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseSchemaAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableAttributeChecks" upperBound="-1" eType="#//DatabaseTableAttributeCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnChecks" upperBound="-1" eType="#//DatabaseColumnCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseTableAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnAttributeChecks" upperBound="-1" eType="#//DatabaseColumnAttributeCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnAttributeCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseColumnAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+
+  <!-- Composite/Control Checks -->
+  <eClassifiers xsi:type="ecore:EClass" name="CheckGroup" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopOnFirstFailure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="checks" upperBound="-1" eType="#//OlapCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//OlapCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenCheck" eType="#//OlapCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseCheck" eType="#//OlapCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="NegationCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="check" eType="#//OlapCheck" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="QuantifiedCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantifier" eType="#//QuantifierType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="#//QuantifierScope"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="check" eType="#//OlapCheck" containment="true"/>
+  </eClassifiers>
+
+  <!-- Role-Based Checks -->
+  <eClassifiers xsi:type="ecore:EClass" name="RoleVisibilityCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roles" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementType" eType="#//ElementType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="RoleAccessCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roles" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryLanguage" eType="#//QueryLanguage" defaultValueLiteral="MDX"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectSuccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+
+  <!-- Flat Element Checks -->
+  <eClassifiers xsi:type="ecore:EClass" name="ElementExistsCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementType" eType="#//ElementType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="ElementAttributeCheck" eSuperTypes="#//OlapCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementType" eType="#//ElementType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode" defaultValueLiteral="EQUALS"/>
+  </eClassifiers>
+
+  <!-- ==================== RESULT CLASSES ==================== -->
+
+  <eClassifiers xsi:type="ecore:EClass" name="CheckExecutionResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="success" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalExecutionTimeMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="successCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="failureCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skippedCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="checkResults" upperBound="-1" eType="#//CheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceModel" eType="#//OlapCheckModel"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CheckResult" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//CheckStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionTimeMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceCheck" eType="#//OlapCheck"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CheckSuccess" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CheckFailure" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exception" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CheckSkipped" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reason" eType="#//SkipReason"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <!-- Hierarchical Results -->
+  <eClassifiers xsi:type="ecore:EClass" name="CatalogCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cubeResults" upperBound="-1" eType="#//CubeCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseSchemaResults" upperBound="-1" eType="#//DatabaseSchemaCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryResults" upperBound="-1" eType="#//QueryCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CubeCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensionResults" upperBound="-1" eType="#//DimensionCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measureResults" upperBound="-1" eType="#//MeasureCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kpiResults" upperBound="-1" eType="#//KPICheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namedSetResults" upperBound="-1" eType="#//NamedSetCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="drillThroughActionResults" upperBound="-1" eType="#//DrillThroughActionCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DimensionCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchyResults" upperBound="-1" eType="#//HierarchyCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchyCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="levelResults" upperBound="-1" eType="#//LevelCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="LevelCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberResults" upperBound="-1" eType="#//MemberCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="MemberCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyResults" upperBound="-1" eType="#//PropertyCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="KPICheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kpiName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="NamedSetCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namedSetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DrillThroughActionCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableResults" upperBound="-1" eType="#//DatabaseTableCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnResults" upperBound="-1" eType="#//DatabaseColumnCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1" eType="#//AttributeCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="QueryCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryLanguage" eType="#//QueryLanguage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executedSuccessfully" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cellResults" upperBound="-1" eType="#//CellCheckResult" containment="true"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CellCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coordinates" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="CountCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+
+</ecore:EPackage>

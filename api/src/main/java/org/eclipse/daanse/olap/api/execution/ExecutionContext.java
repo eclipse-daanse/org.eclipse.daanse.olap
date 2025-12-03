@@ -133,12 +133,36 @@ public final class ExecutionContext {
     }
 
     /**
+     * Returns the current execution context.
+     *
+     * @return the current ExecutionContext
+     * @throws NoExecutionContextException if no context is bound to the current scope
+     */
+    public static ExecutionContext current() {
+        if (!CURRENT.isBound()) {
+            throw new NoExecutionContextException();
+        }
+        return CURRENT.get();
+    }
+
+    /**
      * Returns the current execution context, or null if not in execution scope.
+     * Use this method only when you explicitly need to handle the case where
+     * no context is available.
      *
      * @return the current ExecutionContext, or null if outside execution scope
      */
-    public static ExecutionContext current() {
+    public static ExecutionContext currentOrNull() {
         return CURRENT.isBound() ? CURRENT.get() : null;
+    }
+
+    /**
+     * Returns true if an ExecutionContext is currently bound to this scope.
+     *
+     * @return true if a context is bound, false otherwise
+     */
+    public static boolean isBound() {
+        return CURRENT.isBound();
     }
 
     /**

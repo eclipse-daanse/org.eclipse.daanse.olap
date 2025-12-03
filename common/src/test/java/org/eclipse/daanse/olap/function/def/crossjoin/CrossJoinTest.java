@@ -137,9 +137,10 @@ public class CrossJoinTest {
         when(rolapConnection.getContext()).thenReturn(context);
         when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(excMock.getDaanseStatement()).thenReturn(statement);
+        ExecutionContext executionContext = mock(ExecutionContext.class);
+        when(excMock.asContext()).thenReturn(executionContext);
       CrossJoinIterCalc calc =
         new CrossJoinIterCalc( getResolvedFunCall(), null, crossJoinFunDef.getCtag() );
-
       doTupleTupleIterTest( calc, excMock );
   }
 

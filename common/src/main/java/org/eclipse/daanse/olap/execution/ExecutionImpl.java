@@ -115,10 +115,10 @@ public class ExecutionImpl implements Execution {
     public ExecutionImpl(Statement statement, Optional<Duration> duration) {
         Execution parentExec = null;
         ExecutionContext parentContext = null;
-        // Skip ExecutionContext.current() during static initialization (when statement
-        // is null for NONE)
+        // Skip ExecutionContext during static initialization (when statement is null for NONE)
+        // Use currentOrNull() as we need to handle the case where no context is bound
         if (statement != null) {
-            ExecutionContext currentContext = ExecutionContext.current();
+            ExecutionContext currentContext = ExecutionContext.currentOrNull();
             if (currentContext != null) {
                 parentExec = currentContext.getExecution();
                 if (parentExec != null) {

@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2024 Contributors to the Eclipse Foundation.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;"
+    modelDirectory="/org.eclipse.daanse.olap.check.model.emf/src" modelPluginID="org.eclipse.daanse.olap.check.model.emf"
+    modelName="org.eclipse.daanse.olap.check.model" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true" oSGiCompatible="true">
+  <foreignModel>org.eclipse.daanse.olap.check.ecore</foreignModel>
+  <genPackages prefix="OlapCheck" basePackage="org.eclipse.daanse.olap.check.model"
+      resource="XMI" disposableProviderFactory="true" fileExtensions="olapcheck" ecorePackage="org.eclipse.daanse.olap.check.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//MatchMode">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/EQUALS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/CONTAINS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/REGEX"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/STARTS_WITH"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/ENDS_WITH"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/NOT_EQUALS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MatchMode/NOT_CONTAINS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//CatalogAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CatalogAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CatalogAttribute/DESCRIPTION"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//CubeAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeAttribute/CUBE_TYPE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/DIMENSION_TYPE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/ORDINAL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/IS_VIRTUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionAttribute/CARDINALITY"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/HAS_ALL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/ALL_MEMBER_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/ALL_MEMBER_UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/DEFAULT_MEMBER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/DISPLAY_FOLDER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/ORIGIN"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//HierarchyAttribute/CARDINALITY"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//LevelAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/DEPTH"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/LEVEL_TYPE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/IS_ALL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/IS_UNIQUE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/ORDINAL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/CARDINALITY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelAttribute/MEMBERS_WITH_DATA"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//MemberAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/MEMBER_TYPE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/IS_CALCULATED"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/IS_DATA_MEMBER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/PARENT_UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/PARENT_COUNT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/CHILDREN_CARDINALITY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/ORDINAL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberAttribute/DEPTH"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/UNIQUE_NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/VISIBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/AGGREGATOR"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/DATA_TYPE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/EXPRESSION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/FORMAT_STRING"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MeasureAttribute/MEASURE_GROUP_NAME"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DimensionType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/STANDARD"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/TIME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/MEASURES"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/GEOGRAPHY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/ORGANIZATION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/BILL_OF_MATERIALS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/ACCOUNTS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/CUSTOMERS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/PRODUCTS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/SCENARIO"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/UTILITY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/CURRENCY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/RATES"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/CHANNEL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/PROMOTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DimensionType/UNKNOWN"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//LevelType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/REGULAR"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/ALL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/NULL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_YEARS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_HALF_YEARS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_QUARTERS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_MONTHS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_WEEKS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_DAYS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_HOURS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_MINUTES"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_SECONDS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/TIME_UNDEFINED"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_CONTINENT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_REGION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_COUNTRY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_STATE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_COUNTY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_CITY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//LevelType/GEO_POINT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//MemberType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberType/REGULAR"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberType/ALL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberType/MEASURE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberType/FORMULA"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//MemberType/UNKNOWN"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//CubeType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeType/CUBE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CubeType/VIRTUAL_CUBE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//AggregatorType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/SUM"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/COUNT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/MIN"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/MAX"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/AVG"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/DISTINCT_COUNT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/NONE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//AggregatorType/CALCULATED"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DataType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DataType/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DataType/NUMERIC"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DataType/CURRENCY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DataType/PERCENT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DataType/STRING"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//KPIAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/DISPLAY_FOLDER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/VALUE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/GOAL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/STATUS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/TREND"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/WEIGHT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/CURRENT_TIME_MEMBER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/STATUS_GRAPHIC"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/TREND_GRAPHIC"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//KPIAttribute/PARENT_KPI_NAME"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/DISPLAY_FOLDER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/IS_DYNAMIC"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//NamedSetAttribute/EXPRESSION"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttribute/CAPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttribute/DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttribute/IS_DEFAULT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttribute/NAME"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttribute/DESCRIPTION"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute/NAME"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute/TYPE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute/NULLABLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute/COLUMN_SIZE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttribute/DECIMAL_DIGITS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//PropertyValueType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//PropertyValueType/STRING"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//PropertyValueType/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//PropertyValueType/DOUBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//PropertyValueType/BOOLEAN"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//PropertyValueType/AUTO"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//QuantifierType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierType/FORALL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierType/EXISTS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierType/EXISTS_UNIQUE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//QuantifierScope">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/CUBES"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/DIMENSIONS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/HIERARCHIES"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/LEVELS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/MEMBERS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QuantifierScope/MEASURES"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//ElementType">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/CATALOG"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/CUBE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/DIMENSION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/HIERARCHY"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/LEVEL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/MEMBER"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/MEASURE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/KPI"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/NAMED_SET"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/DRILL_THROUGH_ACTION"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/DATABASE_SCHEMA"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/DATABASE_TABLE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//ElementType/DATABASE_COLUMN"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//SkipReason">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//SkipReason/DISABLED"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//SkipReason/CONDITION_NOT_MET"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//SkipReason/TIMEOUT"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//SkipReason/DEPENDENCY_FAILED"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//SkipReason/ELEMENT_NOT_FOUND"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//CheckStatus">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CheckStatus/SUCCESS"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CheckStatus/FAILURE"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//CheckStatus/SKIPPED"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="org.eclipse.daanse.olap.check.ecore#//QueryLanguage">
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QueryLanguage/MDX"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QueryLanguage/SQL"/>
+      <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QueryLanguage/DAX"/>
+    </genEnums>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//OlapCheckModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheckModel/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheckModel/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//OlapCheckModel/connectionConfig"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//OlapCheckModel/catalogChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//ConnectionConfig">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ConnectionConfig/catalogName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ConnectionConfig/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ConnectionConfig/locale"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="org.eclipse.daanse.olap.check.ecore#//OlapCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheck/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheck/enabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheck/timeout"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CatalogCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogCheck/catalogName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheck/cubeChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheck/catalogAttributeChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheck/databaseSchemaChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheck/roleChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheck/queryChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CubeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeCheck/cubeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeCheck/cubeUniqueName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeCheck/cubeType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/dimensionChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/measureChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/kpiChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/namedSetChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/drillThroughActionChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheck/cubeAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//RoleCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleCheck/roleName"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DimensionCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionCheck/dimensionName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionCheck/dimensionUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DimensionCheck/hierarchyChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DimensionCheck/dimensionAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/expectedDimensionType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//HierarchyCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyCheck/hierarchyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyCheck/hierarchyUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//HierarchyCheck/levelChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//HierarchyCheck/hierarchyAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//LevelCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelCheck/levelName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelCheck/levelUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//LevelCheck/memberChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//LevelCheck/levelAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/expectedLevelType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MemberCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberCheck/memberName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberCheck/memberUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MemberCheck/propertyChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MemberCheck/memberAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/expectedMemberType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//PropertyCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/propertyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/expectedDouble"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/valueType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/tolerance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MeasureCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureCheck/measureName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureCheck/measureUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MeasureCheck/measureAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/expectedAggregator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/expectedDataType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//KPICheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPICheck/kpiName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//KPICheck/kpiAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPIAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//NamedSetCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetCheck/namedSetName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//NamedSetCheck/namedSetAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheck/actionName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheck/actionAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//QueryCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/query"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/queryLanguage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/expectedRowCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/expectedColumnCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheck/maxExecutionTimeMs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//QueryCheck/cellChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CellValueCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/coordinates"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/expectedNumericValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/tolerance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/checkFormattedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellValueCheck/matchMode"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="org.eclipse.daanse.olap.check.ecore#//CountCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheck/expectedCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheck/minCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheck/maxCount"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CubeCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DimensionCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//HierarchyCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//LevelCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MemberCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MeasureCountCheck"/>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheck/schemaName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheck/schemaAttributeChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheck/tableChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheck/tableName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheck/tableAttributeChecks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheck/columnChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheck/columnName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheck/columnAttributeChecks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/attributeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/expectedBoolean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/expectedInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/matchMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnAttributeCheck/caseSensitive"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckGroup">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckGroup/stopOnFirstFailure"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CheckGroup/checks"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//ConditionalCheck">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//ConditionalCheck/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//ConditionalCheck/thenCheck"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//ConditionalCheck/elseCheck"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//NegationCheck">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//NegationCheck/check"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//QuantifiedCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QuantifiedCheck/quantifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QuantifiedCheck/scope"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//QuantifiedCheck/check"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//RoleVisibilityCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleVisibilityCheck/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleVisibilityCheck/elementUniqueName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleVisibilityCheck/elementType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleVisibilityCheck/expectedVisible"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//RoleAccessCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleAccessCheck/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleAccessCheck/query"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleAccessCheck/queryLanguage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//RoleAccessCheck/expectSuccess"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//ElementExistsCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementExistsCheck/elementUniqueName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementExistsCheck/elementType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementExistsCheck/cubeName"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/elementUniqueName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/elementType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/cubeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/attributeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//ElementAttributeCheck/matchMode"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/success"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/startTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/endTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/totalExecutionTimeMs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/successCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/failureCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/skippedCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/checkResults"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/sourceModel"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/checkName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/checkDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/status"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/executionTimeMs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/startTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/endTime"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CheckResult/sourceCheck"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckSuccess">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckSuccess/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckSuccess/actualValue"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckFailure">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckFailure/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckFailure/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckFailure/actualValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckFailure/errorCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckFailure/exception"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckSkipped">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckSkipped/reason"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckSkipped/message"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult/catalogName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult/cubeResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult/attributeResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult/databaseSchemaResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CatalogCheckResult/queryResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CubeCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/cubeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/cubeUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/dimensionResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/measureResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/kpiResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/namedSetResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/drillThroughActionResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CubeCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DimensionCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionCheckResult/dimensionName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DimensionCheckResult/dimensionUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DimensionCheckResult/hierarchyResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DimensionCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//HierarchyCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyCheckResult/hierarchyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//HierarchyCheckResult/hierarchyUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//HierarchyCheckResult/levelResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//HierarchyCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//LevelCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelCheckResult/levelName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//LevelCheckResult/levelUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//LevelCheckResult/memberResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//LevelCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MemberCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberCheckResult/memberName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MemberCheckResult/memberUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MemberCheckResult/propertyResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MemberCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//PropertyCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheckResult/propertyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheckResult/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//PropertyCheckResult/actualValue"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//MeasureCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureCheckResult/measureName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//MeasureCheckResult/measureUniqueName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//MeasureCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//KPICheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//KPICheckResult/kpiName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//KPICheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//NamedSetCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//NamedSetCheckResult/namedSetName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//NamedSetCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheckResult/actionName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DrillThroughActionCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheckResult/schemaName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheckResult/attributeResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseSchemaCheckResult/tableResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheckResult/tableName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheckResult/attributeResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseTableCheckResult/columnResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheckResult/columnName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//DatabaseColumnCheckResult/attributeResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//QueryCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/query"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/queryLanguage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/executedSuccessfully"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/rowCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/columnCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//QueryCheckResult/cellResults"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CellCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellCheckResult/coordinates"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellCheckResult/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CellCheckResult/actualValue"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//AttributeCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//AttributeCheckResult/attributeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//AttributeCheckResult/expectedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//AttributeCheckResult/actualValue"/>
+    </genClasses>
+    <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CountCheckResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheckResult/expectedCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheckResult/actualCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheckResult/minCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CountCheckResult/maxCount"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

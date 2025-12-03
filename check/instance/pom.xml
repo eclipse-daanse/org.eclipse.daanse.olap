@@ -25,5 +25,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>tutorial</module>
+    <module>serializer</module>
   </modules>
 </project>

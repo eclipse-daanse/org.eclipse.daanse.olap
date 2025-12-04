@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.QueryTiming;
-
 import org.eclipse.daanse.olap.util.ArrayStack;
 
 /**

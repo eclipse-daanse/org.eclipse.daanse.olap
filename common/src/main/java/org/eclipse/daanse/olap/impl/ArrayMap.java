@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-
 import org.eclipse.daanse.olap.util.Pair;
 
 /**

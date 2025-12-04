@@ -13,16 +13,11 @@
  */
 package org.eclipse.daanse.olap.function.def.vba.nper;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
-import org.eclipse.daanse.olap.api.calc.DateTimeCalc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
 public class NPerCalc extends AbstractProfilingNestedDoubleCalc {
 

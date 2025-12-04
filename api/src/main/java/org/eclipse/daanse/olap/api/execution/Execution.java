@@ -26,9 +26,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.execution;
 
 import java.time.Duration;
+
+import org.eclipse.daanse.olap.api.QueryTiming;
+import org.eclipse.daanse.olap.api.Statement;
 
 public interface Execution {
 
@@ -56,8 +59,6 @@ public interface Execution {
 
     void setExpCacheCounts(int expResultCacheHitCount, int expResultCacheMissCount);
 
-    void registerStatement(Locus locus, java.sql.Statement stmt);
-
     void end();
 
     void start();
@@ -69,6 +70,15 @@ public interface Execution {
     int getExpCacheHitCount();
 
     int getExpCacheMissCount();
+
+    /**
+     * Converts this Execution to an ExecutionContext for use with ScopedValue-based
+     * context propagation. This method provides a bridge between the legacy
+     * Execution interface and the new ExecutionContext approach.
+     *
+     * @return the ExecutionContext representation of this execution
+     */
+    ExecutionContext asContext();
 
     /**
      * Enumeration of the states of an Execution instance.

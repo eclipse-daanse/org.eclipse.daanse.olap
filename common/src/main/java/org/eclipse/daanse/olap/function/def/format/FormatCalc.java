@@ -20,7 +20,6 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
-
 import org.eclipse.daanse.olap.util.Format;
 
 public class FormatCalc extends AbstractProfilingNestedStringCalc{

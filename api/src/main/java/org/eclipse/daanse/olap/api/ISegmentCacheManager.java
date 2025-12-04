@@ -17,6 +17,7 @@ package org.eclipse.daanse.olap.api;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 
 public interface ISegmentCacheManager {
 
@@ -25,7 +26,7 @@ public interface ISegmentCacheManager {
        */
     void shutdown();
 
-    void printCacheState(CellRegion region, PrintWriter pw, Locus locus);
+    void printCacheState(CellRegion region, PrintWriter pw, ExecutionContext executionContext);
 
     <T> T execute( CacheCommand<T> command );
 

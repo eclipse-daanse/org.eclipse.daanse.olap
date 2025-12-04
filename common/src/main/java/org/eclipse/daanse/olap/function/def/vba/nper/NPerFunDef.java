@@ -17,7 +17,6 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAt
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.Calc;
-import org.eclipse.daanse.olap.api.calc.DateTimeCalc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
@@ -25,7 +24,6 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.def.vba.pmt.PmtCalc;
 
 public class NPerFunDef  extends AbstractFunctionDefinition {
 

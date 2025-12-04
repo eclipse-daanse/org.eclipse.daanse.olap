@@ -368,7 +368,7 @@ public abstract class DelegatingCatalogReader implements CatalogReader {
 
     @Override
 	public CatalogReader withLocus() {
-        return Util.locusCatalogReader(
+        return Util.executionCatalogReader(
             schemaReader.getCatalog().getInternalConnection(),
             this);
     }

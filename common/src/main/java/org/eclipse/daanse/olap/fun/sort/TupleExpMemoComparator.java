@@ -40,11 +40,10 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.exception.CellRequestQuantumExceededException;
 import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.util.CancellationChecker;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-
-import org.eclipse.daanse.olap.util.CancellationChecker;
 
 /**
  * Supports comparison of tuples, caching results such that .compare calls involving the same tuple do not result in

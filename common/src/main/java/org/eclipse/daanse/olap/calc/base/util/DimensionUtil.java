@@ -19,7 +19,6 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 
 public class DimensionUtil {
 

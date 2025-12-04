@@ -20,10 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.ConfigConstants;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
@@ -34,6 +33,8 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -50,14 +51,11 @@ import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.fun.MemberExtractingVisitor;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.function.def.set.SetListCalc;
 import org.eclipse.daanse.olap.function.def.set.ExprIterCalc;
-
+import org.eclipse.daanse.olap.function.def.set.SetListCalc;
+import org.eclipse.daanse.olap.util.CancellationChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.eclipse.daanse.olap.server.LocusImpl;
-import org.eclipse.daanse.olap.util.CancellationChecker;
 
 public class CrossJoinFunDef extends AbstractFunctionDefinition {
     private static final Logger LOGGER = LoggerFactory.getLogger(CrossJoinFunDef.class);
@@ -390,7 +388,7 @@ public class CrossJoinFunDef extends AbstractFunctionDefinition {
         final int iNext = i + 1;
         final TupleCursor cursor = tupleList.tupleCursor();
         int currentIteration = 0;
-        Execution execution = LocusImpl.peek().getExecution();
+        Execution execution = ExecutionContext.current().getExecution();
         while (cursor.forward()) {
             CancellationChecker.checkCancelOrTimeout(currentIteration++, execution);
             cursor.currentToArray(partialArray, partialSize);

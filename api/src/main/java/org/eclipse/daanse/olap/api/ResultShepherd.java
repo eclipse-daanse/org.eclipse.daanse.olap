@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.api;
 
 import java.util.concurrent.Callable;
 
+import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.result.Result;
 
 public interface ResultShepherd {

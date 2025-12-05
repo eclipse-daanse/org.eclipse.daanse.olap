@@ -64,7 +64,7 @@ public class KeySegmentImpl implements KeyIdentifierSegment {
         if (subSegments.length < 1) {
             throw new IllegalArgumentException();
         }
-        this.subSegmentList = UnmodifiableArrayList.asCopyOf(subSegments);
+        this.subSegmentList = List.of(subSegments);
     }
 
     /**

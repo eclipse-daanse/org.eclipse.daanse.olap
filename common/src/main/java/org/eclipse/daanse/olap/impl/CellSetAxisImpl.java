@@ -17,6 +17,8 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -25,8 +27,8 @@ import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
 import org.eclipse.daanse.olap.api.result.IAxis;
 import org.eclipse.daanse.olap.api.result.Position;
-
-import org.eclipse.daanse.olap.server.LocusImpl;
+import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 
 public class CellSetAxisImpl implements CellSetAxis {
 
@@ -77,14 +79,14 @@ public class CellSetAxisImpl implements CellSetAxis {
 
             @Override
             public int size() {
-                return LocusImpl.execute(
-                    cellSet.getStatement().getConnection(),
-                    "Getting List<Position>.size", new LocusImpl.Action<Integer>() {
-                        @Override
-                        public Integer execute() {
-                            return axis.getTupleList().size();
-                        }
-                    });
+                // Create a new ExecutionImpl for getting size (similar to LocusImpl.execute(connection, ...))
+                final Statement statement = cellSet.getStatement().getConnection().getInternalStatement();
+                final ExecutionImpl execution = new ExecutionImpl(statement,
+                    ExecuteDurationUtil.executeDurationValue(cellSet.getStatement().getConnection().getContext()));
+
+                return ExecutionContext.where(execution.asContext(), () -> {
+                    return axis.getTupleList().size();
+                });
             }
         };
 

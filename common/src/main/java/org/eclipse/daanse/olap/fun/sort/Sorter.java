@@ -27,8 +27,8 @@
 
 package org.eclipse.daanse.olap.fun.sort;
 
+import static org.eclipse.daanse.olap.common.Util.DOUBLE_NULL;
 import static org.eclipse.daanse.olap.common.Util.newInternal;
-import static org.eclipse.daanse.olap.fun.FunUtil.DOUBLE_NULL;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -44,23 +44,22 @@ import java.util.PriorityQueue;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
 import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.element.LimitedMember;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.type.ScalarType;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
+import org.eclipse.daanse.olap.util.CancellationChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.eclipse.daanse.olap.util.CancellationChecker;
 
 @SuppressWarnings( "squid:S4274" )
 public class Sorter {

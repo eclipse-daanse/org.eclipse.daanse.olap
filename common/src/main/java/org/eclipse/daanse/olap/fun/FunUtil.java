@@ -43,7 +43,6 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Validator;
@@ -61,6 +60,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.MetaData;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -75,23 +75,22 @@ import org.eclipse.daanse.olap.api.type.ScalarType;
 import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
-import org.eclipse.daanse.olap.element.AbstractProperty;
 import org.eclipse.daanse.olap.common.ResultStyleException;
 import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.element.AbstractProperty;
+import org.eclipse.daanse.olap.exceptions.CousinHierarchyMismatchException;
+import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
+import org.eclipse.daanse.olap.fun.sort.OrderKey;
+import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.function.def.hierarchy.member.HierarchyCurrentMemberFunDef;
 import org.eclipse.daanse.olap.function.def.parentheses.ParenthesesFunDef;
 import org.eclipse.daanse.olap.function.def.set.SetFunDef;
 import org.eclipse.daanse.olap.impl.IdentifierParser.Builder;
 import org.eclipse.daanse.olap.query.component.HierarchyExpressionImpl;
-import org.eclipse.daanse.olap.util.type.TypeUtil;
-import org.eclipse.daanse.olap.exceptions.CousinHierarchyMismatchException;
-import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
-import org.eclipse.daanse.olap.fun.sort.OrderKey;
-import org.eclipse.daanse.olap.fun.sort.Sorter;
-
 import org.eclipse.daanse.olap.util.CancellationChecker;
 import org.eclipse.daanse.olap.util.ConcatenableList;
 import org.eclipse.daanse.olap.util.IdentifierParser;
+import org.eclipse.daanse.olap.util.type.TypeUtil;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.

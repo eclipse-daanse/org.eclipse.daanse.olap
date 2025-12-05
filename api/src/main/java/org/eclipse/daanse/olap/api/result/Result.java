@@ -32,8 +32,8 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 /**

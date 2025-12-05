@@ -15,7 +15,6 @@ package org.eclipse.daanse.olap.function.def.member.namedsetcurrentordinal;
 
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.resolver.ParametersCheckingFunctionDefinitionResolver;
-import org.eclipse.daanse.olap.function.def.member.namedsetcurrentordinal.NamedSetCurrentOrdinalFunDef;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = FunctionResolver.class)

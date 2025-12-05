@@ -40,6 +40,7 @@ import org.eclipse.daanse.olap.api.access.AllHierarchyAccess;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;
 import org.eclipse.daanse.olap.api.element.DatabaseSchema;
@@ -51,7 +52,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.common.Util;
-import org.eclipse.daanse.olap.api.element.Catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

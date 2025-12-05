@@ -18,10 +18,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -30,8 +30,6 @@ import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedT
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
 import org.eclipse.daanse.olap.fun.DaanseEvaluationException;
-import org.eclipse.daanse.olap.function.def.drilldownlevel.DrilldownLevelCalc;
-import org.eclipse.daanse.olap.function.def.drilldownmember.DrilldownMemberCalc;
 import org.eclipse.daanse.olap.function.def.set.level.LevelMembersCalc;
 
 public class AddCalculatedMembersCalc extends AbstractProfilingNestedTupleListCalc {

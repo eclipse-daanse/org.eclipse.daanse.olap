@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.Execution;
 import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
 import org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc;
@@ -26,12 +25,12 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
-
-import org.eclipse.daanse.olap.server.LocusImpl;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 
 public class GenerateListCalc extends AbstractProfilingNestedTupleListCalc {
@@ -55,7 +54,7 @@ public class GenerateListCalc extends AbstractProfilingNestedTupleListCalc {
             final TupleIterable iterable1 = tupleIteratorCalc.evaluate(evaluator);
             evaluator.restore(savepoint);
             TupleList result = TupleCollections.createList(arityOut);
-            Execution execution = LocusImpl.peek().getExecution();
+            Execution execution = ExecutionContext.current().getExecution();
             if (all) {
                 final TupleCursor cursor = iterable1.tupleCursor();
                 int rowCount = 0;

@@ -19,38 +19,24 @@
   <parent>
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.pom.parent</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5-SNAPSHOT</version>
   </parent>
   <artifactId>org.eclipse.daanse.olap</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
   <name>Eclipse Daanse OLAP Processing Engine</name>
-  <description>Comprehensive OLAP (Online Analytical Processing) engine providing multidimensional data processing, cube operations, advanced query execution, intelligent caching, and aggregation management. Includes complete API framework for hierarchical navigation, measure calculations, access control, and XMLA protocol integration for enterprise analytical applications.</description>
+  <description>Comprehensive OLAP (Online Analytical Processing) engine
+    providing multidimensional data processing, cube operations, advanced query
+    execution, intelligent caching, and aggregation management. Includes
+    complete API framework for hierarchical navigation, measure calculations,
+    access control, and XMLA protocol integration for enterprise analytical
+    applications.</description>
 
   <properties>
     <revision>0.0.1-SNAPSHOT</revision>
     <slf4j.version>2.0.9</slf4j.version>
     <caffeine.version>3.1.2</caffeine.version>
-<!--    <bnd.version>7.2.0-SNAPSHOT</bnd.version>-->
-    <mockito.version>5.10.0</mockito.version>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <maven.compiler.release>21</maven.compiler.release>
   </properties>
-
-<repositories>
-  <repository>
-    <name>Central Portal Snapshots</name>
-    <id>central-portal-snapshots</id>
-    <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
-</repositories>
 
   <modules>
     <module>api</module>
@@ -62,23 +48,12 @@
   </modules>
 
   <dependencies>
-     <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>compile</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-junit-jupiter</artifactId>
-        <version>${mockito.version}</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
+
 </project>

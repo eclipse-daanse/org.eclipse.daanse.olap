@@ -22,12 +22,13 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.element.DrillThroughAction;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -35,12 +36,13 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.common.QueryCanceledException;
-import org.eclipse.daanse.olap.common.QueryTimeoutException;
+import org.eclipse.daanse.olap.api.execution.QueryCanceledException;
+import org.eclipse.daanse.olap.api.execution.QueryTimeoutException;
+import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
-import org.eclipse.daanse.olap.server.LocusImpl;
+import org.eclipse.daanse.olap.execution.ExecutionImpl;
 
-public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl implements Statement {
+public class StatementImpl extends org.eclipse.daanse.olap.execution.StatementImpl implements Statement {
 
     private Connection connection;
     private boolean closed;
@@ -206,23 +208,20 @@ public class StatementImpl extends org.eclipse.daanse.olap.server.StatementImpl 
 
     private Query parseQuery(String mdx) {
         try {
-            return LocusImpl.execute(
-                connection,
-                "Parsing query",
-                new LocusImpl.Action<Query>() {
-                    @Override
-                    public Query execute()
-                    {
-                        final Query query =
-                            (Query) ((ConnectionBase)connection).parseStatement(
-                                StatementImpl.this,
-                                mdx,
-                                context.getFunctionService(),
-                                false);
-                        return query;
+            // Create a new ExecutionImpl for parsing (similar to LocusImpl.execute(connection, ...))
+            final Statement statement = connection.getInternalStatement();
+            final ExecutionImpl execution = new ExecutionImpl(statement,
+                ExecuteDurationUtil.executeDurationValue(connection.getContext()));
 
-                    }
-                });
+            return ExecutionContext.where(execution.asContext(), () -> {
+                final Query query =
+                    (Query) ((ConnectionBase)connection).parseStatement(
+                        StatementImpl.this,
+                        mdx,
+                        context.getFunctionService(),
+                        false);
+                return query;
+            });
         } catch (OlapRuntimeException e) {
             throw new RuntimeException(
                 "daanse gave exception while parsing query", e);

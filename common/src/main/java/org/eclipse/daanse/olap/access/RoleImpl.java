@@ -35,16 +35,17 @@ import java.util.WeakHashMap;
 
 import org.eclipse.daanse.olap.api.access.AccessCatalog;
 import org.eclipse.daanse.olap.api.access.AccessCube;
-import org.eclipse.daanse.olap.api.access.AccessDimension;
-import org.eclipse.daanse.olap.api.access.AccessHierarchy;
+import org.eclipse.daanse.olap.api.access.AccessDatabaseColumn;
 import org.eclipse.daanse.olap.api.access.AccessDatabaseSchema;
 import org.eclipse.daanse.olap.api.access.AccessDatabaseTable;
-import org.eclipse.daanse.olap.api.access.AccessDatabaseColumn;
+import org.eclipse.daanse.olap.api.access.AccessDimension;
+import org.eclipse.daanse.olap.api.access.AccessHierarchy;
 import org.eclipse.daanse.olap.api.access.AccessMember;
 import org.eclipse.daanse.olap.api.access.AllHierarchyAccess;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.DatabaseColumn;
 import org.eclipse.daanse.olap.api.element.DatabaseSchema;
@@ -56,12 +57,13 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.VirtualCube;
-import org.eclipse.daanse.olap.element.OlapElementBase;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
-import org.eclipse.daanse.olap.api.element.Catalog;
+import org.eclipse.daanse.olap.element.OlapElementBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import aQute.bnd.compatibility.Access;
 
 /**
  * Default implementation of the {@link Role} interface.

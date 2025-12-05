@@ -108,7 +108,7 @@ public class IdentifierNode
         if (segments.length < 1) {
             throw new IllegalArgumentException();
         }
-        this.segments = UnmodifiableArrayList.asCopyOf(segments);
+        this.segments = List.of(segments);
     }
 
 
@@ -121,10 +121,7 @@ public class IdentifierNode
         if (segments.size() < 1) {
             throw new IllegalArgumentException();
         }
-        this.segments =
-            new UnmodifiableArrayList<IdentifierSegment>(
-                segments.toArray(
-                    new IdentifierSegment[segments.size()]));
+        this.segments = List.copyOf(segments);
     }
     
     public String toString() {

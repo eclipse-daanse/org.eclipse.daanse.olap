@@ -20,42 +20,30 @@ import org.eclipse.daanse.olap.api.access.AccessMember;
 public class AccessUtil {
 
     public static AccessDimension getAccessDimension(AccessCube accessCube) {
-        switch (accessCube) {
-        case ALL:
-            return AccessDimension.ALL;
-        case NONE:
-            return AccessDimension.NONE;
-        case CUSTOM:
-            return AccessDimension.CUSTOM;
-        default:
-            return AccessDimension.NONE;
-        }
+        return switch (accessCube) {
+            case ALL -> AccessDimension.ALL;
+            case NONE -> AccessDimension.NONE;
+            case CUSTOM -> AccessDimension.CUSTOM;
+            default -> AccessDimension.NONE;
+        };
     }
 
     public static AccessMember getAccessMember(AccessDimension access) {
-        switch (access) {
-        case NONE:
-            return AccessMember.NONE;
-        case CUSTOM:
-            return AccessMember.CUSTOM;
-        case ALL:
-            return AccessMember.ALL;
-        default:
-            return AccessMember.NONE;
-        }
+        return switch (access) {
+            case NONE -> AccessMember.NONE;
+            case CUSTOM -> AccessMember.CUSTOM;
+            case ALL -> AccessMember.ALL;
+            default -> AccessMember.NONE;
+        };
     }
 
     public static AccessMember getAccessMember(AccessHierarchy access) {
-        switch (access) {
-        case NONE:
-            return AccessMember.NONE;
-        case CUSTOM:
-            return AccessMember.CUSTOM;
-        case ALL:
-            return AccessMember.ALL;
-        default:
-            return AccessMember.NONE;
-        }
+        return switch (access) {
+            case NONE -> AccessMember.NONE;
+            case CUSTOM -> AccessMember.CUSTOM;
+            case ALL -> AccessMember.ALL;
+            default -> AccessMember.NONE;
+        };
     }
 
 }

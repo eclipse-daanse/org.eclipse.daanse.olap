@@ -60,6 +60,7 @@
     <module>spi</module>
     <module>format</module>
     <module>odc</module>
+    <module>check</module>
   </modules>
 
   <dependencies>

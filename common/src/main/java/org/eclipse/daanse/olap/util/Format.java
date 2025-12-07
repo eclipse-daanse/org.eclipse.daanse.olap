@@ -45,9 +45,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -1477,7 +1475,7 @@ public class Format {
 
     public static List<Token> getTokenList()
     {
-        return Collections.unmodifiableList(Arrays.asList(tokens));
+        return List.of(tokens);
     }
 
     /**

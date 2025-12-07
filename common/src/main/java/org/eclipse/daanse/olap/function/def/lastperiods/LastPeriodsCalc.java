@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.function.def.lastperiods;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
@@ -54,7 +53,7 @@ public class LastPeriodsCalc extends AbstractProfilingNestedTupleListCalc {
     private List<Member> lastPeriods(Member member, Evaluator evaluator, Integer indexValue) {
         // empty set
         if ((indexValue == 0) || member.isNull()) {
-            return Collections.emptyList();
+            return List.of();
         }
         List<Member> list = new ArrayList<>();
 

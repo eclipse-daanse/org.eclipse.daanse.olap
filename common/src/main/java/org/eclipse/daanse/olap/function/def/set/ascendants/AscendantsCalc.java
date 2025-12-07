@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.function.def.set.ascendants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.CatalogReader;
@@ -40,7 +39,7 @@ public class AscendantsCalc extends AbstractProfilingNestedTupleListCalc {
 
     private List<Member> ascendants(CatalogReader schemaReader, Member member) {
         if (member.isNull()) {
-            return Collections.emptyList();
+            return List.of();
         }
         final List<Member> result = new ArrayList<>();
         result.add(member);

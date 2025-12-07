@@ -13,8 +13,6 @@
 */
 package org.eclipse.daanse.olap.api;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +42,7 @@ import org.eclipse.daanse.sql.guard.api.SqlGuardFactory;
  */
 public interface Context<C extends Connection> {
 
-    List<String> KEYWORD_LIST = Collections.unmodifiableList(Arrays.asList("$AdjustedProbability",
+    List<String> KEYWORD_LIST = List.of("$AdjustedProbability",
             "$Distance", "$Probability", "$ProbabilityStDev", "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev",
             "$StdDeV", "$Support", "$Variance", "AddCalculatedMembers", "Action", "After", "Aggregate", "All", "Alter",
             "Ancestor", "And", "Append", "As", "ASC", "Axis", "Automatic", "Back_Color", "BASC", "BDESC", "Before",
@@ -78,7 +76,7 @@ public interface Context<C extends Connection> {
             "Solve_Order", "Sort", "StdDev", "Stdev", "StripCalculatedMembers", "StrToSet", "StrToTuple", "SubSet",
             "Support", "Tail", "Text", "Thresholds", "ToggleDrillState", "TopCount", "TopPercent", "TopSum",
             "TupleToStr", "Under", "Uniform", "UniqueName", "Use", "Value", "Var", "Variance", "VarP", "VarianceP",
-            "VisualTotals", "When", "Where", "With", "WTD", "Xor"));
+            "VisualTotals", "When", "Where", "With", "WTD", "Xor");
 
 	CatalogCache getCatalogCache();
     /**

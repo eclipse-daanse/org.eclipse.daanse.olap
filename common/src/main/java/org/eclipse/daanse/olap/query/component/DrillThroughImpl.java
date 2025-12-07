@@ -27,7 +27,6 @@ package org.eclipse.daanse.olap.query.component;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.CatalogReader;
@@ -68,7 +67,7 @@ public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough 
         this.query = query;
         this.maxRowCount = maxRowCount;
         this.firstRowOrdinal = firstRowOrdinal;
-        this.returnList = Collections.unmodifiableList(
+        this.returnList = List.copyOf(
             resolveReturnList(returnList));
     }
 
@@ -118,7 +117,7 @@ public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough 
 
     private List<OlapElement> resolveReturnList(List<Expression> returnList) {
         if (returnList == null) {
-            return Collections.emptyList();
+            return List.of();
         }
         List<OlapElement> returnClauseElements = new ArrayList<>();
         CatalogReader reader = query.getCatalogReader(true);

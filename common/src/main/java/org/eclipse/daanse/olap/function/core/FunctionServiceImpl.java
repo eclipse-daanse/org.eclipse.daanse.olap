@@ -153,7 +153,7 @@ public class FunctionServiceImpl implements FunctionService {
 		FunctionAtomCompareKey key = new FunctionAtomCompareKey(operationAtom);
 		List<FunctionResolver> matchingResolvers = mapNameToResolvers.get(key);
 		if (matchingResolvers == null) {
-			matchingResolvers = Collections.emptyList();
+			matchingResolvers = List.of();
 		}
 		return matchingResolvers;
 	}

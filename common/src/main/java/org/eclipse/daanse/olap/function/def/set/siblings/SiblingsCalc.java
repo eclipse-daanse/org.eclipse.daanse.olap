@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.function.def.set.siblings;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.CatalogReader;
@@ -40,7 +39,7 @@ public class SiblingsCalc extends AbstractProfilingNestedTupleListCalc {
     private List<Member> memberSiblings(Member member, Evaluator evaluator) {
         if (member.isNull()) {
             // the null member has no siblings -- not even itself
-            return Collections.emptyList();
+            return List.of();
         }
         Member parent = member.getParentMember();
         final CatalogReader schemaReader = evaluator.getCatalogReader();

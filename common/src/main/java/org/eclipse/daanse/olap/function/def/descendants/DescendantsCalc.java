@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.function.def.descendants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.CatalogReader;
@@ -100,7 +99,7 @@ public class DescendantsCalc extends AbstractProfilingNestedTupleListCalc{
       // (a city). This is why we repeat the before/self/after logic for
       // each member.
       final int levelDepth = level.getDepth();
-      List<Member> members = Collections.singletonList( ancestor );
+      List<Member> members = List.of( ancestor );
       // Each pass, "fertileMembers" has the same contents as "members",
       // except that we omit members whose children we are not interested
       // in. We allocate it once, and clear it each pass, to save a little

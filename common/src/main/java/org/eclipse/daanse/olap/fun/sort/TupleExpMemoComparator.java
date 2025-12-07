@@ -33,7 +33,6 @@ package org.eclipse.daanse.olap.fun.sort;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
@@ -85,7 +84,7 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
     getDependentHierarchiesIndices( tuple );
     return Arrays.stream( dependentHierarchiesIndices )
       .mapToObj( tuple::get )
-      .collect( Collectors.toList() );
+      .toList();
   }
 
   private void getDependentHierarchiesIndices( List<Member> tuple ) {

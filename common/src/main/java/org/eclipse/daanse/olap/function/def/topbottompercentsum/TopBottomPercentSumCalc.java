@@ -74,8 +74,8 @@ public class TopBottomPercentSumCalc extends AbstractProfilingNestedTupleListCal
             final Object o = mapMemberToValue.get(key);
             if (o == Util.nullValue) {
                 nullCount++;
-            } else if (o instanceof Number) {
-                runningTotal += ((Number) o).doubleValue();
+            } else if (o instanceof Number n) {
+                runningTotal += n.doubleValue();
             } else if (o instanceof Exception) {
                 // ignore the error
             } else {

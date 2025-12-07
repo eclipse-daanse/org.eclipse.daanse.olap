@@ -996,9 +996,9 @@ public class Sorter {
     @Override
 	public boolean equals( Object obj ) {
       return this == obj
-        || obj instanceof ObjIntPair
-        && this.i == ( (ObjIntPair) obj ).i
-        && Objects.equals( this.t, ( (ObjIntPair) obj ).t );
+        || obj instanceof ObjIntPair<?> other
+        && this.i == other.i
+        && Objects.equals( this.t, other.t );
     }
 
     @Override

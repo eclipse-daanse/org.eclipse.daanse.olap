@@ -170,8 +170,8 @@ public class SetFunDef extends AbstractFunctionDefinition {
             final Expression arg = args[i];
             categories[i] = new FunctionParameterR(arg.getCategory());
             final Type argType = arg.getType();
-            if (argType instanceof SetType) {
-                type = ((SetType) argType).getElementType();
+            if (argType instanceof SetType setType) {
+                type = setType.getElementType();
             } else {
                 type = argType;
             }

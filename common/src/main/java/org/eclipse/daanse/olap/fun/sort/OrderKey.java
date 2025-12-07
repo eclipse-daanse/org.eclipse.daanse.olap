@@ -41,7 +41,8 @@ public class OrderKey implements Comparable {
   @Override
 public int compareTo( Object o ) {
     assert o instanceof OrderKey;
-    Member otherMember = ( (OrderKey) o ).member;
+    OrderKey other = (OrderKey) o;
+    Member otherMember = other.member;
     final boolean thisCalculated = this.member.isCalculatedInQuery();
     final boolean otherCalculated = otherMember.isCalculatedInQuery();
     if ( thisCalculated ) {

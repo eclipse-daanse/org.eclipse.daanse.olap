@@ -116,7 +116,7 @@ public class TypeUtil {
 		} else if (type instanceof DimensionType || type instanceof HierarchyType || type instanceof LevelType) {
 			return MemberType.forType(type);
 		} else if (type instanceof TupleType tupleType && tupleType.getArity() == 1) {
-			return MemberType.forHierarchy(((TupleType) type).getHierarchies().get(0));
+			return MemberType.forHierarchy(tupleType.getHierarchies().get(0));
 		} else {
 			return null;
 		}

@@ -61,8 +61,8 @@ public class ByteString implements Comparable<ByteString>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ByteString
-            && Arrays.equals(bytes, ((ByteString) obj).bytes);
+        return obj instanceof ByteString other
+            && Arrays.equals(bytes, other.bytes);
     }
 
     @Override

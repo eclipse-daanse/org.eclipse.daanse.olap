@@ -139,11 +139,11 @@ public class NativeListCalc  extends AbstractProfilingNestedTupleListCalc {
     private Expression getOriginalExp(final Query query) {
         originalExp.accept(
             new TransformFromFormulasVisitor(query, compiler));
-        if (originalExp instanceof NamedSetExpression) {
+        if (originalExp instanceof NamedSetExpression namedSetExpr) {
             //named sets get their evaluator cached in RolapResult.
             //We do not want to use the cached evaluator, so pass along the
             //expression instead.
-            return ((NamedSetExpression) originalExp).getNamedSet().getExp();
+            return namedSetExpr.getNamedSet().getExp();
         }
         return originalExp;
     }

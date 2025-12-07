@@ -181,8 +181,7 @@ public class ParseRegionImpl implements ParseRegion {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof ParseRegionImpl) {
-            final ParseRegionImpl that = (ParseRegionImpl) obj;
+        if (obj instanceof ParseRegionImpl that) {
             return this.startLine == that.startLine
                 && this.startColumn == that.startColumn
                 && this.endLine == that.endLine

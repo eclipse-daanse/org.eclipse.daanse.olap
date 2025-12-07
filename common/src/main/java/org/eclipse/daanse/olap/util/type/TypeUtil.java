@@ -30,7 +30,6 @@
 package org.eclipse.daanse.olap.util.type;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.BracesOperationAtom;
@@ -615,7 +614,7 @@ public class TypeUtil {
 			return hierarchyList;
 		} else {
 			Hierarchy hierarchy = type.getHierarchy();
-			return hierarchy == null ? Collections.<Hierarchy>emptyList() : Collections.singletonList(hierarchy);
+			return hierarchy == null ? List.of() : List.of(hierarchy);
 		}
 	}
 

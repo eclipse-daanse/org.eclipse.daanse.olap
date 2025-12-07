@@ -30,7 +30,6 @@ package org.eclipse.daanse.olap.query.component;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
@@ -65,7 +64,7 @@ public class IdImpl
      * @param segment Segment, consisting of a name and quoting style
      */
     public IdImpl(Segment segment) {
-        segments = Collections.singletonList(segment);
+        segments = List.of(segment);
     }
 
     public IdImpl(List<Segment> segments) {
@@ -111,7 +110,7 @@ public class IdImpl
 
     @Override
     public List<Segment> getSegments() {
-        return Collections.unmodifiableList(this.segments);
+        return List.copyOf(this.segments);
     }
 
     @Override

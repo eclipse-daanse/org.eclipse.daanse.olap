@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +112,7 @@ public class CellSetAxisMetaDataImpl implements CellSetAxisMetaData {
     private List<Hierarchy> getHierarchiesNonFilter() {
         final Expression exp = queryAxis.getSet();
         if (exp == null) {
-            return Collections.emptyList();
+            return List.of();
         }
         List<Hierarchy> hierarchyList = new ArrayList<>();
         hierarchyList.addAll(TypeUtil.getHierarchies(exp.getType()));

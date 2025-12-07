@@ -27,9 +27,7 @@
  */
 package org.eclipse.daanse.olap.common;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -451,8 +449,8 @@ public final class StandardProperty extends AbstractProperty {
 	/**
 	 * The various property names which define a format string.
 	 */
-	public static final Set<String> FORMAT_PROPERTIES = new HashSet<>(
-			Arrays.asList("format", "format_string", "FORMAT", FORMAT_STRING.getName()));
+	public static final Set<String> FORMAT_PROPERTIES =
+			Set.of("format", "format_string", "FORMAT", FORMAT_STRING.getName());
 
 	@Override
 	public MemberPropertyFormatter getFormatter() {

@@ -28,7 +28,6 @@
 
 package org.eclipse.daanse.olap.api.calc;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,66 +79,41 @@ public enum ResultStyle {
     // collections of result styles.
 
     public static final List<ResultStyle> ANY_LIST =
-            Arrays.asList(
-                    ANY);
+            List.of(ANY);
 
     public static final List<ResultStyle> ITERABLE_ONLY =
-            Arrays.asList(
-                    ITERABLE);
+            List.of(ITERABLE);
 
     public static final List<ResultStyle> MUTABLELIST_ONLY =
-            Arrays.asList(
-                    MUTABLE_LIST);
+            List.of(MUTABLE_LIST);
 
     public static final List<ResultStyle> LIST_ONLY =
-            Arrays.asList(
-                    LIST);
+            List.of(LIST);
 
     public static final List<ResultStyle> ITERABLE_ANY =
-            Arrays.asList(
-                    ITERABLE,
-                    ANY);
+            List.of(ITERABLE, ANY);
 
     public static final List<ResultStyle> ITERABLE_LIST =
-            Arrays.asList(
-                    ITERABLE,
-                    LIST);
+            List.of(ITERABLE, LIST);
 
     public static final List<ResultStyle> ITERABLE_MUTABLELIST =
-            Arrays.asList(
-                    ITERABLE,
-                    MUTABLE_LIST);
+            List.of(ITERABLE, MUTABLE_LIST);
 
     public static final List<ResultStyle> ITERABLE_LIST_MUTABLELIST =
-            Arrays.asList(
-                    ITERABLE,
-                    LIST,
-                    MUTABLE_LIST);
+            List.of(ITERABLE, LIST, MUTABLE_LIST);
 
     public static final List<ResultStyle> LIST_MUTABLELIST =
-            Arrays.asList(
-                    LIST,
-                    MUTABLE_LIST);
+            List.of(LIST, MUTABLE_LIST);
 
     public static final List<ResultStyle> MUTABLELIST_LIST =
-            Arrays.asList(
-                    MUTABLE_LIST,
-                    LIST);
+            List.of(MUTABLE_LIST, LIST);
 
     public static final List<ResultStyle> ITERABLE_LIST_MUTABLELIST_ANY =
-            Arrays.asList(
-                    ITERABLE,
-                    LIST,
-                    MUTABLE_LIST,
-                    ANY);
+            List.of(ITERABLE, LIST, MUTABLE_LIST, ANY);
 
     public static final List<ResultStyle> ITERABLE_MUTABLELIST_LIST =
-            Arrays.asList(
-                    ITERABLE,
-                    MUTABLE_LIST,
-                    LIST);
+            List.of(ITERABLE, MUTABLE_LIST, LIST);
 
     public static final List<ResultStyle> ANY_ONLY =
-            Arrays.asList(
-                    ANY);
+            List.of(ANY);
 }

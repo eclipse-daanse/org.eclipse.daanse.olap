@@ -29,7 +29,6 @@ import java.sql.Types;
 import java.time.Instant;
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -138,7 +137,7 @@ public class Convertor {
         cellPropertyMap.put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
     }
 
-    protected static final List<Property> defaultProps = Arrays.asList(
+    protected static final List<Property> defaultProps = List.of(
             rename(Property.StandardMemberProperty.MEMBER_UNIQUE_NAME, "UName"),
             rename(Property.StandardMemberProperty.MEMBER_CAPTION, "Caption"),
             rename(Property.StandardMemberProperty.LEVEL_UNIQUE_NAME, "LName"),
@@ -406,7 +405,7 @@ public class Convertor {
             // The slicer axes contains the default hierarchy
             // of each dimension not seen on another axis.
             List<Dimension> unseenDimensionList = new ArrayList(
-                    cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
+                    cube.getDimensions() != null ? List.of(cube.getDimensions()) : List.of());
             for (Hierarchy hier1 : axisHierarchyList) {
                 unseenDimensionList.remove(hier1.getDimension());
             }
@@ -886,7 +885,7 @@ public class Convertor {
             // The slicer axes contains the default hierarchy
             // of each dimension not seen on another axis.
             List<Dimension> unseenDimensionList = new ArrayList(
-                    cube.getDimensions() != null ? Arrays.asList(cube.getDimensions()) : List.of());
+                    cube.getDimensions() != null ? List.of(cube.getDimensions()) : List.of());
             for (Hierarchy hier1 : axisHierarchyList) {
                 unseenDimensionList.remove(hier1.getDimension());
             }

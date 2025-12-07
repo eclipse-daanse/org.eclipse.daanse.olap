@@ -24,8 +24,6 @@
 
 package org.eclipse.daanse.olap.fun;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,14 +72,11 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
      * one of these expressions would result in a set of members
      * that cannot be determined from the expression itself.
      */
-    private static final String[] unsafeFuncNames = new String[] {
+    private static final List<String> blacklist = List.of(
         "Ytd", "Mtd", "Qtd", "Wtd", "BottomCount", "TopCount", "ClosingPeriod",
         "Cousin", "FirstChild", "FirstSibling", "LastChild", "LastPeriods",
         "LastSibling", "ParallelPeriod", "PeriodsToDate", "Parent",
-        "PrevMember", "NextMember", "Ancestor", "Ancestors"
-    };
-    private static final List<String> blacklist = Collections.unmodifiableList(
-        Arrays.asList(MemberExtractingVisitor.unsafeFuncNames));
+        "PrevMember", "NextMember", "Ancestor", "Ancestors");
 
     public MemberExtractingVisitor(
         Set<Member> memberSet, ResolvedFunCall call, boolean mapToAllMember)

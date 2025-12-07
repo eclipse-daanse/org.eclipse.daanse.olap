@@ -33,8 +33,6 @@
 
 package org.eclipse.daanse.olap.api.result;
 
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Set;
 
 public interface Property {
@@ -87,11 +85,9 @@ public interface Property {
         private final int xmlaOrdinal;
 
         public static final Set<Property.TypeFlag> CELL_TYPE_FLAG =
-            Collections.unmodifiableSet(
-            		EnumSet.of(Property.TypeFlag.CELL));
+            Set.of(Property.TypeFlag.CELL);
         public static final Set<Property.TypeFlag> MEMBER_TYPE_FLAG =
-            Collections.unmodifiableSet(
-            		EnumSet.of(Property.TypeFlag.MEMBER));
+            Set.of(Property.TypeFlag.MEMBER);
 
 
 

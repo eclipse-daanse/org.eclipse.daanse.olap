@@ -325,13 +325,11 @@ public class Convertor {
 
     private static List<RowSetRow> getRowSetRows(CellSet cellSet, int axisCount, int cellOrdinal, List<Integer> posList,
             List<Column> columns, Member[] members, int[] pos) {
-        switch (axisCount) {
-        case 0:
-            // For MDX like: SELECT FROM Sales
-            return getRowSetRowList(cellSet.getCell(posList), cellOrdinal, columns, members);
-        default:
-            return getRowSetRowList(cellSet, axisCount - 1, 0, cellOrdinal, columns, members, pos, posList);
-        }
+        return switch (axisCount) {
+            case 0 -> // For MDX like: SELECT FROM Sales
+                getRowSetRowList(cellSet.getCell(posList), cellOrdinal, columns, members);
+            default -> getRowSetRowList(cellSet, axisCount - 1, 0, cellOrdinal, columns, members, pos, posList);
+        };
     }
 
     private static List<RowSetRow> getRowSetRowList(CellSet cellSet, int axis, final int xxx, int cellOrdinal,
@@ -669,20 +667,14 @@ public class Convertor {
     private static String getXsdType(Property property) {
         Datatype datatype = property.getDatatype();
         if (datatype != null) {
-            switch (datatype) {
-            case UNSIGNED_INTEGER:
-                return RowsetDefinitionType.UNSIGNED_INTEGER.columnType;
-            case DOUBLE:
-                return RowsetDefinitionType.DOUBLE.columnType;
-            case LARGE_INTEGER:
-                return RowsetDefinitionType.LONG.columnType;
-            case INTEGER:
-                return RowsetDefinitionType.INTEGER.columnType;
-            case BOOLEAN:
-                return RowsetDefinitionType.BOOLEAN.columnType;
-            default:
-                return RowsetDefinitionType.STRING.columnType;
-            }
+            return switch (datatype) {
+                case UNSIGNED_INTEGER -> RowsetDefinitionType.UNSIGNED_INTEGER.columnType;
+                case DOUBLE -> RowsetDefinitionType.DOUBLE.columnType;
+                case LARGE_INTEGER -> RowsetDefinitionType.LONG.columnType;
+                case INTEGER -> RowsetDefinitionType.INTEGER.columnType;
+                case BOOLEAN -> RowsetDefinitionType.BOOLEAN.columnType;
+                default -> RowsetDefinitionType.STRING.columnType;
+            };
         }
         return null;
     }
@@ -722,20 +714,13 @@ public class Convertor {
 
     private static Object getDefaultValue(Property property) {
         Datatype datatype = property.getDatatype();
-        switch (datatype) {
-        case UNSIGNED_INTEGER:
-            return DEFAULT_INT;
-        case DOUBLE:
-            return DEFAULT_DOUBLE;
-        case LARGE_INTEGER:
-            return DEFAULT_LONG;
-        case INTEGER:
-            return DEFAULT_INT;
-        case BOOLEAN:
-            return DEFAULT_BOOLEAN;
-        default:
-            return null;
-        }
+        return switch (datatype) {
+            case UNSIGNED_INTEGER, INTEGER -> DEFAULT_INT;
+            case DOUBLE -> DEFAULT_DOUBLE;
+            case LARGE_INTEGER -> DEFAULT_LONG;
+            case BOOLEAN -> DEFAULT_BOOLEAN;
+            default -> null;
+        };
     }
 
     private static Axis getAxis(CellSet cellSet, CellSetAxis axis, List<Property> props, String name) {
@@ -1072,36 +1057,20 @@ public class Convertor {
      * @return XSD type
      */
     private static String sqlToXsdType(final int sqlType, final int scale) {
-        switch (sqlType) {
-        // Integer
-        case Types.INTEGER:
-        case Types.SMALLINT:
-        case Types.TINYINT:
-            return XSD_INTEGER;
-        case Types.NUMERIC:
-        case Types.DECIMAL:
+        return switch (sqlType) {
+            // Integer
+            case Types.INTEGER, Types.SMALLINT, Types.TINYINT -> XSD_INTEGER;
             // Oracle reports all numbers as NUMERIC. We check
             // the scale of the column and pick the right XSD type.
-            if (scale == 0) {
-                return XSD_INTEGER;
-            } else {
-                return XSD_DECIMAL;
-            }
-        case Types.BIGINT:
-            return XSD_INTEGER_LONG;
-        // Real
-        case Types.DOUBLE:
-        case Types.FLOAT:
-            return XSD_DOUBLE;
-        // Date and time
-        case Types.TIME:
-        case Types.TIMESTAMP:
-        case Types.DATE:
-            return XSD_STRING;
-        // Other
-        default:
-            return XSD_STRING;
-        }
+            case Types.NUMERIC, Types.DECIMAL -> (scale == 0) ? XSD_INTEGER : XSD_DECIMAL;
+            case Types.BIGINT -> XSD_INTEGER_LONG;
+            // Real
+            case Types.DOUBLE, Types.FLOAT -> XSD_DOUBLE;
+            // Date and time
+            case Types.TIME, Types.TIMESTAMP, Types.DATE -> XSD_STRING;
+            // Other
+            default -> XSD_STRING;
+        };
     }
 
     abstract static class Column {

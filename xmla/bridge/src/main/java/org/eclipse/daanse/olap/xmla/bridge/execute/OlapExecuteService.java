@@ -481,20 +481,13 @@ public class OlapExecuteService implements ExecuteService {
     }
 
     private AllocationPolicy convertAllocation(Allocation allocation) {
-        switch (allocation) {
-        case NO_ALLOCATION:
-            return AllocationPolicy.EQUAL_ALLOCATION;
-        case USE_EQUAL_ALLOCATION:
-            return AllocationPolicy.EQUAL_ALLOCATION;
-        case USE_EQUAL_INCREMENT:
-            return AllocationPolicy.EQUAL_INCREMENT;
-        case USE_WEIGHTED_ALLOCATION:
-            return AllocationPolicy.WEIGHTED_ALLOCATION;
-        case USE_WEIGHTED_INCREMENT:
-            return AllocationPolicy.WEIGHTED_INCREMENT;
-        default:
-            return AllocationPolicy.EQUAL_ALLOCATION;
-        }
+        return switch (allocation) {
+            case NO_ALLOCATION, USE_EQUAL_ALLOCATION -> AllocationPolicy.EQUAL_ALLOCATION;
+            case USE_EQUAL_INCREMENT -> AllocationPolicy.EQUAL_INCREMENT;
+            case USE_WEIGHTED_ALLOCATION -> AllocationPolicy.WEIGHTED_ALLOCATION;
+            case USE_WEIGHTED_INCREMENT -> AllocationPolicy.WEIGHTED_INCREMENT;
+            default -> AllocationPolicy.EQUAL_ALLOCATION;
+        };
     }
 
     private StatementResponse executeRefresh(Connection connection, Refresh refresh) {

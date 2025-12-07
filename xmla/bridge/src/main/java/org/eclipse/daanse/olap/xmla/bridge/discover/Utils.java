@@ -747,20 +747,14 @@ public class Utils {
 
     private static MemberTypeEnum getMemberTypeEnum(Member.MemberType memberType) {
         if (memberType != null) {
-            switch (memberType) {
-            case REGULAR:
-                return MemberTypeEnum.REGULAR_MEMBER;
-            case ALL:
-                return MemberTypeEnum.ALL_MEMBER;
-            case MEASURE:
-                return MemberTypeEnum.MEASURE;
-            case FORMULA:
-                return MemberTypeEnum.FORMULA;
-            case UNKNOWN:
-                return MemberTypeEnum.UNKNOWN;
-            default:
-                return MemberTypeEnum.REGULAR_MEMBER;
-            }
+            return switch (memberType) {
+                case REGULAR -> MemberTypeEnum.REGULAR_MEMBER;
+                case ALL -> MemberTypeEnum.ALL_MEMBER;
+                case MEASURE -> MemberTypeEnum.MEASURE;
+                case FORMULA -> MemberTypeEnum.FORMULA;
+                case UNKNOWN -> MemberTypeEnum.UNKNOWN;
+                default -> MemberTypeEnum.REGULAR_MEMBER;
+            };
         }
         return MemberTypeEnum.REGULAR_MEMBER;
     }
@@ -962,16 +956,12 @@ public class Utils {
 
     private static DimensionTypeEnum getDimensionType(DimensionType dimensionType) {
         if (dimensionType != null) {
-            switch (dimensionType) {
-            case STANDARD_DIMENSION:
-                return DimensionTypeEnum.OTHER;
-            case MEASURES_DIMENSION:
-                return DimensionTypeEnum.MEASURE;
-            case TIME_DIMENSION:
-                return DimensionTypeEnum.TIME;
-            default:
-                throw new RuntimeException("Wrong dimension type");
-            }
+            return switch (dimensionType) {
+                case STANDARD_DIMENSION -> DimensionTypeEnum.OTHER;
+                case MEASURES_DIMENSION -> DimensionTypeEnum.MEASURE;
+                case TIME_DIMENSION -> DimensionTypeEnum.TIME;
+                default -> throw new RuntimeException("Wrong dimension type");
+            };
         }
         return null;
     }

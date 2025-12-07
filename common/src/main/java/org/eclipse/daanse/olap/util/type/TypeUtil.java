@@ -289,43 +289,26 @@ public class TypeUtil {
 			return true;
 		}
 		RuntimeException e = null;
-		switch (from) {
-		case ARRAY:
-			return convertFromArray();
-		case DIMENSION:
-			return convertFromDimension(ordinal, to, conversions, from, e);
-		case HIERARCHY:
-			return convertFromHierarchy(ordinal, to, conversions, from);
-		case LEVEL:
-			return convertFromLevel(ordinal, to, conversions, from);
-		case LOGICAL:
-			return convertFromLogical(to);
-		case MEMBER:
-			return convertFromMember(ordinal, to, conversions, from);
-		case NUMERIC:
-			return convertFromNumeric(ordinal, to, conversions, from);
-		case INTEGER:
-			return convertFromInteger(to);
-		case SET:
-			return convertFromSet();
-		case STRING:
-			return convertFromString(to);
-		case DATE_TIME:
-			return convertFromDateTime(to);
-		case TUPLE:
-			return convertFromTuple(ordinal, to, conversions, from);
-		case VALUE:
-			return convertFromValue(ordinal, to, conversions, from);
-		case SYMBOL:
-			return convertFromSymbol();
-		case NULL:
-			return convertFromNull(ordinal, to, conversions, from);
-		case EMPTY:
-			return convertFromEmpty();
-		default:
-			throw Util.newInternal(new StringBuilder("unknown category ").append(from).append(" for type ")
+		return switch (from) {
+			case ARRAY -> convertFromArray();
+			case DIMENSION -> convertFromDimension(ordinal, to, conversions, from, e);
+			case HIERARCHY -> convertFromHierarchy(ordinal, to, conversions, from);
+			case LEVEL -> convertFromLevel(ordinal, to, conversions, from);
+			case LOGICAL -> convertFromLogical(to);
+			case MEMBER -> convertFromMember(ordinal, to, conversions, from);
+			case NUMERIC -> convertFromNumeric(ordinal, to, conversions, from);
+			case INTEGER -> convertFromInteger(to);
+			case SET -> convertFromSet();
+			case STRING -> convertFromString(to);
+			case DATE_TIME -> convertFromDateTime(to);
+			case TUPLE -> convertFromTuple(ordinal, to, conversions, from);
+			case VALUE -> convertFromValue(ordinal, to, conversions, from);
+			case SYMBOL -> convertFromSymbol();
+			case NULL -> convertFromNull(ordinal, to, conversions, from);
+			case EMPTY -> convertFromEmpty();
+			default -> throw Util.newInternal(new StringBuilder("unknown category ").append(from).append(" for type ")
 					.append(fromType).toString());
-		}
+		};
 	}
 
 	/**
@@ -456,31 +439,18 @@ public class TypeUtil {
 	}
 
 	private static boolean convertFromDateTime(DataType to) {
-		switch (to) {
-		case VALUE:
-			return true;
-		default:
-			return false;
-		}
+		return to == DataType.VALUE;
 	}
 
 	private static boolean convertFromString(DataType to) {
-		switch (to) {
-		case VALUE:
-			return true;
-		default:
-			return false;
-		}
+		return to == DataType.VALUE;
 	}
 
 	private static boolean convertFromInteger(DataType to) {
-		switch (to) {
-		case VALUE, NUMERIC:
-
-			return true;
-		default:
-			return false;
-		}
+		return switch (to) {
+			case VALUE, NUMERIC -> true;
+			default -> false;
+		};
 	}
 
 	private static boolean convertFromNumeric(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,

@@ -62,17 +62,10 @@ public enum DataType {
 	}
 
 	public boolean isScalar() {
-		switch (this) {
-		case VALUE:
-		case LOGICAL:
-		case NUMERIC:
-		case INTEGER:
-		case STRING:
-		case DATE_TIME:
-			return true;
-		default:
-			return false;
-		}
+		return switch (this) {
+			case VALUE, LOGICAL, NUMERIC, INTEGER, STRING, DATE_TIME -> true;
+			default -> false;
+		};
 	}
 
 	public String getName() {

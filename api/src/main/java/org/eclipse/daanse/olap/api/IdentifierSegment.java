@@ -70,9 +70,9 @@ public sealed interface IdentifierSegment permits KeyIdentifierSegment, NameIden
     String toString();
 
     /**
-     * Appends a string representation of this Segment to a StringBuffer.
+     * Appends a string representation of this Segment to a StringBuilder.
      *
-     * @param buf StringBuffer
+     * @param buf StringBuilder
      */
     void toString(StringBuilder buf);
 

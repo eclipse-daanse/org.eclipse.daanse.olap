@@ -338,7 +338,7 @@ public class CrossJoinTest {
   // Helper methods
   ////////////////////////////////////////////////////////////////////////
   protected String toString( TupleIterable l ) {
-    StringBuffer buf = new StringBuffer( 100 );
+    StringBuilder buf = new StringBuilder( 100 );
     buf.append( '{' );
     int j = 0;
     for ( List<Member> o : l ) {

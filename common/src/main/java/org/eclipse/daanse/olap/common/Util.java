@@ -2315,9 +2315,8 @@ public class Util {
         String text,
         Map<String, String> env)
     {
-        // As of JDK 1.5, cannot use StringBuilder - appendReplacement requires
-        // the antediluvian StringBuffer.
-        StringBuffer buf = new StringBuffer(text.length() + 200);
+        // Since Java 9, Matcher.appendReplacement accepts StringBuilder
+        StringBuilder buf = new StringBuilder(text.length() + 200);
 
         Pattern pattern = Pattern.compile("\\$\\{([^${}]+)\\}");
         Matcher matcher = pattern.matcher(text);

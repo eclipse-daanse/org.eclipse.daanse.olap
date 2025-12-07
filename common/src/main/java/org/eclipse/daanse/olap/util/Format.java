@@ -2953,9 +2953,9 @@ public class Format {
                     bigInteger.longValue(), buf);
             } else if (clazz == String.class) {
                 formatValue.format((String) o, buf);
-            } else if (o instanceof java.util.Date) {
+            } else if (o instanceof java.util.Date date) {
                 // includes java.sql.Date, java.sql.Time and java.sql.Timestamp
-                formatValue.format((Date) o, buf);
+                formatValue.format(date, buf);
             } else if (o instanceof Calendar calendar) {
                 formatValue.format(calendar, buf);
             } else {

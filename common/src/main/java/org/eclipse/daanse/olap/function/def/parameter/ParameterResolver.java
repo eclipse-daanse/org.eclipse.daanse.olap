@@ -165,8 +165,8 @@ public class ParameterResolver extends AbstractMetaDataMultiResolver {
         }
         if (category == DataType.MEMBER) {
             Type expType = exp.getType();
-            if (expType instanceof SetType) {
-                expType = ((SetType) expType).getElementType();
+            if (expType instanceof SetType setType) {
+                expType = setType.getElementType();
             }
             if (ParameterResolver.distinctFrom(type.getDimension(), expType.getDimension())
                     || ParameterResolver.distinctFrom(type.getHierarchy(), expType.getHierarchy())

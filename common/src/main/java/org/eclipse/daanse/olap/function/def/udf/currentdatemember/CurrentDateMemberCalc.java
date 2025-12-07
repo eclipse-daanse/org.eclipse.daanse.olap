@@ -69,11 +69,10 @@ public class CurrentDateMemberCalc extends AbstractProfilingNestedCalc<Object> {
         // if there is no matching member, return the null member for
         // the specified dimension/hierarchy
         Object arg0 = hierarchyCalc.evaluate(evaluator);
-        if (arg0 instanceof Hierarchy) {
-            resultDateMember = ((Hierarchy) arg0).getNullMember();
-        } else {
-            resultDateMember =
-                ((Dimension) arg0).getHierarchy().getNullMember();
+        if (arg0 instanceof Hierarchy hier) {
+            resultDateMember = hier.getNullMember();
+        } else if (arg0 instanceof Dimension dim) {
+            resultDateMember = dim.getHierarchy().getNullMember();
         }
         return resultDateMember;
     }

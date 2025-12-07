@@ -83,9 +83,7 @@ public class Pair <L, R>
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof Pair) {
-            //noinspection unchecked
-            Pair<L, R> pair = (Pair) obj;
+        if (obj instanceof Pair<?, ?> pair) {
             return Objects.equals(this.left, pair.left)
                 && Objects.equals(this.right, pair.right);
         }

@@ -263,11 +263,11 @@ public class ParameterImpl
         if (value instanceof List list && !(value instanceof TupleList)) {
             return TupleCollections.asTupleList(list);
         }
-        if (value instanceof MemberExpression) {
-            return ((MemberExpression) value).getMember();
+        if (value instanceof MemberExpression memberExpr) {
+            return memberExpr.getMember();
         }
-        if (value instanceof Literal) {
-            return ((Literal) value).getValue();
+        if (value instanceof Literal literal) {
+            return literal.getValue();
         }
         return value;
     }

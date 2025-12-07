@@ -328,9 +328,8 @@ class UnionRoleImpl implements Role {
                 int resultDepth = 0;
                 for (int i = 0; i < list.size(); i++) {
                     HierarchyAccess hierarchyAccess = list.get(i);
-                    if (hierarchyAccess instanceof AllHierarchyAccess
-                        ? ((AllHierarchyAccess) hierarchyAccess).getAccess()
-                        != AccessHierarchy.NONE : true)
+                    if (!(hierarchyAccess instanceof AllHierarchyAccess allAccess)
+                        || allAccess.getAccess() != AccessHierarchy.NONE)
                     {
                         int currentDepth =
                             hierarchyAccess.getBottomLevelDepth();

@@ -100,9 +100,8 @@ class ValueInfo {
                     this.value = inputValue;
                     this.isDecimal = false;
 
-                } else if (inputValue instanceof Long) {
+                } else if (inputValue instanceof Long lval) {
                     // See if it can be an integer or long
-                    long lval = (Long) inputValue;
                     setValueAndType(lval);
 
                 } else if (inputValue instanceof BigInteger bi) {
@@ -176,10 +175,10 @@ class ValueInfo {
                         }
                     }
 
-                } else if (inputValue instanceof Number) {
+                } else if (inputValue instanceof Number n) {
                     // Don't know what Number type we have here.
                     // Note: this could result in precision loss.
-                    this.value = ((Number) inputValue).longValue();
+                    this.value = n.longValue();
                     this.valueType = valueTypeHint;
                     this.isDecimal = false;
 
@@ -206,6 +205,7 @@ class ValueInfo {
                         || inputValue instanceof Long) {
                     // Convert from byte/short/integer/long to double
                     this.value = ((Number) inputValue).doubleValue();
+                    // Note: Pattern matching not beneficial here as we're checking multiple types
                     this.valueType = valueTypeHint;
                     this.isDecimal = true;
 
@@ -248,10 +248,10 @@ class ValueInfo {
                         this.isDecimal = true;
                     }
 
-                } else if (inputValue instanceof Number) {
+                } else if (inputValue instanceof Number n) {
                     // Don't know what Number type we have here.
                     // Note: this could result in precision loss.
-                    this.value = ((Number) inputValue).doubleValue();
+                    this.value = n.doubleValue();
                     this.valueType = valueTypeHint;
                     this.isDecimal = true;
 
@@ -285,9 +285,9 @@ class ValueInfo {
                 this.value = s.intValue();
                 this.isDecimal = false;
 
-            } else if (inputValue instanceof Long) {
+            } else if (inputValue instanceof Long lval) {
                 // See if it can be an integer or long
-                setValueAndType((Long) inputValue);
+                setValueAndType(lval);
 
             } else if (inputValue instanceof BigInteger bi) {
                 // See if it can be an integer or long
@@ -333,10 +333,10 @@ class ValueInfo {
                 }
                 this.isDecimal = true;
 
-            } else if (inputValue instanceof Number) {
+            } else if (inputValue instanceof Number n) {
                 // Don't know what Number type we have here.
                 // Note: this could result in precision loss.
-                this.value = ((Number) inputValue).longValue();
+                this.value = n.longValue();
                 this.valueType = XsdType.XSD_LONG;
                 this.isDecimal = false;
 

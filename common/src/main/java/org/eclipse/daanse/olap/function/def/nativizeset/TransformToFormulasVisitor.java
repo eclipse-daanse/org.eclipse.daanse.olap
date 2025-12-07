@@ -114,10 +114,10 @@ public class TransformToFormulasVisitor extends MdxVisitorImpl {
             Expression curr = args.get(i);
             if (prev.toString().equals(curr.toString())) {
                 OlapElement element = null;
-                if (curr instanceof NamedSetExpression) {
-                    element = ((NamedSetExpression) curr).getNamedSet();
-                } else if (curr instanceof MemberExpression) {
-                    element = ((MemberExpression) curr).getMember();
+                if (curr instanceof NamedSetExpression namedSetExpr) {
+                    element = namedSetExpr.getNamedSet();
+                } else if (curr instanceof MemberExpression memberExpr) {
+                    element = memberExpr.getMember();
                 }
                 if (element != null) {
                     Level level = element.getHierarchy().getLevels().getFirst();

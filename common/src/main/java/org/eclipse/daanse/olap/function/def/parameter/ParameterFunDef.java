@@ -90,9 +90,8 @@ public class ParameterFunDef  extends AbstractFunctionDefinition {
         if (typeArg instanceof FunctionCall hierarchyCall) {
             if (hierarchyCall.getOperationAtom().name().equals("Hierarchy")
                 && hierarchyCall.getArgCount() > 0
-                && hierarchyCall.getArg(0) instanceof FunctionCall)
+                && hierarchyCall.getArg(0) instanceof FunctionCall currentMemberCall)
             {
-                FunctionCall currentMemberCall = (FunctionCall) hierarchyCall.getArg(0);
                 if (currentMemberCall.getOperationAtom().name().equals("CurrentMember")
                     && currentMemberCall.getArgCount() > 0
                     && currentMemberCall.getArg(0) instanceof DimensionExpression)

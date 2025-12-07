@@ -90,10 +90,9 @@ public class ArrayMap<K, V>
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Map)) {
+        if (!(o instanceof Map<?, ?> m)) {
             return false;
         }
-        Map<K, V> m = (Map<K, V>) o;
         if (m.size() != size()) {
             return false;
         }

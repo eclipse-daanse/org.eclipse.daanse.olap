@@ -2279,15 +2279,10 @@ public class Util {
         Map<String, String> map)
         throws IOException
     {
-        final Reader r =
-            new BufferedReader(new InputStreamReader(url.openStream()));
         final int BUF_SIZE = 8096;
-        try {
+        try (Reader r = new BufferedReader(new InputStreamReader(url.openStream()))) {
             String xmlCatalog = readFully(r, BUF_SIZE);
-            xmlCatalog = Util.replaceProperties(xmlCatalog, map);
-            return xmlCatalog;
-        } finally {
-            r.close();
+            return Util.replaceProperties(xmlCatalog, map);
         }
     }
 

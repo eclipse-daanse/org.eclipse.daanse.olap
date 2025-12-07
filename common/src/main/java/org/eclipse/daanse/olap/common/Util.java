@@ -2822,7 +2822,7 @@ public class Util {
   /**
    * Wraps a CatalogReader so that each call has a locus for profiling purposes.
    *
-   * <p>This method creates a {@link LocusCatalogReaderWrapper} that automatically
+   * <p>This method creates a {@link ExecutionCatalogReaderWrapper} that automatically
    * manages the execution context for every method call on the CatalogReader interface.
    *
    * @param connection Connection providing execution context

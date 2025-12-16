@@ -11,8 +11,9 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.xmla.bridge;
+package org.eclipse.daanse.olap.xmla.bridge.integration;
 
+import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

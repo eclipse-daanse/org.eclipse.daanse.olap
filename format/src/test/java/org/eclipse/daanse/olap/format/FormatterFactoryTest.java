@@ -44,16 +44,16 @@ class FormatterFactoryTest {
     void shouldCreateFormatterByClassName() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
-                .formatterAttr("org.eclipse.daanse.rolap.common.format.CellFormatterTestImpl")
+                .formatterAttr("org.eclipse.daanse.olap.format.CellFormatterTestImpl")
                 .build();
         FormatterCreateContext memberFormatterContext =
             new FormatterCreateContext.Builder("name")
-                .formatterAttr("org.eclipse.daanse.rolap.common.format.MemberFormatterTestImpl")
+                .formatterAttr("org.eclipse.daanse.olap.format.MemberFormatterTestImpl")
                 .build();
         FormatterCreateContext propertyFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr(
-                    "org.eclipse.daanse.rolap.common.format.PropertyFormatterTestImpl")
+                    "org.eclipse.daanse.olap.format.PropertyFormatterTestImpl")
                 .build();
 
         CellFormatter cellFormatter =
@@ -109,18 +109,18 @@ class FormatterFactoryTest {
     void shouldCreateFormatterByClassNameIfBothSpecified() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
-                .formatterAttr("org.eclipse.daanse.rolap.common.format.CellFormatterTestImpl")
+                .formatterAttr("org.eclipse.daanse.olap.format.CellFormatterTestImpl")
                 .script("return null;", "JavaScript")
                 .build();
         FormatterCreateContext memberFormatterContext =
             new FormatterCreateContext.Builder("name")
-                .formatterAttr("org.eclipse.daanse.rolap.common.format.MemberFormatterTestImpl")
+                .formatterAttr("org.eclipse.daanse.olap.format.MemberFormatterTestImpl")
                 .script("return null;", "JavaScript")
                 .build();
         FormatterCreateContext propertyFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr(
-                    "org.eclipse.daanse.rolap.common.format.PropertyFormatterTestImpl")
+                    "org.eclipse.daanse.olap.format.PropertyFormatterTestImpl")
                 .script("return null;", "JavaScript")
                 .build();
 

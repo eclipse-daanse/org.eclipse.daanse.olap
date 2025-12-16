@@ -114,7 +114,7 @@ public abstract class ConnectionBase implements Connection {
             parser = getContext().getMdxParserProvider().newParser(queryToParse, funTable.getPropertyWords());
             MdxStatement mdxStatement = parser.parseMdxStatement();
             return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
-        } catch (MdxParserException mdxPE) {
+        } catch (Exception mdxPE) {
 
             Optional<SqlGuardFactory> oSqlGuardFactory = getContext().getSqlGuardFactory();
             if (oSqlGuardFactory.isEmpty()) {
@@ -122,7 +122,8 @@ public abstract class ConnectionBase implements Connection {
             } else {
                 List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
                 org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl("", ds);
-                SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of(), this.getContext().getDialect());
+                //TODO need resolve function list from other place
+                SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of("sum", "avg", "min", "max", "count", "concat"), this.getContext().getDialect());
                 // TODO add white list functions
                 try {
                     String sanetizedSql = guard.guard(queryToParse);

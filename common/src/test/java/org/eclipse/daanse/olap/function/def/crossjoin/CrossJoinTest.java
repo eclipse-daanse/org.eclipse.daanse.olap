@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
@@ -64,6 +65,7 @@ import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
 import org.eclipse.daanse.olap.api.execution.ExecutionContext;
+import org.eclipse.daanse.olap.api.execution.ExecutionMetadata;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,7 +139,8 @@ public class CrossJoinTest {
         when(rolapConnection.getContext()).thenReturn(context);
         when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(excMock.getDaanseStatement()).thenReturn(statement);
-        ExecutionContext executionContext = mock(ExecutionContext.class);
+        ExecutionMetadata executionMetadata = mock(ExecutionMetadata.class);
+        ExecutionContext executionContext = ExecutionContext.root(Optional.empty(), executionMetadata);
         when(excMock.asContext()).thenReturn(executionContext);
       CrossJoinIterCalc calc =
         new CrossJoinIterCalc( getResolvedFunCall(), null, crossJoinFunDef.getCtag() );

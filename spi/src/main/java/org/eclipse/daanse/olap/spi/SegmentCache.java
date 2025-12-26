@@ -26,8 +26,6 @@ package org.eclipse.daanse.olap.spi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.common.SystemWideProperties;
-
 /**
  * SPI definition of the segments cache.
  *

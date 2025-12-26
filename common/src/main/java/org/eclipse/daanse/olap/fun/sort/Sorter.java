@@ -30,7 +30,6 @@ package org.eclipse.daanse.olap.fun.sort;
 import static org.eclipse.daanse.olap.common.Util.DOUBLE_NULL;
 import static org.eclipse.daanse.olap.common.Util.newInternal;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.AbstractList;
 import java.util.ArrayList;

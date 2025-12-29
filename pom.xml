@@ -62,6 +62,7 @@
     <module>format</module>
     <module>odc</module>
     <module>check</module>
+    <module>csdl</module>
   </modules>
 
   <dependencies>

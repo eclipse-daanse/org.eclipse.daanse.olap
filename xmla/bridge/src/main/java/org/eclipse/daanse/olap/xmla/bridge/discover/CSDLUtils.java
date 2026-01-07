@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.xmla.bridge.discover;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +29,25 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.element.MemberBase;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiFactory;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TEntityContainer;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TEntitySet;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TEntityType;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.THierarchy;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TLevel;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TMeasure;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.EdmFactory;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.EntityContainerType;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.EntitySetType;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityKeyElement;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityProperty;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.TPropertyRef;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.TSchema;
 
 public class CSDLUtils {
+    private static EdmFactory edmFactory = EdmFactory.eINSTANCE;
+    private static BiFactory biFactory = BiFactory.eINSTANCE;
+
     private static final String csdlMd = """
             <Schema
                 xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
@@ -251,6 +270,132 @@ public class CSDLUtils {
                                 </EntityType>
                             </Schema>
                       """;
+
+    
+    public static TSchema getCSDLModel(Catalog catalog, Optional<String> perspectiveName) {
+        //return String.format(csdlMd, catalog.getName(), getTables(catalog), getCubes(catalog), getTableColumns(catalog));
+        if (perspectiveName.isPresent()) {
+            String cubeName = perspectiveName.get();
+            Optional<Cube> oCube = catalog.getCubes().stream().filter(c -> cubeName.equals(c.getName())).findFirst();
+            if (oCube.isPresent()) {
+                Cube cube = oCube.get();
+                TSchema schema = edmFactory.createTSchema();
+                schema.setNamespace("Model");
+                schema.setAlias("Model");
+
+                EntityContainerType container = edmFactory.createEntityContainerType();
+                container.setName(catalog.getName());
+
+                TEntityContainer biContainer = biFactory.createTEntityContainer();
+                biContainer.setCaption(cube.getName());
+                biContainer.setCulture("de-DE");
+                container.setBiEntityContainer(biContainer);
+
+                
+                List<Member> measures = cube.getMeasures();
+                if (measures != null) {
+                    for (Member member : measures) {
+                        EntitySetType entitySet = edmFactory.createEntitySetType();
+                        entitySet.setName(member.getUniqueName());
+                        entitySet.setEntityType("Model." + member.getUniqueName());
+                        TEntitySet biEntitySet = biFactory.createTEntitySet();
+                        biEntitySet.setCaption(member.getCaption());
+                        entitySet.setBiEntitySet(biEntitySet);
+                        container.getEntitySet().add(entitySet);
+
+                        org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityType measureSumType = edmFactory.createTEntityType();
+                        measureSumType.setName(member.getUniqueName());
+
+                        TEntityType biMeasureSumType = biFactory.createTEntityType();
+                        biMeasureSumType.setContents(member.getUniqueName());
+                        measureSumType.setBiEntityType(biMeasureSumType);
+
+                        TEntityProperty valueProperty = edmFactory.createTEntityProperty();
+                        valueProperty.setName(member.getUniqueName());
+                        valueProperty.setType("Int32");
+                        valueProperty.setNullable(false);
+
+                        TMeasure biValueMeasure = biFactory.createTMeasure();
+                        biValueMeasure.setCaption(member.getUniqueName());
+                        biValueMeasure.setHidden(false);
+                        valueProperty.setBiMeasure(biValueMeasure);
+
+                        measureSumType.getProperty().add(valueProperty);
+                        schema.getEntityType().add(measureSumType);
+                    }
+                }
+
+                List<Hierarchy> hierarchies = cube.getHierarchies();
+                if (hierarchies != null) {
+                    for (Hierarchy hierarchy : hierarchies) {
+                        EntitySetType entitySetHierarchy = edmFactory.createEntitySetType();
+                        entitySetHierarchy.setName(hierarchy.getUniqueName());
+                        entitySetHierarchy.setEntityType("Model." + hierarchy.getUniqueName());
+
+                        TEntitySet biEntitySetHierarchy  = biFactory.createTEntitySet();
+                        biEntitySetHierarchy.setCaption(hierarchy.getCaption());
+
+                        entitySetHierarchy.setBiEntitySet(biEntitySetHierarchy);
+
+                        container.getEntitySet().add(entitySetHierarchy);
+
+                        org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityType hierarchyType = edmFactory.createTEntityType();
+                        hierarchyType.setName(hierarchy.getUniqueName());
+
+                        List<TLevel> levels = new ArrayList<>();
+
+                        List<? extends Level> ls = hierarchy.getLevels();
+                        if (ls != null) {
+                            for (Level l : ls) {
+                                TLevel tLevel = biFactory.createTLevel();
+                                tLevel.setName(l.getUniqueName());
+                                tLevel.setCaption(l.getCaption());
+                                tLevel.setReferenceName(l.getUniqueName());
+                                levels.add(tLevel);
+                                
+                                TEntityProperty levelProperty = edmFactory.createTEntityProperty();
+                                levelProperty.setName(l.getUniqueName());
+                                levelProperty.setType("String");
+                                levelProperty.setNullable(false);
+                                hierarchyType.getProperty().add(levelProperty);
+                            }
+                        }
+
+                        THierarchy hierarchyTHierarchy = biFactory.createTHierarchy();
+                        hierarchyTHierarchy.setCaption(hierarchy.getCaption());
+                        hierarchyTHierarchy.setName(hierarchy.getUniqueName());
+                        hierarchyTHierarchy.setReferenceName(hierarchy.getUniqueName());
+
+                        hierarchyTHierarchy.getLevel().addAll(levels);
+
+                        TEntityType hierarchyTEntityType = biFactory.createTEntityType();
+                        hierarchyTEntityType.setContents(hierarchy.getUniqueName());
+                        hierarchyTEntityType.getHierarchy().add(hierarchyTHierarchy);
+
+                        hierarchyType.setBiEntityType(hierarchyTEntityType);
+
+                        TEntityProperty hierarchyKeyProperty = edmFactory.createTEntityProperty();
+                        hierarchyKeyProperty.setName(hierarchy.getUniqueName());
+                        hierarchyKeyProperty.setType("Int32");
+                        hierarchyKeyProperty.setNullable(false);
+
+                        TPropertyRef hierarchyPropertyRef = edmFactory.createTPropertyRef();
+                        hierarchyPropertyRef.setName(hierarchy.getUniqueName());
+
+                        TEntityKeyElement key =  edmFactory.createTEntityKeyElement();
+                        key.getPropertyRef().add(hierarchyPropertyRef);
+
+
+                        hierarchyType.getProperty().add(hierarchyKeyProperty);
+
+                        schema.getEntityType().add(hierarchyType);
+                    }
+                }
+                return schema;
+            }
+        }
+        return edmFactory.createTSchema();
+    }
 
     public static String getCSDL(Catalog catalog, Optional<String> perspectiveName) {
         //return String.format(csdlMd, catalog.getName(), getTables(catalog), getCubes(catalog), getTableColumns(catalog));

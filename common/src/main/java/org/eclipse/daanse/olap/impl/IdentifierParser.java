@@ -421,7 +421,7 @@ public class IdentifierParser {
          *     segment, or continuation of a key segment
          */
         void segmentComplete(
-            ParseRegionImpl region,
+            ParseRegionR region,
             String name,
             Quoting quoting,
             IdentifierParser.Builder.Syntax syntax);
@@ -463,7 +463,7 @@ public class IdentifierParser {
         }
 
         public void segmentComplete(
-            ParseRegionImpl region,
+            ParseRegionR region,
             String name,
             Quoting quoting,
             Syntax syntax)

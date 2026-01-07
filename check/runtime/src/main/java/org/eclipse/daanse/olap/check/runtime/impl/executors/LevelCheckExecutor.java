@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,13 +56,13 @@ public class LevelCheckExecutor {
 
     public LevelCheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         LevelCheckResult result = factory.createLevelCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setLevelName(check.getLevelName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -71,7 +71,7 @@ public class LevelCheckExecutor {
 
             if (foundLevel.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
-                result.setEndTime(new Date());
+                result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
             }
@@ -110,7 +110,7 @@ public class LevelCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

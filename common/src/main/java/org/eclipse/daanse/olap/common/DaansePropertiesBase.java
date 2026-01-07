@@ -28,9 +28,8 @@
 package org.eclipse.daanse.olap.common;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
@@ -160,8 +159,8 @@ public abstract class DaansePropertiesBase extends Properties {
 		public InputStream openStream() {
             try {
                 this.lastModified = file.lastModified();
-                return new FileInputStream(file);
-            } catch (FileNotFoundException e) {
+                return Files.newInputStream(file.toPath());
+            } catch (IOException e) {
                 throw Util.newInternal(
                     e,
                     new StringBuilder("Error while opening properties file '").append(file).append("'").toString());

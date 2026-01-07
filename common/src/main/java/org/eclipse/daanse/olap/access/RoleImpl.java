@@ -799,21 +799,15 @@ public class RoleImpl implements Role {
     @Override
 	public boolean canAccess(OlapElement olapElement) {
         Util.assertPrecondition(olapElement != null, "olapElement != null");
-        if (olapElement instanceof Member member) {
-            return getAccess(member) != AccessMember.NONE;
-        } else if (olapElement instanceof Level level) {
-            return getAccess(level) != AccessMember.NONE;
-        } else if (olapElement instanceof NamedSet namedSet) {
-            return getAccess(namedSet) != AccessMember.NONE;
-        } else if (olapElement instanceof Hierarchy hierarchy) {
-            return getAccess(hierarchy) != AccessHierarchy.NONE;
-        } else if (olapElement instanceof Cube cube) {
-            return getAccess(cube) != AccessCube.NONE;
-        } else if (olapElement instanceof Dimension dimension) {
-            return getAccess(dimension) != AccessDimension.NONE;
-        } else {
-            return false;
-        }
+        return switch (olapElement) {
+            case Member member -> getAccess(member) != AccessMember.NONE;
+            case Level level -> getAccess(level) != AccessMember.NONE;
+            case NamedSet namedSet -> getAccess(namedSet) != AccessMember.NONE;
+            case Hierarchy hierarchy -> getAccess(hierarchy) != AccessHierarchy.NONE;
+            case Cube cube -> getAccess(cube) != AccessCube.NONE;
+            case Dimension dimension -> getAccess(dimension) != AccessDimension.NONE;
+            default -> false;
+        };
     }
 
     @Override
@@ -941,7 +935,7 @@ public class RoleImpl implements Role {
             this.access = access;
             this.rollupPolicy = rollupPolicy;
             this.topLevel = topLevel == null
-                ? hierarchy.getLevels().get(0)
+                ? hierarchy.getLevels().getFirst()
                 : topLevel;
             this.bottomLevel = bottomLevel == null
                 ? hierarchy.getLevels().getLast()

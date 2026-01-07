@@ -12,6 +12,7 @@
 */
 package org.eclipse.daanse.olap.odc.simple.impl;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class AutoOdc {
                     Files.write(path.resolve("cube_measures_" + cube.getName() + ".odc"), out.getBytes());
                 }
 
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

@@ -259,7 +259,7 @@ public class OlapExecuteService implements ExecuteService {
         Optional<String> oCatalog = statementRequest.properties().catalog();
         //some clients (Power BI send empty catalog if only one catalog)
         if (!oCatalog.isPresent() && contextsListSupplyer.getContexts() != null && contextsListSupplyer.getContexts().size() == 1) {
-            oCatalog = Optional.ofNullable(contextsListSupplyer.getContexts().get(0).getName());
+            oCatalog = Optional.ofNullable(contextsListSupplyer.getContexts().getFirst().getName());
         }
         if (oCatalog.isPresent()) {
             String catalogName = oCatalog.get();
@@ -270,31 +270,25 @@ public class OlapExecuteService implements ExecuteService {
                 Connection connection = context.getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r)), locale));
                 QueryComponent queryComponent = connection.parseStatement(statement);
 
-                if (queryComponent instanceof DrillThrough drillThrough) {
-                    return executeDrillThroughQuery(statementRequest, drillThrough);
-                } else if (queryComponent instanceof CalculatedFormula calculatedFormula) {
-                    return executeCalculatedFormula(connection, calculatedFormula);
-                } else if (queryComponent instanceof DmvQuery dmvQuery) {
-                    return executeDmvQuery(connection, dmvQuery, metaData, statementRequest);
-                    // TODO: remove  userRolePrincipal,  metaData,
-                } else if (queryComponent instanceof Refresh refresh) {
-                    return executeRefresh(connection, refresh);
-                } else if (queryComponent instanceof Update update) {
-                    return executeUpdate(connection, statementRequest, update);
-                } else if (queryComponent instanceof TransactionCommand transactionCommand) {
-                    return executeTransactionCommand(connection, statementRequest, transactionCommand,
+                return switch (queryComponent) {
+                    case DrillThrough drillThrough -> executeDrillThroughQuery(statementRequest, drillThrough);
+                    case CalculatedFormula calculatedFormula -> executeCalculatedFormula(connection, calculatedFormula);
+                    case DmvQuery dmvQuery -> executeDmvQuery(connection, dmvQuery, metaData, statementRequest);
+                        // TODO: remove  userRolePrincipal,  metaData,
+                    case Refresh refresh -> executeRefresh(connection, refresh);
+                    case Update update -> executeUpdate(connection, statementRequest, update);
+                    case TransactionCommand transactionCommand -> executeTransactionCommand(connection, statementRequest, transactionCommand,
                             userRolePrincipal.userName());
-                } else if (queryComponent instanceof Query query) {
-                    return executeQuery(statementRequest, query);
-                } else if (queryComponent instanceof SqlQuery sqlQuery) {
-                    return executeSqlQuery(sqlQuery);
-                }
+                    case Query query -> executeQuery(statementRequest, query);
+                    case SqlQuery sqlQuery -> executeSqlQuery(sqlQuery);
+                    default -> null;
+                };
             
         } else {
             if (contextsListSupplyer.getContexts() != null && !contextsListSupplyer.getContexts().isEmpty()) {
                 //TODO: aggregate word from all statements?
                 //or do we have a default context?
-                Connection connection = contextsListSupplyer.getContexts().get(0).getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
+                Connection connection = contextsListSupplyer.getContexts().getFirst().getConnection(new ConnectionProps(RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
                 QueryComponent queryComponent = connection.parseStatement(statement);
                 if (queryComponent instanceof DmvQuery dmvQuery) {
                     
@@ -447,7 +441,7 @@ public class OlapExecuteService implements ExecuteService {
                             .append(" ON 0 FROM ").append(update.getCubeName())
                             // .append(" CELL PROPERTIES CELL_ORDINAL")
                             .toString());
-                    CellSetAxis axis = cellSet.getAxes().get(0);
+                    CellSetAxis axis = cellSet.getAxes().getFirst();
                     if (axis.getPositionCount() == 0) {
                         // Empty tuple exception
                     }
@@ -783,39 +777,33 @@ public class OlapExecuteService implements ExecuteService {
     }
 
     private Object getValue(RowSetRow row, Expression exp, List<ExecuteParameter> parameters) {
-        if (exp instanceof Id id) {
-            Segment s = id.getElement(0);
-            if (s instanceof NameSegment ns) {
-                String columnName = ns.getName();
-                if (columnName.startsWith("@")) {
-                    columnName = columnName.substring(1);
-                    Object value = null;
-                    final String cn = columnName;
-                    Optional<ExecuteParameter> oExecuteParameter = parameters.stream().filter(p -> cn.equals(p.name()))
-                            .findFirst();
-                    if (oExecuteParameter.isPresent()) {
-                        value = oExecuteParameter.get().value();
+        return switch (exp) {
+            case Id id -> {
+                Segment s = id.getElement(0);
+                if (s instanceof NameSegment ns) {
+                    String columnName = ns.getName();
+                    if (columnName.startsWith("@")) {
+                        columnName = columnName.substring(1);
+                        final String cn = columnName;
+                        Optional<ExecuteParameter> oExecuteParameter = parameters.stream()
+                                .filter(p -> cn.equals(p.name())).findFirst();
+                        yield oExecuteParameter.map(ExecuteParameter::value).orElse(null);
+                    } else {
+                        final String cn = columnName;
+                        Optional<RowSetRowItem> oRowSetRowItem = row.rowSetRowItem().stream()
+                                .filter(ri -> cn.equals(ri.tagName())).findFirst();
+                        yield oRowSetRowItem.filter(item -> item.value() != null)
+                                .map(RowSetRowItem::value).orElse(null);
                     }
-                    return value;
-                } else {
-                    Object value = null;
-                    final String cn = columnName;
-                    Optional<RowSetRowItem> oRowSetRowItem = row.rowSetRowItem().stream()
-                            .filter(ri -> cn.equals(ri.tagName())).findFirst();
-                    if (oRowSetRowItem.isPresent() && oRowSetRowItem.get().value() != null) {
-                        value = oRowSetRowItem.get().value();
-                    }
-                    return value;
                 }
+                yield null;
             }
-        } else if (exp instanceof Literal l) {
-            Object value = l.getValue();
-            if (value != null) {
-                value = value.toString();
+            case Literal l -> {
+                Object value = l.getValue();
+                yield value != null ? value.toString() : null;
             }
-            return value;
-        }
-        return null;
+            case null, default -> null;
+        };
     }
 
     private RowSetR filterRowSetByColumns(RowSetR rowSet, List<String> columns, Expression where,

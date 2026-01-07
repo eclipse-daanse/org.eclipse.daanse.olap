@@ -201,7 +201,7 @@ public class OtherDiscoverService {
     public List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request, RequestMetaData metaData) {
         List<DiscoverKeywordsResponseRow> result = new ArrayList<>();
         if (this.contextsListSupplyer.getContexts() != null && !this.contextsListSupplyer.getContexts().isEmpty()) {
-            for (String keyword : this.contextsListSupplyer.getContexts().get(0).getKeywordList()) {
+            for (String keyword : this.contextsListSupplyer.getContexts().getFirst().getKeywordList()) {
                 result.add(new DiscoverKeywordsResponseRowR(keyword));
             }
         }

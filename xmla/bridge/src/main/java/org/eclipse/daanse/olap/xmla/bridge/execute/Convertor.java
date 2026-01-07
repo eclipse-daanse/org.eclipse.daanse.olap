@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Statement;
@@ -116,7 +117,7 @@ public class Convertor {
         longProps.put("DisplayInfo", Property.StandardMemberProperty.DISPLAY_INFO);
     }
 
-    protected static Map<String, CellProperty> cellPropertyMap = new HashMap<>();
+    protected static Map<String, CellPropertyR> cellPropertyMap = new HashMap<>();
 
     public static final String CELL_ORDINAL = "CELL_ORDINAL";
 
@@ -127,14 +128,14 @@ public class Convertor {
     public static final String XSD_UNSIGNED_INT = "xsd:unsignedInt";
 
     static {
-        cellPropertyMap.put(CELL_ORDINAL, new CellProperty(CELL_ORDINAL, "CellOrdinal", XSD_UNSIGNED_INT));
-        cellPropertyMap.put(VALUE, new CellProperty(VALUE, "Value", null));
-        cellPropertyMap.put(FORMATTED_VALUE, new CellProperty(FORMATTED_VALUE, "FmtValue", "xsd:string"));
-        cellPropertyMap.put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
-        cellPropertyMap.put("LANGUAGE", new CellProperty("LANGUAGE", "Language", XSD_UNSIGNED_INT));
-        cellPropertyMap.put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", XSD_UNSIGNED_INT));
-        cellPropertyMap.put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", XSD_UNSIGNED_INT));
-        cellPropertyMap.put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
+        cellPropertyMap.put(CELL_ORDINAL, new CellPropertyR(CELL_ORDINAL, "CellOrdinal", XSD_UNSIGNED_INT));
+        cellPropertyMap.put(VALUE, new CellPropertyR(VALUE, "Value", null));
+        cellPropertyMap.put(FORMATTED_VALUE, new CellPropertyR(FORMATTED_VALUE, "FmtValue", "xsd:string"));
+        cellPropertyMap.put("FORMAT_STRING", new CellPropertyR("FORMAT_STRING", "FormatString", "xsd:string"));
+        cellPropertyMap.put("LANGUAGE", new CellPropertyR("LANGUAGE", "Language", XSD_UNSIGNED_INT));
+        cellPropertyMap.put("BACK_COLOR", new CellPropertyR("BACK_COLOR", "BackColor", XSD_UNSIGNED_INT));
+        cellPropertyMap.put("FORE_COLOR", new CellPropertyR("FORE_COLOR", "ForeColor", XSD_UNSIGNED_INT));
+        cellPropertyMap.put("FONT_FLAGS", new CellPropertyR("FONT_FLAGS", "FontFlags", "xsd:int"));
     }
 
     protected static final List<Property> defaultProps = List.of(
@@ -159,14 +160,14 @@ public class Convertor {
     public static StatementResponse toStatementResponseRowSet(ResultSet rs, int totalCount) throws SQLException {
         List<RowSetRow> rowSetRows = new ArrayList<>();
         RowSetR rowSet = new RowSetR(rowSetRows);
-        List<SqlColumn> columns = new ArrayList<>();
+        List<SqlColumnR> columns = new ArrayList<>();
         List<Object[]> rows;
         ResultSetMetaData md = rs.getMetaData();
         int columnCount = md.getColumnCount();
 
         // populate column defs
         for (int i = 0; i < columnCount; i++) {
-            columns.add(new SqlColumn(md.getColumnLabel(i + 1), md.getColumnType(i + 1), md.getScale(i + 1)));
+            columns.add(SqlColumnR.of(md.getColumnLabel(i + 1), md.getColumnType(i + 1), md.getScale(i + 1)));
         }
 
         // Populate data; assume that SqlStatement is already positioned
@@ -184,8 +185,8 @@ public class Convertor {
         if (totalCount >= 0) {
             String countStr = Integer.toString(totalCount);
             List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
-            for (SqlColumn column : columns) {
-                rowSetRowItem.add(new RowSetRowItemR(column.encodedName, column.name, countStr, Optional.empty()));
+            for (SqlColumnR column : columns) {
+                rowSetRowItem.add(new RowSetRowItemR(column.encodedName(), column.name(), countStr, Optional.empty()));
             }
             rowSetRows.add(new RowSetRowR(rowSetRowItem));
         }
@@ -199,8 +200,8 @@ public class Convertor {
                     if (value instanceof Number) {
                         valueString = XmlaUtil.normalizeNumericString(valueString);
                     }
-                    rowSetRowItem.add(new RowSetRowItemR(columns.get(i).encodedName, columns.get(i).name, valueString,
-                            Optional.of(ItemTypeEnum.fromValue(columns.get(i).xsdType))));
+                    rowSetRowItem.add(new RowSetRowItemR(columns.get(i).encodedName(), columns.get(i).name(), valueString,
+                            Optional.of(ItemTypeEnum.fromValue(columns.get(i).xsdType()))));
                 }
             }
             rowSetRows.add(new RowSetRowR(rowSetRowItem));
@@ -252,7 +253,7 @@ public class Convertor {
                 empty = true;
                 continue;
             }
-            dimensionCount += axis.getPositions().get(0).getMembers().size();
+            dimensionCount += axis.getPositions().getFirst().getMembers().size();
         }
 
         // Build a list of the lowest level used on each non-COLUMNS axis.
@@ -300,18 +301,11 @@ public class Convertor {
 
         // Deduce the list of column headings.
         if (!axes.isEmpty()) {
-            CellSetAxis columnsAxis = axes.get(0);
+            CellSetAxis columnsAxis = axes.getFirst();
             for (Position position : columnsAxis.getPositions()) {
-                String name = null;
-                int j = 0;
-                for (Member member : position.getMembers()) {
-                    if (j == 0) {
-                        name = member.getUniqueName();
-                    } else {
-                        name = new StringBuilder(name).append(".").append(member.getUniqueName()).toString();
-                    }
-                    j++;
-                }
+                String name = position.getMembers().stream()
+                        .map(Member::getUniqueName)
+                        .collect(Collectors.joining("."));
                 columnList.add(new CellColumn(name));
             }
         }
@@ -472,7 +466,7 @@ public class Convertor {
         List<CellType> cellList = new ArrayList<>();
         Cell cell = cellSet.getCell(pos);
 
-        Boolean allPropertyIsEmpty = true;
+        boolean allPropertyIsEmpty = true;
         for (String propertyName : queryCellPropertyNames) {
             if (cell.getPropertyValue(propertyName) != null) {
                 allPropertyIsEmpty = false;
@@ -568,7 +562,7 @@ public class Convertor {
             Member positionMember;
             final List<Position> slicerPositions = slicerAxis.getPositions();
             if (slicerPositions != null && !slicerPositions.isEmpty()) {
-                final Position pos0 = slicerPositions.get(0);
+                final Position pos0 = slicerPositions.getFirst();
                 int i = 0;
                 for (Member member : pos0.getMembers()) {
                     memberMap.put(member.getHierarchy().getName(), i++);
@@ -576,7 +570,7 @@ public class Convertor {
             }
 
             final List<Member> slicerMembers = slicerPositions.isEmpty() ? List.of()
-                    : slicerPositions.get(0).getMembers();
+                    : slicerPositions.getFirst().getMembers();
             for (Hierarchy hierarchy : hierarchies) {
                 // Find which member is on the slicer.
                 // If it's not explicitly there, use the default member.
@@ -596,7 +590,7 @@ public class Convertor {
 
                 if (member != null) {
                     if (positionMember != null) {
-                        mem.add(getMember(positionMember, null, slicerPositions.get(0), indexPosition,
+                        mem.add(getMember(positionMember, null, slicerPositions.getFirst(), indexPosition,
                                 getProps(slicerAxis.getAxisMetaData())));
                     } else {
                         slicerAxis(member, getProps(slicerAxis.getAxisMetaData()));
@@ -840,7 +834,7 @@ public class Convertor {
             if (cellPropertyName != null) {
                 cellPropertyName = cellPropertyName.toUpperCase();
             }
-            CellProperty cellProperty = cellPropertyMap.get(cellPropertyName);
+            CellPropertyR cellProperty = cellPropertyMap.get(cellPropertyName);
             if (cellProperty != null) {
                 Optional<String> oType = cellProperty.getXsdType() != null ? Optional.of(cellProperty.getXsdType())
                         : Optional.empty();
@@ -1001,28 +995,17 @@ public class Convertor {
         return false;
     }
 
-    static class CellProperty {
-
-        String name;
-        String alias;
-        String xsdType;
-
-        public CellProperty(String name, String alias, String xsdType) {
-            this.name = name;
-            this.alias = alias;
-            this.xsdType = xsdType;
-        }
-
+    record CellPropertyR(String name, String alias, String xsdType) {
         public String getName() {
-            return this.name;
+            return name;
         }
 
         public String getAlias() {
-            return this.alias;
+            return alias;
         }
 
         public String getXsdType() {
-            return this.xsdType;
+            return xsdType;
         }
     }
 
@@ -1086,19 +1069,14 @@ public class Convertor {
         public abstract List<RowSetRowItem> getRowSetRowItems(Cell cell, Member[] members);
     }
 
-    static class SqlColumn {
-        private final String name;
-        private final String encodedName;
-        private final String xsdType;
-
-        SqlColumn(String name, int type, int scale) {
-            this.name = name;
-
+    record SqlColumnR(String name, String encodedName, String xsdType) {
+        // Static factory method that does the computation from SQL metadata
+        static SqlColumnR of(String name, int type, int scale) {
             // replace invalid XML element name, like " ", with "_x0020_" in
-            // column headers, otherwise will generate a badly-formatted xml
-            // doc.
-            this.encodedName = XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
-            this.xsdType = sqlToXsdType(type, scale);
+            // column headers, otherwise will generate a badly-formatted xml doc.
+            String encodedName = XmlaUtil.ElementNameEncoder.INSTANCE.encode(name);
+            String xsdType = sqlToXsdType(type, scale);
+            return new SqlColumnR(name, encodedName, xsdType);
         }
     }
 

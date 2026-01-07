@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,13 +57,13 @@ public class HierarchyCheckExecutor {
 
     public HierarchyCheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         HierarchyCheckResult result = factory.createHierarchyCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setHierarchyName(check.getHierarchyName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -72,7 +72,7 @@ public class HierarchyCheckExecutor {
 
             if (foundHierarchy.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
-                result.setEndTime(new Date());
+                result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
             }
@@ -111,7 +111,7 @@ public class HierarchyCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

@@ -2171,14 +2171,14 @@ public class Format {
         // Later entries in the formats list default to the first (e.g.
         // "#.00;;Nil"), but the first entry must be set.
         if (alternateFormatList.isEmpty()
-            || alternateFormatList.get(0) == null)
+            || alternateFormatList.getFirst() == null)
         {
             formatValue = new JavaFormat(locale.locale);
         } else if (alternateFormatList.size() == 1
                    && (formatType[0] == FormatType.DATE
                        || formatType[0] == FormatType.STRING))
         {
-            formatValue = alternateFormatList.get(0);
+            formatValue = alternateFormatList.getFirst();
         } else {
             BasicFormat[] alternateFormats =
                 alternateFormatList.toArray(
@@ -2887,7 +2887,7 @@ public class Format {
             alternateFormat = null;
             break;
         case 1:
-            alternateFormat = formatList.get(0);
+            alternateFormat = formatList.getFirst();
             break;
         default:
             alternateFormat =

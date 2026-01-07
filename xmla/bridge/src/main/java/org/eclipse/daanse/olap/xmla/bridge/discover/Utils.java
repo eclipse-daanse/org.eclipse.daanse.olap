@@ -1546,7 +1546,7 @@ public class Utils {
         }
         String levelListStr = builder.toString();
         //get measure level
-        Level measuresLevel = cube.getDimensions().getFirst().getHierarchies().getFirst().getLevels().get(0);
+        Level measuresLevel = cube.getDimensions().getFirst().getHierarchies().getFirst().getLevels().getFirst();
         List<Member> members = catalogReader.getLevelMembers(measuresLevel, true);
         List<org.eclipse.daanse.olap.api.element.Member> measures = getMeasureWithFilterByUniqueName(
                 getMeasureWithFilterByName(members, oMeasureName), oMeasureUniqueName);

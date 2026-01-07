@@ -173,7 +173,7 @@ public class IdentifierNode
     static ParseRegion sumSegmentRegions(
         final List<? extends IdentifierSegment> segments)
     {
-        return ParseRegionImpl.sum(
+        return ParseRegionR.sum(
             new AbstractList<ParseRegion>() {
                 public ParseRegion get(int index) {
                     return segments.get(index).getRegion();

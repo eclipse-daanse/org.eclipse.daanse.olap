@@ -757,14 +757,14 @@ public class Convertor {
         Position prevPosition = null;
         Position position = pit.hasNext() ? pit.next() : null;
         Position nextPosition = pit.hasNext() ? pit.next() : null;
+        List<TupleType> tuples = new ArrayList<>();
+        TuplesType tuplesType = new TuplesTypeR(tuples);
+        setType.add(tuplesType);
         while (position != null) {
+            int k = 0;
             List<MemberType> memberList = new ArrayList<>();
             TupleType tupleType = new TupleTypeR(memberList);
-            List<TupleType> tuples = new ArrayList<>();
             tuples.add(tupleType);
-            TuplesType tuplesType = new TuplesTypeR(tuples);
-            setType.add(tuplesType);
-            int k = 0;
             for (Member member : position.getMembers()) {
                 memberList.add(getMember(member, prevPosition, nextPosition, k++, props));
             }

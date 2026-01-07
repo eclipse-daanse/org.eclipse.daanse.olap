@@ -80,6 +80,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.xmla.Restriction;
+import org.eclipse.daanse.xmla.csdl.model.v2.edm.TSchema;
 import org.eclipse.daanse.xmla.model.record.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsResponseRowR;
@@ -348,6 +349,7 @@ public class OtherDiscoverService {
                 Catalog catalog = oCatalog.get();
 
                 if (catalog != null) {
+                    TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
                     result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
                 }
             }
@@ -355,6 +357,7 @@ public class OtherDiscoverService {
             List<Catalog> cs = contextsListSupplyer.get(metaData.sessionId());
             if (cs != null) {
                 Catalog catalog = cs.get(0);
+                TSchema schema = CSDLUtils.getCSDLModel(catalog, Optional.empty());
                 result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
             }
         }

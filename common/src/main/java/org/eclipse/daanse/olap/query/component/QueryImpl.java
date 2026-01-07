@@ -1215,10 +1215,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof NameSegment)) {
+        if (!(nameParts.getFirst() instanceof NameSegment)) {
             return null;
         }
-        String name = ((NameSegment) nameParts.get(0)).getName();
+        String name = ((NameSegment) nameParts.getFirst()).getName();
         ScopedNamedSet bestScopedNamedSet = null;
         int bestScopeOrdinal = -1;
         for (ScopedNamedSet scopedNamedSet : scopedNamedSets) {

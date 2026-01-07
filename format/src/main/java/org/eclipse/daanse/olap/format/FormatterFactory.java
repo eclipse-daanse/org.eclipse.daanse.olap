@@ -85,7 +85,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (Exception e) {
+        } catch (ReflectiveOperationException e) {
             throw new OlapRuntimeException(MessageFormat.format(cellFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
@@ -97,10 +97,10 @@ public class FormatterFactory {
     /**
      * Given the name of a member formatter class
      * and/or a member formatter script, returns a member formatter.
-     * 
+     *
      *     Returns default formatter implementation
      *     if empty context is passed.
-     * 
+     *
      */
     public MemberFormatter createRolapMemberFormatter(
         FormatterCreateContext context)
@@ -109,7 +109,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (Exception e) {
+        } catch (ReflectiveOperationException e) {
             throw new OlapRuntimeException(MessageFormat.format(memberFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
@@ -122,10 +122,10 @@ public class FormatterFactory {
      * Given the name of a property formatter class
      * and/or a property formatter script,
      * returns a property formatter.
-     * 
+     *
      *     Returns default formatter implementation
      *     if empty context is passed.
-     * 
+     *
      */
     public MemberPropertyFormatter createPropertyFormatter(
         FormatterCreateContext context)
@@ -134,7 +134,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (Exception e) {
+        } catch (ReflectiveOperationException e) {
             throw new OlapRuntimeException(MessageFormat.format(propertyFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),

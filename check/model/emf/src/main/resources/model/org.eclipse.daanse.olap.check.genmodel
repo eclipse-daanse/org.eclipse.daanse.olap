@@ -268,6 +268,7 @@
       <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QueryLanguage/SQL"/>
       <genEnumLiterals ecoreEnumLiteral="org.eclipse.daanse.olap.check.ecore#//QueryLanguage/DAX"/>
     </genEnums>
+    <genDataTypes ecoreDataType="org.eclipse.daanse.olap.check.ecore#//Instant"/>
     <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//OlapCheckSuite">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheckSuite/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//OlapCheckSuite/description"/>
@@ -558,8 +559,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/success"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/startTime"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/endTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/startedAt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/endedAt"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/totalExecutionTimeMs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/successCount"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckExecutionResult/failureCount"/>
@@ -572,8 +573,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/checkDescription"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/status"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/executionTimeMs"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/startTime"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/endTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/startedAt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute org.eclipse.daanse.olap.check.ecore#//CheckResult/endedAt"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference org.eclipse.daanse.olap.check.ecore#//CheckResult/sourceCheck"/>
     </genClasses>
     <genClasses ecoreClass="org.eclipse.daanse.olap.check.ecore#//CheckSuccess">

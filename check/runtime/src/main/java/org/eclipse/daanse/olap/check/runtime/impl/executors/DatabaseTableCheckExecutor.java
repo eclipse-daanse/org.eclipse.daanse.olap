@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,13 +47,13 @@ public class DatabaseTableCheckExecutor {
 
     public DatabaseTableCheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         DatabaseTableCheckResult result = factory.createDatabaseTableCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setTableName(check.getTableName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -62,7 +62,7 @@ public class DatabaseTableCheckExecutor {
 
             if (foundTable.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
-                result.setEndTime(new Date());
+                result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
             }
@@ -100,7 +100,7 @@ public class DatabaseTableCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

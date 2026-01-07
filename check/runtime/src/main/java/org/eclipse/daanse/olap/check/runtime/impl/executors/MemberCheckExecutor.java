@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,13 +55,13 @@ public class MemberCheckExecutor {
 
     public MemberCheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         MemberCheckResult result = factory.createMemberCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setMemberName(check.getMemberName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -70,7 +70,7 @@ public class MemberCheckExecutor {
 
             if (foundMember.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
-                result.setEndTime(new Date());
+                result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
             }
@@ -106,7 +106,7 @@ public class MemberCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;
@@ -198,13 +198,13 @@ public class MemberCheckExecutor {
 
     private PropertyCheckResult executePropertyCheck(PropertyCheck propertyCheck, Member member) {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         PropertyCheckResult result = factory.createPropertyCheckResult();
         result.setCheckName(propertyCheck.getName());
         result.setCheckDescription(propertyCheck.getDescription());
         result.setPropertyName(propertyCheck.getPropertyName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(propertyCheck);
 
         try {
@@ -225,7 +225,7 @@ public class MemberCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

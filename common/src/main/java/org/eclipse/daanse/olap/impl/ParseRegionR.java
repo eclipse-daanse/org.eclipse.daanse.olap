@@ -1,25 +1,5 @@
- /*
- * Licensed to Julian Hyde under one or more contributor license
- * agreements. See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.
- *
- * Julian Hyde licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * ---- All changes after Fork in 2023 ------------------------
- * 
- * Project: Eclipse daanse
- * 
- * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+/*
+ * Copyright (c) 2023-2025 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -27,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Contributors after Fork in 2023:
+ * Contributors:
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
@@ -58,110 +38,47 @@ import org.eclipse.daanse.olap.api.ParseRegion;
  * the SELECT token has region [1:1, 1:6].
  *
  * Regions are immutable.
- *
- * @author jhyde
  */
-public class ParseRegionImpl implements ParseRegion {
-    private final int startLine;
-    private final int startColumn;
-    private final int endLine;
-    private final int endColumn;
+public record ParseRegionR(int startLine, int startColumn, int endLine, int endColumn) implements ParseRegion {
 
     /**
-     * Creates a ParseRegion.
-     *
-     * All lines and columns are 1-based and inclusive. For example, the
-     * token "select" in "select from [Sales]" has a region [1:1, 1:6].
-     *
-     * @param startLine Line of the beginning of the region
-     * @param startColumn Column of the beginning of the region
-     * @param endLine Line of the end of the region
-     * @param endColumn Column of the end of the region
+     * Compact constructor with validation.
      */
-    public ParseRegionImpl(
-        int startLine,
-        int startColumn,
-        int endLine,
-        int endColumn)
-    {
+    public ParseRegionR {
         assert endLine >= startLine;
         assert endLine > startLine || endColumn >= startColumn;
-        this.startLine = startLine;
-        this.startColumn = startColumn;
-        this.endLine = endLine;
-        this.endColumn = endColumn;
     }
 
     /**
-     * Creates a ParseRegion.
-     *
-     * All lines and columns are 1-based.
+     * Creates a point ParseRegion (same start and end).
      *
      * @param line Line of the beginning and end of the region
      * @param column Column of the beginning and end of the region
+     * @return ParseRegionR representing a point
      */
-    public ParseRegionImpl(
-        int line,
-        int column)
-    {
-        this(line, column, line, column);
+    public static ParseRegionR of(int line, int column) {
+        return new ParseRegionR(line, column, line, column);
     }
 
-    /**
-     * Return starting line number (1-based).
-     *
-     * @return 1-based starting line number
-     */
+    // Interface methods - delegate to record accessors
     @Override
-	public int getStartLine() {
+    public int getStartLine() {
         return startLine;
     }
 
-    /**
-     * Return starting column number (1-based).
-     *
-     * @return 1-based starting column number
-     */
     @Override
-	public int getStartColumn() {
+    public int getStartColumn() {
         return startColumn;
     }
 
-    /**
-     * Return ending line number (1-based).
-     *
-     * @return 1-based ending line number
-     */
     @Override
-	public int getEndLine() {
+    public int getEndLine() {
         return endLine;
     }
 
-    /**
-     * Return ending column number (1-based).
-     *
-     * @return 1-based starting endings column number
-     */
     @Override
-	public int getEndColumn() {
+    public int getEndColumn() {
         return endColumn;
-    }
-
-    /**
-     * Returns a string representation of this ParseRegion.
-     *
-     * Regions are of the form
-     * [startLine:startColumn, endLine:endColumn], or
-     * [startLine:startColumn] for point regions.
-     *
-     * @return string representation of this ParseRegion
-     */
-    public String toString() {
-        return "[" + startLine + ":" + startColumn
-            + ((isPoint())
-            ? ""
-            : ", " + endLine + ":" + endColumn)
-            + "]";
     }
 
     /**
@@ -173,22 +90,11 @@ public class ParseRegionImpl implements ParseRegion {
         return endLine == startLine && endColumn == startColumn;
     }
 
-    public int hashCode() {
-        return startLine ^
-            (startColumn << 2) ^
-            (endLine << 4) ^
-            (endColumn << 8);
-    }
-
-    public boolean equals(Object obj) {
-        if (obj instanceof ParseRegionImpl that) {
-            return this.startLine == that.startLine
-                && this.startColumn == that.startColumn
-                && this.endLine == that.endLine
-                && this.endColumn == that.endColumn;
-        } else {
-            return false;
-        }
+    @Override
+    public String toString() {
+        return "[" + startLine + ":" + startColumn
+            + (isPoint() ? "" : ", " + endLine + ":" + endColumn)
+            + "]";
     }
 
     /**
@@ -197,8 +103,7 @@ public class ParseRegionImpl implements ParseRegion {
      * @param nodes Source code regions
      * @return region which represents the span of the given regions
      */
-    public ParseRegion plus(final ParseTreeNode... nodes)
-    {
+    public ParseRegion plus(final ParseTreeNode... nodes) {
         return plusAll(
             new AbstractList<ParseRegion>() {
                 public ParseRegion get(int index) {
@@ -241,8 +146,7 @@ public class ParseRegionImpl implements ParseRegion {
      * @param regions Source code regions
      * @return region which represents the span of the given regions
      */
-    public ParseRegion plus(ParseRegionImpl... regions)
-    {
+    public ParseRegion plus(ParseRegionR... regions) {
         return plusAll(Arrays.asList(regions));
     }
 
@@ -254,8 +158,7 @@ public class ParseRegionImpl implements ParseRegion {
      * @param regions Collection of source code regions
      * @return region which represents the span of the given regions
      */
-    public ParseRegion plusAll(Iterable<ParseRegion> regions)
-    {
+    public ParseRegion plusAll(Iterable<ParseRegion> regions) {
         return sum(
             regions,
             getStartLine(),
@@ -271,9 +174,7 @@ public class ParseRegionImpl implements ParseRegion {
      * @param nodes Collection of parse tree nodes
      * @return region which represents the span of the given nodes
      */
-    public static ParseRegion sum(
-        Iterable<ParseRegion> nodes)
-    {
+    public static ParseRegion sum(Iterable<ParseRegion> nodes) {
         return sum(nodes, Integer.MAX_VALUE, Integer.MAX_VALUE, -1, -1);
     }
 
@@ -308,70 +209,46 @@ public class ParseRegionImpl implements ParseRegion {
                 endColumn = testColumn;
             }
         }
-        return new ParseRegionImpl(startLine, startColumn, endLine, endColumn);
+        return new ParseRegionR(startLine, startColumn, endLine, endColumn);
     }
 
     /**
      * Looks for one or two carets in an MDX string, and if present, converts
      * them into a parser position.
      *
-     * Examples:
-     *
-     *
-     * findPos("xxx^yyy") yields {"xxxyyy", position 3, line 1 column 4}
-     * findPos("xxxyyy") yields {"xxxyyy", null}
-     * findPos("xxx^yy^y") yields {"xxxyyy", position 3, line 4 column 4
-     * through line 1 column 6}
-     *
-     *
      * @param code Source code
      * @return object containing source code annotated with region
      */
-    public static RegionAndSource findPos(String code)
-    {
+    public static RegionAndSourceR findPos(String code) {
         int firstCaret = code.indexOf('^');
         if (firstCaret < 0) {
-            return new RegionAndSource(code, null);
+            return new RegionAndSourceR(code, null);
         }
         int secondCaret = code.indexOf('^', firstCaret + 1);
         if (secondCaret < 0) {
             String codeSansCaret =
                 code.substring(0, firstCaret)
                     + code.substring(firstCaret + 1);
-            int [] start = indexToLineCol(code, firstCaret);
-            return new RegionAndSource(
+            int[] start = indexToLineCol(code, firstCaret);
+            return new RegionAndSourceR(
                 codeSansCaret,
-                new ParseRegionImpl(start[0], start[1]));
+                ParseRegionR.of(start[0], start[1]));
         } else {
             String codeSansCaret =
                 code.substring(0, firstCaret)
                     + code.substring(firstCaret + 1, secondCaret)
                     + code.substring(secondCaret + 1);
-            int [] start = indexToLineCol(code, firstCaret);
-
-            // subtract 1 because first caret pushed the string out
-            --secondCaret;
-
-            // subtract 1 because the col position needs to be inclusive
-            --secondCaret;
-            int [] end = indexToLineCol(code, secondCaret);
-            return new RegionAndSource(
+            int[] start = indexToLineCol(code, firstCaret);
+            secondCaret--;
+            secondCaret--;
+            int[] end = indexToLineCol(code, secondCaret);
+            return new RegionAndSourceR(
                 codeSansCaret,
-                new ParseRegionImpl(start[0], start[1], end[0], end[1]));
+                new ParseRegionR(start[0], start[1], end[0], end[1]));
         }
     }
 
-    /**
-     * Returns the (1-based) line and column corresponding to a particular
-     * (0-based) offset in a string.
-     *
-     * Converse of {@link #lineColToIndex(String, int, int)}.
-     *
-     * @param code Source code
-     * @param i Offset within source code
-     * @return 2-element array containing line and column
-     */
-    private static int [] indexToLineCol(String code, int i) {
+    private static int[] indexToLineCol(String code, int i) {
         int line = 0;
         int j = 0;
         while (true) {
@@ -395,7 +272,7 @@ public class ParseRegionImpl implements ParseRegion {
                 j = n;
             }
             if ((j < 0) || (j > i)) {
-                return new int[] { line + 1, i - prevj + 1 };
+                return new int[]{line + 1, i - prevj + 1};
             }
             assert s != null;
             j += s.length();
@@ -403,28 +280,12 @@ public class ParseRegionImpl implements ParseRegion {
         }
     }
 
-    /**
-     * Finds the position (0-based) in a string which corresponds to a given
-     * line and column (1-based).
-     *
-     * Converse of {@link #indexToLineCol(String, int)}.
-     *
-     * @param code Source code
-     * @param line Line number
-     * @param column Column number
-     * @return Offset within source code
-     */
-    private static int lineColToIndex(String code, int line, int column)
-    {
+    private static int lineColToIndex(String code, int line, int column) {
         --line;
         --column;
         int i = 0;
         while (line-- > 0) {
-            // Works on linux where line ending is "\n";
-            // also works on windows where line ending is "\r\n".
-            // Even works if they supply linux strings on windows.
-            i = code.indexOf("\n", i)
-                + "\n".length();
+            i = code.indexOf("\n", i) + "\n".length();
         }
         return i + column;
     }
@@ -433,10 +294,6 @@ public class ParseRegionImpl implements ParseRegion {
      * Generates a string of the source code annotated with caret symbols ("^")
      * at the beginning and end of the region.
      *
-     * For example, for the region (1, 9, 1, 12) and source
-     * "values (foo)",
-     * yields the string "values (^foo^)".
-     *
      * @param source Source code
      * @return Source code annotated with position
      */
@@ -444,18 +301,6 @@ public class ParseRegionImpl implements ParseRegion {
         return addCarets(source, startLine, startColumn, endLine, endColumn);
     }
 
-    /**
-     * Converts a string to a string with one or two carets in it. For example,
-     * addCarets("values (foo)", 1, 9, 1, 11) yields "values
-     * (^foo^)".
-     *
-     * @param sql Source code
-     * @param line Line number
-     * @param col Column number
-     * @param endLine Line number of end of region
-     * @param endCol Column number of end of region
-     * @return String annotated with region
-     */
     private static String addCarets(
         String sql,
         int line,
@@ -469,7 +314,7 @@ public class ParseRegionImpl implements ParseRegion {
             + sql.substring(cut);
         if ((col != endCol) || (line != endLine)) {
             cut = lineColToIndex(sqlWithCarets, endLine, endCol + 1);
-            ++cut; // for caret
+            ++cut;
             if (cut < sqlWithCarets.length()) {
                 sqlWithCarets =
                     sqlWithCarets.substring(0, cut)
@@ -484,35 +329,7 @@ public class ParseRegionImpl implements ParseRegion {
     /**
      * Combination of a region within an MDX statement with the source text
      * of the whole MDX statement.
-     *
-     * Useful for reporting errors. For example, the error in the statement
-     *
-     *
-     *
-     * SELECT {<b><i>[Measures].[Units In Stock]</i></b>} ON COLUMNS
-     * FROM [Sales]
-     *
-     *
-     *
-     * has source
-     * "SELECT {[Measures].[Units In Stock]} ON COLUMNS\nFROM [Sales]" and
-     * region [1:9, 1:34].
      */
-    public static class RegionAndSource {
-        public final String source;
-        public final ParseRegion region;
-
-        /**
-         * Creates a RegionAndSource.
-         *
-         * @param source Source MDX code
-         * @param region Coordinates of region within MDX code
-         */
-        public RegionAndSource(String source, ParseRegion region) {
-            this.source = source;
-            this.region = region;
-        }
+    public record RegionAndSourceR(String source, ParseRegion region) {
     }
 }
-
-// End ParseRegion.java

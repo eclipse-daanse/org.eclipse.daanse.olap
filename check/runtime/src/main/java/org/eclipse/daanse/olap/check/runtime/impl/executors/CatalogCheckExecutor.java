@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,13 +53,13 @@ public class CatalogCheckExecutor {
 
     public CheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         CatalogCheckResult result = factory.createCatalogCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setCatalogName(check.getCatalogName());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -126,7 +126,7 @@ public class CatalogCheckExecutor {
             // Create a failure message
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

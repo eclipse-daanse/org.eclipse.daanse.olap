@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -46,14 +46,14 @@ public class QueryCheckExecutor {
 
     public QueryCheckResult execute() {
         long startTime = System.currentTimeMillis();
-        Date start = new Date();
+        Instant start = Instant.now();
 
         QueryCheckResult result = factory.createQueryCheckResult();
         result.setCheckName(check.getName());
         result.setCheckDescription(check.getDescription());
         result.setQuery(check.getQuery());
         result.setQueryLanguage(check.getQueryLanguage());
-        result.setStartTime(start);
+        result.setStartedAt(start);
         result.setSourceCheck(check);
 
         try {
@@ -63,18 +63,13 @@ public class QueryCheckExecutor {
             }
 
             switch (language) {
-            case MDX:
-                executeMdxQuery(result, startTime);
-                break;
-            case SQL:
-                executeSqlQuery(result, startTime);
-                break;
-            case DAX:
-                executeDaxQuery(result, startTime);
-                break;
-            default:
-                result.setExecutedSuccessfully(false);
-                result.setStatus(CheckStatus.FAILURE);
+                case MDX -> executeMdxQuery(result, startTime);
+                case SQL -> executeSqlQuery(result, startTime);
+                case DAX -> executeDaxQuery(result, startTime);
+                default -> {
+                    result.setExecutedSuccessfully(false);
+                    result.setStatus(CheckStatus.FAILURE);
+                }
             }
 
         } catch (Exception e) {
@@ -82,7 +77,7 @@ public class QueryCheckExecutor {
             result.setStatus(CheckStatus.FAILURE);
         }
 
-        result.setEndTime(new Date());
+        result.setEndedAt(Instant.now());
         result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
 
         return result;

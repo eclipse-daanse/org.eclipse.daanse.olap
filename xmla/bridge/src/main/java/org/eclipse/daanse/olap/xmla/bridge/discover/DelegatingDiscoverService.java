@@ -272,10 +272,8 @@ public class DelegatingDiscoverService implements DiscoverService {
     @Override
     public List<DiscoverCsdlMetaDataResponseRow> csdlMetaData(DiscoverCsdlMetaDataRequest request,
             RequestMetaData metaData) {
-        //return otherSchemaService.csdlMetaData(request, metaData);
-        //TODO
 
-        return null;
+        return otherSchemaService.csdlMetaData(request, metaData);
     }
 
 }

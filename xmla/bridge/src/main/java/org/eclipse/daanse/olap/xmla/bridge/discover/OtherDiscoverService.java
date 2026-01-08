@@ -350,7 +350,8 @@ public class OtherDiscoverService {
 
                 if (catalog != null) {
                     TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
-                    result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
+                    //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
+                    result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDLModelAsString(schema)));
                 }
             }
         } else {
@@ -358,7 +359,8 @@ public class OtherDiscoverService {
             if (cs != null) {
                 Catalog catalog = cs.get(0);
                 TSchema schema = CSDLUtils.getCSDLModel(catalog, Optional.empty());
-                result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
+                //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
+                
             }
         }
         return result;

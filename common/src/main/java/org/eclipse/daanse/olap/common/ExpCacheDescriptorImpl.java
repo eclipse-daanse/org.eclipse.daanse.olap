@@ -38,7 +38,7 @@ import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.eclipse.daanse.olap.calc.base.compiler.BetterExpCompiler;
+import org.eclipse.daanse.olap.calc.base.compiler.EnhancedExpressionCompiler;
 
 /**
  * Holds information necessary to add an expression to the expression result
@@ -72,7 +72,7 @@ public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
      * @param evaluator Evaluator
      */
     public ExpCacheDescriptorImpl(Expression exp, Evaluator evaluator) {
-        this(exp, new BetterExpCompiler(evaluator, null));
+        this(exp, new EnhancedExpressionCompiler(evaluator, null));
     }
 
     /**

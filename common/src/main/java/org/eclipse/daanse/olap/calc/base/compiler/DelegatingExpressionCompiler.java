@@ -1,15 +1,4 @@
 /*
- * This software is subject to the terms of the Eclipse Public License v1.0
- * Agreement, available at the following URL:
- * http://www.eclipse.org/legal/epl-v10.html.
- * You must accept the terms of that agreement to use this software.
- *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
- *
- * ---- All changes after Fork in 2023 ------------------------
- *
- * Project: Eclipse daanse
- *
  * Copyright (c) 2023 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
@@ -18,9 +7,15 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * 2002-2017 Hitachi Vantara.
+ * 2006      jhyde
+ * 
  * Contributors after Fork in 2023:
+ *   Sergei Semenkov (2001)
  *   SmartCity Jena - initial
  */
+
+
 package org.eclipse.daanse.olap.calc.base.compiler;
 
 import java.io.PrintWriter;
@@ -54,27 +49,44 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;
 
 /**
- * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler}
+ * Delegating implementation of {@link ExpressionCompiler} that enables the Decorator pattern.
  *
- * @author jhyde
- * @since Jan 2, 2006
+ * <p>This class wraps a parent compiler and delegates all compilation methods to it,
+ * while providing hooks for subclasses to intercept and modify the compilation process.
+ * The primary extension point is the {@link #afterCompile} method, which is called
+ * after each compilation to allow post-processing of the resulting {@link Calc}.</p>
+ *
+ * <p>Subclasses can override {@code afterCompile} to add behaviors such as:</p>
+ * <ul>
+ *   <li>Profiling and timing of calculations</li>
+ *   <li>Caching of intermediate results</li>
+ *   <li>Logging and debugging</li>
+ *   <li>Result transformation or optimization</li>
+ * </ul>
+ *
+ * @see BaseExpressionCompiler
  */
-public class DelegatingExpCompiler implements ExpressionCompiler {
+public class DelegatingExpressionCompiler implements ExpressionCompiler {
     private final ExpressionCompiler parent;
 
-    protected DelegatingExpCompiler(ExpressionCompiler parent) {
+    /**
+     * Creates a delegating compiler that wraps the specified parent compiler.
+     *
+     * @param parent the parent compiler to delegate to; must not be null
+     */
+    protected DelegatingExpressionCompiler(ExpressionCompiler parent) {
         this.parent = parent;
     }
 
     /**
      * Hook for post-processing.
      *
-     * @param exp Expression to compile
-     * @param calc Calculator created by compiler
+     * @param exp     Expression to compile
+     * @param calc    Calculator created by compiler
      * @param mutable Whether the result is mutuable
      * @return Calculator after post-processing
      */
-    protected Calc afterCompile(Expression exp, Calc calc, boolean mutable) {
+    protected Calc<?> afterCompile(Expression exp, Calc<?> calc, boolean mutable) {
         return calc;
     }
 
@@ -89,17 +101,13 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public Calc compile(Expression exp) {
-        final Calc calc = parent.compile(wrap(exp));
+    public Calc<?> compile(Expression exp) {
+        final Calc<?> calc = parent.compile(wrap(exp));
         return afterCompile(exp, calc, false);
     }
 
     @Override
-    public Calc compileAs(
-            Expression exp,
-            Type resultType,
-            List<ResultStyle> preferredResultTypes)
-    {
+    public Calc<?> compileAs(Expression exp, Type resultType, List<ResultStyle> preferredResultTypes) {
         return parent.compileAs(wrap(exp), resultType, preferredResultTypes);
     }
 
@@ -157,9 +165,9 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public TupleIteratorCalc compileIter(Expression exp) {
-        final TupleIteratorCalc calc = parent.compileIter(wrap(exp));
-        return (TupleIteratorCalc) afterCompile(exp, calc, false);
+    public TupleIteratorCalc<?> compileIter(Expression exp) {
+        final TupleIteratorCalc<?> calc = parent.compileIter(wrap(exp));
+        return (TupleIteratorCalc<?>) afterCompile(exp, calc, false);
     }
 
     @Override
@@ -181,8 +189,8 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public Calc compileScalar(Expression exp, boolean scalar) {
-        final Calc calc = parent.compileScalar(wrap(exp), scalar);
+    public Calc<?> compileScalar(Expression exp, boolean scalar) {
+        final Calc<?> calc = parent.compileScalar(wrap(exp), scalar);
         return afterCompile(exp, calc, false);
     }
 
@@ -197,19 +205,19 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     /**
-     * Wrapping an expression ensures that when it is visited, it calls
-     * back to this compiler rather than our parent (wrapped) compiler.
+     * Wrapping an expression ensures that when it is visited, it calls back to this
+     * compiler rather than our parent (wrapped) compiler.
      *
-     * All methods that pass an expression to the delegate compiler should
-     * wrap expressions in this way. Hopefully the delegate compiler doesn't
-     * use {@code instanceof}; it should be using the visitor pattern instead.
+     * All methods that pass an expression to the delegate compiler should wrap
+     * expressions in this way. Hopefully the delegate compiler doesn't use
+     * {@code instanceof}; it should be using the visitor pattern instead.
      *
-     * If we didn't do this, the decorator would get forgotten at the first
-     * level of recursion. It's not pretty, and I thought about other ways
-     * of combining Visitor + Decorator. For instance, I tried replacing
+     * If we didn't do this, the decorator would get forgotten at the first level of
+     * recursion. It's not pretty, and I thought about other ways of combining
+     * Visitor + Decorator. For instance, I tried replacing
      * {@link #afterCompile(org.eclipse.daanse.olap.api.query.component.Expression, mondrian.calc.Calc, boolean)}
-     * with a callback (Strategy), but the exit points in ExpCompiler not
-     * clear because there are so many methods.
+     * with a callback (Strategy), but the exit points in ExpCompiler not clear
+     * because there are so many methods.
      *
      * @param e Expression to be wrapped
      * @return wrapper expression
@@ -219,16 +227,14 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     /**
-     * See {@link org.eclipse.daanse.olap.calc.base.compiler.DelegatingExpCompiler#wrap}.
+     * See
+     * {@link org.eclipse.daanse.olap.calc.base.compiler.DelegatingExpressionCompiler#wrap}.
      */
     private static class WrapExpressionImpl extends AbstractQueryPart implements Expression, WrapExpression {
         private final Expression e;
         private final ExpressionCompiler wrappingCompiler;
 
-        WrapExpressionImpl(
-                Expression e,
-                ExpressionCompiler wrappingCompiler)
-        {
+        WrapExpressionImpl(Expression e, ExpressionCompiler wrappingCompiler) {
             this.e = e;
             this.wrappingCompiler = wrappingCompiler;
         }
@@ -259,7 +265,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-        public Calc accept(ExpressionCompiler compiler) {
+        public Calc<?> accept(ExpressionCompiler compiler) {
             return e.accept(wrappingCompiler);
         }
 
@@ -269,7 +275,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-		public void explain(PrintWriter pw) {
+        public void explain(PrintWriter pw) {
             if (e instanceof QueryComponent queryPart) {
                 queryPart.explain(pw);
             } else {

@@ -46,7 +46,7 @@ public class IterableListCalc extends AbstractProfilingNestedTupleListCalc {
      *
      * @param tupleIteratorCalc Calculation that returns an iterable.
      */
-    public IterableListCalc(TupleIteratorCalc tupleIteratorCalc) {
+    public IterableListCalc(TupleIteratorCalc<?> tupleIteratorCalc) {
         super(tupleIteratorCalc.getType(), new Calc[] { tupleIteratorCalc });
         this.tupleIteratorCalc = tupleIteratorCalc;
     }

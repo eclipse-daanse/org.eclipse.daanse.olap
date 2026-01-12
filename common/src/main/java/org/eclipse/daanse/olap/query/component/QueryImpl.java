@@ -1079,7 +1079,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     value = olapElement;
                 }
             }
-            if (value instanceof Member && type.isInstance(value)) {
+            if (value instanceof Member m && type.isInstance(value)) {
                 return value;
             }
             throw Util.newInternal(

@@ -98,7 +98,7 @@ public interface ExpressionCompiler {
      *
      * @return Compiled expression, or null if none can satisfy
      */
-    Calc compileAs(
+    Calc<?> compileAs(
             Expression exp,
             Type resultType,
             List<ResultStyle> preferredResultStyles);
@@ -168,7 +168,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Calculator which yields an Iterable
      */
-    TupleIteratorCalc compileIter(Expression exp);
+    TupleIteratorCalc<?> compileIter(Expression exp);
 
     /**
      * Compiles an expression which yields a boolean result.

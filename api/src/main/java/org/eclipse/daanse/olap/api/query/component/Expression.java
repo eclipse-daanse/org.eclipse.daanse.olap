@@ -39,14 +39,14 @@ import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
 
 /**
- * An  Expression is an MDX expression.
+ * An Expression is an MDX expression.
  */
 public interface Expression {
 
     Expression cloneExp();
 
     /**
-     * Returns the  DataType of the expression.
+     * Returns the DataType of the expression.
      *
      *  Category.instance().isValid(return)
      */
@@ -85,10 +85,10 @@ public interface Expression {
      * @param compiler
      * @return A compiled expression
      */
-    Calc accept(ExpressionCompiler compiler);
+    Calc<?> accept(ExpressionCompiler compiler);
 
     /**
-     * Accepts a visitor to this  Expression.
+     * Accepts a visitor to this Expression.
      * The implementation should generally dispatches to the
      *  QueryComponentVisitor method appropriate to the type of expression.
      *

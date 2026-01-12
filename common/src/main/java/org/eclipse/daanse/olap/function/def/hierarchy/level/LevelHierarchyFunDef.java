@@ -37,7 +37,7 @@ public class LevelHierarchyFunDef extends AbstractFunctionDefinition {
 
     @Override
     public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        return new LevelHirarchyCalc(call.getType(), compiler.compileLevel(call.getArg(0)));
+        return new LevelHierarchyCalc(call.getType(), compiler.compileLevel(call.getArg(0)));
     }
 
 }

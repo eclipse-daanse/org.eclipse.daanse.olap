@@ -34,36 +34,52 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
 
 /**
- * Calc is the base class for all calculable expressions.
+ * Calc is the base interface for all calculable expressions.
  *
- * Logical and physical expression languages
+ * <h2>Logical and physical expression languages</h2>
  *
- * Mondrian has two expression languages:
- * The logical language of parsed MDX fragments ( org.eclipse.daanse.olap.api.query.component.Expression).
- * The phyiscal language of compiled expressions ( Calc).
+ * <p>Mondrian has two expression languages:</p>
+ * <ul>
+ * <li>The logical language of parsed MDX fragments ({@link org.eclipse.daanse.olap.api.query.component.Expression}).</li>
+ * <li>The physical language of compiled expressions ({@link Calc}).</li>
+ * </ul>
  *
- *
- * The two languages allow us to separate logical (how an
+ * <p>The two languages allow us to separate logical (how an
  * MDX expression was specified) from physical (how it is to be evaluated).
  * The physical language is more strongly typed, and certain constructs which
  * are implicit in the logical language (such as the addition of calls
- * to the &lt;Member&gt;.CurrentMember function) are made
- * explicit in the physical language.
+ * to the {@code <Member>.CurrentMember} function) are made
+ * explicit in the physical language.</p>
  *
- * Compilation
+ * <h2>Compilation</h2>
  *
- * Expressions are generally created from using an expression compiler
- * ( ExpressionCompiler}). There are often more than one evaluation strategy
- * for a given expression, and compilation process gives us an opportunity to
- * choose the optimal one.
+ * <p>Expressions are generally created using an expression compiler
+ * ({@link ExpressionCompiler}). There are often more than one evaluation strategy
+ * for a given expression, and the compilation process gives us an opportunity to
+ * choose the optimal one.</p>
  *
+ * <h2>Type Hierarchy</h2>
  *
+ * <p>The Calc interface has the following sub-interfaces:</p>
+ * <ul>
+ * <li>{@link BooleanCalc} - boolean values</li>
+ * <li>{@link ByteCalc}, {@link IntegerCalc}, {@link LongCalc}, {@link FloatCalc}, {@link DoubleCalc} - numeric types</li>
+ * <li>{@link StringCalc}, {@link DateTimeCalc} - string and date types</li>
+ * <li>{@link MemberCalc}, {@link TupleCalc} - member and tuple types</li>
+ * <li>{@link DimensionCalc}, {@link HierarchyCalc}, {@link LevelCalc} - schema element types</li>
+ * <li>{@link TupleIterableCalc} - tuple collections</li>
+ * <li>{@link ConstantCalc} - constant values</li>
+ * <li>{@link VoidCalc} - void expressions (side effects only)</li>
+ * </ul>
+ *
+ * <p>Note: This interface cannot be sealed because some sub-interfaces
+ * (TupleIteratorCalc, TupleListCalc) are in the 'todo' subpackage,
+ * and cross-package sealing requires named modules.</p>
  *
  * @author jhyde
  * @since Sep 26, 2005
- * 
- * @param <E> parameter
- * 
+ *
+ * @param <E> the result type of the calculation
  */
 public interface Calc<E> {
     /**

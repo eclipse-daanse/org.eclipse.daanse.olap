@@ -41,7 +41,7 @@ public class BaseExpressionCompilerFactory implements ExpressionCompilerFactory 
     @Override
     public ExpressionCompiler createExpressionCompiler(Evaluator evaluator, Validator validator,
             List<ResultStyle> resultStyles) {
-        return new BetterExpCompiler(evaluator, validator, resultStyles);
+        return new EnhancedExpressionCompiler(evaluator, validator, resultStyles);
     }
 
 }

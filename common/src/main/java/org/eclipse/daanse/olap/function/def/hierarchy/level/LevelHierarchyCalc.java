@@ -20,9 +20,9 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
-public class LevelHirarchyCalc extends AbstractProfilingNestedHierarchyCalc {
+public class LevelHierarchyCalc extends AbstractProfilingNestedHierarchyCalc {
 
-    public LevelHirarchyCalc(Type type, LevelCalc levelCalc) {
+    public LevelHierarchyCalc(Type type, LevelCalc levelCalc) {
         super(type, levelCalc);
     }
 

@@ -19,9 +19,9 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.fun.FunUtil;
 
-public class IntgegerToBooleanCalc extends AbstractProfilingNestedBooleanCalc {
+public class IntegerToBooleanCalc extends AbstractProfilingNestedBooleanCalc {
 
-	public IntgegerToBooleanCalc(Type type, IntegerCalc integerCalc) {
+	public IntegerToBooleanCalc(Type type, IntegerCalc integerCalc) {
 		super(type, integerCalc);
 	}
 

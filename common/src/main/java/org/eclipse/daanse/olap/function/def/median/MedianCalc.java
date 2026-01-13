@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.function.def.aggregate.AbstractAggregateFunDef;
 
@@ -47,7 +47,7 @@ public class MedianCalc extends AbstractProfilingNestedDoubleCalc {
 
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
-        return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
+        return HierarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
     }
 
 }

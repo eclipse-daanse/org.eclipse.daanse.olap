@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.fun.sort.SortKeySpec;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.fun.sort.Sorter.SorterFlag;
@@ -147,7 +147,7 @@ public class OrderCurrentMemberCalc  extends AbstractProfilingNestedTupleListCal
 
     @Override
     public boolean dependsOn( Hierarchy hierarchy ) {
-      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
+      return HierarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
     private SorterFlag getDesc(boolean brk) {

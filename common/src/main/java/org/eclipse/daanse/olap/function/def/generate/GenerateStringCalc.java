@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 
 public class GenerateStringCalc extends AbstractProfilingNestedStringCalc {
@@ -62,6 +62,6 @@ public class GenerateStringCalc extends AbstractProfilingNestedStringCalc {
 
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
-        return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
+        return HierarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
     }
 }

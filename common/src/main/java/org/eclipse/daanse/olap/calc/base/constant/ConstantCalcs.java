@@ -33,7 +33,7 @@ public class ConstantCalcs {
 		} else if (type instanceof NumericType nt) {
 			return new ConstantIntegerCalc(nt, null);
 
-		} else if (type instanceof BooleanType bt) {
+		} else if (type instanceof BooleanType _) {
 			return new ConstantBooleanCalc(BooleanType.INSTANCE, null);
 
 		} else {

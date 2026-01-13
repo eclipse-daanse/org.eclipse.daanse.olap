@@ -29,37 +29,35 @@ package org.eclipse.daanse.olap.fun.sort;
 
 import org.eclipse.daanse.olap.api.element.Member;
 
+public class OrderKey implements Comparable<OrderKey> {
 
-public class OrderKey implements Comparable {
-  final Member member;
+    final Member member;
 
-  public OrderKey( Member member ) {
-    super();
-    this.member = member;
-  }
-
-  @Override
-public int compareTo( Object o ) {
-    assert o instanceof OrderKey;
-    OrderKey other = (OrderKey) o;
-    Member otherMember = other.member;
-    final boolean thisCalculated = this.member.isCalculatedInQuery();
-    final boolean otherCalculated = otherMember.isCalculatedInQuery();
-    if ( thisCalculated ) {
-      if ( !otherCalculated ) {
-        return 1;
-      }
-    } else {
-      if ( otherCalculated ) {
-        return -1;
-      }
+    public OrderKey(Member member) {
+        this.member = member;
     }
-    final Comparable thisKey = this.member.getOrderKey();
-    final Comparable otherKey = otherMember.getOrderKey();
-    if ( ( thisKey != null ) && ( otherKey != null ) ) {
-      return thisKey.compareTo( otherKey );
-    } else {
-      return this.member.compareTo( otherMember );
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public int compareTo(OrderKey other) {
+        Member otherMember = other.member;
+        final boolean thisCalculated = this.member.isCalculatedInQuery();
+        final boolean otherCalculated = otherMember.isCalculatedInQuery();
+        if (thisCalculated) {
+            if (!otherCalculated) {
+                return 1;
+            }
+        } else {
+            if (otherCalculated) {
+                return -1;
+            }
+        }
+        final Comparable thisKey = this.member.getOrderKey();
+        final Comparable otherKey = otherMember.getOrderKey();
+        if ((thisKey != null) && (otherKey != null)) {
+            return thisKey.compareTo(otherKey);
+        } else {
+            return this.member.compareTo(otherMember);
+        }
     }
-  }
 }

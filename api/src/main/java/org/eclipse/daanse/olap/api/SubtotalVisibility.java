@@ -14,11 +14,9 @@
 package org.eclipse.daanse.olap.api;
 
 /**
- * SubtotalVisibility enumerates the allowed values of
- * whether subtotals are visible.
+ * SubtotalVisibility enumerates the allowed values of whether subtotals are
+ * visible.
  */
 public enum SubtotalVisibility {
-    Undefined,
-    Hide,
-    Show;
+    Undefined, Hide, Show;
 }

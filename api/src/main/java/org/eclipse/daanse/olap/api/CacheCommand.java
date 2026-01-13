@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 
 public interface CacheCommand<T> extends Message {
 
-	ExecutionContext getExecutionContext();
+    ExecutionContext getExecutionContext();
 
     T call() throws Exception;
 }

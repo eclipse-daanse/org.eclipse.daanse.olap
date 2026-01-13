@@ -15,13 +15,13 @@ package org.eclipse.daanse.olap.api.calc;
 
 /**
  * 
- * Marker interface to check the returning type of an  org.eclipse.daanse.olap.api.calc.Calc
+ * Marker interface to check the returning type of an
+ * org.eclipse.daanse.olap.api.calc.Calc
  * 
  * @author Stefan Bischof
  * 
  */
 
-
 public interface ByteCalc extends Calc<Byte> {
-   
+
 }

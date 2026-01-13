@@ -45,13 +45,12 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 /**
- * An Evaluator holds the context necessary to evaluate an
- * expression.
+ * An Evaluator holds the context necessary to evaluate an expression.
  *
  * @author jhyde
  * @since 27 July, 2001
  */
-public interface Evaluator{
+public interface Evaluator {
 
     /**
      * Returns the current cube.
@@ -69,54 +68,54 @@ public interface Evaluator{
     LocalDateTime getQueryStartTime();
 
     /**
-     * Creates a savepoint encapsulating the current state of the evalutor.
-     * You can restore the evaluator to this state by calling
-     *  #restore(int) with the value returned by this method.
+     * Creates a savepoint encapsulating the current state of the evalutor. You can
+     * restore the evaluator to this state by calling #restore(int) with the value
+     * returned by this method.
      *
-     * This method is typically called before evaluating an expression which
-     * is known to corrupt the evaluation context.
+     * This method is typically called before evaluating an expression which is
+     * known to corrupt the evaluation context.
      *
-     * Multiple savepoints may be active at the same time for the same
-     * evaluator. And, it is allowable to restore to the save savepoint more
-     * than once (or not at all). However, when you have rolled back to a
-     * particular savepoint you may not restore to a later savepoint.
+     * Multiple savepoints may be active at the same time for the same evaluator.
+     * And, it is allowable to restore to the save savepoint more than once (or not
+     * at all). However, when you have rolled back to a particular savepoint you may
+     * not restore to a later savepoint.
      *
-     * @return Evaluator with each given member overriding the state of the
-     *   current Evaluator for its hierarchy
+     * @return Evaluator with each given member overriding the state of the current
+     *         Evaluator for its hierarchy
      */
     int savepoint();
 
     /**
      * Creates a new Evaluator with the same context as this evaluator.
      *
-     * This method is typically called before evaluating an expression which
-     * may corrupt the evaluation context.
+     * This method is typically called before evaluating an expression which may
+     * corrupt the evaluation context.
      *
-     * In mondrian-3.3 and later, a more efficient way to save the state of
-     * an evaluator is to call  #savepoint followed by
-     *  #restore(int). We recommend using those methods most of the time.
+     * In mondrian-3.3 and later, a more efficient way to save the state of an
+     * evaluator is to call #savepoint followed by #restore(int). We recommend using
+     * those methods most of the time.
      *
-     * However, it makes sense to use this method in the constructor of an
-     * iterator. It allows the iterator to modify its evaluation context without
-     * affecting the evaluation context of the calling code. This behavior
-     * cannot be achieved using {@code savepoint}.
+     * However, it makes sense to use this method in the constructor of an iterator.
+     * It allows the iterator to modify its evaluation context without affecting the
+     * evaluation context of the calling code. This behavior cannot be achieved
+     * using {@code savepoint}.
      *
-     * @return Evaluator with each given member overriding the state of the
-     *   current Evaluator for its hierarchy
+     * @return Evaluator with each given member overriding the state of the current
+     *         Evaluator for its hierarchy
      */
     Evaluator push();
 
     /**
      * Restores previous evaluator.
      *
-     * @param savepoint Savepoint returned by  #savepoint()
+     * @param savepoint Savepoint returned by #savepoint()
      */
     void restore(int savepoint);
 
     /**
      * Makes member the current member of its hierarchy.
      *
-     * @param member  New member
+     * @param member New member
      *
      * @return Previous member of this hierarchy
      */
@@ -125,23 +124,20 @@ public interface Evaluator{
     /**
      * Makes member the current member of its hierarchy.
      *
-     * If {@code safe}, checks whether this is the first time that
-     * a member of this hierarchy has been changed since  #savepoint()
-     * was called. If so, saves the previous member. If {@code safe} is false,
-     * never saves the previous member.
+     * If {@code safe}, checks whether this is the first time that a member of this
+     * hierarchy has been changed since #savepoint() was called. If so, saves the
+     * previous member. If {@code safe} is false, never saves the previous member.
      *
-     * Use {@code safe = false} only if you are sure that the context has
-     * been set before. For example,
+     * Use {@code safe = false} only if you are sure that the context has been set
+     * before. For example,
      *
      *
-     * int n = 0;
-     * for (Member member : members) {
-     * &nbsp;&nbsp;evaluator.setContext(member, n++ &gt; 0);
-     * }
+     * int n = 0; for (Member member : members) {
+     * &nbsp;&nbsp;evaluator.setContext(member, n++ &gt; 0); }
      *
-     * @param member  New member
-     * @param safe    Whether to store the member of this hierarchy that was
-     *                current last time that  #savepoint() was called.
+     * @param member New member
+     * @param safe   Whether to store the member of this hierarchy that was current
+     *               last time that #savepoint() was called.
      */
     void setContext(Member member, boolean safe);
 
@@ -150,27 +146,23 @@ public interface Evaluator{
      *
      * Equivalent to
      *
-     * for (Member member : memberList) {
-     * &nbsp;&nbsp;setContext(member);
-     * }
+     * for (Member member : memberList) { &nbsp;&nbsp;setContext(member); }
      *
      * @param memberList List of members
      */
     void setContext(List<Member> memberList);
 
     /**
-     * Sets the context to a list of members, optionally skipping the check
-     * whether it is necessary to store the previous member of each hierarchy.
+     * Sets the context to a list of members, optionally skipping the check whether
+     * it is necessary to store the previous member of each hierarchy.
      *
      * Equivalent to
      *
-     * for (Member member : memberList) {
-     * &nbsp;&nbsp;setContext(member, safe);
-     * }
+     * for (Member member : memberList) { &nbsp;&nbsp;setContext(member, safe); }
      *
      * @param memberList List of members
-     * @param safe    Whether to store the member of each hierarchy that was
-     *                current last time that  #savepoint() was called.
+     * @param safe       Whether to store the member of each hierarchy that was
+     *                   current last time that #savepoint() was called.
      */
     void setContext(List<Member> memberList, boolean safe);
 
@@ -179,9 +171,7 @@ public interface Evaluator{
      *
      * Equivalent to
      *
-     * for (Member member : memberList) {
-     * &nbsp;&nbsp;setContext(member);
-     * }
+     * for (Member member : memberList) { &nbsp;&nbsp;setContext(member); }
      *
      * @param members Array of members
      */
@@ -193,13 +183,11 @@ public interface Evaluator{
      *
      * Equivalent to
      *
-     * for (Member member : memberList) {
-     * &nbsp;&nbsp;setContext(member, safe);
-     * }
+     * for (Member member : memberList) { &nbsp;&nbsp;setContext(member, safe); }
      *
      * @param members Array of members
-     * @param safe    Whether to store the member of each hierarchy that was
-     *                current last time that  #savepoint() was called.
+     * @param safe    Whether to store the member of each hierarchy that was current
+     *                last time that #savepoint() was called.
      */
     void setContext(Member[] members, boolean safe);
 
@@ -211,21 +199,20 @@ public interface Evaluator{
     Object evaluateCurrent();
 
     /**
-     * Returns the format string for this cell. This is computed by evaluating
-     * the format expression in the current context, and therefore different
-     * cells may have different format strings.
+     * Returns the format string for this cell. This is computed by evaluating the
+     * format expression in the current context, and therefore different cells may
+     * have different format strings.
      */
     public String getFormatString();
 
     /**
-     * Formats a value as a string according to the current context's
-     * format.
+     * Formats a value as a string according to the current context's format.
      */
     String format(Object o);
 
     /**
-     * Formats a value as a string according to the current context's
-     * format, using a given format string.
+     * Formats a value as a string according to the current context's format, using
+     * a given format string.
      */
     String format(Object o, String formatString);
 
@@ -235,25 +222,23 @@ public interface Evaluator{
     Locale getConnectionLocale();
 
     /**
-     * Retrieves the value of property name. If more than one
-     * member in the current context defines that property, the one with the
-     * highest solve order has precedence.
+     * Retrieves the value of property name. If more than one member in the current
+     * context defines that property, the one with the highest solve order has
+     * precedence.
      *
      * If the property is not defined, default value is returned.
      */
     Object getProperty(String name, Object defaultValue);
 
     /**
-     * Returns a  CatalogReader appropriate for the current
-     * access-control context.
+     * Returns a CatalogReader appropriate for the current access-control context.
      */
     CatalogReader getCatalogReader();
 
     /**
-     * Simple caching of the result of an Exp. The
-     * key for the cache consists of all members of the current
-     * context that exp depends on. Members of
-     * independent hierarchies are not part of the key.
+     * Simple caching of the result of an Exp. The key for the cache consists of all
+     * members of the current context that exp depends on. Members of independent
+     * hierarchies are not part of the key.
      * 
      */
     Object getCachedResult(ExpCacheDescriptor key);
@@ -261,25 +246,23 @@ public interface Evaluator{
     /**
      * Returns true for an axis that is NON EMPTY.
      *
-     * May be used by expression
-     * evaluators to optimize their result. For example, a top-level crossjoin
-     * may be optimized by removing all non-empty set elements before
-     * performing the crossjoin. This is possible because of the identity
+     * May be used by expression evaluators to optimize their result. For example, a
+     * top-level crossjoin may be optimized by removing all non-empty set elements
+     * before performing the crossjoin. This is possible because of the identity
      *
-     * nonempty(crossjoin(a, b)) ==
-     * nonempty(crossjoin(nonempty(a), nonempty(b));
+     * nonempty(crossjoin(a, b)) == nonempty(crossjoin(nonempty(a), nonempty(b));
      */
     boolean isNonEmpty();
 
     /**
-     * Sets whether an expression evaluation should filter out empty cells.
-     * Allows expressions to modify non empty flag to evaluate their children.
+     * Sets whether an expression evaluation should filter out empty cells. Allows
+     * expressions to modify non empty flag to evaluate their children.
      */
     void setNonEmpty(boolean nonEmpty);
 
     /**
-     * Creates an exception which indicates that an error has occurred during
-     * the runtime evaluation of a function. The caller should then throw that
+     * Creates an exception which indicates that an error has occurred during the
+     * runtime evaluation of a function. The caller should then throw that
      * exception.
      */
     RuntimeException newEvalException(Object context, String s);
@@ -287,7 +270,7 @@ public interface Evaluator{
     /**
      * Returns an evaluator for a set.
      *
-     * @param exp Expression
+     * @param exp    Expression
      * @param create Whether to create evaluator if not found
      * @return Evaluator of named set
      */
@@ -297,7 +280,7 @@ public interface Evaluator{
      * Returns an evaluator for a named set.
      *
      * @param namedSet Named set
-     * @param create Whether to create evaluator if not found
+     * @param create   Whether to create evaluator if not found
      * @return Evaluator of named set
      */
     NamedSetEvaluator getNamedSetEvaluator(NamedSet namedSet, boolean create);
@@ -308,15 +291,12 @@ public interface Evaluator{
     Member[] getMembers();
 
     /**
-     * Returns an array of the non-All members which make up the current
-     * context.
+     * Returns an array of the non-All members which make up the current context.
      *
-     * Notes:
-     * The 0th element is a measure, but otherwise the order of the
-     *     members is unspecified.
-     * No hierarchy occurs more than once.
-     * In rare circumstances, some of the members may be an 'All' member.
-     * The list may contain calculated members.
+     * Notes: The 0th element is a measure, but otherwise the order of the members
+     * is unspecified. No hierarchy occurs more than once. In rare circumstances,
+     * some of the members may be an 'All' member. The list may contain calculated
+     * members.
      *
      */
     Member[] getNonAllMembers();
@@ -328,8 +308,8 @@ public interface Evaluator{
     int getMissCount();
 
     /**
-     * Returns the value of a parameter, evaluating its default value if it is
-     * not set.
+     * Returns the value of a parameter, evaluating its default value if it is not
+     * set.
      */
     Object getParameterValue(ParameterSlot slot);
 
@@ -359,43 +339,42 @@ public interface Evaluator{
 
     /**
      * Returns a new Aggregator whose aggregation context adds a given list of
-     * tuples, and whose evaluation context is the same as this
-     * Aggregator.
+     * tuples, and whose evaluation context is the same as this Aggregator.
      *
      * @param list List of tuples
-     * @return Aggregator with list added to its aggregation
-     *   context
+     * @return Aggregator with list added to its aggregation context
      */
     Evaluator pushAggregation(List<List<Member>> list);
 
     /**
-     * Returns the base (non-virtual) cube that the current measure in the
-     * context belongs to.
+     * Returns the base (non-virtual) cube that the current measure in the context
+     * belongs to.
+     * 
      * @return Cube
      */
     Cube getMeasureCube();
 
     /**
-     * Returns whether it is necessary to check whether to return null for
-     * an unrelated dimension. If false, we never need to check: we can assume
-     * that  #needToReturnNullForUnrelatedDimension(org.eclipse.daanse.olap.api.element.Member[])
+     * Returns whether it is necessary to check whether to return null for an
+     * unrelated dimension. If false, we never need to check: we can assume that
+     * #needToReturnNullForUnrelatedDimension(org.eclipse.daanse.olap.api.element.Member[])
      * will always return false.
      *
-     * @return whether it is necessary to check whether to return null for
-     * an unrelated dimension
+     * @return whether it is necessary to check whether to return null for an
+     *         unrelated dimension
      */
     boolean mightReturnNullForUnrelatedDimension();
 
     /**
-     * If IgnoreMeasureForNonJoiningDimension is set to true and one or more
-     * members are on unrelated dimension for the measure in current context
-     * then returns true.
+     * If IgnoreMeasureForNonJoiningDimension is set to true and one or more members
+     * are on unrelated dimension for the measure in current context then returns
+     * true.
      *
-     * You must not call this method unless
-     *  #mightReturnNullForUnrelatedDimension() has returned true.
+     * You must not call this method unless #mightReturnNullForUnrelatedDimension()
+     * has returned true.
      *
-     * @param members Dimensions for the members need to be checked whether
-     *     related or unrelated
+     * @param members Dimensions for the members need to be checked whether related
+     *                or unrelated
      *
      * @return boolean
      */
@@ -413,7 +392,7 @@ public interface Evaluator{
      *
      * @param nativeEnabled Whether native evaluation should be used
      */
-   void setNativeEnabled(boolean nativeEnabled);
+    void setNativeEnabled(boolean nativeEnabled);
 
     /**
      * Returns whether the current context is an empty cell.
@@ -423,8 +402,8 @@ public interface Evaluator{
     boolean currentIsEmpty();
 
     /**
-     * Returns the member that was the current evaluation context for a
-     * particular hierarchy before the most recent change in context.
+     * Returns the member that was the current evaluation context for a particular
+     * hierarchy before the most recent change in context.
      *
      * @param hierarchy Hierarchy
      * @return Previous context member for given hierarchy
@@ -450,12 +429,11 @@ public interface Evaluator{
      */
     interface NamedSetEvaluator {
         /**
-         * Returns an iterator over the tuples of the named set. Applicable if
-         * the named set is a set of tuples.
+         * Returns an iterator over the tuples of the named set. Applicable if the named
+         * set is a set of tuples.
          *
-         * The iterator from this iterable maintains the current ordinal
-         * property required for the methods  #currentOrdinal() and
-         *  #currentTuple().
+         * The iterator from this iterable maintains the current ordinal property
+         * required for the methods #currentOrdinal() and #currentTuple().
          *
          * @param eval Evaluator for current context
          *
@@ -494,12 +472,11 @@ public interface Evaluator{
      */
     interface SetEvaluator {
         /**
-         * Returns an iterator over the tuples of the named set. Applicable if
-         * the named set is a set of tuples.
+         * Returns an iterator over the tuples of the named set. Applicable if the named
+         * set is a set of tuples.
          *
-         * The iterator from this iterable maintains the current ordinal
-         * property required for the methods  #currentOrdinal() and
-         *  #currentTuple().
+         * The iterator from this iterable maintains the current ordinal property
+         * required for the methods #currentOrdinal() and #currentTuple().
          *
          * @return Iterable over the tuples of the set
          */

@@ -35,8 +35,7 @@ import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Segment;
 
 /**
- * An OlapElement is a catalog object (dimension, hierarchy, level,
- * member).
+ * An OlapElement is a catalog object (dimension, hierarchy, level, member).
  *
  * @author jhyde, 21 January, 1999
  */
@@ -76,22 +75,21 @@ public interface OlapElement {
      * defined. Applicable only to set expressions.
      *
      *
-     * Example 1: 
+     * Example 1:
      *
      *
      * [Sales].children
      *
      *
-     *  has dimension [Sales].
+     * has dimension [Sales].
      *
      *
      *
      * Example 2:
      *
      *
-     * order(except([Promotion Media].[Media Type].members,
-     *              {[Promotion Media].[Media Type].[No Media]}),
-     *       [Measures].[Unit Sales], DESC)
+     * order(except([Promotion Media].[Media Type].members, {[Promotion
+     * Media].[Media Type].[No Media]}), [Measures].[Unit Sales], DESC)
      *
      *
      * has dimension [Promotion Media].
@@ -101,12 +99,11 @@ public interface OlapElement {
      * Example 3:
      *
      *
-     * CrossJoin([Product].[Product Department].members,
-     *           [Gender].members)
+     * CrossJoin([Product].[Product Department].members, [Gender].members)
      *
      *
-     * has no dimension (well, actually it is [Product] x [Gender],
-     * but we can't represent that, so we return null);
+     * has no dimension (well, actually it is [Product] x [Gender], but we can't
+     * represent that, so we return null);
      *
      */
     Dimension getDimension();

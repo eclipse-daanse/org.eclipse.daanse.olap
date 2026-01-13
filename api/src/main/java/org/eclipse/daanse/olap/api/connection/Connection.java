@@ -62,8 +62,7 @@ public interface Connection {
     Catalog getCatalog();
 
     /**
-     * Closes this Connection. You may not use this
-     * Connection after closing it.
+     * Closes this Connection. You may not use this Connection after closing it.
      */
     void close();
 
@@ -72,18 +71,18 @@ public interface Connection {
      *
      * @throws RuntimeException if another thread cancels the query's statement.
      *
-     * @deprecated This method is deprecated and will be removed in
-     * mondrian-4.0. It operates by internally creating a statement. Better
-     * to use olap4j and explicitly create a statement.
+     * @deprecated This method is deprecated and will be removed in mondrian-4.0. It
+     *             operates by internally creating a statement. Better to use olap4j
+     *             and explicitly create a statement.
      */
     @Deprecated
-	Result execute(Query query);
+    Result execute(Query query);
 
     Statement createStatement();
 
     /**
-     * Returns the locale this connection belongs to.  Determines, for example,
-     * the currency string used in formatting cell values.
+     * Returns the locale this connection belongs to. Determines, for example, the
+     * currency string used in formatting cell values.
      *
      *
      */
@@ -103,44 +102,39 @@ public interface Connection {
      * Parses a statement.
      *
      * @param mdx MDX string
-     * @return A  Query if it is a SELECT statement, a
-     *    DrillThrough if it is a DRILLTHROUGH statement
+     * @return A Query if it is a SELECT statement, a DrillThrough if it is a
+     *         DRILLTHROUGH statement
      */
     QueryComponent parseStatement(String mdx);
 
     /**
      * Sets the privileges for the this connection.
      *
-     *  role != null
-     *  role.isMutable()
+     * role != null role.isMutable()
      */
     void setRole(Role role);
 
     /**
-     * Returns the access-control profile for this connection.
-     *  role != null
-     *  role.isMutable()
+     * Returns the access-control profile for this connection. role != null
+     * role.isMutable()
      */
     Role getRole();
 
     /**
-     * Returns a schema reader with access control appropriate to the current
-     * role.
+     * Returns a schema reader with access control appropriate to the current role.
      */
     CatalogReader getCatalogReader();
 
-
     /**
-     * Returns an object with which to explicitly control the contents of the
-     * cache.
+     * Returns an object with which to explicitly control the contents of the cache.
      *
      * @param pw Writer to which to write logging information; may be null
      */
     CacheControl getCacheControl(PrintWriter pw);
 
     /**
-     * Returns the data source this connection uses to create connections
-     * to the underlying JDBC database.
+     * Returns the data source this connection uses to create connections to the
+     * underlying JDBC database.
      *
      * @return Data source
      */
@@ -153,20 +147,21 @@ public interface Connection {
     Scenario createScenario();
 
     void setScenario(Scenario scenario);
+
     /**
-     * Returns the identifier of this connection. Unique within the lifetime of
-     * this JVM.
+     * Returns the identifier of this connection. Unique within the lifetime of this
+     * JVM.
      *
      * @return Identifier of this connection
      */
-	long getId();
+    long getId();
 
-	Statement getInternalStatement();
+    Statement getInternalStatement();
 
-	/**
-	   * Executes a statement.
-	   *
-	   * @param execution Execution context (includes statement, query)
-	   */
-	Result execute(Execution execution);
+    /**
+     * Executes a statement.
+     *
+     * @param execution Execution context (includes statement, query)
+     */
+    Result execute(Execution execution);
 }

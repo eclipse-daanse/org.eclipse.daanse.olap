@@ -21,6 +21,6 @@ public non-sealed interface UpdateClause extends QueryComponent {
 
     Expression getValueExp();
 
-	Allocation getAllocation();
+    Allocation getAllocation();
 
 }

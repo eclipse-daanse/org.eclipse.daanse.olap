@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.api;
 import java.util.List;
 
 /**
- * The  ContextGroup gives access to a set of  Contexts.
- * It guarantees that names of the  Contexts are unique in the group.
+ * The ContextGroup gives access to a set of Contexts. It guarantees that names
+ * of the Contexts are unique in the group.
  *
  * @author stbischof
  *
@@ -25,14 +25,12 @@ import java.util.List;
 public interface ContextGroup {
 
     /**
-     * Gives access to the valid  Contexts.
+     * Gives access to the valid Contexts.
      * 
      * A Context is only valid, if it in unique in the this Group.
      *
      * @return Context
      */
-	List<Context<?>> getValidContexts();
-	
-
+    List<Context<?>> getValidContexts();
 
 }

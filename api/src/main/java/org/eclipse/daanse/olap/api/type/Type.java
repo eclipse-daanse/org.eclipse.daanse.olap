@@ -27,7 +27,6 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -46,26 +45,21 @@ public interface Type {
      *
      * For example:
      *
-     * DimensionType([Gender]) uses only the
-     *     [Gender] dimension.
-     * TupleType(MemberType([Gender]), MemberType([Store]))
-     *     uses [Gender]  and [Store]
-     *     dimensions.
+     * DimensionType([Gender]) uses only the [Gender] dimension.
+     * TupleType(MemberType([Gender]), MemberType([Store])) uses [Gender] and
+     * [Store] dimensions.
      *
      *
-     * The definitely parameter comes into play when the
-     * dimensional information is incomplete. For example, when applied to
-     * TupleType(MemberType(null), MemberType([Store])),
-     * usesDimension([Gender], false) returns true because it
-     * is possible that the expression returns a member of the
-     * [Gender] dimension; but
-     * usesDimension([Gender], true) returns true because it
-     * is possible that the expression returns a member of the
-     * [Gender] dimension.
+     * The definitely parameter comes into play when the dimensional information is
+     * incomplete. For example, when applied to TupleType(MemberType(null),
+     * MemberType([Store])), usesDimension([Gender], false) returns true because it
+     * is possible that the expression returns a member of the [Gender] dimension;
+     * but usesDimension([Gender], true) returns true because it is possible that
+     * the expression returns a member of the [Gender] dimension.
      *
-     * @param dimension Dimension
-     * @param definitely If true, returns true only if this type definitely
-     *    uses the dimension
+     * @param dimension  Dimension
+     * @param definitely If true, returns true only if this type definitely uses the
+     *                   dimension
      *
      * @return whether this Type uses the given Dimension
      */
@@ -76,93 +70,83 @@ public interface Type {
      *
      * For example:
      *
-     * HierarchyType([Customer].[Gender]) uses only the
-     *     [Customer].[Gender] hierarchy.
-     * TupleType(MemberType([Customer].[Gender]),
-     *           MemberType([Store].[Store]))
-     *     uses [Gender]  and [Store]
-     *     dimensions.
+     * HierarchyType([Customer].[Gender]) uses only the [Customer].[Gender]
+     * hierarchy. TupleType(MemberType([Customer].[Gender]),
+     * MemberType([Store].[Store])) uses [Gender] and [Store] dimensions.
      *
      *
-     * The definitely parameter comes into play when the
-     * dimensional information is incomplete. For example, when applied to
-     * TupleType(MemberType([Customer]), MemberType([Store])),
-     * usesDimension([Customer].[Gender], false) returns true
-     * because the expression returns a member of one hierarchy of the
-     * [Customer] dimension and that might be a member of the
-     * [Customer].[Gender] hierarchy; but
-     * usesDimension([Customer].[Gender], true) returns false
-     * because might return a member of a different hierarchy, such as
-     * [Customer].[State].
+     * The definitely parameter comes into play when the dimensional information is
+     * incomplete. For example, when applied to TupleType(MemberType([Customer]),
+     * MemberType([Store])), usesDimension([Customer].[Gender], false) returns true
+     * because the expression returns a member of one hierarchy of the [Customer]
+     * dimension and that might be a member of the [Customer].[Gender] hierarchy;
+     * but usesDimension([Customer].[Gender], true) returns false because might
+     * return a member of a different hierarchy, such as [Customer].[State].
      *
-     * @param hierarchy Hierarchy
-     * @param definitely If true, returns true only if this type definitely
-     *    uses the hierarchy
+     * @param hierarchy  Hierarchy
+     * @param definitely If true, returns true only if this type definitely uses the
+     *                   hierarchy
      *
      * @return whether this Type uses the given Hierarchy
      */
     boolean usesHierarchy(Hierarchy hierarchy, boolean definitely);
 
     /**
-     * Returns the Dimension of this Type, or null if not known.
-     * If not applicable, throws.
+     * Returns the Dimension of this Type, or null if not known. If not applicable,
+     * throws.
      *
      * @return the Dimension of this Type, or null if not known.
      */
     Dimension getDimension();
 
     /**
-     * Returns the Hierarchy of this Type, or null if not known.
-     * If not applicable, throws.
+     * Returns the Hierarchy of this Type, or null if not known. If not applicable,
+     * throws.
      *
      * @return the Hierarchy of this type, or null if not known
      */
     Hierarchy getHierarchy();
 
     /**
-     * Returns the Level of this Type, or null if not known.
-     * If not applicable, throws.
+     * Returns the Level of this Type, or null if not known. If not applicable,
+     * throws.
      *
      * @return the Level of this Type
      */
     Level getLevel();
 
     /**
-     * Returns a Type which is more general than this and the given Type.
-     * The type returned is broad enough to hold any value of either type,
-     * but no broader. If there is no such type, returns null.
+     * Returns a Type which is more general than this and the given Type. The type
+     * returned is broad enough to hold any value of either type, but no broader. If
+     * there is no such type, returns null.
      *
-     * Some examples:
-     * The common type for StringType and NumericType is ScalarType.
-     * The common type for NumericType and DecimalType(4, 2) is
-     *     NumericType.
+     * Some examples: The common type for StringType and NumericType is ScalarType.
+     * The common type for NumericType and DecimalType(4, 2) is NumericType.
      * DimensionType and NumericType have no common type.
      *
      *
-     * If conversionCount is not null, implicit conversions
-     * such as HierarchyType to DimensionType are considered; the parameter
-     * is incremented by the number of conversions performed.
+     * If conversionCount is not null, implicit conversions such as HierarchyType to
+     * DimensionType are considered; the parameter is incremented by the number of
+     * conversions performed.
      *
-     * Some examples:
-     * The common type for HierarchyType(hierarchy=Time.Weekly)
-     *     and LevelType(dimension=Time), if conversions are allowed, is
-     *     HierarchyType(dimension=Time).
+     * Some examples: The common type for HierarchyType(hierarchy=Time.Weekly) and
+     * LevelType(dimension=Time), if conversions are allowed, is
+     * HierarchyType(dimension=Time).
      *
      *
-     * One use of common types is to determine the types of the arguments
-     * to the Iif function. For example, the call
+     * One use of common types is to determine the types of the arguments to the Iif
+     * function. For example, the call
      *
-     * Iif(1 &gt; 2, [Measures].[Unit Sales],
-     * 5)
+     * Iif(1 &gt; 2, [Measures].[Unit Sales], 5)
      *
-     * has type ScalarType, because DecimalType(-1, 0) is a subtype of
-     * ScalarType, and MeasureType can be converted implicitly to ScalarType.
+     * has type ScalarType, because DecimalType(-1, 0) is a subtype of ScalarType,
+     * and MeasureType can be converted implicitly to ScalarType.
      *
-     * @param type Type
+     * @param type            Type
      *
      * @param conversionCount Number of conversions; output parameter that is
-     * incremented each time a conversion is performed; if null, conversions
-     * are not considered
+     *                        incremented each time a conversion is performed; if
+     *                        null, conversions are not considered
      *
      * @return More general type
      */
@@ -177,8 +161,8 @@ public interface Type {
     boolean isInstance(Object value);
 
     /**
-     * Returns the number of fields in a tuple type, or a set of tuples.
-     * For most other types, in particular member type, returns 1.
+     * Returns the number of fields in a tuple type, or a set of tuples. For most
+     * other types, in particular member type, returns 1.
      *
      * @return Arity of type
      */

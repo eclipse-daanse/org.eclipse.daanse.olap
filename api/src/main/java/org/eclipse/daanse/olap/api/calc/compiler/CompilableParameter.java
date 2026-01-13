@@ -30,9 +30,9 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.calc.Calc;
 
 /**
- * A  org.eclipse.daanse.olap.api.Parameter can be compiled in an  Calc using an
- *  ExpressionCompiler.
+ * A org.eclipse.daanse.olap.api.Parameter can be compiled in an Calc using an
+ * ExpressionCompiler.
  */
 public interface CompilableParameter extends Parameter {
-	Calc<?> compile(ExpressionCompiler expressionCompiler);
+    Calc<?> compile(ExpressionCompiler expressionCompiler);
 }

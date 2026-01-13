@@ -22,13 +22,13 @@ import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 public interface ISegmentCacheManager {
 
     /**
-       * Shuts down this cache manager and all active threads and indexes.
-       */
+     * Shuts down this cache manager and all active threads and indexes.
+     */
     void shutdown();
 
     void printCacheState(CellRegion region, PrintWriter pw, ExecutionContext executionContext);
 
-    <T> T execute( CacheCommand<T> command );
+    <T> T execute(CacheCommand<T> command);
 
     ISegmentCacheIndex getIndexRegistry();
 

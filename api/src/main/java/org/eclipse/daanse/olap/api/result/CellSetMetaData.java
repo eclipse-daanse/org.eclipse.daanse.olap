@@ -35,9 +35,9 @@ public interface CellSetMetaData {
     List<CellSetAxisMetaData> getAxesMetaData();
 
     /**
-     * Returns a CellSetAxisMetaData describing the filter axis. Never returns
-     * null; if the MDX statement contains no WHERE clause, the description of
-     * the filter contains no hierarchies.
+     * Returns a CellSetAxisMetaData describing the filter axis. Never returns null;
+     * if the MDX statement contains no WHERE clause, the description of the filter
+     * contains no hierarchies.
      *
      * @return metadata describing filter axis
      */

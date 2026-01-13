@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.api.calc;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 
-
 public interface DimensionCalc extends Calc<Dimension> {
 
 }

@@ -41,14 +41,13 @@ public interface HierarchyAccess {
     /**
      * Returns the access the current role has to a given member.
      *
-     * Visibility is:
-     *  Access#NONE if member is not visible,
-     *  Access#ALL if member and all children are visible,
-     *  Access#CUSTOM if some of the children are not visible.
+     * Visibility is: Access#NONE if member is not visible, Access#ALL if member and
+     * all children are visible, Access#CUSTOM if some of the children are not
+     * visible.
      *
      *
-     * For these purposes, children which are below the bottom level are
-     * regarded as visible.
+     * For these purposes, children which are below the bottom level are regarded as
+     * visible.
      *
      * @param member Member.
      * @return Return current role's access to member.
@@ -56,35 +55,35 @@ public interface HierarchyAccess {
     AccessMember getAccess(Member member);
 
     /**
-     * Returns the depth of the highest level to which the current Role has
-     * access. The 'all' level, if present, has a depth of zero.
+     * Returns the depth of the highest level to which the current Role has access.
+     * The 'all' level, if present, has a depth of zero.
      *
      * @return Returns depth of the highest accessible level.
      */
     int getTopLevelDepth();
 
     /**
-     * Returns the depth of the lowest level to which the current Role has
-     * access. The 'all' level, if present, has a depth of zero.
+     * Returns the depth of the lowest level to which the current Role has access.
+     * The 'all' level, if present, has a depth of zero.
      *
      * @return Returns depth of the lowest accessible level.
      */
     int getBottomLevelDepth();
 
     /**
-     * Returns the policy by which cell values are calculated if not all
-     * of a member's children are visible.
+     * Returns the policy by which cell values are calculated if not all of a
+     * member's children are visible.
      *
      * @return Returns rollup policy.
      */
     RollupPolicy getRollupPolicy();
 
     /**
-     * Returns true if at least one of the descendants of the
-     * given Member is inaccessible to this Role.
+     * Returns true if at least one of the descendants of the given Member is
+     * inaccessible to this Role.
      *
-     * Descendants which are inaccessible because they are below the
-     * bottom level are ignored.
+     * Descendants which are inaccessible because they are below the bottom level
+     * are ignored.
      *
      * @param member Member
      * @return Returns whether a descendant is inaccessible.

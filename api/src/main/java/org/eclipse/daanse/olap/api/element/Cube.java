@@ -64,23 +64,21 @@ public interface Cube extends OlapElement, MetaElement {
     List<Member> getMeasures();
 
     /**
-     * Finds a hierarchy whose name (or unique name, if unique is true)
-     * equals s.
+     * Finds a hierarchy whose name (or unique name, if unique is true) equals s.
      */
     Hierarchy lookupHierarchy(NameSegment s, boolean unique);
 
     /**
      * Returns Member[]. It builds Member[] by analyzing cellset, which gets created
-     * by running mdx sQuery. query has to be in the format of
-     * something like "[with calculated members] select *members* on columns from
-     * this".
+     * by running mdx sQuery. query has to be in the format of something like "[with
+     * calculated members] select *members* on columns from this".
      */
     Member[] getMembersForQuery(String query, List<Member> calcMembers);
 
     /**
-     * Returns a  CatalogReader for which this cube is the context for lookup
-     * up members. If role is null, the returned schema reader also
-     * obeys the access-control profile of role.
+     * Returns a CatalogReader for which this cube is the context for lookup up
+     * members. If role is null, the returned schema reader also obeys the
+     * access-control profile of role.
      */
     CatalogReader getCatalogReader(Role role);
 
@@ -121,8 +119,7 @@ public interface Cube extends OlapElement, MetaElement {
      * @param approximate Whether an approximation is acceptable
      * @param materialize Whether to go to disk if no approximation for the count is
      *                    available and the members are not in cache. If false,
-     *                    returns  Integer#MIN_VALUE if value is not in
-     *                    cache.
+     *                    returns Integer#MIN_VALUE if value is not in cache.
      */
     int getLevelCardinality(Level level, boolean approximate, boolean materialize);
 

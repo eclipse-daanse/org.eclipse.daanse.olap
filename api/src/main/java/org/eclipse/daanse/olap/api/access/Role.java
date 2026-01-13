@@ -45,17 +45,16 @@ import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
 /**
- * A Role is a collection of access rights to cubes, permissions,
- * and so forth.
+ * A Role is a collection of access rights to cubes, permissions, and so forth.
  *
- * At present, the only way to create a role is programmatically. You then
- * add appropriate permissions, and associate the role with a connection.
- * Queries executed for the duration of the connection will be using the role
- * for security control.
+ * At present, the only way to create a role is programmatically. You then add
+ * appropriate permissions, and associate the role with a connection. Queries
+ * executed for the duration of the connection will be using the role for
+ * security control.
  *
- * Mondrian does not have any notion of a 'user'. It is the client
- * application's responsibility to create a role appropriate for the user who
- * is establishing the connection.
+ * Mondrian does not have any notion of a 'user'. It is the client application's
+ * responsibility to create a role appropriate for the user who is establishing
+ * the connection.
  *
  * @author jhyde
  * @since Oct 5, 2002
@@ -65,79 +64,66 @@ public interface Role {
     /**
      * Returns the access this role has to a given schema.
      *
-     *  schema != null
-     *  return == Access.ALL
-     * || return == Access.NONE
-     * || return == Access.ALL_DIMENSIONS
+     * schema != null return == Access.ALL || return == Access.NONE || return ==
+     * Access.ALL_DIMENSIONS
      */
     AccessCatalog getAccess(Catalog schema);
 
     /**
      * Returns the access this role has to a given cube.
      *
-     *  cube != null
-     *  return == Access.ALL || return == Access.NONE
+     * cube != null return == Access.ALL || return == Access.NONE
      */
     AccessCube getAccess(Cube cube);
-
 
     /**
      * Returns the access this role has to a given dimension.
      *
-     *  dimension != null
-     *  Access.instance().isValid(return)
+     * dimension != null Access.instance().isValid(return)
      */
     AccessDimension getAccess(Dimension dimension);
 
     /**
      * Returns the access this role has to a given hierarchy.
      *
-     *  hierarchy != null
-     *  return == Access.NONE
-     *   || return == Access.ALL
-     *   || return == Access.CUSTOM
+     * hierarchy != null return == Access.NONE || return == Access.ALL || return ==
+     * Access.CUSTOM
      */
     AccessHierarchy getAccess(Hierarchy hierarchy);
 
     /**
-     * Returns the details of this hierarchy's access, or null if the hierarchy
-     * has not been given explicit access.
+     * Returns the details of this hierarchy's access, or null if the hierarchy has
+     * not been given explicit access.
      *
-     *  hierarchy != null
+     * hierarchy != null
      */
     HierarchyAccess getAccessDetails(Hierarchy hierarchy);
 
     /**
      * Returns the access this role has to a given level.
      *
-     *  level != null
-     *  Access.instance().isValid(return)
+     * level != null Access.instance().isValid(return)
      */
     AccessMember getAccess(Level level);
 
     /**
      * Returns the access this role has to a given member.
      *
-     *  member != null
-     *  isMutable()
-     *  return == Access.NONE
-     *    || return == Access.ALL
-     *    || return == Access.CUSTOM
+     * member != null isMutable() return == Access.NONE || return == Access.ALL ||
+     * return == Access.CUSTOM
      */
     AccessMember getAccess(Member member);
 
     /**
      * Returns the access this role has to a given named set.
      *
-     *  set != null
-     *  isMutable()
-     *  return == Access.NONE || return == Access.ALL
+     * set != null isMutable() return == Access.NONE || return == Access.ALL
      */
     AccessMember getAccess(NamedSet set);
 
     /**
-     * Returns whether this role is allowed to see a given element.
-     *  olapElement != null
+     * Returns whether this role is allowed to see a given element. olapElement !=
+     * null
      */
     boolean canAccess(OlapElement olapElement);
 
@@ -149,4 +135,3 @@ public interface Role {
 
     AccessDatabaseColumn getAccess(DatabaseColumn column, AccessDatabaseTable accessDatabaseTable);
 }
-

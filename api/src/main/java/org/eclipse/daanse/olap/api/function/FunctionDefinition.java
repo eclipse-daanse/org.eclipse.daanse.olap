@@ -23,13 +23,12 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 public interface FunctionDefinition {
-	
-	FunctionMetaData getFunctionMetaData();
+
+    FunctionMetaData getFunctionMetaData();
 
     /**
-     * Creates an expression which represents a call to this function with
-     * a given set of arguments. The result is usually a  ResolvedFunCall but
-     * not always.
+     * Creates an expression which represents a call to this function with a given
+     * set of arguments. The result is usually a ResolvedFunCall but not always.
      */
     Expression createCall(Validator validator, Expression[] args);
 
@@ -43,17 +42,13 @@ public interface FunctionDefinition {
 //        		fi.returnCategory(),
 //        		fi.parameterDataTypes());
 
-
     /**
-     * Writes a function call with given  Expressions into MDX.
+     * Writes a function call with given Expressions into MDX.
      */
-	void unparse(Expression[] args, PrintWriter pw);
-		
+    void unparse(Expression[] args, PrintWriter pw);
+
 //		getFunctionMetaData().functionAtom().syntax().unparse(getFunctionMetaData().functionAtom().name(), args, pw);
 
- 
     Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler);
-    
-
 
 }

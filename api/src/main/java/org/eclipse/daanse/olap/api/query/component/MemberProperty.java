@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import org.eclipse.daanse.olap.api.Validator;
 
-public non-sealed interface MemberProperty extends QueryComponent{
+public non-sealed interface MemberProperty extends QueryComponent {
 
     Expression getExp();
 

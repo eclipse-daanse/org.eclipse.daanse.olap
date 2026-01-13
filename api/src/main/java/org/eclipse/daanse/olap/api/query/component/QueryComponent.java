@@ -28,42 +28,18 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import java.io.PrintWriter;
 
-public sealed interface QueryComponent permits
-    CalculatedFormula,
-    CellProperty,
-    DimensionExpression,
-    DmvQuery,
-    DrillThrough,
-    Explain,
-    Formula,
-    HierarchyExpression,
-    Id,
-    LevelExpression,
-    Literal,
-    MemberProperty,
-    NamedSetExpression,
-    ParameterExpression,
-    Query,
-    QueryAxis,
-    Refresh,
-    ResolvedFunCall,
-    Subcube,
-    TransactionCommand,
-    UnresolvedFunCall,
-    Update,
-    MemberExpression,
-    WrapExpression,
-    UpdateClause,
-    SqlQuery {
+public sealed interface QueryComponent permits CalculatedFormula, CellProperty, DimensionExpression, DmvQuery,
+        DrillThrough, Explain, Formula, HierarchyExpression, Id, LevelExpression, Literal, MemberProperty,
+        NamedSetExpression, ParameterExpression, Query, QueryAxis, Refresh, ResolvedFunCall, Subcube,
+        TransactionCommand, UnresolvedFunCall, Update, MemberExpression, WrapExpression, UpdateClause, SqlQuery {
 
     /**
-     * Returns an array of the object's children.  Those which are not are ignored.
+     * Returns an array of the object's children. Those which are not are ignored.
      */
     Object[] getChildren();
 
     /**
-     * Writes a string representation of this parse tree
-     * node to the given writer.
+     * Writes a string representation of this parse tree node to the given writer.
      *
      * @param pw writer
      */

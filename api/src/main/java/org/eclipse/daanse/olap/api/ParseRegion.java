@@ -14,32 +14,32 @@ package org.eclipse.daanse.olap.api;
 
 public interface ParseRegion {
 
-	/**
-	 * Return starting line number (1-based).
-	 *
-	 * @return 1-based starting line number
-	 */
-	int getStartLine();
+    /**
+     * Return starting line number (1-based).
+     *
+     * @return 1-based starting line number
+     */
+    int getStartLine();
 
-	/**
-	 * Return starting column number (1-based).
-	 *
-	 * @return 1-based starting column number
-	 */
-	int getStartColumn();
+    /**
+     * Return starting column number (1-based).
+     *
+     * @return 1-based starting column number
+     */
+    int getStartColumn();
 
-	/**
-	 * Return ending line number (1-based).
-	 *
-	 * @return 1-based ending line number
-	 */
-	int getEndLine();
+    /**
+     * Return ending line number (1-based).
+     *
+     * @return 1-based ending line number
+     */
+    int getEndLine();
 
-	/**
-	 * Return ending column number (1-based).
-	 *
-	 * @return 1-based starting endings column number
-	 */
-	int getEndColumn();
+    /**
+     * Return ending column number (1-based).
+     *
+     * @return 1-based starting endings column number
+     */
+    int getEndColumn();
 
 }

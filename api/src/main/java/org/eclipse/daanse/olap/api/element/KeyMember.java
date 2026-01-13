@@ -12,6 +12,6 @@
  */
 package org.eclipse.daanse.olap.api.element;
 
-public interface KeyMember extends Member{
+public interface KeyMember extends Member {
     Object getKey();
 }

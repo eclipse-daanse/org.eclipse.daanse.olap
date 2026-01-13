@@ -18,6 +18,5 @@ import java.util.Optional;
 
 public non-sealed interface DrillThroughAction extends Action {
 
-
     Optional<List<String>> catalogs();
 }

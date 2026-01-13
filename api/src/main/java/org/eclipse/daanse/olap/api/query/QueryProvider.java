@@ -39,7 +39,8 @@ public interface QueryProvider {
 
     Query createQuery(Statement statement, SelectStatement selectStatement, boolean strictValidation);
 
-    DrillThrough createDrillThrough(Statement statement, DrillthroughStatement drillThroughStatement, boolean strictValidation);
+    DrillThrough createDrillThrough(Statement statement, DrillthroughStatement drillThroughStatement,
+            boolean strictValidation);
 
     Explain createExplain(Statement statement, ExplainStatement explainStatement, boolean strictValidation);
 
@@ -49,11 +50,6 @@ public interface QueryProvider {
 
     Update createUpdate(UpdateStatement updateStatement);
 
-    Query createQuery(Statement statement,
-                                Formula[] formula,
-                                QueryAxis[] axes,
-                                Subcube subcube,
-                                QueryAxis slicerAxis,
-                                CellProperty[] cellProps,
-                                boolean strictValidation);
+    Query createQuery(Statement statement, Formula[] formula, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
+            CellProperty[] cellProps, boolean strictValidation);
 }

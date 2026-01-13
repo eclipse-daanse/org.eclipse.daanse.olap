@@ -24,21 +24,18 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
+public class NullType extends ScalarType {
 
-public class NullType extends ScalarType
-{
+    public static final NullType INSTANCE = new NullType();
 
-	public static final NullType INSTANCE = new NullType();
-
-	private NullType() {
-		super("<NULLTYPE>");
-	}
+    private NullType() {
+        super("<NULLTYPE>");
+    }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return obj instanceof NullType;
     }
 

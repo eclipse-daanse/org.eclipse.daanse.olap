@@ -14,10 +14,10 @@
 package org.eclipse.daanse.olap.api.calc;
 
 /**
- * Marker Interface for  Calc that returns the same value on each call of
- *  #evaluate(mondrian.olap.Evaluator) method.
- *  
- *  @param <E> parameter
+ * Marker Interface for Calc that returns the same value on each call of
+ * #evaluate(mondrian.olap.Evaluator) method.
+ * 
+ * @param <E> parameter
  */
 public interface ConstantCalc<E> extends Calc<E> {
 

@@ -32,7 +32,6 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 
-
 /**
  * The type of an expression which represents a Dimension.
  *
@@ -48,8 +47,8 @@ public class DimensionType implements Type {
     /**
      * Creates a type representing a dimension.
      *
-     * @param dimension Dimension that values of this type must belong to, or
-     *   null if the dimension is unknown
+     * @param dimension Dimension that values of this type must belong to, or null
+     *                  if the dimension is unknown
      */
     public DimensionType(Dimension dimension) {
         this.dimension = dimension;
@@ -70,21 +69,19 @@ public class DimensionType implements Type {
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
         // REVIEW: Should be '!definitely'?
-        return this.dimension == dimension
-            || (definitely && this.dimension == null);
+        return this.dimension == dimension || (definitely && this.dimension == null);
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         // If hierarchy belongs to this type's dimension, we might use it.
-        return hierarchy.getDimension() == this.dimension
-            && !definitely;
+        return hierarchy.getDimension() == this.dimension && !definitely;
     }
 
     @Override
-	public Hierarchy getHierarchy() {
+    public Hierarchy getHierarchy() {
         if (dimension == null) {
             return null;
         } else {
@@ -93,22 +90,22 @@ public class DimensionType implements Type {
     }
 
     @Override
-	public Level getLevel() {
+    public Level getLevel() {
         return null;
     }
 
     @Override
-	public Dimension getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return digest.hashCode();
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof DimensionType that) {
             return Objects.equals(this.getDimension(), that.getDimension());
         }
@@ -116,12 +113,12 @@ public class DimensionType implements Type {
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (conversionCount != null && type instanceof HierarchyType hierarchyType) {
             if (Objects.equals(hierarchyType.getDimension(), dimension)) {
                 ++conversionCount[0];
@@ -132,24 +129,19 @@ public class DimensionType implements Type {
         if (!(type instanceof DimensionType that)) {
             return null;
         }
-        if (this.getDimension() != null
-            && this.getDimension().equals(that.getDimension()))
-        {
-            return new DimensionType(
-                this.getDimension());
+        if (this.getDimension() != null && this.getDimension().equals(that.getDimension())) {
+            return new DimensionType(this.getDimension());
         }
         return DimensionType.Unknown;
     }
 
     @Override
-	public boolean isInstance(Object value) {
-        return value instanceof Dimension
-            && (dimension == null
-                || value.equals(dimension));
+    public boolean isInstance(Object value) {
+        return value instanceof Dimension && (dimension == null || value.equals(dimension));
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return 1;
     }
 }

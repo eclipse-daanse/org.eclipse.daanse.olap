@@ -36,36 +36,36 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 
 public interface FunctionService {
 
-	void addResolver(FunctionResolver resolver);
+    void addResolver(FunctionResolver resolver);
 
-	void removeResolver(FunctionResolver resolver);
+    void removeResolver(FunctionResolver resolver);
 
-	/**
-	 * Returns a Set of all words, that are used in Functions and may not be used as
-	 * identifiers.
-	 */
-	Set<String> getPropertyWords();
+    /**
+     * Returns a Set of all words, that are used in Functions and may not be used as
+     * identifiers.
+     */
+    Set<String> getPropertyWords();
 
-	List<FunctionMetaData> getFunctionMetaDatas();
+    List<FunctionMetaData> getFunctionMetaDatas();
 
-	/**
-	 * Returns whether a string is a reserved word.
-	 */
-	boolean isReservedWord(String word);
+    /**
+     * Returns whether a string is a reserved word.
+     */
+    boolean isReservedWord(String word);
 
-	/**
-	 * Returns a list of
-	 *  org.eclipse.daanse.olap.api.function.FunctionResolver objects.
-	 */
-	List<FunctionResolver> getResolvers();
+    /**
+     * Returns a list of org.eclipse.daanse.olap.api.function.FunctionResolver
+     * objects.
+     */
+    List<FunctionResolver> getResolvers();
 
-	/**
-	 * Returns a list of resolvers for an operator with a given name and syntax.
-	 * Never returns null; if there are no resolvers, returns the empty list.
-	 *
-	 * @param operationAtom OperationAtom
-	 * @return List of resolvers for the OperationAtom
-	 */
-	List<FunctionResolver> getResolvers(OperationAtom operationAtom);
+    /**
+     * Returns a list of resolvers for an operator with a given name and syntax.
+     * Never returns null; if there are no resolvers, returns the empty list.
+     *
+     * @param operationAtom OperationAtom
+     * @return List of resolvers for the OperationAtom
+     */
+    List<FunctionResolver> getResolvers(OperationAtom operationAtom);
 
 }

@@ -16,8 +16,10 @@ package org.eclipse.daanse.olap.api.execution;
 /**
  * Exception thrown when a query execution has exceeded its timeout.
  *
- * <p>This exception is thrown by {@link ExecutionContext#checkCancelOrTimeout()}
- * when the execution has exceeded its configured timeout duration.</p>
+ * <p>
+ * This exception is thrown by {@link ExecutionContext#checkCancelOrTimeout()}
+ * when the execution has exceeded its configured timeout duration.
+ * </p>
  *
  * @see ExecutionContext#timeout()
  * @see ExecutionContext#checkCancelOrTimeout()
@@ -35,7 +37,8 @@ public class QueryTimeoutException extends RuntimeException {
     }
 
     /**
-     * Constructs a new query timeout exception with the specified detail message and cause.
+     * Constructs a new query timeout exception with the specified detail message
+     * and cause.
      *
      * @param message the detail message
      * @param cause   the cause

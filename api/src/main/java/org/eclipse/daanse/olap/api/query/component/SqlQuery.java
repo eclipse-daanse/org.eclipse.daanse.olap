@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import java.sql.ResultSet;
 
-public non-sealed interface SqlQuery extends QueryComponent{
+public non-sealed interface SqlQuery extends QueryComponent {
 
     String getSql();
 

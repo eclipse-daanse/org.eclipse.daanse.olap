@@ -17,6 +17,6 @@ import java.math.BigDecimal;
 
 public non-sealed interface NumericLiteral extends Literal<BigDecimal> {
 
-	int getIntValue();
+    int getIntValue();
 
 }

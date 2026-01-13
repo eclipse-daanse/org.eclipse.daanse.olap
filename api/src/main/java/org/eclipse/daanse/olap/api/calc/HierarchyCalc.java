@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.api.calc;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 
-
 public interface HierarchyCalc extends Calc<Hierarchy> {
 
 }

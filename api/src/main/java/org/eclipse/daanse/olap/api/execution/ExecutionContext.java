@@ -99,7 +99,8 @@ public final class ExecutionContext {
      *
      * @param parent   the parent context (null for root contexts)
      * @param metadata the metadata (defaults to empty if null)
-     * @param timeout  the timeout duration (inherits from parent if empty and parent exists)
+     * @param timeout  the timeout duration (inherits from parent if empty and
+     *                 parent exists)
      */
     private ExecutionContext(ExecutionContext parent, ExecutionMetadata metadata, Optional<Duration> timeout) {
         this.id = ID_GENERATOR.incrementAndGet();
@@ -136,7 +137,8 @@ public final class ExecutionContext {
      * Returns the current execution context.
      *
      * @return the current ExecutionContext
-     * @throws NoExecutionContextException if no context is bound to the current scope
+     * @throws NoExecutionContextException if no context is bound to the current
+     *                                     scope
      */
     public static ExecutionContext current() {
         if (!CURRENT.isBound()) {
@@ -146,9 +148,9 @@ public final class ExecutionContext {
     }
 
     /**
-     * Returns the current execution context, or null if not in execution scope.
-     * Use this method only when you explicitly need to handle the case where
-     * no context is available.
+     * Returns the current execution context, or null if not in execution scope. Use
+     * this method only when you explicitly need to handle the case where no context
+     * is available.
      *
      * @return the current ExecutionContext, or null if outside execution scope
      */
@@ -358,7 +360,8 @@ public final class ExecutionContext {
      * Creates a child execution context with new metadata and custom timeout.
      *
      * @param metadata the metadata for the child context
-     * @param timeout  the timeout for the child context (empty to inherit from parent)
+     * @param timeout  the timeout for the child context (empty to inherit from
+     *                 parent)
      * @return a new child ExecutionContext with the specified metadata and timeout
      */
     public ExecutionContext createChild(ExecutionMetadata metadata, Optional<Duration> timeout) {

@@ -24,22 +24,22 @@ import org.eclipse.daanse.olap.api.type.Type;
 
 public interface CalculationProfile {
 
-	Class<?> clazz();
+    Class<?> clazz();
 
-	Type type();
+    Type type();
 
-	ResultStyle resultStyle();
+    ResultStyle resultStyle();
 
-	Optional<Instant> start();
+    Optional<Instant> start();
 
-	Optional<Instant> end();
+    Optional<Instant> end();
 
-	Map<String, Object> additionalValues();
+    Map<String, Object> additionalValues();
 
-	List<CalcEvaluationProfile> evaluationProfiles();
+    List<CalcEvaluationProfile> evaluationProfiles();
 
-	List<CalculationProfile> childProfiles();
+    List<CalculationProfile> childProfiles();
 
-	Duration duration();
+    Duration duration();
 
 }

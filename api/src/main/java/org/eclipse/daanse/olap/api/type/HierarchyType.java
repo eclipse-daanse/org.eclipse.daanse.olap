@@ -48,10 +48,10 @@ public class HierarchyType implements Type {
     /**
      * Creates a type representing a hierarchy.
      *
-     * @param dimension Dimension that values of this type must belong to, or
-     *   null if the dimension is unknown
-     * @param hierarchy Hierarchy that values of this type must belong to,
-     *   null if the hierarchy is unknown
+     * @param dimension Dimension that values of this type must belong to, or null
+     *                  if the dimension is unknown
+     * @param hierarchy Hierarchy that values of this type must belong to, null if
+     *                  the hierarchy is unknown
      */
     public HierarchyType(Dimension dimension, Hierarchy hierarchy) {
         this.dimension = dimension;
@@ -75,85 +75,71 @@ public class HierarchyType implements Type {
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
-        return this.dimension == dimension
-            || (!definitely && this.dimension == null);
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
+        return this.dimension == dimension || (!definitely && this.dimension == null);
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
-        return this.hierarchy == hierarchy
-            || (!definitely
-                && this.hierarchy == null
-                && (this.dimension == null
-                    || this.dimension == hierarchy.getDimension()));
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+        return this.hierarchy == hierarchy || (!definitely && this.hierarchy == null
+                && (this.dimension == null || this.dimension == hierarchy.getDimension()));
     }
 
     @Override
-	public Dimension getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
     @Override
-	public Hierarchy getHierarchy() {
+    public Hierarchy getHierarchy() {
         return hierarchy;
     }
 
     @Override
-	public Level getLevel() {
+    public Level getLevel() {
         return null;
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return digest.hashCode();
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof HierarchyType that) {
-            return Objects.equals(this.hierarchy, that.hierarchy)
-                && Objects.equals(this.dimension, that.dimension);
+            return Objects.equals(this.hierarchy, that.hierarchy) && Objects.equals(this.dimension, that.dimension);
         }
         return false;
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (!(type instanceof HierarchyType that)) {
             return null;
         }
-        if (this.getHierarchy() != null
-            && this.getHierarchy().equals(that.getHierarchy()))
-        {
+        if (this.getHierarchy() != null && this.getHierarchy().equals(that.getHierarchy())) {
             return this;
         }
-        if (this.getDimension() != null
-            && this.getDimension().equals(that.getDimension()))
-        {
-            return new HierarchyType(
-                this.getDimension(),
-                null);
+        if (this.getDimension() != null && this.getDimension().equals(that.getDimension())) {
+            return new HierarchyType(this.getDimension(), null);
         }
         return HierarchyType.Unknown;
     }
 
     @Override
-	public boolean isInstance(Object value) {
-        return value instanceof Hierarchy hValue
-            && (hierarchy == null
-                || value.equals(hierarchy))
-            && (dimension == null
-                || hValue.getDimension().equals(dimension));
+    public boolean isInstance(Object value) {
+        return value instanceof Hierarchy hValue && (hierarchy == null || value.equals(hierarchy))
+                && (dimension == null || hValue.getDimension().equals(dimension));
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return 1;
     }
 }

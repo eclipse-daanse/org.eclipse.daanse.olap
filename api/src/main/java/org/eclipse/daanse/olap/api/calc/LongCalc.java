@@ -14,10 +14,12 @@
 package org.eclipse.daanse.olap.api.calc;
 
 /**
- *  Marker interface to check the returning type of an  org.eclipse.daanse.olap.api.calc.Calc
- *  Returns  mondrian.olap.fun.FunUtil#INTEGER_NULL} If result  #evaluate(Evaluator) would be null
- *  
- *  @author Stefan Bischof
+ * Marker interface to check the returning type of an
+ * org.eclipse.daanse.olap.api.calc.Calc Returns
+ * mondrian.olap.fun.FunUtil#INTEGER_NULL} If result #evaluate(Evaluator) would
+ * be null
+ * 
+ * @author Stefan Bischof
  */
 public interface LongCalc extends Calc<Long> {
 }

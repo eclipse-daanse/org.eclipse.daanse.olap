@@ -19,7 +19,7 @@ public non-sealed interface KeyIdentifierSegment extends IdentifierSegment {
 
     /**
      * Returns the key components, if this IdentifierSegment is a key. (That is, if
-     *  #getQuoting() returns  Quoting#KEY.)
+     * #getQuoting() returns Quoting#KEY.)
      *
      * Returns null otherwise.
      *

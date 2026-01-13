@@ -24,14 +24,12 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
-
 
 /**
  * The type of an expression which represents a member.
@@ -46,23 +44,17 @@ public class MemberType implements Type {
     private final Member member;
     private final String digest;
 
-    public static final MemberType Unknown =
-        new MemberType(null, null, null, null);
+    public static final MemberType Unknown = new MemberType(null, null, null, null);
 
     /**
      * Creates a type representing a member.
      *
      * @param dimension Dimension the member belongs to, or null if not known
      * @param hierarchy Hierarchy the member belongs to, or null if not known
-     * @param level Level the member belongs to, or null if not known
-     * @param member The precise member, or null if not known
+     * @param level     Level the member belongs to, or null if not known
+     * @param member    The precise member, or null if not known
      */
-    public MemberType(
-        Dimension dimension,
-        Hierarchy hierarchy,
-        Level level,
-        Member member)
-    {
+    public MemberType(Dimension dimension, Hierarchy hierarchy, Level level, Member member) {
         this.dimension = dimension;
         this.hierarchy = hierarchy;
         this.level = level;
@@ -137,17 +129,17 @@ public class MemberType implements Type {
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
     @Override
-	public Hierarchy getHierarchy() {
+    public Hierarchy getHierarchy() {
         return hierarchy;
     }
 
     @Override
-	public Level getLevel() {
+    public Level getLevel() {
         return level;
     }
 
@@ -156,18 +148,14 @@ public class MemberType implements Type {
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
-        return this.dimension == dimension
-            || (!definitely && this.dimension == null);
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
+        return this.dimension == dimension || (!definitely && this.dimension == null);
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
-        return this.hierarchy == hierarchy
-            || (!definitely
-                && this.hierarchy == null
-                && (this.dimension == null
-                    || this.dimension == hierarchy.getDimension()));
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+        return this.hierarchy == hierarchy || (!definitely && this.hierarchy == null
+                && (this.dimension == null || this.dimension == hierarchy.getDimension()));
     }
 
     public Type getValueType() {
@@ -177,7 +165,7 @@ public class MemberType implements Type {
     }
 
     @Override
-	public Dimension getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
@@ -185,16 +173,12 @@ public class MemberType implements Type {
         if (type instanceof MemberType) {
             return (MemberType) type;
         } else {
-            return new MemberType(
-                type.getDimension(),
-                type.getHierarchy(),
-                type.getLevel(),
-                null);
+            return new MemberType(type.getDimension(), type.getHierarchy(), type.getLevel(), null);
         }
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (type instanceof ScalarType) {
             return getValueType().computeCommonType(type, conversionCount);
         }
@@ -204,54 +188,30 @@ public class MemberType implements Type {
         if (!(type instanceof MemberType that)) {
             return null;
         }
-        if (this.getMember() != null
-            && this.getMember().equals(that.getMember()))
-        {
+        if (this.getMember() != null && this.getMember().equals(that.getMember())) {
             return this;
         }
-        if (this.getLevel() != null
-            && this.getLevel().equals(that.getLevel()))
-        {
-            return new MemberType(
-                this.getDimension(),
-                this.getHierarchy(),
-                this.getLevel(),
-                null);
+        if (this.getLevel() != null && this.getLevel().equals(that.getLevel())) {
+            return new MemberType(this.getDimension(), this.getHierarchy(), this.getLevel(), null);
         }
-        if (this.getHierarchy() != null
-            && this.getHierarchy().equals(that.getHierarchy()))
-        {
-            return new MemberType(
-                this.getDimension(),
-                this.getHierarchy(),
-                null,
-                null);
+        if (this.getHierarchy() != null && this.getHierarchy().equals(that.getHierarchy())) {
+            return new MemberType(this.getDimension(), this.getHierarchy(), null, null);
         }
-        if (this.getDimension() != null
-            && this.getDimension().equals(that.getDimension()))
-        {
-            return new MemberType(
-                this.getDimension(),
-                null,
-                null,
-                null);
+        if (this.getDimension() != null && this.getDimension().equals(that.getDimension())) {
+            return new MemberType(this.getDimension(), null, null, null);
         }
         return MemberType.Unknown;
     }
 
     @Override
-	public boolean isInstance(Object value) {
-        return value instanceof Member
-            && (level == null
-            || ((Member) value).getLevel().equals(level))
-            && (hierarchy == null
-            || ((Member) value).getHierarchy().equals(hierarchy))
-            && (dimension == null
-            || ((Member) value).getDimension().equals(dimension));
+    public boolean isInstance(Object value) {
+        return value instanceof Member && (level == null || ((Member) value).getLevel().equals(level))
+                && (hierarchy == null || ((Member) value).getHierarchy().equals(hierarchy))
+                && (dimension == null || ((Member) value).getDimension().equals(dimension));
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return 1;
     }
 }

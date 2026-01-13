@@ -12,7 +12,7 @@
  */
 package org.eclipse.daanse.olap.api.element;
 
-public interface ParentChildMember extends KeyMember{
+public interface ParentChildMember extends KeyMember {
 
     Member createPseudoLeafMember(Member child, String name);
 

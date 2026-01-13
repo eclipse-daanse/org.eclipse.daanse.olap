@@ -31,47 +31,48 @@ package org.eclipse.daanse.olap.api;
 //TODO: REMOVE and use New Type System. when this is free from inner values
 public enum DataType {
 
-	ARRAY("array", "Array"), //
-	CUBE("cube", "Cube"), //
-	DATE_TIME("datetime", "DateTime"), //
-	DIMENSION("dimension", "Dimension"), //
-	EMPTY("empty", "Empty"), //
-	HIERARCHY("hierarchy", "Hierarchy"), //
-	INTEGER("integer", "Integer"), //
-	LEVEL("level", "Level"), //
-	LOGICAL("logical", "Logical Expression"), //
-	MEMBER("member", "Member"), //
-	NULL("null", "Null"), //
-	NUMERIC("numeric", "Numeric Expression"), //
-	SET("set", "Set"), //
-	STRING("string", "String"), //
-	SYMBOL("symbol", "Symbol"), //
-	TUPLE("tuple", "Tuple"), //
-	UNKNOWN("unknown", "Unknown"), //
-	/**
-	 * A Category.VALUE is a expression that results in a string or numeric.
-	 */
-	VALUE("value", "Value");
+    ARRAY("array", "Array"), //
+    CUBE("cube", "Cube"), //
+    DATE_TIME("datetime", "DateTime"), //
+    DIMENSION("dimension", "Dimension"), //
+    EMPTY("empty", "Empty"), //
+    HIERARCHY("hierarchy", "Hierarchy"), //
+    INTEGER("integer", "Integer"), //
+    LEVEL("level", "Level"), //
+    LOGICAL("logical", "Logical Expression"), //
+    MEMBER("member", "Member"), //
+    NULL("null", "Null"), //
+    NUMERIC("numeric", "Numeric Expression"), //
+    SET("set", "Set"), //
+    STRING("string", "String"), //
+    SYMBOL("symbol", "Symbol"), //
+    TUPLE("tuple", "Tuple"), //
+    UNKNOWN("unknown", "Unknown"), //
+    /**
+     * A Category.VALUE is a expression that results in a string or numeric.
+     */
+    VALUE("value", "Value");
 
-	private String name;
-	private String prittyName;
+    private String name;
+    private String prittyName;
 
-	DataType(String name, String prittyName) {
-		this.name = name;
-		this.prittyName = prittyName;
-	}
+    DataType(String name, String prittyName) {
+        this.name = name;
+        this.prittyName = prittyName;
+    }
 
-	public boolean isScalar() {
-		return switch (this) {
-			case VALUE, LOGICAL, NUMERIC, INTEGER, STRING, DATE_TIME -> true;
-			default -> false;
-		};
-	}
+    public boolean isScalar() {
+        return switch (this) {
+        case VALUE, LOGICAL, NUMERIC, INTEGER, STRING, DATE_TIME -> true;
+        default -> false;
+        };
+    }
 
-	public String getName() {
-		return name;
-	}
-	public String getPrittyName() {
-		return prittyName;
-	}
+    public String getName() {
+        return name;
+    }
+
+    public String getPrittyName() {
+        return prittyName;
+    }
 }

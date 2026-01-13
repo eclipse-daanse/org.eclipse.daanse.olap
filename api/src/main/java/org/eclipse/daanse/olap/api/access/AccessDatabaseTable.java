@@ -33,6 +33,7 @@ public enum AccessDatabaseTable {
         return this.name();
     }
 
-   public static final Set<AccessDatabaseTable> ALLOWED_SET = EnumSet.of(AccessDatabaseTable.NONE, AccessDatabaseTable.ALL, AccessDatabaseTable.CUSTOM);
+    public static final Set<AccessDatabaseTable> ALLOWED_SET = EnumSet.of(AccessDatabaseTable.NONE,
+            AccessDatabaseTable.ALL, AccessDatabaseTable.CUSTOM);
 
 }

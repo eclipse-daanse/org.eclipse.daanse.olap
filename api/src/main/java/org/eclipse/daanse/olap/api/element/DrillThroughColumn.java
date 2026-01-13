@@ -14,6 +14,5 @@
 package org.eclipse.daanse.olap.api.element;
 
 public interface DrillThroughColumn {
-      OlapElement getOlapElement();
+    OlapElement getOlapElement();
 }
-

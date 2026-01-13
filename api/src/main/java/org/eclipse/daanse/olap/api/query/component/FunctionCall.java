@@ -31,19 +31,17 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 /**
  * A FunCall is a function applied to a list of operands.
  *
- * The parser creates function calls as an
- *  mondrian.mdx.UnresolvedFunCallImpl unresolved  function call.
- * The validator converts it to a
- *   mondrian.mdx.ResolvedFunCallImpl resolved function call,
- * which has a  FunctionDefinition function definition and extra type information.
+ * The parser creates function calls as an mondrian.mdx.UnresolvedFunCallImpl
+ * unresolved function call. The validator converts it to a
+ * mondrian.mdx.ResolvedFunCallImpl resolved function call, which has a
+ * FunctionDefinition function definition and extra type information.
  *
  * @author jhyde
  * @since Jan 6, 2006
  */
 public interface FunctionCall extends Expression {
     /**
-     * Returns the index th argument to this function
-     * call.
+     * Returns the index th argument to this function call.
      *
      * @param index Ordinal of the argument
      * @return index th argument to this function call
@@ -68,6 +66,5 @@ public interface FunctionCall extends Expression {
      * Returns the OperationAtom.
      */
     OperationAtom getOperationAtom();
-
 
 }

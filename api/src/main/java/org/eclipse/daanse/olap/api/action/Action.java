@@ -16,13 +16,21 @@ package org.eclipse.daanse.olap.api.action;
 import java.util.Optional;
 
 public sealed interface Action permits DrillThroughAction, ReportAction, UrlAction {
-    String content( String coordinate, String cubeName );
+    String content(String coordinate, String cubeName);
+
     Optional<String> catalogName();
+
     Optional<String> schemaName();
+
     String cubeName();
+
     Optional<String> actionName();
+
     Optional<String> actionCaption();
+
     Optional<String> description();
+
     String coordinate();
+
     CoordinateTypeEnum coordinateType();
 }

@@ -33,12 +33,11 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Extension to  java.util.Iterator that returns tuples.
+ * Extension to java.util.Iterator that returns tuples.
  *
- * Extends  TupleCursor to support the standard Java iterator
- * API. For some implementations, using the iterator API (in particular the
- *  #next and  #hasNext methods) may be more expensive than using
- * cursor's  #forward method.
+ * Extends TupleCursor to support the standard Java iterator API. For some
+ * implementations, using the iterator API (in particular the #next and #hasNext
+ * methods) may be more expensive than using cursor's #forward method.
  *
  * @author jhyde
  */

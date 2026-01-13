@@ -14,9 +14,9 @@ package org.eclipse.daanse.olap.api.element;
 
 public interface MetaElement {
     /**
-     * Returns the  MetaData of Element.
+     * Returns the MetaData of Element.
      *
-     * @return  MetaData with additional Metadata for the Element.
+     * @return MetaData with additional Metadata for the Element.
      */
     MetaData getMetaData();
 }

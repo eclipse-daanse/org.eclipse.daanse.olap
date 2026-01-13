@@ -26,20 +26,20 @@ package org.eclipse.daanse.olap.api.type;
 
 public class EmptyType extends ScalarType {
 
-	public static final EmptyType INSTANCE = new EmptyType();
+    public static final EmptyType INSTANCE = new EmptyType();
 
-	private EmptyType() {
-		super("<EMPTY>");
-	}
+    private EmptyType() {
+        super("<EMPTY>");
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof EmptyType;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EmptyType;
+    }
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
 }

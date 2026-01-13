@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 /**
  * Parameter to a Query.
  *
- * A parameter is not an expression; see  ParameterExpr.
+ * A parameter is not an expression; see ParameterExpr.
  *
  * @author jhyde
  * @since Jul 22, 2006
@@ -54,8 +54,8 @@ public interface Parameter {
     Type getType();
 
     /**
-     * Returns the expression which provides the default value for this
-     * Parameter. Never null.
+     * Returns the expression which provides the default value for this Parameter.
+     * Never null.
      *
      * @return Default value expression of the parameter
      */
@@ -85,11 +85,11 @@ public interface Parameter {
     /**
      * Returns the value of this parameter.
      *
-     * If  #setValue(Object) has not been called, returns the default
-     * value of this parameter.
+     * If #setValue(Object) has not been called, returns the default value of this
+     * parameter.
      *
-     * The type of the value is (depending on the type of the parameter)
-     * a  String,  Number, or  Member.
+     * The type of the value is (depending on the type of the parameter) a String,
+     * Number, or Member.
      *
      * @return The value of this parameter
      */
@@ -98,19 +98,18 @@ public interface Parameter {
     /**
      * Sets the value of this parameter.
      *
-     * @param value Value of the parameter; must be a  String,
-     *   a  Double, or a  org.eclipse.daanse.olap.api.element.Member
+     * @param value Value of the parameter; must be a String, a Double, or a
+     *              org.eclipse.daanse.olap.api.element.Member
      */
     void setValue(Object value);
 
     /**
      * Returns whether the value of this parameter has been set.
      *
-     * If the value has not been set, this parameter will return its default
-     * value.
+     * If the value has not been set, this parameter will return its default value.
      *
-     * Setting a parameter to {@code null} is not equivalent to unsetting it.
-     * To unset a parameter, call  #unsetValue.
+     * Setting a parameter to {@code null} is not equivalent to unsetting it. To
+     * unset a parameter, call #unsetValue.
      *
      * @return Whether this parameter has been assigned a value
      */
@@ -119,9 +118,9 @@ public interface Parameter {
     /**
      * Unsets the value of this parameter.
      *
-     * After calling this method, the parameter will revert to its default
-     * value, as if  #setValue(Object) had not been called, and
-     *  #isSet() will return {@code false}.
+     * After calling this method, the parameter will revert to its default value, as
+     * if #setValue(Object) had not been called, and #isSet() will return
+     * {@code false}.
      */
     void unsetValue();
 
@@ -129,9 +128,6 @@ public interface Parameter {
      * Scope where a parameter is defined.
      */
     enum Scope {
-        System,
-        Schema,
-        Connection,
-        Statement
+        System, Schema, Connection, Statement
     }
 }

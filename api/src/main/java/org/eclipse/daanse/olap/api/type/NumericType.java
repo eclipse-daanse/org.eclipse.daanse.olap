@@ -24,33 +24,32 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 public class NumericType extends ScalarType {
 
-	public static final NumericType INSTANCE = new NumericType();
+    public static final NumericType INSTANCE = new NumericType();
 
-	private NumericType() {
-		this("NUMERIC");
-	}
+    private NumericType() {
+        this("NUMERIC");
+    }
 
-	protected NumericType(String digest) {
-		super(digest);
-	}
+    protected NumericType(String digest) {
+        super(digest);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof NumericType && toString().equals(obj.toString());
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof NumericType && toString().equals(obj.toString());
+    }
 
-	@Override
-	public boolean isInstance(Object value) {
-		return value instanceof Number || value instanceof Character;
-	}
+    @Override
+    public boolean isInstance(Object value) {
+        return value instanceof Number || value instanceof Character;
+    }
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -27,7 +27,6 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
@@ -35,8 +34,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 
 /**
- * A Axis is a component of a  Result.
- * It contains a list of  Positions.
+ * A Axis is a component of a Result. It contains a list of Positions.
  *
  * @author jhyde
  * @since 6 August, 2001

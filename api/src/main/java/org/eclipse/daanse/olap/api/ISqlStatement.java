@@ -18,32 +18,34 @@ import java.sql.ResultSet;
 public interface ISqlStatement {
 
     /**
-       * Executes the current statement, and handles any SQLException.
-       */
+     * Executes the current statement, and handles any SQLException.
+     */
     void execute();
 
     /**
-       * Closes all resources (statement, result set) held by this SqlStatement.
-       *
-       * If any of them fails, wraps them in a
-       *  RuntimeException describing the high-level operation which this statement was performing. No further
-       * error-handling is required to produce a descriptive stack trace, unless you want to absorb the error.
-       *
-       * This method is idempotent.
-       */
+     * Closes all resources (statement, result set) held by this SqlStatement.
+     *
+     * If any of them fails, wraps them in a RuntimeException describing the
+     * high-level operation which this statement was performing. No further
+     * error-handling is required to produce a descriptive stack trace, unless you
+     * want to absorb the error.
+     *
+     * This method is idempotent.
+     */
     void close();
 
     ResultSet getResultSet();
 
     /**
-       * Returns the result set in a proxy which automatically closes this SqlStatement (and hence also the statement and
-       * result set) when the result set is closed.
-       *
-       * This helps to prevent connection leaks. The caller still has to
-       * remember to call ResultSet.close(), of course.
-       *
-       * @return Wrapped result set
-       */
+     * Returns the result set in a proxy which automatically closes this
+     * SqlStatement (and hence also the statement and result set) when the result
+     * set is closed.
+     *
+     * This helps to prevent connection leaks. The caller still has to remember to
+     * call ResultSet.close(), of course.
+     *
+     * @return Wrapped result set
+     */
     ResultSet getWrappedResultSet();
 
 }

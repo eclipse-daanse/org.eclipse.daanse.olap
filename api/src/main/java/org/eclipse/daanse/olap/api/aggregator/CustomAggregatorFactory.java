@@ -19,6 +19,5 @@ public interface CustomAggregatorFactory {
 
     String getName();
 
-    Aggregator getAggregator(String template,
-            List<String> properties, List<Object> columns);
+    Aggregator getAggregator(String template, List<String> properties, List<Object> columns);
 }

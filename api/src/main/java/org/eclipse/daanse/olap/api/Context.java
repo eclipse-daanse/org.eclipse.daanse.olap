@@ -32,7 +32,7 @@ import org.eclipse.daanse.olap.api.monitor.EventBus;
 import org.eclipse.daanse.sql.guard.api.SqlGuardFactory;
 
 /**
- * The  Context gives access to all resources and configurations that are needed
+ * The Context gives access to all resources and configurations that are needed
  * to calculate and Data Cubes
  *
  * @author stbischof
@@ -42,27 +42,27 @@ import org.eclipse.daanse.sql.guard.api.SqlGuardFactory;
  */
 public interface Context<C extends Connection> {
 
-    List<String> KEYWORD_LIST = List.of("$AdjustedProbability",
-            "$Distance", "$Probability", "$ProbabilityStDev", "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev",
-            "$StdDeV", "$Support", "$Variance", "AddCalculatedMembers", "Action", "After", "Aggregate", "All", "Alter",
-            "Ancestor", "And", "Append", "As", "ASC", "Axis", "Automatic", "Back_Color", "BASC", "BDESC", "Before",
-            "Before_And_After", "Before_And_Self", "Before_Self_After", "BottomCount", "BottomPercent", "BottomSum",
-            "Break", "Boolean", "Cache", "Calculated", "Call", "Case", "Catalog_Name", "Cell", "Cell_Ordinal", "Cells",
-            "Chapters", "Children", "Children_Cardinality", "ClosingPeriod", "Cluster", "ClusterDistance",
-            "ClusterProbability", "Clusters", "CoalesceEmpty", "Column_Values", "Columns", "Content", "Contingent",
-            "Continuous", "Correlation", "Cousin", "Covariance", "CovarianceN", "Create", "CreatePropertySet",
-            "CrossJoin", "Cube", "Cube_Name", "CurrentMember", "CurrentCube", "Custom", "Cyclical", "DefaultMember",
-            "Default_Member", "DESC", "Descendents", "Description", "Dimension", "Dimension_Unique_Name", "Dimensions",
-            "Discrete", "Discretized", "DrillDownLevel", "DrillDownLevelBottom", "DrillDownLevelTop", "DrillDownMember",
-            "DrillDownMemberBottom", "DrillDownMemberTop", "DrillTrough", "DrillUpLevel", "DrillUpMember", "Drop",
-            "Else", "Empty", "End", "Equal_Areas", "Exclude_Null", "ExcludeEmpty", "Exclusive", "Expression", "Filter",
-            "FirstChild", "FirstRowset", "FirstSibling", "Flattened", "Font_Flags", "Font_Name", "Font_size",
-            "Fore_Color", "Format_String", "Formatted_Value", "Formula", "From", "Generate", "Global", "Head",
-            "Hierarchize", "Hierarchy", "Hierary_Unique_name", "IIF", "IsEmpty", "Include_Null", "Include_Statistics",
-            "Inclusive", "Input_Only", "IsDescendant", "Item", "Lag", "LastChild", "LastPeriods", "LastSibling", "Lead",
-            "Level", "Level_Number", "Level_Unique_Name", "Levels", "LinRegIntercept", "LinRegR2", "LinRegPoint",
-            "LinRegSlope", "LinRegVariance", "Long", "MaxRows", "Median", "Member", "Member_Caption", "Member_Guid",
-            "Member_Name", "Member_Ordinal", "Member_Type", "Member_Unique_Name", "Members", "Microsoft_Clustering",
+    List<String> KEYWORD_LIST = List.of("$AdjustedProbability", "$Distance", "$Probability", "$ProbabilityStDev",
+            "$ProbabilityStdDeV", "$ProbabilityVariance", "$StDev", "$StdDeV", "$Support", "$Variance",
+            "AddCalculatedMembers", "Action", "After", "Aggregate", "All", "Alter", "Ancestor", "And", "Append", "As",
+            "ASC", "Axis", "Automatic", "Back_Color", "BASC", "BDESC", "Before", "Before_And_After", "Before_And_Self",
+            "Before_Self_After", "BottomCount", "BottomPercent", "BottomSum", "Break", "Boolean", "Cache", "Calculated",
+            "Call", "Case", "Catalog_Name", "Cell", "Cell_Ordinal", "Cells", "Chapters", "Children",
+            "Children_Cardinality", "ClosingPeriod", "Cluster", "ClusterDistance", "ClusterProbability", "Clusters",
+            "CoalesceEmpty", "Column_Values", "Columns", "Content", "Contingent", "Continuous", "Correlation", "Cousin",
+            "Covariance", "CovarianceN", "Create", "CreatePropertySet", "CrossJoin", "Cube", "Cube_Name",
+            "CurrentMember", "CurrentCube", "Custom", "Cyclical", "DefaultMember", "Default_Member", "DESC",
+            "Descendents", "Description", "Dimension", "Dimension_Unique_Name", "Dimensions", "Discrete", "Discretized",
+            "DrillDownLevel", "DrillDownLevelBottom", "DrillDownLevelTop", "DrillDownMember", "DrillDownMemberBottom",
+            "DrillDownMemberTop", "DrillTrough", "DrillUpLevel", "DrillUpMember", "Drop", "Else", "Empty", "End",
+            "Equal_Areas", "Exclude_Null", "ExcludeEmpty", "Exclusive", "Expression", "Filter", "FirstChild",
+            "FirstRowset", "FirstSibling", "Flattened", "Font_Flags", "Font_Name", "Font_size", "Fore_Color",
+            "Format_String", "Formatted_Value", "Formula", "From", "Generate", "Global", "Head", "Hierarchize",
+            "Hierarchy", "Hierary_Unique_name", "IIF", "IsEmpty", "Include_Null", "Include_Statistics", "Inclusive",
+            "Input_Only", "IsDescendant", "Item", "Lag", "LastChild", "LastPeriods", "LastSibling", "Lead", "Level",
+            "Level_Number", "Level_Unique_Name", "Levels", "LinRegIntercept", "LinRegR2", "LinRegPoint", "LinRegSlope",
+            "LinRegVariance", "Long", "MaxRows", "Median", "Member", "Member_Caption", "Member_Guid", "Member_Name",
+            "Member_Ordinal", "Member_Type", "Member_Unique_Name", "Members", "Microsoft_Clustering",
             "Microsoft_Decision_Trees", "Mining", "Model", "Model_Existence_Only", "Models", "Move", "MTD", "Name",
             "Nest", "NextMember", "Non", "NonEmpty", "Normal", "Not", "Ntext", "Nvarchar", "OLAP", "On",
             "OpeningPeriod", "OpenQuery", "Or", "Ordered", "Ordinal", "Pages", "ParallelPeriod", "Parent",
@@ -78,73 +78,74 @@ public interface Context<C extends Connection> {
             "TupleToStr", "Under", "Uniform", "UniqueName", "Use", "Value", "Var", "Variance", "VarP", "VarianceP",
             "VisualTotals", "When", "Where", "With", "WTD", "Xor");
 
-	CatalogCache getCatalogCache();
+    CatalogCache getCatalogCache();
+
     /**
-     * Gives access to the  javax.sql.DataSource that holds the  java.sql.Connection}s to
-     * the Database.
+     * Gives access to the javax.sql.DataSource that holds the java.sql.Connection}s
+     * to the Database.
      *
      * @return DataSource
      */
     DataSource getDataSource();
 
     /**
-     * Gives access to the  Dialect that must be used to generate SQL querys
-     * against the  javax.sql.DataSource.
+     * Gives access to the Dialect that must be used to generate SQL querys against
+     * the javax.sql.DataSource.
      *
      * @return DataSource
      */
     Dialect getDialect();
 
     /**
-     * Gives access to a  QueryProvider.
+     * Gives access to a QueryProvider.
      *
-     * @return  QueryProvider.
+     * @return QueryProvider.
      */
 //    QueryProvider getQueryProvider();
-	/*
-	 * The human readable name of the Context. By default the name of the Schema.
-	 * May be overridden.
-	 */
-	String getName();
+    /*
+     * The human readable name of the Context. By default the name of the Schema.
+     * May be overridden.
+     */
+    String getName();
 
-	/*
-	 * The human readable description of the Context. By default the getDescription
-	 * of the Schema. May be overridden.
-	 */
-	Optional<String> getDescription();
-	List<String> getAccessRoles();
+    /*
+     * The human readable description of the Context. By default the getDescription
+     * of the Schema. May be overridden.
+     */
+    Optional<String> getDescription();
 
-	ExpressionCompilerFactory getExpressionCompilerFactory();
+    List<String> getAccessRoles();
 
-	/*
-	 * Gives access to the  Connection.
-	 */
-	C getConnectionWithDefaultRole();
+    ExpressionCompilerFactory getExpressionCompilerFactory();
+
+    /*
+     * Gives access to the Connection.
+     */
+    C getConnectionWithDefaultRole();
 
     C getConnection(ConnectionProps props);
 
+    void addConnection(C rolapConnection);
 
-	void addConnection(C rolapConnection);
+    void removeConnection(C rolapConnection);
 
-	void removeConnection(C rolapConnection);
-
-	ResultShepherd getResultShepherd();
+    ResultShepherd getResultShepherd();
 
 //	AggregationManager getAggregationManager();
 
-	void addStatement(Statement statement);
+    void addStatement(Statement statement);
 
-	void removeStatement(Statement internalStatement);
+    void removeStatement(Statement internalStatement);
 
-	EventBus getMonitor();
+    EventBus getMonitor();
 
-	List<Statement> getStatements(C connection);
+    List<Statement> getStatements(C connection);
 
-    <T> T getConfigValue(String key, T dflt ,Class<T> clazz);
+    <T> T getConfigValue(String key, T dflt, Class<T> clazz);
 
     Semaphore getQueryLimitSemaphore();
 
-	Optional<Map<Object, Object>> getSqlMemberSourceValuePool();
+    Optional<Map<Object, Object>> getSqlMemberSourceValuePool();
 
     FunctionService getFunctionService();
 

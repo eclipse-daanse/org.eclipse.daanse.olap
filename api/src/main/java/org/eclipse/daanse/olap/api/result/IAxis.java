@@ -18,32 +18,32 @@ import java.util.Locale;
 public interface IAxis {
 
     /**
-     * Abbreviation for  IAxis.Standard#FILTER.
+     * Abbreviation for IAxis.Standard#FILTER.
      */
     IAxis.Standard FILTER = IAxis.Standard.FILTER;
 
     /**
-     * Abbreviation for  IAxis.Standard#COLUMNS.
+     * Abbreviation for IAxis.Standard#COLUMNS.
      */
     IAxis.Standard COLUMNS = IAxis.Standard.COLUMNS;
 
     /**
-     * Abbreviation for  IAxis.Standard#ROWS}.
+     * Abbreviation for IAxis.Standard#ROWS}.
      */
     IAxis.Standard ROWS = IAxis.Standard.ROWS;
 
     /**
-     * Abbreviation for  IAxis.Standard#PAGES.
+     * Abbreviation for IAxis.Standard#PAGES.
      */
     IAxis.Standard PAGES = IAxis.Standard.PAGES;
 
     /**
-     * Abbreviation for  IAxis.Standard#CHAPTERS.
+     * Abbreviation for IAxis.Standard#CHAPTERS.
      */
     IAxis.Standard SECTIONS = IAxis.Standard.SECTIONS;
 
     /**
-     * Abbreviation for  IAxis.Standard#FILTER.
+     * Abbreviation for IAxis.Standard#FILTER.
      */
     IAxis.Standard CHAPTERS = IAxis.Standard.CHAPTERS;
 
@@ -61,23 +61,17 @@ public interface IAxis {
      */
     boolean isFilter();
 
-
     /**
-     * Returns the ordinal which is to be used for retrieving this axis from
-     * the  org.olap4j.CellSet#getAxes(), or retrieving its
-     * coordinate from  Cell#getCoordinateList().
+     * Returns the ordinal which is to be used for retrieving this axis from the
+     * org.olap4j.CellSet#getAxes(), or retrieving its coordinate from
+     * Cell#getCoordinateList().
      *
      * For example:
      *
-     * -1  IAxis.Standard#FILTER FILTER
-     * 0  IAxis.Standard#COLUMNS COLUMNS
-     * 1  IAxis.Standard#ROWS ROWS
-     * 2  IAxis.Standard#PAGES PAGES
-     * 3  IAxis.Standard#CHAPTERS CHAPTERS
-     * 4  IAxis.Standard#SECTIONS SECTIONS
-     * 5  IAxis.Standard#SECTIONS SECTIONS
-     * 6 AXES(6)
-     * 123 AXES(123)
+     * -1 IAxis.Standard#FILTER FILTER 0 IAxis.Standard#COLUMNS COLUMNS 1
+     * IAxis.Standard#ROWS ROWS 2 IAxis.Standard#PAGES PAGES 3
+     * IAxis.Standard#CHAPTERS CHAPTERS 4 IAxis.Standard#SECTIONS SECTIONS 5
+     * IAxis.Standard#SECTIONS SECTIONS 6 AXES(6) 123 AXES(123)
      *
      *
      * @return ordinal of this axis
@@ -99,8 +93,8 @@ public interface IAxis {
      */
     public enum Standard implements IAxis {
         /**
-         * Filter axis, also known as the slicer axis, and represented by the
-         * WHERE clause of an MDX query.
+         * Filter axis, also known as the slicer axis, and represented by the WHERE
+         * clause of an MDX query.
          */
         FILTER,
 
@@ -143,16 +137,15 @@ public interface IAxis {
          * Returns the axis with a given ordinal.
          *
          * For example, {@code forOrdinal(0)} returns the COLUMNS axis;
-         * {@code forOrdinal(-1)} returns the SLICER axis;
-         * {@code forOrdinal(100)} returns AXIS(100).
+         * {@code forOrdinal(-1)} returns the SLICER axis; {@code forOrdinal(100)}
+         * returns AXIS(100).
          *
          * @param ordinal Axis ordinal
          * @return Axis whose ordinal is as given
          */
         public static IAxis forOrdinal(final int ordinal) {
             if (ordinal < -1) {
-                throw new IllegalArgumentException(
-                    "Axis ordinal must be -1 or higher");
+                throw new IllegalArgumentException("Axis ordinal must be -1 or higher");
             }
             if (ordinal + 1 < STANDARD_VALUES.length) {
                 return STANDARD_VALUES[ordinal + 1];

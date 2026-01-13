@@ -16,6 +16,6 @@ package org.eclipse.daanse.olap.api;
 
 import org.eclipse.daanse.olap.api.element.Property;
 
-public interface LevelProperty extends Property{
+public interface LevelProperty extends Property {
 
 }

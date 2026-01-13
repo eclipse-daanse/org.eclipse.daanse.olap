@@ -31,17 +31,17 @@ package org.eclipse.daanse.olap.api;
 
 /**
  * Allows others to walk to the children of an Object or Tree by using
- *  #getChildren().
- *  
- *  @param <T> Walkable
+ * #getChildren().
+ * 
+ * @param <T> Walkable
  */
 public interface Walkable<T> {
 
 //public  interface  Walkable<T extends Walkable<?>> {
 
-	/**
-	 * Returns an array of the object's children. Those which are not
-	 *  Walkable are ignored.
-	 */
-	T[] getChildren();
+    /**
+     * Returns an array of the object's children. Those which are not Walkable are
+     * ignored.
+     */
+    T[] getChildren();
 }

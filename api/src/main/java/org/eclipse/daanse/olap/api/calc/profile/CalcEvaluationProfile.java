@@ -18,12 +18,12 @@ import java.util.Map;
 
 public interface CalcEvaluationProfile {
 
-	Instant start();
+    Instant start();
 
-	Instant end();
+    Instant end();
 
-	Object evaluationResult();
+    Object evaluationResult();
 
-	Map<String, Object> additionalValues();
+    Map<String, Object> additionalValues();
 
 }

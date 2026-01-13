@@ -149,7 +149,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     }
 
     @Override
-    public Calc compile(ExpressionCompiler compiler, ResultStyle resultStyle) {
+    public Calc<?> compile(ExpressionCompiler compiler, ResultStyle resultStyle) {
         Expression expInner = this.exp;
         if (axisOrdinal.isFilter()) {
             expInner = normalizeSlicerExpression(expInner);

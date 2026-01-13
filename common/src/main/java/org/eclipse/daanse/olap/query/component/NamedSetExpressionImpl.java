@@ -105,7 +105,7 @@ public class NamedSetExpressionImpl extends AbstractExpression implements Expres
     }
 
     @Override
-	public Calc accept(ExpressionCompiler compiler) {
+	public Calc<?> accept(ExpressionCompiler compiler) {
         // This is a deliberate breach of the usual rules for interpreting
         // acceptable result styles. Usually the caller gets to call the shots:
         // the callee iterates over the acceptable styles and implements in the

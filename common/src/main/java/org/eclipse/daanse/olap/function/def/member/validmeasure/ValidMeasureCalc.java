@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.api.element.VirtualCubeMeasure;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 
 public class ValidMeasureCalc extends AbstractProfilingNestedUnknownCalc {
 
@@ -191,6 +191,6 @@ public class ValidMeasureCalc extends AbstractProfilingNestedUnknownCalc {
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
         // depends on all hierarchies
-        return HirarchyDependsChecker.butDepends(getChildCalcs(), hierarchy);
+        return HierarchyDependsChecker.butDepends(getChildCalcs(), hierarchy);
     }
 }

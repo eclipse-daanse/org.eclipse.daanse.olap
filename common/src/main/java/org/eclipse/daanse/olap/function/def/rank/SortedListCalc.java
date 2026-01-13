@@ -27,7 +27,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.fun.FunUtil;
 
@@ -52,7 +52,7 @@ public class SortedListCalc extends AbstractProfilingNestedCalc {
 
     @Override
     public boolean dependsOn( Hierarchy hierarchy ) {
-      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
+      return HierarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
     @Override

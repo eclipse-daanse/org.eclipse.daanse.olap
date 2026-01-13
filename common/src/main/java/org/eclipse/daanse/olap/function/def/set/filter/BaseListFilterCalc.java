@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 
 public abstract class BaseListFilterCalc extends AbstractProfilingNestedTupleListCalc {
     private ResolvedFunCall call;
@@ -51,6 +51,6 @@ public abstract class BaseListFilterCalc extends AbstractProfilingNestedTupleLis
 
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
-        return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
+        return HierarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
     }
 }

@@ -38,7 +38,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
@@ -321,7 +321,7 @@ public class AggregateCalc  extends AbstractProfilingNestedUnknownCalc {
         if (hierarchy.getDimension().isMeasures()) {
             return true;
         }
-        return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
+        return HierarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
     }
 
     /**

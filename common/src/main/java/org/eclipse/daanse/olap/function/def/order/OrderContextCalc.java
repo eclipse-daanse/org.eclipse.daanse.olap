@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleListCalc;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.function.def.order.OrderFunDef.CalcWithDual;
 
 public class OrderContextCalc extends AbstractProfilingNestedTupleListCalc {
@@ -58,7 +58,7 @@ public class OrderContextCalc extends AbstractProfilingNestedTupleListCalc {
 
     @Override
     public boolean dependsOn( Hierarchy hierarchy ) {
-      if ( HirarchyDependsChecker.checkAnyDependsOnChilds(  memberCalcs,hierarchy ) ) {
+      if ( HierarchyDependsChecker.checkAnyDependsOnChildren(  memberCalcs,hierarchy ) ) {
         return true;
       }
       // Member calculations generate members, which mask the actual

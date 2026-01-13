@@ -301,7 +301,7 @@ public final class TupleCollections {
             @Override
             public Member[] next() {
                 final List<Member> next = tupleIterator.next();
-                return next.toArray(new Member[next.size()]);
+                return next.toArray(Member[]::new);
             }
 
             @Override
@@ -325,7 +325,7 @@ public final class TupleCollections {
             @Override
             public Member[] get(int index) {
                 final List<Member> tuple = tupleList.get(index);
-                return tuple.toArray(new Member[tuple.size()]);
+                return tuple.toArray(Member[]::new);
             }
 
             @Override

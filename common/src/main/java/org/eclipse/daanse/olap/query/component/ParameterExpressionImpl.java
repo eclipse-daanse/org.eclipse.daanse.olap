@@ -100,7 +100,7 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
     }
 
     @Override
-	public Calc accept(ExpressionCompiler compiler) {
+	public Calc<?> accept(ExpressionCompiler compiler) {
         return ((CompilableParameter) parameter).compile(compiler);
     }
 

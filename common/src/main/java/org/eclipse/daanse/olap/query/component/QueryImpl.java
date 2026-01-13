@@ -191,8 +191,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     private Subcube subcube;
 
     private final Statement statement;
-    public Calc[] axisCalcs;
-    public Calc slicerCalc;
+    public Calc<?>[] axisCalcs;
+    public Calc<?> slicerCalc;
 
     /**
      * Set of FunDefs for which alerts about non-native evaluation

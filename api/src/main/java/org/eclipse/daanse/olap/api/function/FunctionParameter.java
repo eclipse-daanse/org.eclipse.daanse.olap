@@ -21,12 +21,12 @@ import org.eclipse.daanse.olap.api.DataType;
 
 public interface FunctionParameter {
 
-	DataType dataType();
+    DataType dataType();
 
-	Optional<String> name();
+    Optional<String> name();
 
-	Optional<String> description();
-	
-	Optional<List<String>> reservedWords();
+    Optional<String> description();
+
+    Optional<List<String>> reservedWords();
 
 }

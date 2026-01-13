@@ -25,7 +25,6 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 import java.util.ArrayList;
@@ -50,25 +49,23 @@ public class SetType implements Type {
     /**
      * Creates a type representing a set of elements of a given type.
      *
-     * @param elementType The type of the elements in the set, or null if not
-     *   known
+     * @param elementType The type of the elements in the set, or null if not known
      */
     public SetType(Type elementType) {
         if (elementType != null) {
-            assert elementType instanceof MemberType
-                || elementType instanceof TupleType;
+            assert elementType instanceof MemberType || elementType instanceof TupleType;
         }
         this.elementType = elementType;
         this.digest = "SetType<" + elementType + ">";
     }
 
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return digest.hashCode();
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof SetType that) {
             return Objects.equals(this.elementType, that.elementType);
         } else {
@@ -77,7 +74,7 @@ public class SetType implements Type {
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
@@ -91,7 +88,7 @@ public class SetType implements Type {
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
         if (elementType == null) {
             return definitely;
         }
@@ -99,7 +96,7 @@ public class SetType implements Type {
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         if (elementType == null) {
             return definitely;
         }
@@ -107,10 +104,9 @@ public class SetType implements Type {
     }
 
     public List<Hierarchy> getHierarchies() {
-        if(elementType instanceof TupleType tupleType) {
+        if (elementType instanceof TupleType tupleType) {
             return tupleType.getHierarchies();
-        }
-        else { //MemberType
+        } else { // MemberType
             ArrayList<Hierarchy> result = new ArrayList<>();
             result.add(this.getHierarchy());
             return result;
@@ -118,39 +114,32 @@ public class SetType implements Type {
     }
 
     @Override
-	public Dimension getDimension() {
-        return elementType == null
-            ? null
-            : elementType.getDimension();
+    public Dimension getDimension() {
+        return elementType == null ? null : elementType.getDimension();
     }
 
     @Override
-	public Hierarchy getHierarchy() {
-        return elementType == null
-            ? null
-            : elementType.getHierarchy();
+    public Hierarchy getHierarchy() {
+        return elementType == null ? null : elementType.getHierarchy();
     }
 
     @Override
-	public Level getLevel() {
-        return elementType == null
-            ? null
-            : elementType.getLevel();
+    public Level getLevel() {
+        return elementType == null ? null : elementType.getLevel();
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return elementType.getArity();
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (!(type instanceof SetType that)) {
             return null;
         }
-        final Type mostGeneralElementType =
-            this.getElementType().computeCommonType(
-                that.getElementType(), conversionCount);
+        final Type mostGeneralElementType = this.getElementType().computeCommonType(that.getElementType(),
+                conversionCount);
         if (mostGeneralElementType == null) {
             return null;
         }
@@ -158,7 +147,7 @@ public class SetType implements Type {
     }
 
     @Override
-	public boolean isInstance(Object value) {
+    public boolean isInstance(Object value) {
         if (!(value instanceof List list)) {
             return false;
         }

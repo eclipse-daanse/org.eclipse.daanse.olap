@@ -26,27 +26,26 @@
 
 package org.eclipse.daanse.olap.api.type;
 
-
 public class BooleanType extends ScalarType {
 
-	public static final BooleanType INSTANCE = new BooleanType();
+    public static final BooleanType INSTANCE = new BooleanType();
 
-	private BooleanType() {
-		super("BOOLEAN");
-	}
+    private BooleanType() {
+        super("BOOLEAN");
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof BooleanType;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BooleanType;
+    }
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
-	@Override
-	public boolean isInstance(Object value) {
-		return value instanceof Boolean;
-	}
+    @Override
+    public boolean isInstance(Object value) {
+        return value instanceof Boolean;
+    }
 }

@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import java.util.List;
 
-public non-sealed interface Subcube extends QueryComponent{
+public non-sealed interface Subcube extends QueryComponent {
 
     String getCubeName();
 

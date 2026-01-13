@@ -48,9 +48,9 @@ public interface Hierarchy extends OlapElement, MetaElement {
      *
      *
      * If a hierarchy is subject to access-control, some of the levels may not be
-     * visible; use  CatalogReader#getHierarchyLevels instead.
+     * visible; use CatalogReader#getHierarchyLevels instead.
      *
-     *  return != null
+     * return != null
      */
     List<? extends Level> getLevels();
 
@@ -59,26 +59,25 @@ public interface Hierarchy extends OlapElement, MetaElement {
      *
      *
      * If a hierarchy is subject to access-control, the default member may not be
-     * visible, so use  CatalogReader#getHierarchyDefaultMember.
+     * visible, so use CatalogReader#getHierarchyDefaultMember.
      *
-     *  return != null
+     * return != null
      */
     Member getDefaultMember();
 
     /**
      * Returns the "All" member of this hierarchy.
      *
-     *  return != null
+     * return != null
      */
     Member getAllMember();
 
     /**
      * Returns a special member representing the "null" value. This never occurs on
-     * an axis, but may occur if functions such as Lead,
-     * NextMember and ParentMember walk off the end of the
-     * hierarchy.
+     * an axis, but may occur if functions such as Lead, NextMember and ParentMember
+     * walk off the end of the hierarchy.
      *
-     *  return != null
+     * return != null
      */
     Member getNullMember();
 
@@ -93,10 +92,10 @@ public interface Hierarchy extends OlapElement, MetaElement {
     /**
      * Returns the unique name of this hierarchy, always including the dimension
      * name, e.g. "[Time].[Time]", regardless of whether
-     *  SystemWideProperties#SsasCompatibleNaming is enabled.
+     * SystemWideProperties#SsasCompatibleNaming is enabled.
      *
-     * @deprecated Will be removed in mondrian-4.0, when  #getUniqueName()
-     *             will have this behavior.
+     * @deprecated Will be removed in mondrian-4.0, when #getUniqueName() will have
+     *             this behavior.
      *
      * @return Unique name of hierarchy.
      */
@@ -119,6 +118,6 @@ public interface Hierarchy extends OlapElement, MetaElement {
      * @return Ordinal of this hierarchy in its cube
      */
     int getOrdinalInCube();
-    
+
     String getSubName();
 }

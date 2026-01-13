@@ -17,6 +17,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 
 public interface CubeMember extends Member {
 
-	String getMemberUniqueName();
+    String getMemberUniqueName();
 
 }

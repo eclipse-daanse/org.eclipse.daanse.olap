@@ -63,8 +63,8 @@ public interface Property {
     String getDescription();
 
     public enum Datatype {
-        TYPE_STRING(null), TYPE_NUMERIC(null), TYPE_INTEGER("INT"), TYPE_LONG("LONG"),
-        TYPE_BOOLEAN(null), TYPE_DATE(null), TYPE_TIME(null), TYPE_TIMESTAMP(null), TYPE_OTHER(null);
+        TYPE_STRING(null), TYPE_NUMERIC(null), TYPE_INTEGER("INT"), TYPE_LONG("LONG"), TYPE_BOOLEAN(null),
+        TYPE_DATE(null), TYPE_TIME(null), TYPE_TIMESTAMP(null), TYPE_OTHER(null);
 
         private String type;
 

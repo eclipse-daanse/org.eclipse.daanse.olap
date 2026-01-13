@@ -48,7 +48,7 @@ public interface Expression {
     /**
      * Returns the DataType of the expression.
      *
-     *  Category.instance().isValid(return)
+     * Category.instance().isValid(return)
      */
     DataType getCategory();
 
@@ -68,13 +68,13 @@ public interface Expression {
     /**
      * Validates this expression.
      *
-     * The validator acts in the role of 'visitor' (see Gang of Four
-     * 'visitor pattern'), and an expression in the role of 'visitee'.
+     * The validator acts in the role of 'visitor' (see Gang of Four 'visitor
+     * pattern'), and an expression in the role of 'visitee'.
      *
      * @param validator Validator contains validation context
      *
-     * @return The validated expression; often but not always the same as
-     *   this expression
+     * @return The validated expression; often but not always the same as this
+     *         expression
      */
     Expression accept(Validator validator);
 
@@ -88,9 +88,9 @@ public interface Expression {
     Calc<?> accept(ExpressionCompiler compiler);
 
     /**
-     * Accepts a visitor to this Expression.
-     * The implementation should generally dispatches to the
-     *  QueryComponentVisitor method appropriate to the type of expression.
+     * Accepts a visitor to this Expression. The implementation should generally
+     * dispatches to the QueryComponentVisitor method appropriate to the type of
+     * expression.
      *
      * @param visitor Visitor
      */

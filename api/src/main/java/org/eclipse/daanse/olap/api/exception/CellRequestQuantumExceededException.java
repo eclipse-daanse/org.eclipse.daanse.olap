@@ -24,32 +24,27 @@
 package org.eclipse.daanse.olap.api.exception;
 
 /**
- * Signals that there are enough outstanding cell requests that it is
- * worth terminating this phase of execution and asking the segment cache
- * for all of the cells that have been asked for.
+ * Signals that there are enough outstanding cell requests that it is worth
+ * terminating this phase of execution and asking the segment cache for all of
+ * the cells that have been asked for.
  *
- * Not really an exception, just a way of aborting a process so that we can
- * do some work and restart the process. Any code that handles this exception
- * is typically in a loop that calls  mondrian.rolap.RolapResult#phase.
+ * Not really an exception, just a way of aborting a process so that we can do
+ * some work and restart the process. Any code that handles this exception is
+ * typically in a loop that calls mondrian.rolap.RolapResult#phase.
  *
  *
  * There are several advantages to this:
  *
- *     If the query has been run before, the cells will be in the
- *     cache already, and this is an opportunity to copy them into the
- *     local cache.
- *     If cell requests are for the same or similar cells, it gives
- *     opportunity to fetch these cells. Then the requests can be answered
- *     from local cache, and we don't need to bother the cache manager with
- *     similar requests.
- *     Prevents memory from filling up with cell requests.
+ * If the query has been run before, the cells will be in the cache already, and
+ * this is an opportunity to copy them into the local cache. If cell requests
+ * are for the same or similar cells, it gives opportunity to fetch these cells.
+ * Then the requests can be answered from local cache, and we don't need to
+ * bother the cache manager with similar requests. Prevents memory from filling
+ * up with cell requests.
  *
  */
-public final class CellRequestQuantumExceededException
-    extends RuntimeException
-{
-    public static final CellRequestQuantumExceededException INSTANCE =
-        new CellRequestQuantumExceededException();
+public final class CellRequestQuantumExceededException extends RuntimeException {
+    public static final CellRequestQuantumExceededException INSTANCE = new CellRequestQuantumExceededException();
 
     private CellRequestQuantumExceededException() {
     }

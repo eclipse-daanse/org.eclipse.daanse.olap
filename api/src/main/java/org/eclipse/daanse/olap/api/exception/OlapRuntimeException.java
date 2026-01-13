@@ -15,16 +15,16 @@ package org.eclipse.daanse.olap.api.exception;
 @SuppressWarnings("serial")
 public class OlapRuntimeException extends RuntimeException {
 
-	public OlapRuntimeException(Throwable cause) {
-		super(cause);
-	}
+    public OlapRuntimeException(Throwable cause) {
+        super(cause);
+    }
 
-	public OlapRuntimeException(String message) {
-		super(message);
-	}
+    public OlapRuntimeException(String message) {
+        super(message);
+    }
 
-	public OlapRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public OlapRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

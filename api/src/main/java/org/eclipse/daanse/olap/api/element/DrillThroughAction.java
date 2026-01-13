@@ -16,10 +16,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.OlapAction;
 
-public interface DrillThroughAction extends OlapAction{
+public interface DrillThroughAction extends OlapAction {
 
-	boolean getIsDefault();
+    boolean getIsDefault();
 
-	List<OlapElement> getOlapElements();
+    List<OlapElement> getOlapElements();
 
 }

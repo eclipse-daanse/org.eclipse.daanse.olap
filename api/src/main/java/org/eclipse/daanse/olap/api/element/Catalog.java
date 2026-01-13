@@ -1,30 +1,30 @@
- /*
- * This software is subject to the terms of the Eclipse Public License v1.0
- * Agreement, available at the following URL:
- * http://www.eclipse.org/legal/epl-v10.html.
- * You must accept the terms of that agreement to use this software.
- *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
- * 
- * Contributors:
- *  SmartCity Jena - refactor, clean API
- *
- * ---- All changes after Fork in 2023 ------------------------
- *
- * Project: Eclipse daanse
- *
- * Copyright (c) 2023 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors after Fork in 2023:
- *   SmartCity Jena - initial
- *   Stefan Bischof (bipolis.org) - initial
- */
+/*
+* This software is subject to the terms of the Eclipse Public License v1.0
+* Agreement, available at the following URL:
+* http://www.eclipse.org/legal/epl-v10.html.
+* You must accept the terms of that agreement to use this software.
+*
+* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* 
+* Contributors:
+*  SmartCity Jena - refactor, clean API
+*
+* ---- All changes after Fork in 2023 ------------------------
+*
+* Project: Eclipse daanse
+*
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors after Fork in 2023:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 
 package org.eclipse.daanse.olap.api.element;
 
@@ -39,8 +39,7 @@ import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.connection.Connection;
 
 /**
- * A Catalog is a collection of cubes, shared dimensions, and
- * roles.
+ * A Catalog is a collection of cubes, shared dimensions, and roles.
  *
  * @author jhyde
  */
@@ -49,8 +48,7 @@ public interface Catalog extends MetaElement {
     /**
      * Returns the name of this catalog.
      * 
-     *  return != null
-     *  return.length() > 0
+     * return != null return.length() > 0
      */
     String getName();
 
@@ -72,13 +70,13 @@ public interface Catalog extends MetaElement {
     List<Cube> getCubes();
 
     /**
-     * Creates a  CatalogReader without any access control.
+     * Creates a CatalogReader without any access control.
      */
     CatalogReader getCatalogReaderWithDefaultRole();
 
     /**
-     * Finds a role with a given name in the current catalog, or returns
-     * null if no such role exists.
+     * Finds a role with a given name in the current catalog, or returns null if no
+     * such role exists.
      */
     Role lookupRole(String role);
 
@@ -104,6 +102,7 @@ public interface Catalog extends MetaElement {
 
     /**
      * looks up the cubes of this catalog for a cube with the given name.
+     * 
      * @param cubeName
      * @return Optional of Cube
      */

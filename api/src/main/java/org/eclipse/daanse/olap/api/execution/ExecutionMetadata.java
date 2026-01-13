@@ -16,14 +16,16 @@ package org.eclipse.daanse.olap.api.execution;
 import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 
 /**
- * Metadata associated with an execution context for tracing, monitoring, and debugging.
+ * Metadata associated with an execution context for tracing, monitoring, and
+ * debugging.
  *
- * <p>This metadata is primarily used for:
+ * <p>
+ * This metadata is primarily used for:
  * <ul>
- *   <li>OpenTelemetry tracing and spans</li>
- *   <li>Logging and debugging</li>
- *   <li>Performance monitoring</li>
- *   <li>Error reporting and diagnostics</li>
+ * <li>OpenTelemetry tracing and spans</li>
+ * <li>Logging and debugging</li>
+ * <li>Performance monitoring</li>
+ * <li>Error reporting and diagnostics</li>
  * </ul>
  *
  * @since 2.0
@@ -31,32 +33,32 @@ import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
 public interface ExecutionMetadata {
 
     /**
-     * Returns the component name that initiated this execution.
-     * Examples: "SqlStatisticsProvider.getTableCardinality", "RolapCell.getDrillThroughCount"
+     * Returns the component name that initiated this execution. Examples:
+     * "SqlStatisticsProvider.getTableCardinality", "RolapCell.getDrillThroughCount"
      *
      * @return the component name, or null if not set
      */
     String component();
 
     /**
-     * Returns a descriptive message about what this execution is doing.
-     * Examples: "Reading row count from table ...", "Error while counting drill-through"
+     * Returns a descriptive message about what this execution is doing. Examples:
+     * "Reading row count from table ...", "Error while counting drill-through"
      *
      * @return the message, or null if not set
      */
     String message();
 
     /**
-     * Returns the purpose of the SQL statement execution.
-     * Used to categorize SQL operations for monitoring.
+     * Returns the purpose of the SQL statement execution. Used to categorize SQL
+     * operations for monitoring.
      *
      * @return the purpose, or null if not set
      */
     SqlStatementEvent.Purpose purpose();
 
     /**
-     * Returns the number of cell requests associated with this execution.
-     * Returns 0 if not applicable.
+     * Returns the number of cell requests associated with this execution. Returns 0
+     * if not applicable.
      *
      * @return the cell request count
      */
@@ -80,7 +82,8 @@ public interface ExecutionMetadata {
      * @param cellRequestCount the cell request count
      * @return an ExecutionMetadata instance
      */
-    static ExecutionMetadata of(String component, String message, SqlStatementEvent.Purpose purpose, int cellRequestCount) {
+    static ExecutionMetadata of(String component, String message, SqlStatementEvent.Purpose purpose,
+            int cellRequestCount) {
         return new ExecutionMetadataRecord(component, message, purpose, cellRequestCount);
     }
 }

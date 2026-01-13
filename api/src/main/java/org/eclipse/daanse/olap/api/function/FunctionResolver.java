@@ -38,8 +38,8 @@ import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
- * A  FunctionResolver converts a function name, invocation type, and set
- * of arguments into a  FunctionDefinition.
+ * A FunctionResolver converts a function name, invocation type, and set of
+ * arguments into a FunctionDefinition.
  */
 public interface FunctionResolver {
 
@@ -50,10 +50,10 @@ public interface FunctionResolver {
      * correct overloaded form of the function.
      *
      *
-     * The method adds an item to conversions every time it performs an
-     * implicit type-conversion. If there are several candidate functions with the
-     * same signature, the validator will choose the one which used the fewest
-     * implicit conversions.
+     * The method adds an item to conversions every time it performs an implicit
+     * type-conversion. If there are several candidate functions with the same
+     * signature, the validator will choose the one which used the fewest implicit
+     * conversions.
      *
      *
      * @param args        Expressions which this function call is applied to.
@@ -66,10 +66,9 @@ public interface FunctionResolver {
     FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions);
 
     /**
-     * iIndicated whether a argument with a given positionOfArgument
-     * must be a scalar expression. Returns false if any of the
-     * variants of this resolver allows a set as its
-     * positionOfArgumentth argument; true otherwise.
+     * iIndicated whether a argument with a given positionOfArgument must be a
+     * scalar expression. Returns false if any of the variants of this resolver
+     * allows a set as its positionOfArgumentth argument; true otherwise.
      * 
      * 
      * 
@@ -77,15 +76,14 @@ public interface FunctionResolver {
     boolean requiresScalarExpressionOnArgument(int positionOfArgument);
 
     /**
-     * Returns a  List of symbolic constants which can appear as arguments to
-     * this function.
+     * Returns a List of symbolic constants which can appear as arguments to this
+     * function.
      *
      *
-     * For example, the DrilldownMember may take the symbol
-     * RECURSIVE as an argument. Most functions do not define any
-     * symbolic constants.
+     * For example, the DrilldownMember may take the symbol RECURSIVE as an
+     * argument. Most functions do not define any symbolic constants.
      *
-     * @return An  List of the names of the symbolic constants
+     * @return An List of the names of the symbolic constants
      */
     default List<String> getReservedWords() {
         return List.of();

@@ -14,10 +14,10 @@ package org.eclipse.daanse.olap.api;
 
 public interface OlapAction {
 
-	String getName();
+    String getName();
 
-	String getCaption();
+    String getCaption();
 
-	String getDescription();
+    String getDescription();
 
 }

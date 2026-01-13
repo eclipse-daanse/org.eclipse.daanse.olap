@@ -37,8 +37,7 @@ public interface ParameterSlot {
     int getIndex();
 
     /**
-     * Returns a compiled expression to compute the default value of the
-     * parameter.
+     * Returns a compiled expression to compute the default value of the parameter.
      */
     Calc<?> getDefaultValueCalc();
 
@@ -50,29 +49,29 @@ public interface ParameterSlot {
     /**
      * Sets the value of this parameter.
      *
-     * NOTE: This method will be removed when we store parameter values
-     * in the  org.eclipse.daanse.olap.api.result.Result rather than in the
-     *  mondrian.olap.QueryImpl.
+     * NOTE: This method will be removed when we store parameter values in the
+     * org.eclipse.daanse.olap.api.result.Result rather than in the
+     * mondrian.olap.QueryImpl.
      *
-     * @param value New value
-     * @param assigned Whether  #isParameterSet() should return true;
-     *   supply value {@code false} if this is an internal assignment, to
-     *   remember the default value
+     * @param value    New value
+     * @param assigned Whether #isParameterSet() should return true; supply value
+     *                 {@code false} if this is an internal assignment, to remember
+     *                 the default value
      */
     void setParameterValue(Object value, boolean assigned);
 
     /**
      * Returns the value of this parameter.
      *
-     * NOTE: This method will be removed when we store parameter values
-     * in the  org.eclipse.daanse.olap.api.result.Result rather than in the
-     *  mondrian.olap.QueryImpl.
+     * NOTE: This method will be removed when we store parameter values in the
+     * org.eclipse.daanse.olap.api.result.Result rather than in the
+     * mondrian.olap.QueryImpl.
      */
     Object getParameterValue();
 
     /**
-     * Returns whether the parameter has been assigned a value. (That value
-     * may be null.)
+     * Returns whether the parameter has been assigned a value. (That value may be
+     * null.)
      *
      * @return Whether parmaeter has been assigned a value.
      */

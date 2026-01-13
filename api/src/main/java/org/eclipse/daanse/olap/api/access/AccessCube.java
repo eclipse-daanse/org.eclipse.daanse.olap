@@ -33,6 +33,6 @@ public enum AccessCube {
         return this.name();
     }
 
-   public static final Set<AccessCube> ALLOWED_SET = EnumSet.of(AccessCube.NONE, AccessCube.ALL, AccessCube.CUSTOM);
+    public static final Set<AccessCube> ALLOWED_SET = EnumSet.of(AccessCube.NONE, AccessCube.ALL, AccessCube.CUSTOM);
 
 }

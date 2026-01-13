@@ -17,14 +17,17 @@ package org.eclipse.daanse.olap.api.execution;
  * Exception thrown when code attempts to access the current ExecutionContext
  * but none is bound to the current scope.
  *
- * <p>This typically happens when:
+ * <p>
+ * This typically happens when:
  * <ul>
- *   <li>Code runs outside of an {@link ExecutionContext#where} block</li>
- *   <li>Background threads (timers, executors) try to access context</li>
- *   <li>Async operations lose the scoped context</li>
+ * <li>Code runs outside of an {@link ExecutionContext#where} block</li>
+ * <li>Background threads (timers, executors) try to access context</li>
+ * <li>Async operations lose the scoped context</li>
  * </ul>
  *
- * <p>To fix this, ensure the code runs within an ExecutionContext scope:
+ * <p>
+ * To fix this, ensure the code runs within an ExecutionContext scope:
+ * 
  * <pre>
  * ExecutionContext.where(execution.asContext(), () -> {
  *     // Your code here can safely call ExecutionContext.current()
@@ -43,7 +46,7 @@ public class NoExecutionContextException extends RuntimeException {
      */
     public NoExecutionContextException() {
         super("No ExecutionContext is bound to the current scope. "
-            + "Ensure code runs within ExecutionContext.where() block.");
+                + "Ensure code runs within ExecutionContext.where() block.");
     }
 
     /**
@@ -59,7 +62,7 @@ public class NoExecutionContextException extends RuntimeException {
      * Creates a new NoExecutionContextException with a message and cause.
      *
      * @param message the detail message
-     * @param cause the cause
+     * @param cause   the cause
      */
     public NoExecutionContextException(String message, Throwable cause) {
         super(message, cause);

@@ -25,8 +25,8 @@ public enum Quoting {
     QUOTED,
 
     /**
-     * Identifier quoted with an ampersand to indicate a key value, for
-     * example the second segment in "[Employees].&amp;[89]".
+     * Identifier quoted with an ampersand to indicate a key value, for example the
+     * second segment in "[Employees].&amp;[89]".
      */
     KEY
 }

@@ -12,10 +12,13 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 /**
- * Execution context management using JDK 25 ScopedValue for thread-safe context propagation.
+ * Execution context management using JDK 25 ScopedValue for thread-safe context
+ * propagation.
  *
- * <p>This package provides the ExecutionContext class that replaces the ThreadLocal-based
- * Locus system with modern ScopedValue-based context management.
+ * <p>
+ * This package provides the ExecutionContext class that replaces the
+ * ThreadLocal-based Locus system with modern ScopedValue-based context
+ * management.
  */
 @org.osgi.annotation.bundle.Export
 @org.osgi.annotation.versioning.Version("1.0.0")

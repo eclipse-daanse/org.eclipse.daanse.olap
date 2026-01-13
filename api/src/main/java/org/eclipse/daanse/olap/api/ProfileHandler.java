@@ -32,7 +32,7 @@ public interface ProfileHandler {
     /**
      * Called when a statement has finished executing.
      *
-     * @param plan Annotated plan
+     * @param plan   Annotated plan
      * @param timing Query timings
      */
     public void explain(String plan, QueryTiming timing);

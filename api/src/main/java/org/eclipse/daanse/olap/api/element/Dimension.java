@@ -51,8 +51,8 @@ public interface Dimension extends OlapElement, MetaElement {
     boolean isMeasures();
 
     /**
-     * Returns the type of this dimension ( DimensionType#STANDARD_DIMENSION
-     * or  DimensionType#TIME_DIMENSION
+     * Returns the type of this dimension ( DimensionType#STANDARD_DIMENSION or
+     * DimensionType#TIME_DIMENSION
      */
     DimensionType getDimensionType();
 

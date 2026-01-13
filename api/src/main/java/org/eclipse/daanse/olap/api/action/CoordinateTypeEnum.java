@@ -46,7 +46,6 @@ public enum CoordinateTypeEnum {
      */
     CELL;
 
-
     public static CoordinateTypeEnum fromValue(String n) {
         return Stream.of(CoordinateTypeEnum.values()).filter(e -> (e.name() == n)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(

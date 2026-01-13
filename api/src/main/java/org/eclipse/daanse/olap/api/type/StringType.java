@@ -24,23 +24,23 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 public class StringType extends ScalarType {
 
-	public static final StringType INSTANCE = new StringType();
+    public static final StringType INSTANCE = new StringType();
+
     private StringType() {
         super("STRING");
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return obj instanceof StringType;
     }
 
     @Override
-	public boolean isInstance(Object value) {
+    public boolean isInstance(Object value) {
         return value instanceof String;
     }
 

@@ -15,13 +15,11 @@ package org.eclipse.daanse.olap.api.query.component.visit;
 
 /**
  * 
- * Visitee equivalent of QueryComponentVisitor
- * See also  QueryComponentVisitor
+ * Visitee equivalent of QueryComponentVisitor See also QueryComponentVisitor
  * 
  * @param <T> parameter
  */
 public interface Visitee<T> {
-	
-	
-	public T accept(QueryComponentVisitor visitor);
+
+    public T accept(QueryComponentVisitor visitor);
 }

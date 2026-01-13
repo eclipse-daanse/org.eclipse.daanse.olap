@@ -106,9 +106,9 @@ public non-sealed interface Query extends QueryComponent {
 
     void setVirtualCubeNonNativeCrossJoin();
 
-	Object accept(QueryComponentVisitor visitor);
+    Object accept(QueryComponentVisitor visitor);
 
-	Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal forLogicalOrdinal);
+    Hierarchy[] getMdxHierarchiesOnAxis(AxisOrdinal forLogicalOrdinal);
 
-	void setParameter(String string, Object	 object);
+    void setParameter(String string, Object object);
 }

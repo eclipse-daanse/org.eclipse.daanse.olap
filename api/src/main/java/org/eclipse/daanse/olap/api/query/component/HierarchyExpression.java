@@ -17,9 +17,9 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 
 public non-sealed interface HierarchyExpression extends QueryComponent {
 
-	/**
-	 * Returns the hierarchy.
-	 */
-	Hierarchy getHierarchy();
+    /**
+     * Returns the hierarchy.
+     */
+    Hierarchy getHierarchy();
 
 }

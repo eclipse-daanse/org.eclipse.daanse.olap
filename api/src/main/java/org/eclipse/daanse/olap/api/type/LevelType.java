@@ -49,11 +49,11 @@ public class LevelType implements Type {
     /**
      * Creates a type representing a level.
      *
-     * @param dimension Dimension which values of this type must belong to, or
-     *   null if not known
-     * @param hierarchy Hierarchy which values of this type must belong to, or
-     *   null if not known
-     * @param level Level which values of this type must belong to, or null if
+     * @param dimension Dimension which values of this type must belong to, or null
+     *                  if not known
+     * @param hierarchy Hierarchy which values of this type must belong to, or null
+     *                  if not known
+     * @param level     Level which values of this type must belong to, or null if
      */
     public LevelType(Dimension dimension, Hierarchy hierarchy, Level level) {
         this.dimension = dimension;
@@ -61,8 +61,7 @@ public class LevelType implements Type {
         this.level = level;
         if (level != null) {
             assert hierarchy != null;
-            assert
-                level.getHierarchy() == hierarchy;
+            assert level.getHierarchy() == hierarchy;
         }
         if (hierarchy != null) {
             assert dimension != null;
@@ -81,111 +80,84 @@ public class LevelType implements Type {
     }
 
     public static LevelType forType(Type type) {
-        return new LevelType(
-            type.getDimension(),
-            type.getHierarchy(),
-            type.getLevel());
+        return new LevelType(type.getDimension(), type.getHierarchy(), type.getLevel());
     }
 
     public static LevelType forLevel(Level level) {
-        return new LevelType(
-            level.getDimension(),
-            level.getHierarchy(),
-            level);
+        return new LevelType(level.getDimension(), level.getHierarchy(), level);
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
-        return this.dimension == dimension
-            || (!definitely && this.dimension == null);
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
+        return this.dimension == dimension || (!definitely && this.dimension == null);
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
-        return this.hierarchy == hierarchy
-            || (!definitely
-                && this.hierarchy == null
-                && (this.dimension == null
-                    || this.dimension == hierarchy.getDimension()));
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+        return this.hierarchy == hierarchy || (!definitely && this.hierarchy == null
+                && (this.dimension == null || this.dimension == hierarchy.getDimension()));
     }
 
     @Override
-	public Dimension getDimension() {
+    public Dimension getDimension() {
         return dimension;
     }
 
     @Override
-	public Hierarchy getHierarchy() {
+    public Hierarchy getHierarchy() {
         return hierarchy;
     }
 
     @Override
-	public Level getLevel() {
+    public Level getLevel() {
         return level;
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return digest.hashCode();
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof LevelType that) {
-            return Objects.equals(this.level, that.level)
-                && Objects.equals(this.hierarchy, that.hierarchy)
-                && Objects.equals(this.dimension, that.dimension);
+            return Objects.equals(this.level, that.level) && Objects.equals(this.hierarchy, that.hierarchy)
+                    && Objects.equals(this.dimension, that.dimension);
         }
         return false;
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (!(type instanceof LevelType that)) {
             return null;
         }
-        if (this.getLevel() != null
-            && this.getLevel().equals(that.getLevel()))
-        {
+        if (this.getLevel() != null && this.getLevel().equals(that.getLevel())) {
             return this;
         }
-        if (this.getHierarchy() != null
-            && this.getHierarchy().equals(that.getHierarchy()))
-        {
-            return new LevelType(
-                this.getDimension(),
-                this.getHierarchy(),
-                null);
+        if (this.getHierarchy() != null && this.getHierarchy().equals(that.getHierarchy())) {
+            return new LevelType(this.getDimension(), this.getHierarchy(), null);
         }
-        if (this.getDimension() != null
-            && this.getDimension().equals(that.getDimension()))
-        {
-            return new LevelType(
-                this.getDimension(),
-                null,
-                null);
+        if (this.getDimension() != null && this.getDimension().equals(that.getDimension())) {
+            return new LevelType(this.getDimension(), null, null);
         }
         return LevelType.Unknown;
     }
 
     @Override
-	public boolean isInstance(Object value) {
-        return value instanceof Level
-            && (level == null
-                || value.equals(level))
-            && (hierarchy == null
-                || ((Level) value).getHierarchy().equals(hierarchy))
-            && (dimension == null
-                || ((Level) value).getDimension().equals(dimension));
+    public boolean isInstance(Object value) {
+        return value instanceof Level && (level == null || value.equals(level))
+                && (hierarchy == null || ((Level) value).getHierarchy().equals(hierarchy))
+                && (dimension == null || ((Level) value).getDimension().equals(dimension));
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return 1;
     }
 }

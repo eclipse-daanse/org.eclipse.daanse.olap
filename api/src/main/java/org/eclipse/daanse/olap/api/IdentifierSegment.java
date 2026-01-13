@@ -35,30 +35,24 @@
 package org.eclipse.daanse.olap.api;
 
 /**
- * Component in a compound identifier. It is described by its name and how
- * the name is quoted.
+ * Component in a compound identifier. It is described by its name and how the
+ * name is quoted.
  *
- * For example, the identifier
- * [Store].USA.[New Mexico].&amp;[45] has four segments:
- * "Store",  Quoting#QUOTED
- * "USA",  Quoting#UNQUOTED
- * "New Mexico",  Quoting#QUOTED
- * "45",  Quoting#KEY
+ * For example, the identifier [Store].USA.[New Mexico].&amp;[45] has four
+ * segments: "Store", Quoting#QUOTED "USA", Quoting#UNQUOTED "New Mexico",
+ * Quoting#QUOTED "45", Quoting#KEY
  *
  *
- * QUOTED and UNQUOTED segments are represented using a
- *  NameSegment NameSegment;
- * KEY segments are represented using a
- *  KeySegment KeySegment.
+ * QUOTED and UNQUOTED segments are represented using a NameSegment NameSegment;
+ * KEY segments are represented using a KeySegment KeySegment.
  *
  * To parse an identifier into a list of segments, use the method
- *  org.olap4j.mdx.IdentifierNode#parseIdentifier(String) and then call
- *  org.olap4j.mdx.IdentifierNode#getSegmentList() on the resulting
- * node.
+ * org.olap4j.mdx.IdentifierNode#parseIdentifier(String) and then call
+ * org.olap4j.mdx.IdentifierNode#getSegmentList() on the resulting node.
  *
  * @author jhyde
  */
-public sealed interface IdentifierSegment permits KeyIdentifierSegment, NameIdentifierSegment  {
+public sealed interface IdentifierSegment permits KeyIdentifierSegment, NameIdentifierSegment {
 
     /**
      * Returns a string representation of this Segment.
@@ -77,8 +71,8 @@ public sealed interface IdentifierSegment permits KeyIdentifierSegment, NameIden
     void toString(StringBuilder buf);
 
     /**
-     * Returns the region of the source code which this Segment was created
-     * from, if it was created by parsing.
+     * Returns the region of the source code which this Segment was created from, if
+     * it was created by parsing.
      *
      * @return region of source code
      */
@@ -92,13 +86,12 @@ public sealed interface IdentifierSegment permits KeyIdentifierSegment, NameIden
     Quoting getQuoting();
 
     /**
-     * Returns the name of this IdentifierSegment.
-     * Returns {@code null} if this IdentifierSegment represents a key.
+     * Returns the name of this IdentifierSegment. Returns {@code null} if this
+     * IdentifierSegment represents a key.
      *
      * @return name of this Segment
      */
     String getName();
-
 
 }
 

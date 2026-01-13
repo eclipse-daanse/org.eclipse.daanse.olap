@@ -35,7 +35,6 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.todo.TupleList;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 
-
 /**
  * Describes an aggregation operator, such as "sum" or "count".
  *
@@ -49,6 +48,7 @@ public interface Aggregator {
 
     /**
      * Returns the name of the Aggregator.
+     * 
      * @return name of the Aggregator
      */
     String getName();
@@ -61,22 +61,21 @@ public interface Aggregator {
     Aggregator getRollup();
 
     /**
-     * Applies this aggregator to an expression over a set of members and
-     * returns the result.
+     * Applies this aggregator to an expression over a set of members and returns
+     * the result.
      *
      * @param evaluator Evaluation context
-     * @param members List of members, not null
-     * @param calc Expression to evaluate
+     * @param members   List of members, not null
+     * @param calc      Expression to evaluate
      *
      * @return result of applying this aggregator to a set of members/tuples
      */
     Object aggregate(Evaluator evaluator, TupleList members, Calc<?> calc);
 
     /**
-     * Tells Mondrian if this aggregator can perform fast aggregation
-     * using only the raw data of a given object type. This will
-     * determine if Mondrian will attempt to perform in-memory rollups
-     * on raw segment data by invoking  #aggregate.
+     * Tells Mondrian if this aggregator can perform fast aggregation using only the
+     * raw data of a given object type. This will determine if Mondrian will attempt
+     * to perform in-memory rollups on raw segment data by invoking #aggregate.
      *
      * This is only invoked for rollup operations.
      *
@@ -86,18 +85,17 @@ public interface Aggregator {
     boolean supportsFastAggregates(DataTypeJdbc datatype);
 
     /**
-     * Applies this aggregator over a raw list of objects for a rollup
-     * operation. This is useful when the values are already resolved
-     * and we are dealing with a raw  SegmentBody object.
+     * Applies this aggregator over a raw list of objects for a rollup operation.
+     * This is useful when the values are already resolved and we are dealing with a
+     * raw SegmentBody object.
      *
-     * Only gets called if
-     *  #supportsFastAggregates(DataTypeJdbc) is true.
+     * Only gets called if #supportsFastAggregates(DataTypeJdbc) is true.
      *
      * This is only invoked for rollup operations.
      *
      * @param rawData An array of values in its raw form, to be aggregated.
-     * @return A rolled up value of the raw data.
-     * if the object type is not supported.
+     * @return A rolled up value of the raw data. if the object type is not
+     *         supported.
      */
     Object aggregate(List<Object> rawData, DataTypeJdbc datatype);
 

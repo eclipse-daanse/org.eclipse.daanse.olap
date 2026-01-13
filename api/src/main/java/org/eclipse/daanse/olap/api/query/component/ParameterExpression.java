@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import org.eclipse.daanse.olap.api.Parameter;
 
-public non-sealed interface ParameterExpression extends QueryComponent , Expression{
+public non-sealed interface ParameterExpression extends QueryComponent, Expression {
 
     Parameter getParameter();
 }

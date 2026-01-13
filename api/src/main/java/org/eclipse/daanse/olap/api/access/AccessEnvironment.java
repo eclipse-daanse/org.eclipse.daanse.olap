@@ -16,14 +16,14 @@ public enum AccessEnvironment {
     /** No access to an object and its children. */
     NONE,
     /**
-     * A grant that covers none of the children
-     * unless explicitly granted.
+     * A grant that covers none of the children unless explicitly granted.
      */
     CUSTOM,
     /** Access to all shared dimensions (applies to schema grant). */
     ALL_DIMENSIONS,
     /** All access to an object and its children. */
     ALL;
+
     @Override
     public String toString() {
         return this.name();

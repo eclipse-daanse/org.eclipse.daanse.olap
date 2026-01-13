@@ -27,7 +27,6 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
@@ -38,10 +37,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
 
-
 /**
- * A Cell is an item in the grid of a Result.  It is
- * returned by Result#getCell.
+ * A Cell is an item in the grid of a Result. It is returned by Result#getCell.
  *
  * @author jhyde
  * @since 6 August, 2001
@@ -58,32 +55,28 @@ public interface Cell {
      * Returns the cell's raw value. This is useful for sending to further data
      * processing, such as plotting a chart.
      *
-     *  The value is never null. It may have various types:
-     *   if the cell is null, the value is  Util#nullValue;
-     *   if the cell contains an error, the value is an instance of
-     *       Throwable;
-     *   otherwise, the type of this value depends upon the type of
-     *       measure: possible types include java.math.BigDecimal,
-     *       Double, Integer and String.
+     * The value is never null. It may have various types: if the cell is null, the
+     * value is Util#nullValue; if the cell contains an error, the value is an
+     * instance of Throwable; otherwise, the type of this value depends upon the
+     * type of measure: possible types include java.math.BigDecimal, Double, Integer
+     * and String.
      *
      *
-     *  return != null
-     *  (return instanceof Throwable) == isError()
-     *  (return instanceof Util.NullCellValue) == isNull()
+     * return != null (return instanceof Throwable) == isError() (return instanceof
+     * Util.NullCellValue) == isNull()
      */
     Object getValue();
 
     /**
-     * Return the cached formatted string, that survives an aggregate cache
-     * clear.
+     * Return the cached formatted string, that survives an aggregate cache clear.
      */
     String getCachedFormatString();
 
     /**
-     * Returns the cell's value formatted according to the current format
-     * string, and locale-specific settings such as currency symbol. The
-     * current format string may itself be derived via an expression. For more
-     * information about format strings, see mondrian.util.Format.
+     * Returns the cell's value formatted according to the current format string,
+     * and locale-specific settings such as currency symbol. The current format
+     * string may itself be derived via an expression. For more information about
+     * format strings, see mondrian.util.Format.
      */
     String getFormattedValue();
 
@@ -98,23 +91,23 @@ public interface Cell {
     boolean isError();
 
     /**
-     * Returns a SQL query that, when executed, returns drill through data
-     * for this Cell.
+     * Returns a SQL query that, when executed, returns drill through data for this
+     * Cell.
      *
-     * If the parameter {@code extendedContext} is true, then the query will
-     * include all the levels (i.e. columns) of non-constraining members
-     * (i.e. members which are at the "All" level).
+     * If the parameter {@code extendedContext} is true, then the query will include
+     * all the levels (i.e. columns) of non-constraining members (i.e. members which
+     * are at the "All" level).
      *
-     * If the parameter {@code extendedContext} is false, the query will
-     * exclude the levels (coulmns) of non-constraining members.
+     * If the parameter {@code extendedContext} is false, the query will exclude the
+     * levels (coulmns) of non-constraining members.
      *
      * The result is null if the cell is based upon a calculated member.
      */
     String getDrillThroughSQL(boolean extendedContext);
 
     /**
-     * Returns true if drill through is possible for this Cell.
-     * Returns false if the Cell is based on a calculated measure.
+     * Returns true if drill through is possible for this Cell. Returns false if the
+     * Cell is based on a calculated measure.
      *
      * @return Whether can drill through on this cell
      */
@@ -136,17 +129,16 @@ public interface Cell {
     /**
      * Returns the context member for a particular dimension.
      *
-     * The member is defined as follows (note that there is always a
-     * member):
+     * The member is defined as follows (note that there is always a member):
      *
-     * If the dimension appears on one of the visible axes, the context
-     * member is simply the member on the current row or column.
+     * If the dimension appears on one of the visible axes, the context member is
+     * simply the member on the current row or column.
      *
-     * If the dimension appears in the slicer, the context member is the
-     * member of that dimension in the slier.
+     * If the dimension appears in the slicer, the context member is the member of
+     * that dimension in the slier.
      *
-     * Otherwise, the context member is the default member of that
-     * dimension (usually the 'all' member).
+     * Otherwise, the context member is the default member of that dimension
+     * (usually the 'all' member).
      *
      * @param hierarchy Hierarchy
      * @return current member of given hierarchy
@@ -154,18 +146,14 @@ public interface Cell {
     Member getContextMember(Hierarchy hierarchy);
 
     /**
-     * Helper method to implement  org.olap4j.Cell#setValue.
+     * Helper method to implement org.olap4j.Cell#setValue.
      *
-     * @param scenario Scenario
-     * @param newValue New value
+     * @param scenario         Scenario
+     * @param newValue         New value
      * @param allocationPolicy Allocation policy
-     * @param allocationArgs Arguments for allocation policy
+     * @param allocationArgs   Arguments for allocation policy
      */
-    void setValue(
-        Scenario scenario,
-        Object newValue,
-        AllocationPolicy allocationPolicy,
-        Object... allocationArgs);
+    void setValue(Scenario scenario, Object newValue, AllocationPolicy allocationPolicy, Object... allocationArgs);
 
     ISqlStatement drillThroughInternal(int maxRowCount, int firstRowOrdinal, List<OlapElement> fields,
             boolean extendedContext, Logger logger);

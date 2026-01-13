@@ -25,22 +25,22 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
 
-public interface Statement  {
+public interface Statement {
 
-
-   Connection getConnection() ;
+    Connection getConnection();
 
     /**
      * Executes an mdx SelectStatement.
      *
      * @param mdx MDX
      *
-     * @return  Result
+     * @return Result
      *
      */
     Result executeSelect(String mdx) throws Exception;
 
     CellSet executeQuery(String statement);
+
     CellSet executeQuery(Query query);
 
     ResultSet executeQuery(String statement, Optional<String> tabFields, int[] rowCountSlot);
@@ -48,8 +48,6 @@ public interface Statement  {
     ResultSet executeQuery(QueryComponent queryComponent, Optional<String> tabFields, int[] rowCountSlot);
 
     Query getQuery();
-
-
 
     /**
      * Closes this statement.
@@ -77,14 +75,13 @@ public interface Statement  {
      */
     Connection getDaanseConnection();
 
-
     void setQuery(Query query);
 
     /**
      * Enables profiling.
      *
      * Profiling information will be sent to the given writer when
-     *  org.eclipse.daanse.olap.api.result.Result#close() is called.
+     * org.eclipse.daanse.olap.api.result.Result#close() is called.
      *
      * If profileHandler is null, disables profiling.
      *
@@ -99,8 +96,8 @@ public interface Statement  {
      *
      * Zero means no timeout.
      *
-     * Contrast with JDBC's  java.sql.Statement#setQueryTimeout(int)
-     * method, which uses an {@code int} value and a granularity of seconds.
+     * Contrast with JDBC's java.sql.Statement#setQueryTimeout(int) method, which
+     * uses an {@code int} value and a granularity of seconds.
      *
      * @param timeoutMillis Timeout in milliseconds
      */
@@ -111,8 +108,8 @@ public interface Statement  {
      *
      * Zero means no timeout.
      *
-     * Contrast with JDBC's  java.sql.Statement#getQueryTimeout()
-     * method, which uses an {@code int} value and a granularity of seconds.
+     * Contrast with JDBC's java.sql.Statement#getQueryTimeout() method, which uses
+     * an {@code int} value and a granularity of seconds.
      *
      * @return Timeout in milliseconds
      */
@@ -121,10 +118,9 @@ public interface Statement  {
     /**
      * Issues a cancel request on this statement.
      *
-     * Once the thread running the statement detects the cancel request,
-     * execution will throw an exception. See
-     * BasicQueryTest.testCancel for an example of usage of this
-     * method.
+     * Once the thread running the statement detects the cancel request, execution
+     * will throw an exception. See BasicQueryTest.testCancel for an example of
+     * usage of this method.
      *
      * @throws java.sql.SQLException on error
      */
@@ -142,8 +138,8 @@ public interface Statement  {
      *
      * @param execution Execution; must match the execution that was started
      *
-     * @throws IllegalArgumentException if not started,
-     *     or if execution does not match
+     * @throws IllegalArgumentException if not started, or if execution does not
+     *                                  match
      */
     void end(Execution execution);
 

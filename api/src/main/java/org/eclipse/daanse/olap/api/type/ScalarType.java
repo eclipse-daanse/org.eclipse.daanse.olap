@@ -23,7 +23,6 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -33,9 +32,8 @@ import org.eclipse.daanse.olap.api.element.Level;
 /**
  * Base class for types which represent scalar values.
  *
- * An instance of this class means a scalar value of unknown type.
- * Usually one of the derived classes  NumericType,
- *  StringType,  BooleanType is used instead.
+ * An instance of this class means a scalar value of unknown type. Usually one
+ * of the derived classes NumericType, StringType, BooleanType is used instead.
  *
  * @author jhyde
  * @since Feb 17, 2005
@@ -43,7 +41,7 @@ import org.eclipse.daanse.olap.api.element.Level;
 public class ScalarType implements Type {
     private final String digest;
 
-	public static final ScalarType INSTANCE = new ScalarType();
+    public static final ScalarType INSTANCE = new ScalarType();
 
     private ScalarType() {
         this("SCALAR");
@@ -54,85 +52,76 @@ public class ScalarType implements Type {
     }
 
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return digest.hashCode();
     }
 
     @Override
-	public boolean equals(Object obj) {
-        return obj != null
-            && obj.getClass() == ScalarType.class;
+    public boolean equals(Object obj) {
+        return obj != null && obj.getClass() == ScalarType.class;
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         return digest;
     }
 
     @Override
-	public boolean usesDimension(Dimension dimension, boolean definitely) {
+    public boolean usesDimension(Dimension dimension, boolean definitely) {
         return false;
     }
 
     @Override
-	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         return false;
     }
 
     @Override
-	public Hierarchy getHierarchy() {
+    public Hierarchy getHierarchy() {
         return null;
     }
 
     @Override
-	public Level getLevel() {
+    public Level getLevel() {
         return null;
     }
 
     @Override
-	public Type computeCommonType(Type type, int[] conversionCount) {
+    public Type computeCommonType(Type type, int[] conversionCount) {
         if (this.equals(type)) {
             return this;
         } else if (type instanceof NullType) {
             return this;
-        } else if (this instanceof NullType
-            && type instanceof ScalarType)
-        {
+        } else if (this instanceof NullType && type instanceof ScalarType) {
             return type;
-        } else if (this.getClass() == ScalarType.class
-            && type instanceof ScalarType)
-        {
+        } else if (this.getClass() == ScalarType.class && type instanceof ScalarType) {
             return this;
         } else if (type.getClass() == ScalarType.class) {
             return type;
         } else if (type instanceof ScalarType) {
             return new ScalarType();
         } else if (type instanceof MemberType) {
-            return computeCommonType(
-                ((MemberType) type).getValueType(),
-                conversionCount);
+            return computeCommonType(((MemberType) type).getValueType(), conversionCount);
         } else if (type instanceof TupleType) {
-            return computeCommonType(
-                ((TupleType) type).getValueType(),
-                conversionCount);
+            return computeCommonType(((TupleType) type).getValueType(), conversionCount);
         } else {
             return null;
         }
     }
 
     @Override
-	public Dimension getDimension() {
+    public Dimension getDimension() {
         return null;
     }
 
     @Override
-	public boolean isInstance(Object value) {
+    public boolean isInstance(Object value) {
         // Somewhat pessimistic.
         return false;
     }
 
     @Override
-	public int getArity() {
+    public int getArity() {
         return 1;
     }
 }

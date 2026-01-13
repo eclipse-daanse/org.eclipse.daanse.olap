@@ -28,9 +28,7 @@ package org.eclipse.daanse.olap.api.formatter;
 
 import org.eclipse.daanse.olap.api.element.Member;
 
-
 public interface MemberFormatter {
-
 
     String format(Member member);
 }

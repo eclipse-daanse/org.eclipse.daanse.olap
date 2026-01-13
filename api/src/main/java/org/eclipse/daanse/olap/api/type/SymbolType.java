@@ -24,13 +24,12 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.type;
 
 public class SymbolType extends ScalarType {
-	public static final SymbolType INSTANCE = new SymbolType();
+    public static final SymbolType INSTANCE = new SymbolType();
 
-	private SymbolType() {
-		super("SYMBOL");
-	}
+    private SymbolType() {
+        super("SYMBOL");
+    }
 }

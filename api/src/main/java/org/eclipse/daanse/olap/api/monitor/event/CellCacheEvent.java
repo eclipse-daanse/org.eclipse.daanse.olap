@@ -64,8 +64,7 @@ public sealed interface CellCacheEvent extends ExecutionEvent
         ROLLUP,
 
         /**
-         * a segment that has been deleted by a call through the  CacheControl
-         * API.
+         * a segment that has been deleted by a call through the CacheControl API.
          */
         CACHE_CONTROL,
     }

@@ -25,7 +25,6 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-
 package org.eclipse.daanse.olap.api.calc.todo;
 
 import java.util.List;
@@ -34,10 +33,10 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Cheap interface for iterating through the contents of a  TupleList.
+ * Cheap interface for iterating through the contents of a TupleList.
  *
- * Stops short of the full  java.util.Iterator interface. If you want
- * that, see  TupleIterator.
+ * Stops short of the full java.util.Iterator interface. If you want that, see
+ * TupleIterator.
  *
  * @author Julian Hyde
  */
@@ -49,12 +48,11 @@ public interface TupleCursor {
      *
      * Returns false only when end of data has been reached.
      *
-     * Similar to calling the  java.util.Iterator methods
-     *  java.util.Iterator#hasNext() followed by
-     *  java.util.Iterator#next() but
-     * does not construct an object, and is therefore cheaper.
+     * Similar to calling the java.util.Iterator methods
+     * java.util.Iterator#hasNext() followed by java.util.Iterator#next() but does
+     * not construct an object, and is therefore cheaper.
      *
-     * If you want to use an Iterator, see  TupleIterator.
+     * If you want to use an Iterator, see TupleIterator.
      *
      * @return Whether was able to move forward a position
      */
@@ -63,12 +61,12 @@ public interface TupleCursor {
     /**
      * Returns the tuple that this cursor is positioned on.
      *
-     * This method never returns null, and may safely be called multiple
-     * times (or not all) for each position in the iteration.
+     * This method never returns null, and may safely be called multiple times (or
+     * not all) for each position in the iteration.
      *
-     * Invalid to call this method when the cursor is has not been
-     * positioned, for example, if  #forward() has not been called or
-     * if the most recent call to {@code forward} returned {@code false}.
+     * Invalid to call this method when the cursor is has not been positioned, for
+     * example, if #forward() has not been called or if the most recent call to
+     * {@code forward} returned {@code false}.
      *
      * @return Current tuple
      */
@@ -86,8 +84,8 @@ public interface TupleCursor {
     /**
      * Writes the member(s) of the next tuple to a given offset in an array.
      *
-     * This method saves the overhead of a memory allocation when the
-     * resulting tuple will be written immediately to an array. The effect of
+     * This method saves the overhead of a memory allocation when the resulting
+     * tuple will be written immediately to an array. The effect of
      * {@code currentToArray(members, 0)} is the same as calling
      * {@code current().toArray(members)}.
      *
@@ -95,7 +93,7 @@ public interface TupleCursor {
      * position. Typically you would call hasNext followed by next; or forward.
      *
      * @param members Members
-     * @param offset Offset in the array to write to
+     * @param offset  Offset in the array to write to
      */
     void currentToArray(Member[] members, int offset);
 }

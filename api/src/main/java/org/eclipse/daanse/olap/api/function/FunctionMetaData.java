@@ -19,14 +19,14 @@ import org.eclipse.daanse.olap.api.DataType;
 
 public interface FunctionMetaData {
 
-	OperationAtom operationAtom();
+    OperationAtom operationAtom();
 
-	String description();
+    String description();
 
-	DataType returnCategory();
+    DataType returnCategory();
 
-	DataType[] parameterDataTypes();
+    DataType[] parameterDataTypes();
 
-	FunctionParameter[] parameters();
+    FunctionParameter[] parameters();
 
 }

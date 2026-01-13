@@ -34,8 +34,8 @@ import org.eclipse.daanse.olap.api.SqlExpression;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
 
 /**
- * A Level is a group of  Members in a  Hierarchy,
- * all with the same attributes and at the same depth in the hierarchy.
+ * A Level is a group of Members in a Hierarchy, all with the same attributes
+ * and at the same depth in the hierarchy.
  *
  * @author jhyde, 1 March, 1999
  */
@@ -46,14 +46,13 @@ public interface Level extends OlapElement, MetaElement {
      *
      *
      * Note #1: In an access-controlled context, the first visible level of a
-     * hierarchy (as returned by  CatalogReader#getHierarchyLevels) may not
-     * have a depth of 0.
+     * hierarchy (as returned by CatalogReader#getHierarchyLevels) may not have a
+     * depth of 0.
      *
      *
      *
      * Note #2: In a parent-child hierarchy, the depth of a member (as returned by
-     *  CatalogReader#getMemberDepth) may not be the same as the depth of its
-     * level.
+     * CatalogReader#getMemberDepth) may not be the same as the depth of its level.
      */
     int getDepth();
 
@@ -82,8 +81,8 @@ public interface Level extends OlapElement, MetaElement {
     MemberFormatter getMemberFormatter();
 
     /**
-     * Returns the approximate number of members in this level, or
-     *  Integer#MIN_VALUE if no approximation is known.
+     * Returns the approximate number of members in this level, or Integer#MIN_VALUE
+     * if no approximation is known.
      */
     int getApproxRowCount();
 

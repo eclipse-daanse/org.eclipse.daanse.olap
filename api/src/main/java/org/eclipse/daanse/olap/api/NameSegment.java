@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api;
 
-public interface NameSegment extends Segment{
+public interface NameSegment extends Segment {
 
     String getName();
 }

@@ -14,7 +14,5 @@
 package org.eclipse.daanse.olap.api;
 
 public enum Command {
-    BEGIN,
-    COMMIT,
-    ROLLBACK
+    BEGIN, COMMIT, ROLLBACK
 }

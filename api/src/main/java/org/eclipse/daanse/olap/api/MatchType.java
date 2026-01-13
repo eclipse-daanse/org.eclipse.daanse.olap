@@ -28,8 +28,8 @@
 package org.eclipse.daanse.olap.api;
 
 /**
- * MatchType enumerates the allowable match modes when
- * searching for a member based on its unique name.
+ * MatchType enumerates the allowable match modes when searching for a member
+ * based on its unique name.
  *
  * @author Zelaine Fong
  */
@@ -48,8 +48,7 @@ public enum MatchType {
     LAST;
 
     /**
-     * Return true if either Exact or Exact Schema value
-     * is selected.
+     * Return true if either Exact or Exact Schema value is selected.
      *
      * @return true if exact
      */

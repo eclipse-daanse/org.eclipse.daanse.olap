@@ -33,11 +33,9 @@
 
 package org.eclipse.daanse.olap.api.result;
 
-
-
 /**
- * Enumeration of the policies that can be used to modify the values of
- * child cells when their parent cell is modified in a writeback operation.
+ * Enumeration of the policies that can be used to modify the values of child
+ * cells when their parent cell is modified in a writeback operation.
  *
  * @see Cell#setValue
  *
@@ -46,80 +44,77 @@ package org.eclipse.daanse.olap.api.result;
  */
 public enum AllocationPolicy {
     /**
-     * Every atomic cell that contributes to the updated cell will be
-     * assigned an equal value that is:
+     * Every atomic cell that contributes to the updated cell will be assigned an
+     * equal value that is:
      *
      *
-     * &lt;atomic cell value&gt; =
-     * &lt;value&gt; / Count(atomic cells contained in &lt;tuple&gt;)
+     * &lt;atomic cell value&gt; = &lt;value&gt; / Count(atomic cells contained in
+     * &lt;tuple&gt;)
      *
      */
     EQUAL_ALLOCATION,
 
     /**
-     * Every atomic cell that contributes to the updated cell will be
-     * changed according to:
+     * Every atomic cell that contributes to the updated cell will be changed
+     * according to:
      *
      *
-     * &lt;atomic cell value&gt; = &lt;atomic cell value&gt; +
-     * (&lt;value&gt; - &lt;existing value&gt;)  /
-     * Count(atomic cells contained in &lt;tuple&gt;)
+     * &lt;atomic cell value&gt; = &lt;atomic cell value&gt; + (&lt;value&gt; -
+     * &lt;existing value&gt;) / Count(atomic cells contained in &lt;tuple&gt;)
      *
      */
     EQUAL_INCREMENT,
 
     /**
-     * Every atomic cell that contributes to the updated cell will be
-     * assigned an equal value that is:
+     * Every atomic cell that contributes to the updated cell will be assigned an
+     * equal value that is:
      *
      *
-     * &lt;atomic cell value&gt; =
-     * &lt;value&gt; * &lt;weight value expression&gt;
+     * &lt;atomic cell value&gt; = &lt;value&gt; * &lt;weight value expression&gt;
      *
      *
-     * Takes an optional argument, {@code weight_value_expression}.
-     * If {@code weight_value_expression} is not provided, the following
-     * expression is assigned to it by default:
+     * Takes an optional argument, {@code weight_value_expression}. If
+     * {@code weight_value_expression} is not provided, the following expression is
+     * assigned to it by default:
      *
      *
-     * &lt;weight value expression&gt; =
-     * &lt;atomic cell value&gt; / &lt;existing value&gt;
+     * &lt;weight value expression&gt; = &lt;atomic cell value&gt; / &lt;existing
+     * value&gt;
      *
      *
-     * The value of {@code weight value expression} should be expressed
-     * as a value between 0 and 1. This value specifies the ratio of the
-     * allocated value you want to assign to the atomic cells that are
-     * affected by the allocation. It is the client application programmer's
-     * responsibilffity to create expressions whose rollup aggregate values
-     * will equal the allocated value of the expression.
+     * The value of {@code weight value expression} should be expressed as a value
+     * between 0 and 1. This value specifies the ratio of the allocated value you
+     * want to assign to the atomic cells that are affected by the allocation. It is
+     * the client application programmer's responsibilffity to create expressions
+     * whose rollup aggregate values will equal the allocated value of the
+     * expression.
      */
     WEIGHTED_ALLOCATION,
 
     /**
-     * Every atomic cell that contributes to the updated cell will be
-     * changed according to:
+     * Every atomic cell that contributes to the updated cell will be changed
+     * according to:
      *
      *
-     * &lt;atomic cell value&gt; = &lt;atomic cell value&gt; +
-     * (&lt;value&gt; - &lt;existing value&gt;)  *
-     * &lt;weight value expression&gt;
+     * &lt;atomic cell value&gt; = &lt;atomic cell value&gt; + (&lt;value&gt; -
+     * &lt;existing value&gt;) * &lt;weight value expression&gt;
      *
      *
-     * Takes an optional argument, {@code weight_value_expression}.
-     * If {@code weight_value_expression} is not provided, the following
-     * expression is assigned to it by default:
+     * Takes an optional argument, {@code weight_value_expression}. If
+     * {@code weight_value_expression} is not provided, the following expression is
+     * assigned to it by default:
      *
      *
-     * &lt;weight value expression&gt; =
-     * &lt;atomic cell value&gt; / &lt;existing value&gt;
+     * &lt;weight value expression&gt; = &lt;atomic cell value&gt; / &lt;existing
+     * value&gt;
      *
      *
-     * The value of {@code weight value expression} should be expressed
-     * as a value between 0 and 1. This value specifies the ratio of the
-     * allocated value you want to assign to the atomic cells that are
-     * affected by the allocation. It is the client application programmer's
-     * responsibility to create expressions whose rollup aggregate values
-     * will equal the allocated value of the expression.
+     * The value of {@code weight value expression} should be expressed as a value
+     * between 0 and 1. This value specifies the ratio of the allocated value you
+     * want to assign to the atomic cells that are affected by the allocation. It is
+     * the client application programmer's responsibility to create expressions
+     * whose rollup aggregate values will equal the allocated value of the
+     * expression.
      */
     WEIGHTED_INCREMENT,
 }

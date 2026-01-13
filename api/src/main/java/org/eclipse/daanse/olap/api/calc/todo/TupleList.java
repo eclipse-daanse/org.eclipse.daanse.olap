@@ -25,7 +25,6 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-
 package org.eclipse.daanse.olap.api.calc.todo;
 
 import java.util.List;
@@ -40,28 +39,25 @@ import org.eclipse.daanse.olap.api.element.Member;
  * 
  *
  * Consider changing
- *  TupleCalc#evaluateTuple(org.eclipse.daanse.olap.api.Evaluator)
- * and  org.eclipse.daanse.olap.api.Evaluator.NamedSetEvaluator#currentTuple()
- * to List&lt;Member&gt;
+ * TupleCalc#evaluateTuple(org.eclipse.daanse.olap.api.Evaluator) and
+ * org.eclipse.daanse.olap.api.Evaluator.NamedSetEvaluator#currentTuple() to
+ * List&lt;Member&gt;
  *
- * Search for potential uses of  TupleList#get(int, int)
+ * Search for potential uses of TupleList#get(int, int)
  *
- * Worth creating  TupleList.addAll(TupleIterator)?
+ * Worth creating TupleList.addAll(TupleIterator)?
  *
  * 
  *
  * @author jhyde
  */
-public interface TupleList
-extends List<List<Member>>, TupleIterable
-{
+public interface TupleList extends List<List<Member>>, TupleIterable {
     /**
      * Returns a particular column of a particular row.
      *
-     * Note that {@code list.get(row, column)}
-     * is equivalent to {@code list.slice(column).get(row)}
-     * and {@code list.get(row).get(column)}
-     * but is more efficient for most implementations of TupleList.
+     * Note that {@code list.get(row, column)} is equivalent to
+     * {@code list.slice(column).get(row)} and {@code list.get(row).get(column)} but
+     * is more efficient for most implementations of TupleList.
      *
      * @param slice Column ordinal
      * @param index Row ordinal
@@ -72,10 +68,9 @@ extends List<List<Member>>, TupleIterable
     /**
      * Returns a list of the members at a given column.
      *
-     * The list is modifiable if and only if this TupleList is modifiable.
-     * Adding an element to a slice will create a tuple whose members in other
-     * columns are null.
-     * Removing an element from a slicer will remove a tuple.
+     * The list is modifiable if and only if this TupleList is modifiable. Adding an
+     * element to a slice will create a tuple whose members in other columns are
+     * null. Removing an element from a slicer will remove a tuple.
      *
      * @param column Ordinal of the member in each tuple to project
      * @return List of members
@@ -85,12 +80,11 @@ extends List<List<Member>>, TupleIterable
     List<Member> slice(int column);
 
     /**
-     * Creates a copy of this list that has the same type and has a given
-     * capacity.
+     * Creates a copy of this list that has the same type and has a given capacity.
      *
-     * If capacity is negative, populates the list. A deep copy is made,
-     * so that it the contents of the list are not affected to changes to any
-     * backing collections.
+     * If capacity is negative, populates the list. A deep copy is made, so that it
+     * the contents of the list are not affected to changes to any backing
+     * collections.
      *
      * @param capacity Capacity
      * @return Copy of list, empty if capacity is non-negative
@@ -110,9 +104,8 @@ extends List<List<Member>>, TupleIterable
     TupleList withPositionCallback(PositionCallback positionCallback);
 
     /**
-     * Fixes the tuples of this list, so that their contents will not change
-     * even if elements of the list are reordered or removed. Returns this
-     * list if possible.
+     * Fixes the tuples of this list, so that their contents will not change even if
+     * elements of the list are reordered or removed. Returns this list if possible.
      *
      * @return List whose tuples are invariant if the list is sorted or filtered
      */

@@ -25,7 +25,6 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-
 package org.eclipse.daanse.olap.api.calc.todo;
 
 import java.util.List;
@@ -33,12 +32,11 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Extension to  Iterable that returns a  TupleIterator.
+ * Extension to Iterable that returns a TupleIterator.
  *
- * If efficiency is important, call  #tupleCursor() rather than
- *  #tupleIterator() if possible. Because  TupleCursor is a
- * simpler API to implement than  TupleIterator, in some cases the
- * implementation may be more efficient.
+ * If efficiency is important, call #tupleCursor() rather than #tupleIterator()
+ * if possible. Because TupleCursor is a simpler API to implement than
+ * TupleIterator, in some cases the implementation may be more efficient.
  *
  * @author jhyde
  */
@@ -46,7 +44,7 @@ public interface TupleIterable extends Iterable<List<Member>> {
     /**
      * Creates an iterator over the contents of this iterable.
      *
-     * Always has the same effect as calling  #iterator().
+     * Always has the same effect as calling #iterator().
      *
      * @see #tupleCursor()
      *
@@ -57,10 +55,9 @@ public interface TupleIterable extends Iterable<List<Member>> {
     /**
      * Creates a cursor over the contents of this iterable.
      *
-     * The contents of the cursor will always be the same as those returned
-     * by  #tupleIterator(). Because  TupleCursor is a simpler API
-     * to implement than  TupleIterator, in some cases the implementation
-     * may be more efficient.
+     * The contents of the cursor will always be the same as those returned by
+     * #tupleIterator(). Because TupleCursor is a simpler API to implement than
+     * TupleIterator, in some cases the implementation may be more efficient.
      *
      * @return cursor over the tuples returned by this iterable
      */
@@ -76,11 +73,11 @@ public interface TupleIterable extends Iterable<List<Member>> {
     /**
      * Returns an iterable over the members at a given column.
      *
-     * The iteratble returns an interator that is modifiable if and only if
-     * this TupleIterable is modifiable.
+     * The iteratble returns an interator that is modifiable if and only if this
+     * TupleIterable is modifiable.
      *
-     * If this {@code TupleIterable} happens to be a  TupleList,
-     * the method is overridden to return a  List}&lt; Member&gt;.
+     * If this {@code TupleIterable} happens to be a TupleList, the method is
+     * overridden to return a List}&lt; Member&gt;.
      *
      * @param column Ordinal of the member in each tuple to project
      * @return Iterable that returns an iterator over members

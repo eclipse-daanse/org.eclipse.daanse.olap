@@ -27,7 +27,6 @@
  *   SmartCity Jena - initial
  */
 
-
 package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
@@ -35,8 +34,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * A Position is an item on an  Axis.  It contains
- * one or more  Members.
+ * A Position is an item on an Axis. It contains one or more Members.
  *
  * @author jhyde
  * @since 6 August, 2001

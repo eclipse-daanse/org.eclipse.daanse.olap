@@ -34,27 +34,24 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * API for controlling the contents of the cell cache and the member cache.
- * A CellRegion denotes a portion of the cell cache, and a
- * MemberSet denotes a portion of the member cache. Both caches can be
- * flushed, and the member cache can be edited.
+ * API for controlling the contents of the cell cache and the member cache. A
+ * CellRegion denotes a portion of the cell cache, and a MemberSet denotes a
+ * portion of the member cache. Both caches can be flushed, and the member cache
+ * can be edited.
  *
  * To create an instance of this interface, use
  * org.eclipse.daanse.olap.api.Connection#getCacheControl.
  *
- * Methods concerning cell cache:
- * createMemberRegion(Member, boolean)
+ * Methods concerning cell cache: createMemberRegion(Member, boolean)
  * createMemberRegion(boolean, Member, boolean, Member, boolean)
  * createUnionRegion(org.eclipse.daanse.olap.api.CacheControl.CellRegion[])
  * createCrossjoinRegion(org.eclipse.daanse.olap.api.CacheControl.CellRegion[])
  * createMeasuresRegion(Cube)}
  * flush(org.eclipse.daanse.olap.api.CacheControl.CellRegion)
  *
- * Methods concerning member cache:
- * createMemberSet(Member, boolean)
+ * Methods concerning member cache: createMemberSet(Member, boolean)
  * createMemberSet(boolean, Member, boolean, Member, boolean)
- * createAddCommand(Member)
- * createDeleteCommand(Member)
+ * createAddCommand(Member) createDeleteCommand(Member)
  * createDeleteCommand(org.eclipse.daanse.olap.api.CacheControl.MemberSet)
  * createCompoundCommand(java.util.List)
  * createCompoundCommand(org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand[])
@@ -73,9 +70,9 @@ public interface CacheControl {
     /**
      * Creates a cell region consisting of a single member.
      *
-     * @param member the member
+     * @param member      the member
      * @param descendants When true, include descendants of the member in the
-     *   region.
+     *                    region.
      * @return the new cell region
      */
     CellRegion createMemberRegion(Member member, boolean descendants);
@@ -83,90 +80,72 @@ public interface CacheControl {
     /**
      * Creates a cell region consisting of a range between two members.
      *
-     * The members must belong to the same level of the same hierarchy.
-     * One of the bounds may be null.
+     * The members must belong to the same level of the same hierarchy. One of the
+     * bounds may be null.
      *
      * For example, given
      *
-     * Member member97Q3; // [Time].[1997].[Q3]
-     * Member member98Q2; // [Time].[1998].[Q2] 
+     * Member member97Q3; // [Time].[1997].[Q3] Member member98Q2; //
+     * [Time].[1998].[Q2]
      *
      * then
      *
-     * Expression
-     * Meaning
+     * Expression Meaning
      *
-     * createMemberRegion(true, member97Q3, true, member98Q2,
-     * false)
-     * The members between 97Q3 and 98Q2, inclusive:
-     * [Time].[1997].[Q3],
-     * [Time].[1997].[Q4],
-     * [Time].[1998].[Q1],
-     * [Time].[1998].[Q2]
+     * createMemberRegion(true, member97Q3, true, member98Q2, false) The members
+     * between 97Q3 and 98Q2, inclusive: [Time].[1997].[Q3], [Time].[1997].[Q4],
+     * [Time].[1998].[Q1], [Time].[1998].[Q2]
      *
-     * createMemberRegion(true, member97Q3, false, member98Q2,
-     * false)
+     * createMemberRegion(true, member97Q3, false, member98Q2, false)
      *
-     *The members between 97Q3 and 98Q2, exclusive:
-     * [Time].[1997].[Q4],
+     * The members between 97Q3 and 98Q2, exclusive: [Time].[1997].[Q4],
      * [Time].[1998].[Q1]
      *
-     * createMemberRegion(true, member97Q3, false, member98Q2,
-     * false)
+     * createMemberRegion(true, member97Q3, false, member98Q2, false)
      * 
-     * The members between 97Q3 and 98Q2, including their descendants, and
-     * including the lower bound but not the upper bound:
-     * [Time].[1997].[Q3],
-     * [Time].[1997].[Q3].[7],
-     * [Time].[1997].[Q3].[8],
-     * [Time].[1997].[Q3].[9],
-     * [Time].[1997].[Q4],
-     * [Time].[1997].[Q4].[10],
-     * [Time].[1997].[Q4].[11],
-     * [Time].[1997].[Q4].[12],
-     * [Time].[1998].[Q1],
-     * [Time].[1998].[Q1].[1],
-     * [Time].[1998].[Q1].[2],
-     * [Time].[1998].[Q1].[3]
+     * The members between 97Q3 and 98Q2, including their descendants, and including
+     * the lower bound but not the upper bound: [Time].[1997].[Q3],
+     * [Time].[1997].[Q3].[7], [Time].[1997].[Q3].[8], [Time].[1997].[Q3].[9],
+     * [Time].[1997].[Q4], [Time].[1997].[Q4].[10], [Time].[1997].[Q4].[11],
+     * [Time].[1997].[Q4].[12], [Time].[1998].[Q1], [Time].[1998].[Q1].[1],
+     * [Time].[1998].[Q1].[2], [Time].[1998].[Q1].[3]
      *
-     * @param lowerInclusive whether the the range includes the lower bound;
-     *   ignored if the lower bound is not specified
-     * @param lowerMember lower bound member.
-     *   If null, takes all preceding members
-     * @param upperInclusive whether the the range includes the upper bound;
-     *   ignored if the upper bound is not specified
-     * @param upperMember upper bound member.
-     *   If null, takes all preceding members
-     * @param descendants when true, include descendants of the member in the
-     *   region
+     * @param lowerInclusive whether the the range includes the lower bound; ignored
+     *                       if the lower bound is not specified
+     * @param lowerMember    lower bound member. If null, takes all preceding
+     *                       members
+     * @param upperInclusive whether the the range includes the upper bound; ignored
+     *                       if the upper bound is not specified
+     * @param upperMember    upper bound member. If null, takes all preceding
+     *                       members
+     * @param descendants    when true, include descendants of the member in the
+     *                       region
      * @return the new cell region
      */
-    CellRegion createMemberRegion(
-        boolean lowerInclusive,
-        Member lowerMember,
-        boolean upperInclusive,
-        Member upperMember,
-        boolean descendants);
+    CellRegion createMemberRegion(boolean lowerInclusive, Member lowerMember, boolean upperInclusive,
+            Member upperMember, boolean descendants);
 
     /**
      * Forms the cartesian product of two or more cell regions.
+     * 
      * @param regions the operands
      * @return the cartesian product of the operands
      */
     CellRegion createCrossjoinRegion(CellRegion... regions);
 
     /**
-     * Forms the union of two or more cell regions.
-     * The regions must have the same dimensionality.
+     * Forms the union of two or more cell regions. The regions must have the same
+     * dimensionality.
      *
      * @param regions the operands
      * @return the cartesian product of the operands
-
+     * 
      */
     CellRegion createUnionRegion(CellRegion... regions);
 
     /**
      * Creates a region consisting of all measures in a given cube.
+     * 
      * @param cube a cube
      * @return the region
      */
@@ -182,7 +161,8 @@ public interface CacheControl {
 
     /**
      * Prints the state of the cell cache as it pertains to a given region.
-     * @param pw the output target
+     * 
+     * @param pw     the output target
      * @param region the CellRegion of interest
      */
     void printCacheState(PrintWriter pw, CellRegion region);
@@ -190,38 +170,35 @@ public interface CacheControl {
     // member cache control
 
     /**
-     * Creates a member set containing either a single member, or a member and
-     * its descendants.
-     * @param member a member
+     * Creates a member set containing either a single member, or a member and its
+     * descendants.
+     * 
+     * @param member      a member
      * @param descendants when true, include descendants in the set
      * @return the set
      */
     MemberSet createMemberSet(Member member, boolean descendants);
 
     /**
-     * Creates a member set consisting of a range between two members.
-     * The members must belong to the same level of the same hierarchy. One of
-     * the bounds may be null. (Similar to #createMemberRegion(boolean,
-     * Member, boolean, Member, boolean), which see for examples.)
+     * Creates a member set consisting of a range between two members. The members
+     * must belong to the same level of the same hierarchy. One of the bounds may be
+     * null. (Similar to #createMemberRegion(boolean, Member, boolean, Member,
+     * boolean), which see for examples.)
      *
-     * @param lowerInclusive whether the the range includes the lower bound;
-     *   ignored if the lower bound is not specified
-     * @param lowerMember lower bound member.
-     *   If null, takes all preceding members
-     * @param upperInclusive whether the the range includes the upper bound;
-     *   ignored if the upper bound is not specified
-     * @param upperMember upper bound member.
-     *   If null, takes all preceding members
-     * @param descendants when true, include descendants of the member in the
-     *   region
+     * @param lowerInclusive whether the the range includes the lower bound; ignored
+     *                       if the lower bound is not specified
+     * @param lowerMember    lower bound member. If null, takes all preceding
+     *                       members
+     * @param upperInclusive whether the the range includes the upper bound; ignored
+     *                       if the upper bound is not specified
+     * @param upperMember    upper bound member. If null, takes all preceding
+     *                       members
+     * @param descendants    when true, include descendants of the member in the
+     *                       region
      * @return the set
      */
-    MemberSet createMemberSet(
-        boolean lowerInclusive,
-        Member lowerMember,
-        boolean upperInclusive,
-        Member upperMember,
-        boolean descendants);
+    MemberSet createMemberSet(boolean lowerInclusive, Member lowerMember, boolean upperInclusive, Member upperMember,
+            boolean descendants);
 
     /**
      * Forms the union of two or more member sets.
@@ -234,33 +211,33 @@ public interface CacheControl {
     /**
      * Filters a member set, keeping all members at a given Level.
      *
-     * @param level Level
+     * @param level   Level
      * @param baseSet Member set
      * @return Member set with members not at the given level removed
      */
     MemberSet filter(Level level, MemberSet baseSet);
 
     /**
-     * Atomically flushes all members in the member cache which belong to a
-     * given set.
+     * Atomically flushes all members in the member cache which belong to a given
+     * set.
      *
      * @param set a set of members
      */
     void flush(MemberSet set);
 
     /**
-     * Prints the state of the member cache as it pertains to a given member
-     * set.
-     * @param pw the output target
+     * Prints the state of the member cache as it pertains to a given member set.
+     * 
+     * @param pw  the output target
      * @param set the MemberSet of interest
      */
     void printCacheState(PrintWriter pw, MemberSet set);
-
 
     // edit member cache contents
 
     /**
      * Executes a command that edits the member cache.
+     * 
      * @param cmd the command
      */
     void execute(MemberEditCommand cmd);
@@ -275,6 +252,7 @@ public interface CacheControl {
 
     /**
      * Builds a compound command which is executed atomically.
+     * 
      * @param cmds the component commands
      * @return the compound command
      */
@@ -301,36 +279,33 @@ public interface CacheControl {
 
     /**
      * Creates a command to add a member to the cache. The added member and its
-     * parent must have the same Dimension and the correct Levels, Null parent
-     * means add to the top level of its Dimension.
+     * parent must have the same Dimension and the correct Levels, Null parent means
+     * add to the top level of its Dimension.
      *
-     * The ordinal position of the new member among its siblings is implied
-     * by its properties.
+     * The ordinal position of the new member among its siblings is implied by its
+     * properties.
      *
      * @param member the new member
      * @return the command
      *
-     * @throws IllegalArgumentException if member null
-     * or if member belongs to a parent-child hierarchy
+     * @throws IllegalArgumentException if member null or if member belongs to a
+     *                                  parent-child hierarchy
      */
-    MemberEditCommand createAddCommand(
-        Member member) throws IllegalArgumentException;
+    MemberEditCommand createAddCommand(Member member) throws IllegalArgumentException;
 
     /**
-     * Creates a command to Move a member (with its descendants) to a new
-     * location, that is to a new parent.
+     * Creates a command to Move a member (with its descendants) to a new location,
+     * that is to a new parent.
+     * 
      * @param member the member moved
      * @param loc    the new parent
      * @return the command
      *
-     * @throws IllegalArgumentException if member is null,
-     * or loc is null,
-     * or member belongs to a parent-child hierarchy,
-     * or if loc is incompatible with member
+     * @throws IllegalArgumentException if member is null, or loc is null, or member
+     *                                  belongs to a parent-child hierarchy, or if
+     *                                  loc is incompatible with member
      */
-    MemberEditCommand createMoveCommand(
-        Member member,
-        Member loc) throws IllegalArgumentException;
+    MemberEditCommand createMoveCommand(Member member, Member loc) throws IllegalArgumentException;
 
     // commands to change member properties
 
@@ -338,31 +313,26 @@ public interface CacheControl {
      * Creates a command to change one property of a member.
      *
      * @param member the member
-     * @param name the property name
-     * @param value the property value
+     * @param name   the property name
+     * @param value  the property value
      * @return the command
-     * @throws IllegalArgumentException if the property is invalid for the
-     *  member
+     * @throws IllegalArgumentException if the property is invalid for the member
      */
-    MemberEditCommand createSetPropertyCommand(
-        Member member,
-        String name,
-        Object value) throws IllegalArgumentException;
+    MemberEditCommand createSetPropertyCommand(Member member, String name, Object value)
+            throws IllegalArgumentException;
 
     /**
-     * Creates a command to several properties changes over a set of
-     * members. All members must belong to the same Level.
+     * Creates a command to several properties changes over a set of members. All
+     * members must belong to the same Level.
      *
-     * @param set the set of members
+     * @param set            the set of members
      * @param propertyValues Collection of property-value pairs
      * @return the command
-     * @throws IllegalArgumentException for an invalid property, or if all
-     * members in the set do not belong to the same Level.
+     * @throws IllegalArgumentException for an invalid property, or if all members
+     *                                  in the set do not belong to the same Level.
      */
-    MemberEditCommand createSetPropertyCommand(
-        MemberSet set,
-        Map<String, Object> propertyValues)
-        throws IllegalArgumentException;
+    MemberEditCommand createSetPropertyCommand(MemberSet set, Map<String, Object> propertyValues)
+            throws IllegalArgumentException;
 
     // other
 
@@ -381,20 +351,19 @@ public interface CacheControl {
     /**
      * Flushes the cache which maps schema URLs to metadata.
      *
-     * This cache is referenced only when creating a new connection, so
-     * existing connections will continue to use the same schema definition.
+     * This cache is referenced only when creating a new connection, so existing
+     * connections will continue to use the same schema definition.
      *
-     * Flushing the schema cache will flush all aggregations and segments
-     * associated to it as well.
+     * Flushing the schema cache will flush all aggregations and segments associated
+     * to it as well.
      */
     void flushSchemaCache();
-
-   
 
     /** a region of cells in the cell cache */
     public interface CellRegion {
         /**
          * Returns the dimensionality of a region.
+         * 
          * @return a list of org.eclipse.daanse.olap.api.element.Dimension objects.
          */
         List<Dimension> getDimensionality();
@@ -403,17 +372,17 @@ public interface CacheControl {
     /**
      * A specification of a set of members in the member cache.
      *
-     * Member sets can be created using methods
-     * CacheControl#createMemberSet(Member, boolean),
-     * CacheControl#createMemberSet(boolean, Member, boolean, Member, boolean),
+     * Member sets can be created using methods CacheControl#createMemberSet(Member,
+     * boolean), CacheControl#createMemberSet(boolean, Member, boolean, Member,
+     * boolean),
      * CacheControl#createUnionSet(org.eclipse.daanse.olap.api.CacheControl.MemberSet[]).
      */
     public interface MemberSet {
     }
 
     /**
-     * An operation to be applied to the member cache. The operation does not
-     * take effect until CacheControl#execute is called.
+     * An operation to be applied to the member cache. The operation does not take
+     * effect until CacheControl#execute is called.
      */
     public interface MemberEditCommand {
     }

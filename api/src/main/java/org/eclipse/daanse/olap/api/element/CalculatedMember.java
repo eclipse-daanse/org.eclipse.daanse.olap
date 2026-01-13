@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.element;
 
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
-public interface CalculatedMember extends KeyMember{
+public interface CalculatedMember extends KeyMember {
 
     Formula getFormula();
 

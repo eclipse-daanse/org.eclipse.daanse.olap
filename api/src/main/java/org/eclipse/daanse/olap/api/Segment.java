@@ -25,5 +25,4 @@ public interface Segment {
 
     void toString(StringBuilder buf);
 
-
 }

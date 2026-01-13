@@ -16,8 +16,10 @@ package org.eclipse.daanse.olap.api.execution;
 /**
  * Exception thrown when a query execution has been canceled.
  *
- * <p>This exception is thrown by {@link ExecutionContext#checkCancelOrTimeout()}
- * when the execution state is {@link State#CANCELED}.</p>
+ * <p>
+ * This exception is thrown by {@link ExecutionContext#checkCancelOrTimeout()}
+ * when the execution state is {@link State#CANCELED}.
+ * </p>
  *
  * @see ExecutionContext#cancel()
  * @see ExecutionContext#checkCancelOrTimeout()
@@ -35,7 +37,8 @@ public class QueryCanceledException extends RuntimeException {
     }
 
     /**
-     * Constructs a new query canceled exception with the specified detail message and cause.
+     * Constructs a new query canceled exception with the specified detail message
+     * and cause.
      *
      * @param message the detail message
      * @param cause   the cause

@@ -69,7 +69,6 @@ public class ConfigConstants {
     public static final String EXECUTE_DURATION = "executeDuration";
     public static final String EXECUTE_DURATION_UNIT = "executeDurationUnit";
 
-
     public static final Integer QUERY_LIMIT_DEFAULT_VALUE = 40;
     public static final String SEGMENT_CACHE_DEFAULT_VALUE = null;
     public static final Boolean ENABLE_TOTAL_COUNT_DEFAULT_VALUE = false;

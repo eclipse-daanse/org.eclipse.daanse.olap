@@ -20,8 +20,7 @@ public enum DataTypeJdbc {
 
     NUMERIC("Numeric"),
 
-    INTEGER("Integer"),
-    DECIMAL("Decimal"),
+    INTEGER("Integer"), DECIMAL("Decimal"),
 
     FLOAT("Float"),
 
@@ -52,8 +51,6 @@ public enum DataTypeJdbc {
     }
 
     public static DataTypeJdbc fromValue(String v) {
-        return Stream.of(DataTypeJdbc.values())
-            .filter(e -> (e.getValue().equals(v)))
-            .findFirst().orElse(NUMERIC);
+        return Stream.of(DataTypeJdbc.values()).filter(e -> (e.getValue().equals(v))).findFirst().orElse(NUMERIC);
     }
 }

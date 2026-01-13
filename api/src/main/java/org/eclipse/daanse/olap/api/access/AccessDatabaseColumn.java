@@ -28,6 +28,7 @@ public enum AccessDatabaseColumn {
         return this.name();
     }
 
-   public static final Set<AccessDatabaseColumn> ALLOWED_SET = EnumSet.of(AccessDatabaseColumn.NONE, AccessDatabaseColumn.ALL);
+    public static final Set<AccessDatabaseColumn> ALLOWED_SET = EnumSet.of(AccessDatabaseColumn.NONE,
+            AccessDatabaseColumn.ALL);
 
 }

@@ -21,19 +21,13 @@ public enum Datatype {
 
     DOUBLE(5, "DBTYPE_R8", "A double-precision floating-point value: Double"),
 
-    CURRENCY(
-        6,
-        "DBTYPE_CY",
-        "A currency value: LARGE_INTEGER, Currency is a fixed-point number with "
-            + "four digits to the right of the decimal point. It is stored in an "
-            + "eight-byte signed integer, scaled by 10,000."),
+    CURRENCY(6, "DBTYPE_CY",
+            "A currency value: LARGE_INTEGER, Currency is a fixed-point number with "
+                    + "four digits to the right of the decimal point. It is stored in an "
+                    + "eight-byte signed integer, scaled by 10,000."),
 
-    BOOLEAN(
-        11,
-        "DBTYPE_BOOL",
-        "A Boolean value stored in the same way as in Automation: VARIANT_BOOL; "
-            + "0 means false and ~0 (bitwise, the value is not 0; that is, all bits "
-            + "are set to 1) means true."),
+    BOOLEAN(11, "DBTYPE_BOOL", "A Boolean value stored in the same way as in Automation: VARIANT_BOOL; "
+            + "0 means false and ~0 (bitwise, the value is not 0; that is, all bits " + "are set to 1) means true."),
 
     /**
      * Used by SQL Server for value.
@@ -53,27 +47,21 @@ public enum Datatype {
     // The following values exactly match VARENUM
     // in Automation but cannot be used in VARIANT.
 
-    LARGE_INTEGER(
-        20,
-        "DBTYPE_I8",
-        "An eight-byte, signed integer: LARGE_INTEGER"),
+    LARGE_INTEGER(20, "DBTYPE_I8", "An eight-byte, signed integer: LARGE_INTEGER"),
 
     // The following values are not in VARENUM in OLE.
 
-    STRING(
-        130,
-        "DBTYPE_WSTR",
-        "A null-terminated Unicode character string: wchar_t[length]; If "
-            + "DBTYPE_WSTR is used by itself, the number of bytes allocated "
-            + "for the string, including the null-termination character, is "
-            + "specified by cbMaxLen in the DBBINDING structure. If "
-            + "DBTYPE_WSTR is combined with DBTYPE_BYREF, the number of bytes "
-            + "allocated for the string, including the null-termination character, "
-            + "is at least the length of the string plus two. In either case, the "
-            + "actual length of the string is determined from the bound length "
-            + "value. The maximum length of the string is the number of allocated "
-            + "bytes divided by sizeof(wchar_t) and truncated to the nearest "
-            + "integer."),
+    STRING(130, "DBTYPE_WSTR",
+            "A null-terminated Unicode character string: wchar_t[length]; If "
+                    + "DBTYPE_WSTR is used by itself, the number of bytes allocated "
+                    + "for the string, including the null-termination character, is "
+                    + "specified by cbMaxLen in the DBBINDING structure. If "
+                    + "DBTYPE_WSTR is combined with DBTYPE_BYREF, the number of bytes "
+                    + "allocated for the string, including the null-termination character, "
+                    + "is at least the length of the string plus two. In either case, the "
+                    + "actual length of the string is determined from the bound length "
+                    + "value. The maximum length of the string is the number of allocated "
+                    + "bytes divided by sizeof(wchar_t) and truncated to the nearest " + "integer."),
 
     /**
      * Used by SAP BW. Represents a Character
@@ -174,19 +162,15 @@ public enum Datatype {
     private String dbTypeIndicator;
     private String description;
 
-    Datatype(
-        int xmlaOrdinal,
-        String dbTypeIndicator,
-        String description)
-    {
+    Datatype(int xmlaOrdinal, String dbTypeIndicator, String description) {
         this.xmlaOrdinal = xmlaOrdinal;
         this.dbTypeIndicator = dbTypeIndicator;
         this.description = description;
     }
 
     /**
-     * The internal name of this Datatype.
-     * Might not be unique across Datatype instances.
+     * The internal name of this Datatype. Might not be unique across Datatype
+     * instances.
      */
     public String xmlaName() {
         return dbTypeIndicator;

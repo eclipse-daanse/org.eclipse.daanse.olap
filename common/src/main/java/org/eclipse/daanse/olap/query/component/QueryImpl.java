@@ -1029,7 +1029,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                         .append(parameterName).append("', type ").append(type).toString());
             }
             List<Member> expList = new ArrayList<>();
-            final List list = (List) value;
+            final List<?> list = (List<?>) value;
             final SetType setType = (SetType) type;
             final Type elementType = setType.getElementType();
             for (Object o : list) {

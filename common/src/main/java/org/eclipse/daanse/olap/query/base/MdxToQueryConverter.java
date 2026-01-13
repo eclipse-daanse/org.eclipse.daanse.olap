@@ -137,11 +137,11 @@ public class MdxToQueryConverter {
 
     static List<QueryAxis> convertQueryAxisList(SelectQueryClause selectQueryClause) {
         switch (selectQueryClause) {
-        case SelectQueryAsteriskClause _UNNAMED:
+        case SelectQueryAsteriskClause _:
             return selectQueryAsteriskClauseToQueryAxisList();
         case SelectQueryAxesClause selectQueryAxesClause:
             return selectQueryAxesClauseToQueryAxisList(selectQueryAxesClause);
-        case SelectQueryEmptyClause _UNNAMES:
+        case SelectQueryEmptyClause _:
             return selectQueryEmptyClauseToQueryAxisList();
         }
     }
@@ -316,7 +316,7 @@ public class MdxToQueryConverter {
             return NumericLiteralImpl.create(numericLiteral.value());
         case StringLiteral stringLiteral:
             return StringLiteralImpl.create(stringLiteral.value());
-        case NullLiteral _UNNAMED: // TODO: use Unnamed Pattern _
+        case NullLiteral _:
             return NullLiteralImpl.nullValue;
         case SymbolLiteral symbolLiteral:
             return SymbolLiteralImpl.create(symbolLiteral.value());
@@ -369,7 +369,7 @@ public class MdxToQueryConverter {
         case CaseOperationAtom coa:
             list = getExpressionList(callExpression.expressions());
             return new UnresolvedFunCallImpl(coa, list.stream().toArray(Expression[]::new));
-        case CastOperationAtom cast:
+        case CastOperationAtom _:
             list = getExpressionList(callExpression.expressions());
             return new UnresolvedFunCallImpl(new CastOperationAtom(), list.stream().toArray(Expression[]::new));
         }
@@ -444,13 +444,11 @@ public class MdxToQueryConverter {
     }
 
     static String quoted(String name) {
-        StringBuilder sb = new StringBuilder();
-        return sb.append("[").append(name).append("]").toString();
+        return "[" + name + "]";
     }
 
     static String key(String name) {
-        StringBuilder sb = new StringBuilder();
-        return sb.append("&").append(name).append("]").toString();
+        return "&" + name + "]";
     }
 
 }

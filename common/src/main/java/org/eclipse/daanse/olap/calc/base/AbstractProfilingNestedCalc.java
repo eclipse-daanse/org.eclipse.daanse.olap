@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
-import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 
 public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCalc<E>
 		implements Calc<E> {
@@ -64,7 +64,7 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 
 	@Override
 	public boolean dependsOn(Hierarchy hierarchy) {
-		return HirarchyDependsChecker.checkAnyDependsOnChilds(getChildCalcs(), hierarchy);
+		return HierarchyDependsChecker.checkAnyDependsOnChildren(getChildCalcs(), hierarchy);
 	}
 
 	@Override
@@ -73,13 +73,11 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 	}
 
 	@Override
-    protected List<CalculationProfile> getChildProfiles() {
-        Calc<?>[] childCalcs = getChildCalcs();
-        childCalcs = childCalcs == null ? new Calc<?>[0] : childCalcs;
-
-        List<CalculationProfile> childProfiles = Stream.of(childCalcs).filter(Objects::nonNull).map(Calc::getCalculationProfile).toList();
-
-        return childProfiles;
-    }
+	protected List<CalculationProfile> getChildProfiles() {
+		return Stream.of(getChildCalcs())
+				.filter(Objects::nonNull)
+				.map(Calc::getCalculationProfile)
+				.toList();
+	}
 
 }

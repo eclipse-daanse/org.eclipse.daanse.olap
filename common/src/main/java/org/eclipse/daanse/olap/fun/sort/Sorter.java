@@ -328,9 +328,8 @@ public class Sorter {
       tupleArrayList = tupleList;
     }
 
-    @SuppressWarnings( { "unchecked" } )
-    List<Member>[] tuples =
-      tupleArrayList.toArray( new List[ tupleArrayList.size() ] );
+    @SuppressWarnings("unchecked")
+    List<Member>[] tuples = tupleArrayList.toArray(List[]::new);
     final DelegatingTupleList result =
       new DelegatingTupleList(
         tupleIterable.getArity(),
@@ -645,8 +644,8 @@ public class Sorter {
       return ( (Date) value0 ).compareTo( (Date) value1 );
     } else if ( value0 instanceof LocalDateTime ) {
         return ( (LocalDateTime) value0 ).compareTo( (LocalDateTime) value1 );
-    } else if ( value0 instanceof OrderKey ) {
-      return ( (OrderKey) value0 ).compareTo( value1 );
+    } else if ( value0 instanceof OrderKey orderKey0 && value0 instanceof OrderKey orderKey1 ) {
+      return orderKey0.compareTo( orderKey1);
     } else {
       throw newInternal( "cannot compare " + value0 );
     }

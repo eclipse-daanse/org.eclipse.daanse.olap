@@ -39,6 +39,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.DataType;
@@ -99,6 +102,8 @@ import org.eclipse.daanse.olap.util.type.TypeUtil;
  * @since 1.0
  */
 public class FunUtil extends Util {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunUtil.class);
 
   public static final NullMember NullMember = new NullMember();
 
@@ -481,8 +486,8 @@ public class FunUtil extends Util {
         ( (Number) value1 ).doubleValue() );
     } else if ( value0 instanceof Date date) {
       return date.compareTo( (Date) value1 );
-    } else if ( value0 instanceof OrderKey orderKey) {
-      return orderKey.compareTo( value1 );
+    } else if ( value0 instanceof OrderKey orderKey && value1 instanceof OrderKey orderKeyOther) {
+      return orderKey.compareTo( orderKeyOther);
     } else {
       throw Util.newInternal( "cannot compare " + value0 );
     }
@@ -940,8 +945,8 @@ public class FunUtil extends Util {
         DoubleCalc calc = calcs[ i ];
         SetWrapper retval = retvals[ i ];
         Double o = calc.evaluate( evaluator );
-        if(o==null) {
-        	System.out.println(calc);
+        if (o == null) {
+          LOGGER.debug("Calc evaluated to null: {}", calc);
         }
         if ( o == FunUtil.DOUBLE_NULL) {
           retval.nullCount++;
@@ -1673,7 +1678,7 @@ public class FunUtil extends Util {
 
 
   public static class SetWrapper {
-    public List v = new ArrayList();
+    public List<Object> v = new ArrayList<>();
     public int errorCount = 0;
     public int nullCount = 0;
 
@@ -1700,7 +1705,7 @@ public class FunUtil extends Util {
    * Nulls compare last, exceptions (including the
    * object which indicates the the cell is not in the cache yet) next, then numbers and strings are compared by value.
    */
-  public static class DescendingValueComparator implements Comparator {
+  public static class DescendingValueComparator implements Comparator<Object> {
     /**
      * The singleton.
      */
@@ -1708,8 +1713,8 @@ public class FunUtil extends Util {
       new DescendingValueComparator();
 
     @Override
-	public int compare( Object o1, Object o2 ) {
-      return -FunUtil.compareValues( o1, o2 );
+    public int compare(Object o1, Object o2) {
+      return -FunUtil.compareValues(o1, o2);
     }
   }
 

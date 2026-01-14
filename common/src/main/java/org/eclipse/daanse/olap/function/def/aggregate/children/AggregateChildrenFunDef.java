@@ -28,13 +28,13 @@ import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 
-public class AggregateChildrenFunbDef extends AbstractFunctionDefinition {
+public class AggregateChildrenFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtom$AggregateChildren = new InternalOperationAtom("$AggregateChildren");
     static FunctionMetaData functionMetaData$AggregateChildren = new FunctionMetaDataR(functionAtom$AggregateChildren,
             "Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
             DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(  DataType.HIERARCHY ) });
 
-    public AggregateChildrenFunbDef() {
+    public AggregateChildrenFunDef() {
         super(functionMetaData$AggregateChildren);
     }
 

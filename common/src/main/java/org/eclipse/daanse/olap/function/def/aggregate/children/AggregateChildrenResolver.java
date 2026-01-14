@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 public class AggregateChildrenResolver extends ParametersCheckingFunctionDefinitionResolver {
 
     public AggregateChildrenResolver() {
-        super(new AggregateChildrenFunbDef());
+        super(new AggregateChildrenFunDef());
     }
 
 }

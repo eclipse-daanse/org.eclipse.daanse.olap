@@ -325,7 +325,7 @@ public class RoleImpl implements Role {
         }
         // Deny access
         LOGGER.trace(
-            "Access denided to cube {}", cube.getName());
+            "Access denied to cube {}", cube.getName());
         return AccessCube.NONE;
     }
 
@@ -385,7 +385,7 @@ public class RoleImpl implements Role {
                 return AccessDimension.CUSTOM;
             } else {
                 LOGGER.trace(
-                    "Access denided to dimension {} because there are no hierarchies accessible.", dimension.getUniqueName());
+                    "Access denied to dimension {} because there are no hierarchies accessible.", dimension.getUniqueName());
                 return AccessDimension.NONE;
             }
         } else if (access != null) {
@@ -417,7 +417,7 @@ public class RoleImpl implements Role {
             return AccessDimension.NONE;
         default:
             LOGGER.trace(
-                "Access denided to dimension {} because of the access level of schema {}",
+                "Access denied to dimension {} because of the access level of schema {}",
                 dimension.getUniqueName(),
                 dimension.getCatalog().getName());
             return AccessDimension.NONE;
@@ -570,7 +570,7 @@ public class RoleImpl implements Role {
         // Access denied, since we know that the dimension check has
         // checked for its parents as well.
         LOGGER.trace(
-            "Access denided to hierarchy {}", hierarchy.getUniqueName());
+            "Access denied to hierarchy {}", hierarchy.getUniqueName());
         return AccessHierarchy.NONE;
     }
 
@@ -594,7 +594,7 @@ public class RoleImpl implements Role {
         }
         // Deny access
         LOGGER.trace(
-            "Access denided to database schema {}", databaseSchema.getName());
+            "Access denied to database schema {}", databaseSchema.getName());
         return AccessDatabaseSchema.NONE;
     }
 
@@ -616,7 +616,7 @@ public class RoleImpl implements Role {
         }
         // Deny access
         LOGGER.trace(
-            "Access denided to database table {}", databaseTable.getName());
+            "Access denied to database table {}", databaseTable.getName());
         return AccessDatabaseTable.NONE;
     }
 
@@ -638,7 +638,7 @@ public class RoleImpl implements Role {
         }
         // Deny access
         LOGGER.trace(
-            "Access denided to database column {}", databaseColumn.getName());
+            "Access denied to database column {}", databaseColumn.getName());
         return AccessDatabaseColumn.NONE;
     }
 
@@ -718,7 +718,7 @@ public class RoleImpl implements Role {
         HierarchyAccessImpl hierarchyAccess,
         Level level)
     {
-        // Check if this level is explicitly excluded by top/bototm
+        // Check if this level is explicitly excluded by top/bottom
         // level restrictions.
         if (level.getDepth() < hierarchyAccess.topLevel.getDepth()) {
             return false;
@@ -1083,7 +1083,7 @@ public class RoleImpl implements Role {
             // Check for an explicit deny.
             if (accessInner == AccessMember.NONE) {
                 LOGGER.trace(
-                    "Access level {} granted to member {} because it is explicitly denided.",
+                    "Access level {} granted to member {} because it is explicitly denied.",
                     AccessMember.NONE, member.getUniqueName());
                 return AccessMember.NONE;
             }
@@ -1106,7 +1106,7 @@ public class RoleImpl implements Role {
             // defined by topLevel and bottomLevel
             if (!checkLevelIsOkWithRestrictions(this, member.getLevel())) {
                 LOGGER.trace(
-                    "Access denided to member {} because its level {} is out of the permitted bounds of between {} and {}",
+                    "Access denied to member {} because its level {} is out of the permitted bounds of between {} and {}",
                     member.getUniqueName(), member.getLevel().getUniqueName(),
                     this.topLevel.getUniqueName(), this.bottomLevel.getUniqueName());
                 return AccessMember.NONE;
@@ -1131,7 +1131,7 @@ public class RoleImpl implements Role {
                     || parentAccess == AccessMember.CUSTOM)
                 {
                     LOGGER.trace(
-                        "Access denided to member {} because its parent {} is of access level {}",
+                        "Access denied to member {} because its parent {} is of access level {}",
                         member.getUniqueName(), m.getUniqueName(), parentAccess);
                     return AccessMember.NONE;
                 }
@@ -1162,7 +1162,7 @@ public class RoleImpl implements Role {
             }
             // No access
             LOGGER.trace(
-                "Access denided to member {} because none of its parents allow access to it.",
+                "Access denied to member {} because none of its parents allow access to it.",
                 member.getUniqueName());
             return AccessMember.NONE;
         }

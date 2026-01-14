@@ -89,7 +89,7 @@ public class CrossJoinFunDef extends AbstractFunctionDefinition {
                 throw Util.newInternal("arg to crossjoin must be a set");
             }
         }
-        final MemberType[] types = list.toArray(new MemberType[list.size()]);
+        final MemberType[] types = list.toArray(MemberType[]::new);
         TupleType.checkHierarchies(types);
         final TupleType tupleType = new TupleType(types);
         return new SetType(tupleType);
@@ -605,8 +605,7 @@ public class CrossJoinFunDef extends AbstractFunctionDefinition {
                     if (isSlicerMember) {
                         Set<Member> hierarchySlicerMembers = mapOfSlicerMembers.get(em.getHierarchy());
                         if (hierarchySlicerMembers.size() > 1) {
-                            nonAllMemberList
-                                    .add(hierarchySlicerMembers.toArray(new Member[hierarchySlicerMembers.size()]));
+                            nonAllMemberList.add(hierarchySlicerMembers.toArray(Member[]::new));
                         }
                     }
                     continue;
@@ -633,12 +632,12 @@ public class CrossJoinFunDef extends AbstractFunctionDefinition {
                         }
                     } else {
                         // The Hierarchy does NOT have an All member
-                        Member[] rootMembers = rootMemberList.toArray(new Member[rootMemberList.size()]);
+                        Member[] rootMembers = rootMemberList.toArray(Member[]::new);
                         nonAllMemberList.add(rootMembers);
                     }
                 }
             }
-            nonAllMembers = nonAllMemberList.toArray(new Member[nonAllMemberList.size()][]);
+            nonAllMembers = nonAllMemberList.toArray(Member[][]::new);
 
             query.putEvalCache(allMemberListKey, allMemberList);
             query.putEvalCache(nonAllMembersKey, nonAllMembers);

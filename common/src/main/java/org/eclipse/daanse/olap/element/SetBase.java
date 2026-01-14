@@ -88,7 +88,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
         this.description = description;
         this.exp = exp;
         this.validated = validated;
-        this.uniqueName = new StringBuilder("[").append(name).append( "]").toString();
+        this.uniqueName = "[" + name + "]";
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
 
     @Override
 	public String getNameUniqueWithinQuery() {
-        return new StringBuilder().append(System.identityHashCode(this)).append("").toString();
+        return String.valueOf(System.identityHashCode(this));
     }
 
     @Override

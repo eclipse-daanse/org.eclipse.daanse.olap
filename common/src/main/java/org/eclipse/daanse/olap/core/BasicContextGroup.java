@@ -50,7 +50,7 @@ public class BasicContextGroup implements ContextGroup {
 	private BasicContextGroupConfig config;
 
 	@Activate
-	public void activate(BasicContextGroupConfig config,Map<String, Object> coniguration) throws Exception {
+	public void activate(BasicContextGroupConfig config, Map<String, Object> configuration) throws Exception {
 		this.config = config;
 	}
 
@@ -73,7 +73,7 @@ public class BasicContextGroup implements ContextGroup {
 		// TODO: NICE: Quality check! (description) NONE;INFO;WARN;IGNORE,UNIQUE
 		// TODO Auto-generated method stub
 
-		Set<String> duplicats = contexts.stream()
+		Set<String> duplicates = contexts.stream()
 				// Group the elements along
 				// with their frequency in a map
 				.collect(Collectors.groupingBy(Context::getName, Collectors.counting()))
@@ -90,7 +90,7 @@ public class BasicContextGroup implements ContextGroup {
 		List<Context<?>> tmpValid = new ArrayList<>();
 		List<Context<?>> tmpFailing = new ArrayList<>();
 		contexts.stream().forEach(c -> {
-			if (duplicats.contains(c.getName())) {
+			if (duplicates.contains(c.getName())) {
 				tmpFailing.add(c);
 			} else {
 				tmpValid.add(c);

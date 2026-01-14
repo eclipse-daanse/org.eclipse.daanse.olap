@@ -158,13 +158,11 @@ public class CubeAccess {
      */
     public void normalizeCubeAccess() {
         if (!memberList.isEmpty()) {
-            limitedMembers = memberList.toArray(new Member[memberList.size()]);
+            limitedMembers = memberList.toArray(Member[]::new);
             hasRestrictions = true;
         }
         if (!hierarchyList.isEmpty()) {
-            noAccessHierarchies =
-                hierarchyList.toArray(
-                    new Hierarchy[hierarchyList.size()]);
+            noAccessHierarchies = hierarchyList.toArray(Hierarchy[]::new);
             hasRestrictions = true;
         }
     }

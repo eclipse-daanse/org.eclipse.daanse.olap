@@ -193,40 +193,11 @@ public class Util {
      */
     public static final Object EmptyValue = Double.valueOf(DOUBLE_EMPTY);
 
-
-
-    /** Unique id for this JVM instance. Part of a key that ensures that if
-     * two JVMs in the same cluster have a data-source with the same
-     * identity-hash-code, they will be treated as different data-sources,
-     * and therefore caches will not be incorrectly shared. */
-    public static final UUID JVM_INSTANCE_UUID = UUID.randomUUID();
-
     /**
      * Special value represents a null key.
      */
     public static final Comparable<?> sqlNullValue =
         Util.UtilComparable.INSTANCE;
-    /**
-     * Whether this is an IBM JVM.
-     */
-    public static final boolean IBM_JVM =
-        System.getProperties().getProperty("java.vendor").equals(
-            "IBM Corporation");
-
-    /**
-     * What version of JDBC?
-     * Returns:
-     *     0x0401 in JDK 1.7 and higher
-     *     0x0400 in JDK 1.6
-     *     0x0300 otherwise
-     *
-     */
-    public static final int JDBC_VERSION =
-        System.getProperty("java.version").compareTo("1.7") >= 0
-            ? 0x0401
-            : System.getProperty("java.version").compareTo("1.6") >= 0
-            ? 0x0400
-            : 0x0300;
 
 
     private static final UtilCompatible compatible;
@@ -2286,21 +2257,6 @@ public class Util {
         }
     }
 
-   /**
-     * Converts a {@link Properties} object to a string-to-string {@link Map}.
-     *
-     * @param properties Properties
-     * @return String-to-string map
-     */
-    public static Map<String, String> toMap(final Properties properties) {
-        return new AbstractMap<>() {
-            @Override
-			@SuppressWarnings({"unchecked"})
-            public Set<Entry<String, String>> entrySet() {
-                return (Set) properties.entrySet();
-            }
-        };
-    }
     /**
      * Replaces tokens in a string.
      *
@@ -2474,62 +2430,6 @@ public class Util {
             throw new ResourceLimitExceededException(
                 resultSize, Integer.MAX_VALUE);
         }
-    }
-
-    /**
-     * Converts an olap4j connect string into a legacy mondrian connect string.
-     *
-     * For example,
-     * "jdbc:mondrian:Datasource=jdbc/SampleData;Catalog=foodmart/FoodMart.xml;"
-     * becomes
-     * "Provider=Mondrian;
-     * Datasource=jdbc/SampleData;Catalog=foodmart/FoodMart.xml;"
-     *
-     * This method is intended to allow legacy applications (such as JPivot
-     * and Mondrian's XMLA server) to continue to create connections using
-     * Mondrian's legacy connection API even when they are handed an olap4j
-     * connect string.
-     *
-     * @param url olap4j connect string
-     * @return mondrian connect string, or null if cannot be converted
-     */
-    public static String convertOlap4jConnectStringToNativeMondrian(
-        String url)
-    {
-        if (url.startsWith("jdbc:mondrian:")) {
-            return "Provider=Mondrian; "
-                + url.substring("jdbc:daanse:".length());
-        }
-        return null;
-    }
-
-    /**
-     * Checks if a String is whitespace, empty ("") or null.
-     *
-     *
-     * StringUtils.isBlank(null) = true
-     * StringUtils.isBlank("") = true
-     * StringUtils.isBlank(" ") = true
-     * StringUtils.isBlank("bob") = false
-     * StringUtils.isBlank(" bob ") = false
-     *
-     *
-     * (Copied from commons-lang.)
-     *
-     * @param str the String to check, may be null
-     * @return true if the String is null, empty or whitespace
-     */
-    public static boolean isBlank(String str) {
-        final int strLen;
-        if (str == null || (strLen = str.length()) == 0) {
-            return true;
-        }
-        for (int i = 0; i < strLen; i++) {
-            if (!Character.isWhitespace(str.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

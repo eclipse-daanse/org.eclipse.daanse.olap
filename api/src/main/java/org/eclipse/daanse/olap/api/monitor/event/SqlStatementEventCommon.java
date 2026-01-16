@@ -13,7 +13,7 @@
 
 package org.eclipse.daanse.olap.api.monitor.event;
 
-import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent.Purpose;
+import org.eclipse.daanse.olap.api.execution.Execution.Purpose;
 
 public record SqlStatementEventCommon(EventCommon eventCommon, long mdxStatementId, long sqlStatementId, String sql,
         Purpose purpose) {

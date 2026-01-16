@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.olap.api.execution;
 
-import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
-
 /**
  * Record implementation of ExecutionMetadata.
  *
@@ -23,6 +21,6 @@ import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
  * @param purpose          the SQL statement purpose (may be null)
  * @param cellRequestCount the cell request count
  */
-record ExecutionMetadataRecord(String component, String message, SqlStatementEvent.Purpose purpose,
+record ExecutionMetadataRecord(String component, String message, Execution.Purpose purpose,
         int cellRequestCount) implements ExecutionMetadata {
 }

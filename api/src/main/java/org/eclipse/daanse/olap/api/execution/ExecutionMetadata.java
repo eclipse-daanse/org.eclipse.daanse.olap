@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.olap.api.execution;
 
-import org.eclipse.daanse.olap.api.monitor.event.SqlStatementEvent;
-
 /**
  * Metadata associated with an execution context for tracing, monitoring, and
  * debugging.
@@ -54,7 +52,7 @@ public interface ExecutionMetadata {
      *
      * @return the purpose, or null if not set
      */
-    SqlStatementEvent.Purpose purpose();
+    Execution.Purpose purpose();
 
     /**
      * Returns the number of cell requests associated with this execution. Returns 0
@@ -82,7 +80,7 @@ public interface ExecutionMetadata {
      * @param cellRequestCount the cell request count
      * @return an ExecutionMetadata instance
      */
-    static ExecutionMetadata of(String component, String message, SqlStatementEvent.Purpose purpose,
+    static ExecutionMetadata of(String component, String message, Execution.Purpose purpose,
             int cellRequestCount) {
         return new ExecutionMetadataRecord(component, message, purpose, cellRequestCount);
     }

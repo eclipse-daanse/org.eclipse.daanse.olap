@@ -91,4 +91,8 @@ public interface Execution {
          */
         FRESH, RUNNING, ERROR, CANCELED, TIMEOUT, DONE,
     }
+    
+    public enum Purpose {
+        DRILL_THROUGH, CELL_SEGMENT, TUPLES, OTHER
+    }
 }

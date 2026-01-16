@@ -644,7 +644,7 @@ public class Sorter {
       return ( (Date) value0 ).compareTo( (Date) value1 );
     } else if ( value0 instanceof LocalDateTime ) {
         return ( (LocalDateTime) value0 ).compareTo( (LocalDateTime) value1 );
-    } else if ( value0 instanceof OrderKey orderKey0 && value0 instanceof OrderKey orderKey1 ) {
+    } else if ( value0 instanceof OrderKey orderKey0 && value1 instanceof OrderKey orderKey1 ) {
       return orderKey0.compareTo( orderKey1);
     } else {
       throw newInternal( "cannot compare " + value0 );

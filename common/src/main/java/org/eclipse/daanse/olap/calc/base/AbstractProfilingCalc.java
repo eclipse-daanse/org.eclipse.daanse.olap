@@ -14,18 +14,17 @@
 package org.eclipse.daanse.olap.calc.base;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.profile.CalcEvaluationProfile;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
 import org.eclipse.daanse.olap.api.type.Type;
-import org.eclipse.daanse.olap.calc.base.profile.CalcEvaluationProfileR;
 import org.eclipse.daanse.olap.calc.base.profile.CalcProfileR;
 
 public abstract class AbstractProfilingCalc<T> implements Calc<T> {
@@ -35,7 +34,7 @@ public abstract class AbstractProfilingCalc<T> implements Calc<T> {
 	private Instant firstEvalStart = null;
 	private Instant lastEvalEnd = null;
 
-	private final List<CalcEvaluationProfile> evaluations = new CopyOnWriteArrayList<>();
+	private final List<CalcEvaluationProfile> evaluations = new ArrayList<>();
 
 	/**
 	 * Abstract Implementation of {@link Calc} that generated a
@@ -67,9 +66,9 @@ public abstract class AbstractProfilingCalc<T> implements Calc<T> {
 
     protected void profileEvaluation(Instant evaluationStart, Instant evaluationEnd, T evaluationResult) {
 
-		CalcEvaluationProfile evaluationProfile = new CalcEvaluationProfileR(evaluationStart, evaluationEnd,
-				evaluationResult, Map.of());
-		evaluations.add(evaluationProfile);
+//		CalcEvaluationProfile evaluationProfile = new CalcEvaluationProfileR(evaluationStart, evaluationEnd,
+//				evaluationResult, Map.of());
+//		evaluations.add(evaluationProfile);
 
 	}
 

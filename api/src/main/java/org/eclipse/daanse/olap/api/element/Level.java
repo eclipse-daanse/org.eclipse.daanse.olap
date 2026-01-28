@@ -30,6 +30,7 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
+import org.eclipse.daanse.jdbc.db.dialect.api.type.Datatype;
 import org.eclipse.daanse.olap.api.SqlExpression;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
 
@@ -99,4 +100,6 @@ public interface Level extends OlapElement, MetaElement {
     boolean isParentAsLeafEnable();
 
     String getParentAsLeafNameFormat();
+
+    Datatype getDatatype();
 }

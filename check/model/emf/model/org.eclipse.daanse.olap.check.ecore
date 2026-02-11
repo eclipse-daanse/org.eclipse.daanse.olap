@@ -13,6 +13,19 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="check" nsURI="https://www.daanse.org/spec/org.eclipse.daanse.olap.check"
     nsPrefix="olapcheck">
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="qualified" value="true"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="fileExtensions" value="daanse"/>
+    <details key="prefix" value="OlapCheck"/>
+    <details key="oSGiCompatible" value="true"/>
+    <details key="basePackage" value="org.eclipse.daanse.olap.check.model"/>
+    <details key="copyrightText" value="Copyright (c) 2026 Contributors to the Eclipse Foundation.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0"/>
+    <details key="documentation" value="EMF Ecore model for declarative OLAP check definitions and results. Provides model-driven check definitions that can be persisted as XMI or JSON and executed by the check runtime."/>
+    <details key="loadInitialization" value="false"/>
+    <details key="literalsInterface" value="true"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EEnum" name="MatchMode">
     <eLiterals name="EQUALS"/>
     <eLiterals name="CONTAINS" value="1"/>

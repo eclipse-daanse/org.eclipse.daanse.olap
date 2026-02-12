@@ -153,8 +153,6 @@ import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
 import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;
 import org.eclipse.daanse.olap.util.ArraySortedSet;
 import org.eclipse.daanse.olap.util.ConcatenableList;
-import org.eclipse.daanse.olap.util.UtilCompatible;
-import org.eclipse.daanse.olap.util.UtilCompatibleJdk16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -169,6 +167,9 @@ public class Util {
     public static final String NL = System.getProperty("line.separator");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
+
+    private final static String executionStatementCleanupException =
+            "An exception was encountered while trying to cleanup an execution context. A statement failed to cancel gracefully. ExecutionContext was : \"{0}\".";
 
     public static final Logger PROFILE_LOGGER =
             LoggerFactory.getLogger("daanse.profile");
@@ -199,13 +200,6 @@ public class Util {
      */
     public static final Comparable<?> sqlNullValue =
         Util.UtilComparable.INSTANCE;
-
-
-    private static final UtilCompatible compatible;
-
-    static {
-        compatible = new UtilCompatibleJdk16();
-    }
 
     /**
      * A comparator singleton instance which can handle the presence of
@@ -1258,7 +1252,33 @@ public class Util {
      * @param stmt The statement to cancel.
      */
     public static void cancelStatement(Statement stmt) {
-        compatible.cancelStatement(stmt);
+        try {
+            // A call to statement.isClosed() would be great here, but in
+            // reality, some drivers will block on this check and the
+            // cancellation will never happen.  This is due to the
+            // non-thread-safe nature of JDBC and driver implementations. If a
+            // thread is currently using the statement, calls to isClosed() are
+            // synchronized internally and won't return until the query
+            // completes.
+            stmt.cancel();
+        } catch (Throwable t) {
+            // We crush this one. A lot of drivers will complain if cancel() is
+            // called on a closed statement, but a call to isClosed() isn't
+            // thread safe and might block. See above.
+
+            // Also, we MUST catch all throwables. Some drivers (ie. Hive)
+            // will choke on canceled queries and throw a OutOfMemoryError.
+            // We can't protect ourselves against this. That's a bug on their
+            // side.
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("",
+                    new OlapRuntimeException(MessageFormat.format(
+                        executionStatementCleanupException,
+                            t.getMessage()), t),
+                    t);
+            }
+        }
+
     }
 
     /**
@@ -1534,7 +1554,9 @@ public class Util {
     public static <T extends Comparable<T>> int binarySearch(
         T[] ts, int start, int end, T t)
     {
-        return compatible.binarySearch(ts, start, end, t);
+        return Arrays.binarySearch(
+                ts, start, end, t,
+                Util.OLAP_COMPARATOR);
     }
 
     /**

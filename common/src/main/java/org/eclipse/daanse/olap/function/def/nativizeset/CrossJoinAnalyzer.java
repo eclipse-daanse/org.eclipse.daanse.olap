@@ -27,8 +27,8 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
-import org.eclipse.daanse.olap.common.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 
 public class CrossJoinAnalyzer {
 
@@ -373,7 +373,7 @@ public class CrossJoinAnalyzer {
      * simply call Util.checkCJResultLimit.
      *
      * @param resultSize Result limit
-     * @throws org.eclipse.daanse.olap.common.ResourceLimitExceededException
+     * @throws org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException
      *
      */
     private void checkNativeResultLimit(int resultSize) {

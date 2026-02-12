@@ -25,35 +25,21 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
-
-import java.text.MessageFormat;
+package org.eclipse.daanse.olap.exceptions;
 
 /**
  * Exception which indicates some resource limit was exceeded.
+ * When a client receives a MemoryLimitExceededException the state
+ * of the objects associated with the query execution can NOT be
+ * counted on being correct - specifically data structures could be
+ * in an inconsistent state or missing entirely. No attempt should be
+ * make to access or use the result objects.
  */
-public class ResourceLimitExceededException
+public class MemoryLimitExceededException
     extends ResultLimitExceededException
 {
-    private final static String message1 =
-        "Number of members to be read exceeded limit ({0,number})";
 
-    private final static String message2 =
-        "Size of CrossJoin result ({0,number}) exceeded limit ({1,number})";
-
-    public ResourceLimitExceededException(Number result, Number limit) {
-        this(MessageFormat.format(message2, result, limit));
-    }
-
-    public ResourceLimitExceededException(Number limit) {
-        this(MessageFormat.format(message1, limit));
-    }
-    /**
-     * Creates a ResourceLimitExceededException
-     *
-     * @param message Localized message
-     */
-    public ResourceLimitExceededException(String message) {
+    public MemoryLimitExceededException(String message) {
         super(message);
     }
 }

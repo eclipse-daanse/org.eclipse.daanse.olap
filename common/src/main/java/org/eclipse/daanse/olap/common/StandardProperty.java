@@ -35,10 +35,10 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.olap.api.formatter.MemberPropertyFormatter;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-import org.eclipse.daanse.olap.element.AbstractProperty;
+import org.eclipse.daanse.olap.element.PropertyBase;
 import org.eclipse.daanse.olap.query.component.FormulaImpl;
 
-public final class StandardProperty extends AbstractProperty {
+public final class StandardProperty extends PropertyBase {
 
 	private StandardProperty(String name, Datatype type, boolean internal, boolean member, boolean cell,
 			String description) {

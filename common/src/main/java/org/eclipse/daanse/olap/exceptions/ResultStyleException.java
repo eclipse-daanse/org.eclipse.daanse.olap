@@ -25,7 +25,7 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.exceptions;
 
 import java.util.List;
 

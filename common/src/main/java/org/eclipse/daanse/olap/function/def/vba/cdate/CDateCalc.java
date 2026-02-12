@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDateTimeCalc;
-import org.eclipse.daanse.olap.common.InvalidArgumentException;
+import org.eclipse.daanse.olap.exceptions.InvalidArgumentException;
 
 public class CDateCalc extends AbstractProfilingNestedDateTimeCalc {
 

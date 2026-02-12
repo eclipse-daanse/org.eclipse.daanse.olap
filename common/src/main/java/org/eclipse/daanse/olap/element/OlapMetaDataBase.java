@@ -21,17 +21,17 @@ import java.util.Optional;
 import org.eclipse.daanse.olap.api.element.MetaData;
 import org.eclipse.daanse.olap.api.element.OlapElement.LocalizedProperty;
 
-public class OlapMetaData implements MetaData {
+public class OlapMetaDataBase implements MetaData {
 
-	private static final OlapMetaData empty = new OlapMetaData();
+	private static final OlapMetaDataBase empty = new OlapMetaDataBase();
 
 	protected Map<String, Object> innerMap;
 
-	private OlapMetaData() {
+	private OlapMetaDataBase() {
 		this(Map.of());
 	}
 
-	public OlapMetaData(Map<String, Object> map) {
+	public OlapMetaDataBase(Map<String, Object> map) {
 	    if (map == null || map.isEmpty()) {
 	        this.innerMap = Map.of();
 	    } else {

@@ -722,10 +722,10 @@ class MDSchemaDiscoverServiceTest {
 
         MdSchemaPropertiesRequest request = mock(MdSchemaPropertiesRequest.class);
         MdSchemaPropertiesRestrictions restrictions = mock(MdSchemaPropertiesRestrictions.class);
-        org.eclipse.daanse.olap.element.AbstractProperty property1 = mock(
-                org.eclipse.daanse.olap.element.AbstractProperty.class);
-        org.eclipse.daanse.olap.element.AbstractProperty property2 = mock(
-                org.eclipse.daanse.olap.element.AbstractProperty.class);
+        org.eclipse.daanse.olap.element.PropertyBase property1 = mock(
+                org.eclipse.daanse.olap.element.PropertyBase.class);
+        org.eclipse.daanse.olap.element.PropertyBase property2 = mock(
+                org.eclipse.daanse.olap.element.PropertyBase.class);
 
         when(request.restrictions()).thenReturn(restrictions);
         when(restrictions.catalogName()).thenReturn(Optional.of("foo"));

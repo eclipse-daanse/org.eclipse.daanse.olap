@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.ListAssert.assertThatList;
 
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.common.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

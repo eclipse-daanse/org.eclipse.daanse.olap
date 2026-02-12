@@ -111,14 +111,14 @@ import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.common.IdBatchResolver;
 import org.eclipse.daanse.olap.common.NameResolverImpl;
 import org.eclipse.daanse.olap.common.ParameterImpl;
-import org.eclipse.daanse.olap.common.ResultStyleException;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.common.ValidatorImpl;
 import org.eclipse.daanse.olap.common.Walker;
-import org.eclipse.daanse.olap.element.OlapMetaData;
+import org.eclipse.daanse.olap.element.OlapMetaDataBase;
 import org.eclipse.daanse.olap.exceptions.MdxAxisShowSubtotalsNotSupportedException;
 import org.eclipse.daanse.olap.exceptions.ParameterIsNotModifiableException;
+import org.eclipse.daanse.olap.exceptions.ResultStyleException;
 import org.eclipse.daanse.olap.exceptions.UnknownParameterException;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.def.parameter.ParameterFunDef;
@@ -2200,7 +2200,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public MetaData getMetaData()  {
-            return OlapMetaData.empty();
+            return OlapMetaDataBase.empty();
         }
 
         @Override

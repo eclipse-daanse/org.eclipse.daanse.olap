@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.element;
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.olap.api.formatter.MemberPropertyFormatter;
 
-public abstract class AbstractProperty implements Property {
+public abstract class PropertyBase implements Property {
 
 	private String name;
 	private String description;
@@ -25,7 +25,7 @@ public abstract class AbstractProperty implements Property {
 	private final boolean member;
 	private final boolean cell;
 
-	protected AbstractProperty(String name, Datatype type, boolean internal, boolean member, boolean cell,
+	protected PropertyBase(String name, Datatype type, boolean internal, boolean member, boolean cell,
 			String description) {
 		this.name = name;
 		this.description = description;

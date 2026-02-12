@@ -5,7 +5,7 @@
  * You must accept the terms of that agreement to use this software.
  *
  * Copyright (C) 2004-2005 TONBELLER AG
- * Copyright (C) 2006-2017 Hitachi Vantara and others
+ * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
  *
  * ---- All changes after Fork in 2023 ------------------------
@@ -25,21 +25,19 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.exceptions;
 
 /**
- * Exception which indicates some resource limit was exceeded.
- * When a client receives a MemoryLimitExceededException the state
- * of the objects associated with the query execution can NOT be
- * counted on being correct - specifically data structures could be
- * in an inconsistent state or missing entirely. No attempt should be
- * make to access or use the result objects.
+ * Exception which indicates that a query executed for longer than its allowed
+ * time and was automatically canceled.
  */
-public class MemoryLimitExceededException
-    extends ResultLimitExceededException
-{
-
-    public MemoryLimitExceededException(String message) {
+public class QueryTimeoutException extends ResultLimitExceededException {
+    /**
+     * Creates a QueryTimeoutException.
+     *
+     * @param message Localized error message
+     */
+    public QueryTimeoutException(String message) {
         super(message);
     }
 }

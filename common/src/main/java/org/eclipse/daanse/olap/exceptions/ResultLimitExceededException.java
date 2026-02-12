@@ -4,7 +4,7 @@
  * http://www.eclipse.org/legal/epl-v10.html.
  * You must accept the terms of that agreement to use this software.
  *
- * Copyright (C) 2005-2005 Julian Hyde
+ * Copyright (C) 2004-2005 TONBELLER AG
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
  *
@@ -25,23 +25,21 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.exceptions;
 
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 
 /**
- * Exception which indicates that an argument is invalid
- *
- * @author Thiyagu
- * @since April 5, 2007
+ * Abstract base class for exceptions that indicate some limit was exceeded.
  */
-public class InvalidArgumentException extends OlapRuntimeException {
+public abstract class ResultLimitExceededException extends OlapRuntimeException {
+
     /**
-     * Creates a InvalidArgumentException.
+     * Creates a ResultLimitExceededException.
      *
-     * @param message Localized error message
+     * @param message Localized message
      */
-    public InvalidArgumentException(String message) {
+    public ResultLimitExceededException(String message) {
         super(message);
     }
 }

@@ -60,7 +60,7 @@ public class PropertyImpl implements IDaanseOlap4jProperty {
             : map.entrySet()
             )
         {
-            org.eclipse.daanse.olap.element.AbstractProperty o = e.getValue();
+            org.eclipse.daanse.olap.element.PropertyBase o = e.getValue();
             if (o.isMemberProperty()
                 && !memberNames.contains(o.getName()))
             {

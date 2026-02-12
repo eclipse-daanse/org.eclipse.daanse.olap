@@ -132,6 +132,7 @@ import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eclipse.daanse.olap.exceptions.MdxCantFindMemberException;
 import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
 import org.eclipse.daanse.olap.exceptions.MemberNotFoundException;
+import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.execution.ExecutionCatalogReaderWrapper;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.fun.FunUtil;

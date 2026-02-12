@@ -4,7 +4,7 @@
  * http://www.eclipse.org/legal/epl-v10.html.
  * You must accept the terms of that agreement to use this software.
  *
- * Copyright (C) 2004-2005 TONBELLER AG
+ * Copyright (C) 2005-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
  *
@@ -25,26 +25,21 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.exceptions;
+
+import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 
 /**
- * Exception which indicates that a query was canceled by an end-user.
- *
- * See also {@link org.eclipse.daanse.olap.common.QueryTimeoutException}, which indicates that
- * a query was canceled automatically due to a timeout.
+ * Exception which indicates that a Cube is invalid
+ * because there is a hierarchy with no members.
  */
-public class QueryCanceledException extends ResultLimitExceededException {
-    private final static String message = "Query canceled";
-
-    public QueryCanceledException() {
-        this(message);
-    }
+public class InvalidHierarchyException extends OlapRuntimeException {
     /**
-     * Creates a QueryCanceledException.
+     * Creates a InvalidHierarchyException.
      *
      * @param message Localized error message
      */
-    public QueryCanceledException(String message) {
+    public InvalidHierarchyException(String message) {
         super(message);
     }
 }

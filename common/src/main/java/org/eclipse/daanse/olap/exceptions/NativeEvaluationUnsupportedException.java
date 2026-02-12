@@ -4,9 +4,7 @@
  * http://www.eclipse.org/legal/epl-v10.html.
  * You must accept the terms of that agreement to use this software.
  *
- * Copyright (C) 2005-2005 Julian Hyde
- * Copyright (C) 2005-2017 Hitachi Vantara and others
- * All Rights Reserved.
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
  *
  * ---- All changes after Fork in 2023 ------------------------
  *
@@ -25,21 +23,26 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
-
-import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+package org.eclipse.daanse.olap.exceptions;
 
 /**
- * Exception which indicates that a Cube is invalid
- * because there is a hierarchy with no members.
+ * Exception which indicates that native evaluation of a function
+ * was enabled but not supported, and
+ * AlertNativeEvaluationUnsupported was
+ * set to ERROR.
+ *
+ * @author John Sichi
  */
-public class InvalidHierarchyException extends OlapRuntimeException {
+public class NativeEvaluationUnsupportedException
+    extends ResultLimitExceededException
+{
+
     /**
-     * Creates a InvalidHierarchyException.
+     * Creates a NativeEvaluationUnsupportedException.
      *
      * @param message Localized error message
      */
-    public InvalidHierarchyException(String message) {
+    public NativeEvaluationUnsupportedException(String message) {
         super(message);
     }
 }

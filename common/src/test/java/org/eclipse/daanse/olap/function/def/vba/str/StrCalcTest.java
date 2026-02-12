@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.StringType;
-import org.eclipse.daanse.olap.common.InvalidArgumentException;
+import org.eclipse.daanse.olap.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

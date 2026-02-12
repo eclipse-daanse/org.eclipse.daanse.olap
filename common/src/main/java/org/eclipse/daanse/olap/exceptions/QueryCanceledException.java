@@ -25,19 +25,26 @@
  */
 
 
-package org.eclipse.daanse.olap.common;
+package org.eclipse.daanse.olap.exceptions;
 
 /**
- * Exception which indicates that a query executed for longer than its allowed
- * time and was automatically canceled.
+ * Exception which indicates that a query was canceled by an end-user.
+ *
+ * See also {@link org.eclipse.daanse.olap.exceptions.QueryTimeoutException}, which indicates that
+ * a query was canceled automatically due to a timeout.
  */
-public class QueryTimeoutException extends ResultLimitExceededException {
+public class QueryCanceledException extends ResultLimitExceededException {
+    private final static String message = "Query canceled";
+
+    public QueryCanceledException() {
+        this(message);
+    }
     /**
-     * Creates a QueryTimeoutException.
+     * Creates a QueryCanceledException.
      *
      * @param message Localized error message
      */
-    public QueryTimeoutException(String message) {
+    public QueryCanceledException(String message) {
         super(message);
     }
 }

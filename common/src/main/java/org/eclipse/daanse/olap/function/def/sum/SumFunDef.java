@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueUnknownCalc;
-import org.eclipse.daanse.olap.common.ResultStyleException;
+import org.eclipse.daanse.olap.exceptions.ResultStyleException;
 import org.eclipse.daanse.olap.function.def.aggregate.AbstractAggregateFunDef;
 
 public class SumFunDef extends AbstractAggregateFunDef {

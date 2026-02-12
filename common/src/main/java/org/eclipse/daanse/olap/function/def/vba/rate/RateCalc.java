@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.olap.common.InvalidArgumentException;
+import org.eclipse.daanse.olap.exceptions.InvalidArgumentException;
 import org.eclipse.daanse.olap.function.def.vba.fv.FVCalc;
 
 public class RateCalc extends AbstractProfilingNestedDoubleCalc {

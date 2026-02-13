@@ -32,8 +32,8 @@ import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 /**
  * Adapter that converts a
- * {@link org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc} to a
- * {@link org.eclipse.daanse.olap.api.calc.todo.TupleListCalc}.
+ * {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc} to a
+ * {@link org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc}.
  *
  * @author jhyde
  * @since Oct 23, 2008

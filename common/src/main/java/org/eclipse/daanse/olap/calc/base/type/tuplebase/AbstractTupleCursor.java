@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 /**
- * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleIterator}.
+ * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIterator}.
  *
  * Derived classes need to implement only {@link #forward()}.
  *

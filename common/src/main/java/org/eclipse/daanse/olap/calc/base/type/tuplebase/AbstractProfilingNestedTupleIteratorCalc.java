@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 /**
  * Abstract implementation of the
- * {@link org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc} interface.
+ * {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc} interface.
  *
  *
  * The derived class must implement the

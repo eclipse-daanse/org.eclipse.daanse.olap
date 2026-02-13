@@ -139,7 +139,7 @@ public class SystemWideProperties extends DaansePropertiesBase {
      * particular cube in which it is being used.
      *
      * The default is {@code true}, that is, use a cache. If you wish to use
-     * the member cache control aspects of {@link org.eclipse.daanse.olap.api.CacheControl},
+     * the member cache control aspects of {@link org.eclipse.daanse.olap.api.cache.CacheControl},
      * you must set this property to {@code false}.
      *
      * RolapCubeMember has recently become more lightweight to

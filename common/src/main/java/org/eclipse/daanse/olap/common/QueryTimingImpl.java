@@ -53,7 +53,7 @@ import org.eclipse.daanse.olap.util.ArrayStack;
  *
  * To read timing information, add a handler to the statement using
  * org.eclipse.daanse.olap.server.Statement#enableProfiling and implement the
- * {@link org.eclipse.daanse.olap.api.ProfileHandler#explain(String, QueryTimingImpl)} method.
+ * {@link org.eclipse.daanse.olap.api.calc.profile.ProfileHandler#explain(String, QueryTimingImpl)} method.
  *
  * @author jbarnett
  */

@@ -74,7 +74,7 @@ public class Sorter {
    * For each member in a list, evaluates an expression and creates a map from members to values.
    *
    * If the list contains tuples, use
-   * {@link #evaluateTuples(org.eclipse.daanse.olap.api.Evaluator, mondrian.calc.Calc, org.eclipse.daanse.olap.api.calc.todo.TupleList)}.
+   * {@link #evaluateTuples(org.eclipse.daanse.olap.api.Evaluator, mondrian.calc.Calc, org.eclipse.daanse.olap.api.calc.tuple.TupleList)}.
    *
    * @param evaluator  Evaluation context
    * @param exp        Expression to evaluate
@@ -516,7 +516,7 @@ public class Sorter {
    *
    * @param memberList List of members
    * @param post       Whether to sort in post order; if false, sorts in pre order
-   * @see #hierarchizeTupleList(org.eclipse.daanse.olap.api.calc.todo.TupleList, boolean)
+   * @see #hierarchizeTupleList(org.eclipse.daanse.olap.api.calc.tuple.TupleList, boolean)
    */
   public static void hierarchizeMemberList(
     List<Member> memberList,

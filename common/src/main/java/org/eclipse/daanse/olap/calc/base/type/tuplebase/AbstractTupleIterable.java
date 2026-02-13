@@ -32,7 +32,7 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleIterable}.
+ * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIterable}.
  *
  * Derived classes need to implement only {@link #tupleCursor()},
  * and this implementation will implement {@link #tupleIterator()} and

@@ -31,7 +31,7 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Abstract implementation of a {@link org.eclipse.daanse.olap.api.calc.todo.TupleList} that stores
+ * Abstract implementation of a {@link org.eclipse.daanse.olap.api.calc.tuple.TupleList} that stores
  * tuples in end-to-end format.
  *
  * For example, if the arity is 3, the tuples {(A1, B1, C1), (A1, B2, C2)}

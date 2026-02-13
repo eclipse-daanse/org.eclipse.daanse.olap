@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleList} based on a list of
+ * Implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleList} based on a list of
  * {@code List<Member>} tuples.
  *
  * @author jhyde

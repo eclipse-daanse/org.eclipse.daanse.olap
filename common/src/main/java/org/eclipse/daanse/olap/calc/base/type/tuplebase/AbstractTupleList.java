@@ -108,7 +108,7 @@ implements RandomAccess, Cloneable, TupleList
     }
 
     /**
-     * Implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleIterator} for
+     * Implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIterator} for
      * {@link ArrayTupleList}.
      * Based upon AbstractList.Itr, but with concurrent modification checking
      * removed.

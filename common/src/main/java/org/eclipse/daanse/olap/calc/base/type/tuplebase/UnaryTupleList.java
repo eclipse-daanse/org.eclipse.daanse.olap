@@ -223,7 +223,7 @@ implements TupleList
     }
 
     /**
-     * Implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleIterator} for {@link UnaryTupleList}.
+     * Implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleIterator} for {@link UnaryTupleList}.
      * Based upon AbstractList.Itr, but with concurrent modification checking
      * removed.
      */

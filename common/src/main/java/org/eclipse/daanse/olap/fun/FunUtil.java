@@ -1508,7 +1508,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link org.eclipse.daanse.olap.api.CatalogReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
+   * @param evaluator   Evaluator, provides a {@link org.eclipse.daanse.olap.api.catalog.CatalogReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members

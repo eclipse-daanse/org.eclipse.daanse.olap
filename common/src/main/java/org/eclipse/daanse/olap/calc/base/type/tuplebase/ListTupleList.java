@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
- * Implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleList} that stores tuples
+ * Implementation of {@link org.eclipse.daanse.olap.api.calc.tuple.TupleList} that stores tuples
  * end-to-end in a backing list.
  *
  *

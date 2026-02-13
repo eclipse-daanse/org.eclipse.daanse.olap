@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.olap.function.def.cache;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
+import org.eclipse.daanse.olap.api.cache.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
 

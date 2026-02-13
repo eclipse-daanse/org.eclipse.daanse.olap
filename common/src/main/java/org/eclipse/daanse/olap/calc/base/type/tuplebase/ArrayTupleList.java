@@ -30,11 +30,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleCursor;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 /**

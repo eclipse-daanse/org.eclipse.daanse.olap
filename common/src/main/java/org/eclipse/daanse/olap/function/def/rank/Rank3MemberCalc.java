@@ -16,11 +16,11 @@ package org.eclipse.daanse.olap.function.def.rank;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
+import org.eclipse.daanse.olap.api.cache.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.common.Util;

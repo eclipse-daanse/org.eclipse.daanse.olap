@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.olap.function.def.nativizeset;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
-import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 public class NonNativeListCalc extends NonNativeCalc<TupleList> implements TupleListCalc {
     protected NonNativeListCalc(TupleListCalc parent, boolean highCardinality) {

@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.function.def.dimension.member;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;

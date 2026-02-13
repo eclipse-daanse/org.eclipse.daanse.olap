@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.DateTimeCalc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;

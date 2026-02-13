@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
-import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
 import org.eclipse.daanse.olap.api.type.SetType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;

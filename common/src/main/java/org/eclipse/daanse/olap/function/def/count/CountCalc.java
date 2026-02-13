@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.olap.function.def.count;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
-import org.eclipse.daanse.olap.api.calc.todo.TupleListCalc;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.fun.FunUtil;

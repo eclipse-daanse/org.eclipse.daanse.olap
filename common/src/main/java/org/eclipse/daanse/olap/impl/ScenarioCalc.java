@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.impl;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.api.result.WritebackCell;

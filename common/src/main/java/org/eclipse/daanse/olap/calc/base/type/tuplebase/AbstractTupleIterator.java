@@ -27,7 +27,7 @@ package org.eclipse.daanse.olap.calc.base.type.tuplebase;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterator;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**

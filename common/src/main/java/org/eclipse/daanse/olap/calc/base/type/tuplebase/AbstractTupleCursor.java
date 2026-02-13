@@ -24,9 +24,9 @@
 
 package org.eclipse.daanse.olap.calc.base.type.tuplebase;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleCursor;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 /**
  * Abstract implementation of {@link org.eclipse.daanse.olap.api.calc.todo.TupleIterator}.

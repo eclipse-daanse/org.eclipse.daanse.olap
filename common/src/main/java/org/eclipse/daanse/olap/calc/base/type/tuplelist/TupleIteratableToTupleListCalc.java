@@ -12,11 +12,11 @@
 */
 package org.eclipse.daanse.olap.calc.base.type.tuplelist;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.TupleIterableCalc;
-import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleCursor;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 

@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.olap.function.def.member.namedsetcurrentordinal;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.type.Type;

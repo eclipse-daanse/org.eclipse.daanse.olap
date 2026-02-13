@@ -35,10 +35,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.PrefixOperationAtom;
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.NameSegment;
-import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.agg.Segment;
+import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.CalculatedMember;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;

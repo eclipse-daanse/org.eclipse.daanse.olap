@@ -30,13 +30,13 @@ package org.eclipse.daanse.olap.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.ExpCacheDescriptor;
+import org.eclipse.daanse.olap.api.cache.ExpCacheDescriptor;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.base.compiler.EnhancedExpressionCompiler;
 
@@ -50,7 +50,7 @@ import org.eclipse.daanse.olap.calc.base.compiler.EnhancedExpressionCompiler;
 public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
     private final Expression exp;
     private int[] dependentHierarchyOrdinals;
-    private final Calc calc;
+    private final Calc<?> calc;
 
     /**
      * Creates a descriptor with a given compiled expression.
@@ -59,7 +59,7 @@ public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
      * @param calc Compiled expression
      * @param evaluator Evaluator
      */
-    public ExpCacheDescriptorImpl(Expression exp, Calc calc, Evaluator evaluator) {
+    public ExpCacheDescriptorImpl(Expression exp, Calc<?> calc, Evaluator evaluator) {
         this.calc = calc;
         this.exp = exp;
         computeDepends(calc, evaluator);
@@ -85,7 +85,7 @@ public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
         this.exp = exp;
 
         // Compile expression.
-        Calc calcInner = compiler.compile(exp);
+        Calc<?> calcInner = compiler.compile(exp);
         if (calcInner == null) {
             // now allow conversions
             calcInner = compiler.compileAs(exp, null, ResultStyle.ANY_ONLY);
@@ -96,7 +96,7 @@ public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
         computeDepends(calcInner, compiler.getEvaluator());
     }
 
-    private void computeDepends(Calc calc, Evaluator evaluator) {
+    private void computeDepends(Calc<?> calc, Evaluator evaluator) {
         final List<Integer> ordinalList = new ArrayList<>();
         final Member[] members = evaluator.getMembers();
         for (int i = 0; i < members.length; i++) {
@@ -116,7 +116,7 @@ public class ExpCacheDescriptorImpl implements ExpCacheDescriptor {
     }
 
 	@Override
-	public Calc getCalc() {
+	public Calc<?> getCalc() {
         return calc;
     }
 

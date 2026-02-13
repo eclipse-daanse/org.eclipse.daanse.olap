@@ -34,9 +34,9 @@ package org.eclipse.daanse.olap.fun.sort;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.exception.CellRequestQuantumExceededException;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.util.CancellationChecker;

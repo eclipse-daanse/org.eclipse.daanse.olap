@@ -34,12 +34,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleCursor;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleCursor;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.common.Util;
 
 /**

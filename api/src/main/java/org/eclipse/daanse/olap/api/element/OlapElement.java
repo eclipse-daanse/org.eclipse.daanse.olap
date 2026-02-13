@@ -30,9 +30,9 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.api.CatalogReader;
 import org.eclipse.daanse.olap.api.MatchType;
-import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.agg.Segment;
+import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 
 /**
  * An OlapElement is a catalog object (dimension, hierarchy, level, member).

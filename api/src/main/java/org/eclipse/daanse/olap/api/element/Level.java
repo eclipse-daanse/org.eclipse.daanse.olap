@@ -31,8 +31,8 @@ package org.eclipse.daanse.olap.api.element;
 import java.util.List;
 
 import org.eclipse.daanse.jdbc.db.dialect.api.type.Datatype;
-import org.eclipse.daanse.olap.api.SqlExpression;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
+import org.eclipse.daanse.olap.api.sql.SqlExpression;
 
 /**
  * A Level is a group of Members in a Hierarchy, all with the same attributes

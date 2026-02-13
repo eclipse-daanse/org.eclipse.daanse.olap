@@ -46,7 +46,7 @@ import java.util.SortedSet;
 
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.common.Util.ByteMatcher;
 import  org.eclipse.daanse.olap.util.ArraySortedSet;

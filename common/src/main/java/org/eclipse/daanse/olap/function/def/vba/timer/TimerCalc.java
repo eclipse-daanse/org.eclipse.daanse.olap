@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.function.def.vba.timer;
 
 import java.util.Calendar;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedFloatCalc;
 

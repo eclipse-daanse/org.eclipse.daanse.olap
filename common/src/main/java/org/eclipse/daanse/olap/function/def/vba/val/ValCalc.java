@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.function.def.vba.val;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.type.Type;

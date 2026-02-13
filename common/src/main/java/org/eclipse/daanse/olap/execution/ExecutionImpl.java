@@ -32,16 +32,16 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eclipse.daanse.olap.api.CacheCommand;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.ISegmentCacheManager;
-import org.eclipse.daanse.olap.api.QueryTiming;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.cache.CacheCommand;
+import org.eclipse.daanse.olap.api.cache.OlapSegmentCacheManager;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.execution.ExecutionMetadata;
+import org.eclipse.daanse.olap.api.execution.QueryTiming;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.EventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.ExecutionEndEvent;
@@ -363,7 +363,7 @@ public class ExecutionImpl implements Execution {
         // We also have to cancel all requests for the current segments.
         final ExecutionContext currentContext = executionContext;
         AbstractBasicContext abc = (AbstractBasicContext) statement.getConnection().getContext();
-        final ISegmentCacheManager mgr = abc.getAggregationManager().getCacheMgr(null);
+        final OlapSegmentCacheManager mgr = abc.getAggregationManager().getCacheMgr(null);
         mgr.execute(new CacheCommand<Void>() {
             @Override
             public Void call() throws Exception {

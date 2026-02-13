@@ -31,7 +31,7 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 
 /**
  * A Axis is a component of a Result. It contains a list of Positions.

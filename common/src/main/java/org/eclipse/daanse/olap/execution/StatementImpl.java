@@ -28,9 +28,9 @@ package org.eclipse.daanse.olap.execution;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eclipse.daanse.olap.api.CatalogReader;
-import org.eclipse.daanse.olap.api.ProfileHandler;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.calc.profile.ProfileHandler;
+import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.query.component.Query;

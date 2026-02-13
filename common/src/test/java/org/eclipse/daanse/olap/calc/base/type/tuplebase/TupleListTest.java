@@ -26,7 +26,7 @@ package org.eclipse.daanse.olap.calc.base.type.tuplebase;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.eclipse.daanse.olap.api.calc.todo.TupleList;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.junit.jupiter.api.Test;
 
 /**

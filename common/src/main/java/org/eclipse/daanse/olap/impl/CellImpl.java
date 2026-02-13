@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.ISqlStatement;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
@@ -27,6 +26,7 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.Scenario;
+import org.eclipse.daanse.olap.api.sql.SqlStatementI;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.slf4j.Logger;
 
@@ -266,14 +266,14 @@ public class CellImpl implements Cell {
         if (rowCountSlot != null) {
             rowCountSlot[0] = cell.getDrillThroughCount();
         }
-        final ISqlStatement sqlStmt =
+        final SqlStatementI sqlStmt =
                 drillThroughInternal(maxRowCount, firstRowOrdinal, fields, extendedContext, logger);
         return sqlStmt.getWrappedResultSet();
     }
 
 
     @Override
-    public ISqlStatement drillThroughInternal(int maxRowCount, int firstRowOrdinal, List<OlapElement> fields,
+    public SqlStatementI drillThroughInternal(int maxRowCount, int firstRowOrdinal, List<OlapElement> fields,
             boolean extendedContext, Logger logger) {
         return cell.drillThroughInternal(
                     maxRowCount, firstRowOrdinal, fields, extendedContext,

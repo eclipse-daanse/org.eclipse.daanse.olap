@@ -30,9 +30,9 @@ package org.eclipse.daanse.olap.fun.sort;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 /**
  * Compares tuples, which are represented as lists of {@link Member}s.

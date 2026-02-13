@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.function.def.vba.monthname;
 import java.text.DateFormatSymbols;
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.type.Type;

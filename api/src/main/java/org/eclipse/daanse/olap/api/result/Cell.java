@@ -31,10 +31,10 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.ISqlStatement;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.sql.SqlStatementI;
 import org.slf4j.Logger;
 
 /**
@@ -155,6 +155,6 @@ public interface Cell {
      */
     void setValue(Scenario scenario, Object newValue, AllocationPolicy allocationPolicy, Object... allocationArgs);
 
-    ISqlStatement drillThroughInternal(int maxRowCount, int firstRowOrdinal, List<OlapElement> fields,
+    SqlStatementI drillThroughInternal(int maxRowCount, int firstRowOrdinal, List<OlapElement> fields,
             boolean extendedContext, Logger logger);
 }

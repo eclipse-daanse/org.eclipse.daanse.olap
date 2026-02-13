@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.CubeLevel;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.api.element.PhisicalCubeMeasure;
+import org.eclipse.daanse.olap.api.element.PhysicalCubeMeasure;
 
 public class DrillThroughUtils {
 
@@ -115,7 +115,7 @@ public class DrillThroughUtils {
         sb.append("FROM ").append(cubeName);
         boolean flag = true;
         for (OlapElement olapElement : olapElements) {
-            if (olapElement instanceof PhisicalCubeMeasure || olapElement instanceof CubeLevel
+            if (olapElement instanceof PhysicalCubeMeasure || olapElement instanceof CubeLevel
                     || olapElement instanceof LevelProperty) {
                 if (flag) {
                     flag = false;
@@ -206,7 +206,7 @@ public class DrillThroughUtils {
     private static boolean isMeasureExist(List<OlapElement> drillThroughElements, String measureName) {
         if (drillThroughElements != null) {
             for (OlapElement el : drillThroughElements) {
-                if (el instanceof PhisicalCubeMeasure mes) {
+                if (el instanceof PhysicalCubeMeasure mes) {
                     if (measureName.equals(mes.getName())) {
                         return true;
                     }

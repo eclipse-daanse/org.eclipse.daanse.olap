@@ -19,11 +19,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eclipse.daanse.olap.api.CatalogCache;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.IAggregationManager;
-import org.eclipse.daanse.olap.api.ResultShepherd;
 import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.agg.OlapAggregationManager;
+import org.eclipse.daanse.olap.api.cache.CatalogCache;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.monitor.EventBus;
@@ -35,6 +34,7 @@ import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEndEvent;
 import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.MdxStatementStartEvent;
 import org.eclipse.daanse.olap.api.monitor.event.ServertEventCommon;
+import org.eclipse.daanse.olap.api.result.ResultShepherd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 
     protected EventBus eventBus;
 
-	protected IAggregationManager aggMgr;
+	protected OlapAggregationManager aggMgr;
 
 	protected CatalogCache schemaCache;
 
@@ -102,7 +102,7 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 		return KEYWORD_LIST;
 	}
 
-	public IAggregationManager getAggregationManager() {
+	public OlapAggregationManager getAggregationManager() {
 		if (shutdown) {
 			throw new OlapRuntimeException(SERVER_ALREADY_SHUTDOWN);
 		}

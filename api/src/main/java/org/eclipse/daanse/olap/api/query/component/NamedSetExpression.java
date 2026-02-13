@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 public non-sealed interface NamedSetExpression extends QueryComponent {
 

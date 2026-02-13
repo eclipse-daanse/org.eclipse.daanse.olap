@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.api.calc.compiler;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 /**
  * The ExpressionCompilerFactory create a new ExpressionCompiler instance, each

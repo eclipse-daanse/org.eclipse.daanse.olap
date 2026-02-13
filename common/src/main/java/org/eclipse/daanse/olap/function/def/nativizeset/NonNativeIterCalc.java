@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.olap.function.def.nativizeset;
 
-import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIterable;
-import org.eclipse.daanse.olap.api.calc.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
+import org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 
 public class NonNativeIterCalc extends NonNativeCalc<TupleIterable> implements TupleIteratorCalc<TupleIterable> {
     protected NonNativeIterCalc(TupleIteratorCalc parent, boolean highCardinality) {

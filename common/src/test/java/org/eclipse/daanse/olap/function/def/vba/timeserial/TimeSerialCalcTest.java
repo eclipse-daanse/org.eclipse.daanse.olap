@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.type.DateTimeType;
 import org.junit.jupiter.api.BeforeEach;

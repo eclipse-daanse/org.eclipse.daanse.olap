@@ -22,7 +22,7 @@ import java.text.DateFormatSymbols;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.type.StringType;

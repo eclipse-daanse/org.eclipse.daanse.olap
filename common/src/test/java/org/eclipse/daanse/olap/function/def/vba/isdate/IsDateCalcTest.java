@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.BooleanType;
 import org.junit.jupiter.api.BeforeEach;

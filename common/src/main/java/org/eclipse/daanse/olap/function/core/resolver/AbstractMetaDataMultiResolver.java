@@ -74,6 +74,11 @@ public abstract class AbstractMetaDataMultiResolver implements FunctionResolver 
 	}
 
 	@Override
+	public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+	    return List.copyOf(fmds);
+	}
+
+	@Override
 	public boolean requiresScalarExpressionOnArgument(int k) {
 		for (FunctionMetaData fmd : fmds) {
 			DataType[] parameterTypes = fmd.parameterDataTypes();

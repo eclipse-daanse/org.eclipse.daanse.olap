@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

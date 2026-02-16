@@ -28,7 +28,6 @@ package org.eclipse.daanse.olap.query.component;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
@@ -36,6 +35,7 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;

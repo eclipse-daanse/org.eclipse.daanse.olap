@@ -29,15 +29,15 @@ package org.eclipse.daanse.olap.element;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.MatchType;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.MetaData;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.MemberType;
 import org.eclipse.daanse.olap.api.type.SetType;

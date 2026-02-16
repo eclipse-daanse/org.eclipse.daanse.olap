@@ -17,7 +17,7 @@ import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.ParseRegion;
+import org.eclipse.daanse.olap.api.query.ParseRegion;
 
 /**
  * Region of parser source code.

@@ -28,16 +28,16 @@ package org.eclipse.daanse.olap.common;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.IdentifierSegment;
-import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameResolver;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.impl.IdentifierNode;
 

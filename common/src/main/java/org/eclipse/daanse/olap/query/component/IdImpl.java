@@ -33,12 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.NameSegment;
-import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.query.NameSegment;
+import org.eclipse.daanse.olap.api.query.Quoting;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
@@ -172,10 +172,10 @@ public class IdImpl
      *
      * For example, the identifier
      * [Store].USA.[New Mexico].&nbsp;[45] has four segments:
-     * "Store", {@link org.eclipse.daanse.olap.api.Quoting#QUOTED}
-     * "USA", {@link org.eclipse.daanse.olap.api.Quoting#UNQUOTED}
-     * "New Mexico", {@link org.eclipse.daanse.olap.api.Quoting#QUOTED}
-     * "45", {@link org.eclipse.daanse.olap.api.Quoting#KEY}
+     * "Store", {@link org.eclipse.daanse.olap.api.query.Quoting#QUOTED}
+     * "USA", {@link org.eclipse.daanse.olap.api.query.Quoting#UNQUOTED}
+     * "New Mexico", {@link org.eclipse.daanse.olap.api.query.Quoting#QUOTED}
+     * "45", {@link org.eclipse.daanse.olap.api.query.Quoting#KEY}
      *
      */
     public static abstract class AbstractSegment implements Segment {

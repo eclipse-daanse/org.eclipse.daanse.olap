@@ -34,7 +34,7 @@ import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.select.Allocation;
-import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;

@@ -20,7 +20,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.ConfigConstants;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
@@ -33,6 +32,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Query;

@@ -32,7 +32,7 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.query;
 
 /**
  * Component in a compound identifier. It is described by its name and how the

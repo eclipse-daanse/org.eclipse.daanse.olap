@@ -28,14 +28,14 @@ package org.eclipse.daanse.olap.element;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.MatchType;
-import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.NameSegment;
 import org.eclipse.daanse.olap.common.Util;
 /**
  * CubeBase is an abstract implementation of {@link Cube}.

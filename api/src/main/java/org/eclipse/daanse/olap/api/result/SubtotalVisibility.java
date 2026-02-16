@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,11 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
+package org.eclipse.daanse.olap.api.result;
 
-package org.eclipse.daanse.olap.api;
-
-import org.eclipse.daanse.olap.api.element.Property;
-
-public interface LevelProperty extends Property {
-
+/**
+ * SubtotalVisibility enumerates the allowed values of whether subtotals are
+ * visible.
+ */
+public enum SubtotalVisibility {
+    Undefined, Hide, Show;
 }

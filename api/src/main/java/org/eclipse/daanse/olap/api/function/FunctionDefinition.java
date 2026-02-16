@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.api.function;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 

@@ -37,12 +37,12 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionService;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.FunctionCall;
@@ -63,7 +63,7 @@ import org.eclipse.daanse.olap.util.ArrayStack;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
 
 /**
- * Default implementation of {@link org.eclipse.daanse.olap.api.Validator}.
+ * Default implementation of {@link org.eclipse.daanse.olap.api.query.Validator}.
  *
  * Uses a stack to help us guess the type of our parent expression
  * before we've completely resolved our children -- necessary,

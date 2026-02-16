@@ -16,10 +16,10 @@ package org.eclipse.daanse.olap.xmla.bridge;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.CubeMember;
-import org.eclipse.daanse.olap.api.LevelProperty;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.CubeLevel;
+import org.eclipse.daanse.olap.api.element.CubeMember;
+import org.eclipse.daanse.olap.api.element.LevelProperty;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.PhysicalCubeMeasure;

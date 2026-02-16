@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.DrillThroughAction;
@@ -31,6 +30,7 @@ import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.execution.QueryCanceledException;
 import org.eclipse.daanse.olap.api.execution.QueryTimeoutException;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;

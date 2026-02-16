@@ -20,7 +20,7 @@ import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
-import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;

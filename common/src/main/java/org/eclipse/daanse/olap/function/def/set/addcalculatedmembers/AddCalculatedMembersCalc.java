@@ -63,7 +63,7 @@ public class AddCalculatedMembersCalc extends AbstractProfilingNestedTupleListCa
         boolean parentIsNull = o.stream().noneMatch(it -> (it.getParentMember() != null));
         if (!parentIsNull) {
             List<Member> parents = o.stream().filter(m -> (m.getParentMember() != null)).map(it -> it.getParentMember()).toList();
-            boolean nothaveParent = tl.stream().noneMatch(it -> (it.stream().noneMatch(m -> parents.contains(m))));
+            boolean nothaveParent = tl.stream().allMatch(it -> (it.stream().noneMatch(m -> parents.contains(m))));
             return nothaveParent;
         } else {
             return true;

@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 
 public non-sealed interface Formula extends QueryComponent {

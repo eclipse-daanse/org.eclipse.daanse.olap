@@ -33,9 +33,9 @@
  */
 package org.eclipse.daanse.olap.impl;
 
-import org.eclipse.daanse.olap.api.NameIdentifierSegment;
-import org.eclipse.daanse.olap.api.ParseRegion;
-import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.query.NameIdentifierSegment;
+import org.eclipse.daanse.olap.api.query.ParseRegion;
+import org.eclipse.daanse.olap.api.query.Quoting;
 
 /**
  * Component in a compound identifier that describes the name of an object.

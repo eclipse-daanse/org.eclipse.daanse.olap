@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.execution;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,6 @@ import org.eclipse.daanse.olap.api.calc.profile.ProfileHandler;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Catalog;
-import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.CellSet;

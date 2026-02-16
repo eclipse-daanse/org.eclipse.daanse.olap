@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.CastOperationAtom;
 import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ConstantCalc;
@@ -47,6 +46,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.exception.TypeConversionException;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.BooleanType;
 import org.eclipse.daanse.olap.api.type.DecimalType;

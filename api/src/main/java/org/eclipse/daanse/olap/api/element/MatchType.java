@@ -25,7 +25,7 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.element;
 
 /**
  * MatchType enumerates the allowable match modes when searching for a member

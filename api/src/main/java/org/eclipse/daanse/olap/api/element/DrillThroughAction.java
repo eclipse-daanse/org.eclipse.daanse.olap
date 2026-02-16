@@ -14,7 +14,7 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.OlapAction;
+import org.eclipse.daanse.olap.api.action.OlapAction;
 
 public interface DrillThroughAction extends OlapAction {
 

@@ -11,15 +11,22 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.api.query.component;
+package org.eclipse.daanse.olap.api.query;
 
-import org.eclipse.daanse.olap.api.query.Validator;
+public enum Quoting {
+    /**
+     * Unquoted identifier, for example "Measures".
+     */
+    UNQUOTED,
 
-public non-sealed interface MemberProperty extends QueryComponent {
+    /**
+     * Quoted identifier, for example "[Measures]".
+     */
+    QUOTED,
 
-    Expression getExp();
-
-    String getName();
-
-    void resolve(Validator validator);
+    /**
+     * Identifier quoted with an ampersand to indicate a key value, for example the
+     * second segment in "[Employees].&amp;[89]".
+     */
+    KEY
 }

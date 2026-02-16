@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.execution.Statement;
 
 public interface CellSet {
 

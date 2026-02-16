@@ -37,8 +37,8 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.daanse.olap.api.IdentifierSegment;
-import org.eclipse.daanse.olap.api.ParseRegion;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
+import org.eclipse.daanse.olap.api.query.ParseRegion;
 
 /**
  * Multi-part identifier.

@@ -30,8 +30,6 @@ package org.eclipse.daanse.olap.api.execution;
 
 import java.time.Duration;
 
-import org.eclipse.daanse.olap.api.Statement;
-
 public interface Execution {
 
     void cancelSqlStatements();

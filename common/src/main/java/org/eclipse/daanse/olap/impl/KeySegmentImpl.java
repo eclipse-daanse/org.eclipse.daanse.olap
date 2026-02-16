@@ -34,11 +34,11 @@
 package org.eclipse.daanse.olap.impl;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.IdentifierSegment;
-import org.eclipse.daanse.olap.api.KeyIdentifierSegment;
-import org.eclipse.daanse.olap.api.NameIdentifierSegment;
-import org.eclipse.daanse.olap.api.ParseRegion;
-import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
+import org.eclipse.daanse.olap.api.query.KeyIdentifierSegment;
+import org.eclipse.daanse.olap.api.query.NameIdentifierSegment;
+import org.eclipse.daanse.olap.api.query.ParseRegion;
+import org.eclipse.daanse.olap.api.query.Quoting;
 
 /**
  * Segment that represents a key or compound key.

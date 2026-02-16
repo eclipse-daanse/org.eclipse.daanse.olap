@@ -29,7 +29,7 @@ package org.eclipse.daanse.olap.query.component;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;

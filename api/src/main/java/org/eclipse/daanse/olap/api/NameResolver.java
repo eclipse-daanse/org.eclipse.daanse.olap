@@ -15,7 +15,9 @@ package org.eclipse.daanse.olap.api;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
 
 public interface NameResolver {
 

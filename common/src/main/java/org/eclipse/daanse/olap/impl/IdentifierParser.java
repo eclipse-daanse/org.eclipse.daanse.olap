@@ -33,8 +33,8 @@ package org.eclipse.daanse.olap.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.IdentifierSegment;
-import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
+import org.eclipse.daanse.olap.api.query.Quoting;
 
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,

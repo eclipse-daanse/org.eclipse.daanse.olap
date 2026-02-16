@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.api.agg;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.NameSegment;
-import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.query.NameSegment;
+import org.eclipse.daanse.olap.api.query.Quoting;
 
 public interface Segment {
 

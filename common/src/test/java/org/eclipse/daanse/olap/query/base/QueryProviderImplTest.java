@@ -37,7 +37,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectCubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.olap.api.Statement;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.junit.jupiter.api.BeforeEach;

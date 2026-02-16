@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParser;
 import org.eclipse.daanse.olap.api.connection.Connection;
-import org.eclipse.daanse.olap.api.element.DatabaseSchema;
+import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.function.FunctionService;

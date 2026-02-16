@@ -23,7 +23,7 @@ public class DatabaseTableImpl implements DatabaseTable{
     private List<DatabaseColumn> columns;
     private String name;
 
-    public DatabaseTableImpl(org.eclipse.daanse.olap.api.element.DatabaseTable table) {
+    public DatabaseTableImpl(org.eclipse.daanse.olap.api.element.db.DatabaseTable table) {
         this.name = table.getName();
         if (table.getDbColumns() != null) {
             columns = table.getDbColumns().stream().map(c -> (DatabaseColumn)new DatabaseColumnImpl(c)).toList();

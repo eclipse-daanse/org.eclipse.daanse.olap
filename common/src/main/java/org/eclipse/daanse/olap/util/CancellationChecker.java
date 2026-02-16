@@ -26,8 +26,8 @@
 
 package org.eclipse.daanse.olap.util;
 
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 
 /**
  * Encapsulates cancel and timeouts checks

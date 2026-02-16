@@ -10,7 +10,7 @@
 * Contributors:
 *   SmartCity Jena - initial
 */
-package org.eclipse.daanse.olap.api.access;
+package org.eclipse.daanse.olap.api.access.db;
 
 import java.util.EnumSet;
 import java.util.Set;

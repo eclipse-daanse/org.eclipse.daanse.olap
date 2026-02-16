@@ -19,7 +19,7 @@ public class DatabaseColumnImpl implements DatabaseColumn{
 
     private String name;
 
-    public DatabaseColumnImpl(org.eclipse.daanse.olap.api.element.DatabaseColumn column) {
+    public DatabaseColumnImpl(org.eclipse.daanse.olap.api.element.db.DatabaseColumn column) {
         this.name = column.getName();
     }
 

@@ -36,6 +36,7 @@ import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.api.query.IdentifierSegment;
 
 /**

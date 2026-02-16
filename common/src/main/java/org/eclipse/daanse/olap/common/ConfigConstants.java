@@ -11,7 +11,7 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.common;
 
 import java.util.concurrent.TimeUnit;
 

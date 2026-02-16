@@ -11,13 +11,19 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.olap.api.element;
+package org.eclipse.daanse.olap.api.element.db;
 
-import java.util.List;
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 
-public interface DatabaseSchema {
-
-    List<DatabaseTable> getDbTables();
+public interface DatabaseColumn {
 
     String getName();
+
+    DataTypeJdbc getType();
+
+    Boolean getNullable();
+
+    Integer getColumnSize();
+
+    Integer getDecimalDigits();
 }

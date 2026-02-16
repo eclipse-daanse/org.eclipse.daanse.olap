@@ -45,7 +45,6 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.BracesOperationAtom
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.InfixOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.PlainPropertyOperationAtom;
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.NameResolver;
 import org.eclipse.daanse.olap.api.Parameter;
@@ -106,6 +105,7 @@ import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.DelegatingCatalogReader;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.common.IdBatchResolver;

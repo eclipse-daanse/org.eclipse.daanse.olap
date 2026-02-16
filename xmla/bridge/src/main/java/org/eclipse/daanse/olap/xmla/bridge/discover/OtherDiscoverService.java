@@ -26,11 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.element.Catalog;
-import org.eclipse.daanse.olap.api.element.DatabaseColumn;
-import org.eclipse.daanse.olap.api.element.DatabaseSchema;
-import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.PropertyDefinition;

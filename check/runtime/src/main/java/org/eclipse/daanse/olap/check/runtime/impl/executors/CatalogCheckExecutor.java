@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.DatabaseSchema;
+import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheck;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckResult;

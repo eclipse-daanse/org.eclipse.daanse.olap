@@ -10,12 +10,12 @@
 * Contributors:
 *   SmartCity Jena - initial
 */
-package org.eclipse.daanse.olap.api.access;
+package org.eclipse.daanse.olap.api.access.db;
 
 import java.util.EnumSet;
 import java.util.Set;
 
-public enum AccessDatabaseTable {
+public enum AccessDatabaseSchema {
 
     /** No access to an object and its children. */
     NONE,
@@ -33,7 +33,7 @@ public enum AccessDatabaseTable {
         return this.name();
     }
 
-    public static final Set<AccessDatabaseTable> ALLOWED_SET = EnumSet.of(AccessDatabaseTable.NONE,
-            AccessDatabaseTable.ALL, AccessDatabaseTable.CUSTOM);
+    public static final Set<AccessDatabaseSchema> ALLOWED_SET = EnumSet.of(AccessDatabaseSchema.NONE,
+            AccessDatabaseSchema.ALL, AccessDatabaseSchema.CUSTOM);
 
 }

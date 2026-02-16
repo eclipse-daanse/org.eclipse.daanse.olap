@@ -25,7 +25,7 @@ public class DatabaseCatalogImpl implements DatabaseCatalog{
     private String name;
 
 
-    public DatabaseCatalogImpl(String name, List<org.eclipse.daanse.olap.api.element.DatabaseSchema> databaseSchemas) {
+    public DatabaseCatalogImpl(String name, List<org.eclipse.daanse.olap.api.element.db.DatabaseSchema> databaseSchemas) {
         this.name = name;
         if (databaseSchemas != null) {
             this.databaseSchemas = databaseSchemas.stream().map(ds -> (DatabaseSchema)new DatabaseSchemaImpl(ds)).toList();

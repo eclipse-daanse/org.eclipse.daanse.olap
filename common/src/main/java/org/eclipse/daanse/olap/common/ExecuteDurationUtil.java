@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.common;
 import java.time.Duration;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.Context;
 
 public class ExecuteDurationUtil {

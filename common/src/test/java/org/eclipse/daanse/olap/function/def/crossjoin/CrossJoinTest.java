@@ -36,7 +36,6 @@ import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
@@ -63,6 +62,7 @@ import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.ArrayTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;

@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
@@ -49,6 +48,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.ArrayTupleList;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;

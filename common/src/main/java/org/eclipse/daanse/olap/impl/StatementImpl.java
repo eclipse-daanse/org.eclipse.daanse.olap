@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.ConfigConstants;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.connection.Connection;
@@ -38,6 +37,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;

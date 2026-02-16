@@ -27,25 +27,25 @@ package org.eclipse.daanse.olap.access;
 
 import org.eclipse.daanse.olap.api.access.AccessCatalog;
 import org.eclipse.daanse.olap.api.access.AccessCube;
-import org.eclipse.daanse.olap.api.access.AccessDatabaseColumn;
-import org.eclipse.daanse.olap.api.access.AccessDatabaseSchema;
-import org.eclipse.daanse.olap.api.access.AccessDatabaseTable;
 import org.eclipse.daanse.olap.api.access.AccessDimension;
 import org.eclipse.daanse.olap.api.access.AccessHierarchy;
 import org.eclipse.daanse.olap.api.access.AccessMember;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.db.AccessDatabaseColumn;
+import org.eclipse.daanse.olap.api.access.db.AccessDatabaseSchema;
+import org.eclipse.daanse.olap.api.access.db.AccessDatabaseTable;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.DatabaseColumn;
-import org.eclipse.daanse.olap.api.element.DatabaseSchema;
-import org.eclipse.daanse.olap.api.element.DatabaseTable;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.db.DatabaseColumn;
+import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
+import org.eclipse.daanse.olap.api.element.db.DatabaseTable;
 
 /**
  * DelegatingRole implements {@link Role} by

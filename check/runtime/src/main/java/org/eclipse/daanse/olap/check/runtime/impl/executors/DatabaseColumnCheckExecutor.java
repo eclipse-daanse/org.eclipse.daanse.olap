@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.element.DatabaseColumn;
+import org.eclipse.daanse.olap.api.element.db.DatabaseColumn;
 import org.eclipse.daanse.olap.check.model.check.AttributeCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckStatus;
 import org.eclipse.daanse.olap.check.model.check.DatabaseColumnAttribute;

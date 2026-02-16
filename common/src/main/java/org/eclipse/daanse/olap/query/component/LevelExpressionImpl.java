@@ -26,10 +26,10 @@
 package org.eclipse.daanse.olap.query.component;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.LevelCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;

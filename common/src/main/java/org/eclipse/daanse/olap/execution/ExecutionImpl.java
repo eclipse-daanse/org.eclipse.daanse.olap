@@ -33,7 +33,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.cache.CacheCommand;
 import org.eclipse.daanse.olap.api.cache.OlapSegmentCacheManager;
 import org.eclipse.daanse.olap.api.connection.Connection;
@@ -42,6 +41,7 @@ import org.eclipse.daanse.olap.api.execution.Execution;
 import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.execution.ExecutionMetadata;
 import org.eclipse.daanse.olap.api.execution.QueryTiming;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.monitor.event.ConnectionEventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.EventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.ExecutionEndEvent;

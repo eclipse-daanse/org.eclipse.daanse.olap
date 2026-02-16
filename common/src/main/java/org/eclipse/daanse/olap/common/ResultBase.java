@@ -30,10 +30,10 @@ package org.eclipse.daanse.olap.common;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.execution.Execution;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;

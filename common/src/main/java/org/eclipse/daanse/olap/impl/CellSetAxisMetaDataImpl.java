@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
@@ -30,6 +29,7 @@ import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.IAxis;
 import org.eclipse.daanse.olap.api.result.Property;
+import org.eclipse.daanse.olap.api.result.SubtotalVisibility;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.query.component.QueryAxisImpl;
 import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;

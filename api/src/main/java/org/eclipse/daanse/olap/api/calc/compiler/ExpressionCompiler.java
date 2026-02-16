@@ -28,7 +28,6 @@ package org.eclipse.daanse.olap.api.calc.compiler;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.BooleanCalc;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.DateTimeCalc;
@@ -44,6 +43,7 @@ import org.eclipse.daanse.olap.api.calc.TupleCalc;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
 

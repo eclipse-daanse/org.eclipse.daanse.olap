@@ -17,11 +17,11 @@ package org.eclipse.daanse.olap.calc.base.compiler;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;

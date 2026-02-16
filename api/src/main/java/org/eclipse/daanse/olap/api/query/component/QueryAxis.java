@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import org.eclipse.daanse.olap.api.SubtotalVisibility;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.ResultStyle;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.result.SubtotalVisibility;
 
 public non-sealed interface QueryAxis extends QueryComponent {
 

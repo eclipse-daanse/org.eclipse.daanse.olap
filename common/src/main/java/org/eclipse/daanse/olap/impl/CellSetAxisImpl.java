@@ -17,8 +17,8 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.eclipse.daanse.olap.api.Statement;
 import org.eclipse.daanse.olap.api.execution.ExecutionContext;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;

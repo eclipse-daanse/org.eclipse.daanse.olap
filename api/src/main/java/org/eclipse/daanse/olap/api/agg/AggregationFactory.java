@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2024 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,12 +11,10 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.agg;
 
-import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.aggregator.Aggregator;
 
-public interface CubeMember extends Member {
-
-    String getMemberUniqueName();
-
+public interface AggregationFactory {
+    Aggregator getAggregator(Object measure);
 }

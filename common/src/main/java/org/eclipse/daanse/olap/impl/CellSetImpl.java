@@ -16,9 +16,8 @@ package org.eclipse.daanse.olap.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Statement;
-import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
@@ -28,6 +27,7 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.result.SubtotalVisibility;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.query.component.QueryAxisImpl;

@@ -86,13 +86,7 @@ import java.util.stream.Collectors;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.IdentifierSegment;
-import org.eclipse.daanse.olap.api.KeyIdentifierSegment;
-import org.eclipse.daanse.olap.api.MatchType;
-import org.eclipse.daanse.olap.api.NameIdentifierSegment;
 import org.eclipse.daanse.olap.api.Parameter;
-import org.eclipse.daanse.olap.api.Quoting;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.calc.Calc;
@@ -105,6 +99,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.KeyMember;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
@@ -114,6 +109,11 @@ import org.eclipse.daanse.olap.api.execution.QueryTiming;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionService;
+import org.eclipse.daanse.olap.api.query.IdentifierSegment;
+import org.eclipse.daanse.olap.api.query.KeyIdentifierSegment;
+import org.eclipse.daanse.olap.api.query.NameIdentifierSegment;
+import org.eclipse.daanse.olap.api.query.Quoting;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -539,8 +539,8 @@ public class Util {
             //   names.get(i).toString(sb);
             // but that causes some tests to fail
             Segment segment = names.get(i);
-            if (org.eclipse.daanse.olap.api.Quoting.UNQUOTED.equals(segment.getQuoting())) {
-                segment = new IdImpl.NameSegmentImpl(((org.eclipse.daanse.olap.api.NameSegment) segment).getName());
+            if (org.eclipse.daanse.olap.api.query.Quoting.UNQUOTED.equals(segment.getQuoting())) {
+                segment = new IdImpl.NameSegmentImpl(((org.eclipse.daanse.olap.api.query.NameSegment) segment).getName());
             }
             segment.toString(sb);
         }
@@ -647,8 +647,8 @@ public class Util {
         // Now resolve the name one part at a time.
         for (int i = 0; i < names.size(); i++) {
             OlapElement child;
-            org.eclipse.daanse.olap.api.NameSegment name;
-            if (names.get(i) instanceof org.eclipse.daanse.olap.api.NameSegment nameSegment) {
+            org.eclipse.daanse.olap.api.query.NameSegment name;
+            if (names.get(i) instanceof org.eclipse.daanse.olap.api.query.NameSegment nameSegment) {
                 name = nameSegment;
                 child = catalogReader.getElementChild(parent, name, matchType);
             } else if (parent instanceof Level
@@ -850,7 +850,7 @@ public class Util {
                     segments.subList(0, segments.size() - 1);
             final Segment lastSegment = last(segments);
             final String propertyName =
-                    lastSegment instanceof org.eclipse.daanse.olap.api.NameSegment nameSegment
+                    lastSegment instanceof org.eclipse.daanse.olap.api.query.NameSegment nameSegment
                             ? nameSegment.getName()
                             : null;
             final Member member =
@@ -980,7 +980,7 @@ public class Util {
     public static Member lookupHierarchyRootMember(
         CatalogReader reader,
         Hierarchy hierarchy,
-        org.eclipse.daanse.olap.api.NameSegment memberName,
+        org.eclipse.daanse.olap.api.query.NameSegment memberName,
         MatchType matchType)
     {
         // Lookup member at first level.
@@ -1383,9 +1383,9 @@ public class Util {
 
     private static IdImpl.KeySegment convertKs(final KeyIdentifierSegment keySegment) {
         return new IdImpl.KeySegment(
-            new AbstractList<org.eclipse.daanse.olap.api.NameSegment>() {
+            new AbstractList<org.eclipse.daanse.olap.api.query.NameSegment>() {
                 @Override
-				public org.eclipse.daanse.olap.api.NameSegment get(int index) {
+				public org.eclipse.daanse.olap.api.query.NameSegment get(int index) {
                     return convertNS(keySegment.getKeyParts().get(index));
                 }
 
@@ -1396,7 +1396,7 @@ public class Util {
             });
     }
 
-    private static org.eclipse.daanse.olap.api.NameSegment convertNS(NameIdentifierSegment nameSegment) {
+    private static org.eclipse.daanse.olap.api.query.NameSegment convertNS(NameIdentifierSegment nameSegment) {
         return new IdImpl.NameSegmentImpl(
             nameSegment.getName(),
             nameSegment.getQuoting());
@@ -1420,10 +1420,10 @@ public class Util {
     }
 
     public static IdentifierSegment toOlap4j(Segment segment) {
-        if (org.eclipse.daanse.olap.api.Quoting.KEY.equals(segment.getQuoting())) {
+        if (org.eclipse.daanse.olap.api.query.Quoting.KEY.equals(segment.getQuoting())) {
             return toOlap4j((IdImpl.KeySegment) segment);
         } else {
-            return toOlap4j((org.eclipse.daanse.olap.api.NameSegment) segment);
+            return toOlap4j((org.eclipse.daanse.olap.api.query.NameSegment) segment);
         }
     }
 
@@ -1442,14 +1442,14 @@ public class Util {
             });
     }
 
-    private static NameSegmentImpl toOlap4j(org.eclipse.daanse.olap.api.NameSegment nameSegment) {
+    private static NameSegmentImpl toOlap4j(org.eclipse.daanse.olap.api.query.NameSegment nameSegment) {
         return new NameSegmentImpl(
             null,
             nameSegment.getName(),
             toOlap4j(nameSegment.getQuoting()));
     }
 
-    public static Quoting toOlap4j(org.eclipse.daanse.olap.api.Quoting quoting) {
+    public static Quoting toOlap4j(org.eclipse.daanse.olap.api.query.Quoting quoting) {
         return Quoting.valueOf(quoting.name());
     }
 
@@ -2748,7 +2748,7 @@ public class Util {
       org.eclipse.daanse.olap.api.connection.Connection connection,
       final CatalogReader schemaReader)
   {
-      final org.eclipse.daanse.olap.api.Statement statement = connection.getInternalStatement();
+      final org.eclipse.daanse.olap.api.execution.Statement statement = connection.getInternalStatement();
       final ExecutionImpl execution = new ExecutionImpl(statement,
           ExecuteDurationUtil.executeDurationValue(connection.getContext()));
       return new ExecutionCatalogReaderWrapper(execution, "Schema reader", schemaReader);

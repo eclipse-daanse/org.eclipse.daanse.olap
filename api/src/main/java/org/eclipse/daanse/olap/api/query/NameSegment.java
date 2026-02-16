@@ -11,22 +11,11 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.query;
 
-public enum Quoting {
-    /**
-     * Unquoted identifier, for example "Measures".
-     */
-    UNQUOTED,
+import org.eclipse.daanse.olap.api.agg.Segment;
 
-    /**
-     * Quoted identifier, for example "[Measures]".
-     */
-    QUOTED,
+public interface NameSegment extends Segment {
 
-    /**
-     * Identifier quoted with an ampersand to indicate a key value, for example the
-     * second segment in "[Employees].&amp;[89]".
-     */
-    KEY
+    String getName();
 }

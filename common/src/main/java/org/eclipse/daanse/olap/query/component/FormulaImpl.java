@@ -35,8 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.PrefixOperationAtom;
-import org.eclipse.daanse.olap.api.NameSegment;
-import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.agg.Segment;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.CalculatedMember;
@@ -47,6 +45,8 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.query.NameSegment;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.FunctionCall;

@@ -21,4 +21,6 @@ public interface SqlExpression {
 
     List<SqlStatement> getSqls();
 
+    boolean isAscend();
+
 }

@@ -761,7 +761,7 @@ public class Sorter {
     if(
         SystemWideProperties.instance().CompareSiblingsByOrderKey
         &&
-        m1.getLevel().getOrdinalExp() != null
+        m1.getLevel().getOrdinalExps() != null
     ) {
       final Comparable k1 = m1.getOrderKey();
       final Comparable k2 = m2.getOrderKey();

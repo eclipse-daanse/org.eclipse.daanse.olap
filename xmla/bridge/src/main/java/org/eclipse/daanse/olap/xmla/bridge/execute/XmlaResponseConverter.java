@@ -101,9 +101,9 @@ import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Convertor {
+public class XmlaResponseConverter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Convertor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlaResponseConverter.class);
     public static final String SLICER_AXIS = "SlicerAxis";
     private static XmlaUtil.ElementNameEncoder encoder = XmlaUtil.ElementNameEncoder.INSTANCE;
 
@@ -153,7 +153,7 @@ public class Convertor {
     private static float DEFAULT_FLOAT;
     private static double DEFAULT_DOUBLE;
 
-    private Convertor() {
+    private XmlaResponseConverter() {
         // constructor
     }
 

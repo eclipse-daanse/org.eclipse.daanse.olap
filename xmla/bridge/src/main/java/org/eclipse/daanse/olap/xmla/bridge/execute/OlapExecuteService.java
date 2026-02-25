@@ -292,14 +292,14 @@ public class OlapExecuteService implements ExecuteService {
                 QueryComponent queryComponent = connection.parseStatement(statement);
                 if (queryComponent instanceof DmvQuery dmvQuery) {
                     
-                    System.out.println("!!!! use sesscioncach to et the open connection is session exists");
+                    LOGGER.warn("!!!! use sesscioncach to et the open connection is session exists");
                     String tableName = dmvQuery.getTableName();
                     if (tableName.equalsIgnoreCase(OperationNames.DBSCHEMA_CATALOGS)) {
                         List<DbSchemaCatalogsResponseRow> dbSchemaCatalogsResponseRowSetList = new ArrayList<DbSchemaCatalogsResponseRow>();
                         for (Context c : contextsListSupplyer.getContexts()) {
                             dbSchemaCatalogsResponseRowSetList.add(dbSchemaService.dbSchemaCatalogsRow(c));
                         }
-                        RowSetR rowSet = DiscoveryResponseConvertor
+                        RowSetR rowSet = DiscoveryResponseConverter
                                 .dbSchemaCatalogsResponseRowToRowSet(dbSchemaCatalogsResponseRowSetList);
                         return new StatementResponseR(null, filterRowSetByColumns(rowSet, dmvQuery.getColumns(),
                                 dmvQuery.getWhereExpression(), statementRequest.parameters()));
@@ -310,11 +310,11 @@ public class OlapExecuteService implements ExecuteService {
                             Connection conn = c.getConnection(new ConnectionProps(
                                     RoleUtils.getRoles(contextsListSupplyer, r -> userRolePrincipal.hasRole(r))));
                             Catalog catalog = conn.getCatalog();
-                            System.out.println("!!!!!!!!!!!!!!!!USE Catalogreader to enforce the roles");
+                            LOGGER.warn("!!!!!!!!!!!!!!!!USE Catalogreader to enforce the roles");
                             MdSchemaCubesRequest mdSchemaCubesRequest = new MdSchemaCubesRequestR(
                                     (PropertiesR) statementRequest.properties(),
                                     new MdSchemaCubesRestrictionsR(null, empty(), empty(), empty(), empty(), empty()));
-                            RowSetR rowSet = DiscoveryResponseConvertor.mdSchemaCubesResponseRowToRowSet(
+                            RowSetR rowSet = DiscoveryResponseConverter.mdSchemaCubesResponseRowToRowSet(
                                     mdSchemaService.mdSchemaCubes(mdSchemaCubesRequest, metaData));
                             rsrs.addAll(rowSet.rowSetRows());
                         }
@@ -343,7 +343,7 @@ public class OlapExecuteService implements ExecuteService {
     private StatementResponse executeSqlQuery(SqlQuery sqlQuery) {
         try {
             ResultSet execute = sqlQuery.execute();
-            return Convertor.toStatementResponseRowSet(execute, -1);
+            return XmlaResponseConverter.toStatementResponseRowSet(execute, -1);
         } catch (java.sql.SQLException oe) {
             throw new RuntimeException(oe);
         }
@@ -389,9 +389,9 @@ public class OlapExecuteService implements ExecuteService {
                 Optional<Format> format = statementRequest.properties().format();
                 if (!format.isPresent() || Format.NATIVE.equals(format.get())
                         || Format.MULTIDIMENSIONAL.equals(format.get())) {
-                    return Convertor.toStatementResponseMddataset(cellSet, omitDefaultSlicerInfo, json);
+                    return XmlaResponseConverter.toStatementResponseMddataset(cellSet, omitDefaultSlicerInfo, json);
                 }
-                return Convertor.toStatementResponseRowSet(cellSet);
+                return XmlaResponseConverter.toStatementResponseRowSet(cellSet);
             }
             return null;
         } finally {
@@ -510,15 +510,15 @@ public class OlapExecuteService implements ExecuteService {
         case OperationNames.DBSCHEMA_COLUMNS:
             List<DbSchemaColumnsResponseRow> rows = Utils.getDbSchemaColumnsResponseRow(catalog, empty(), empty(),
                     empty(), empty());
-            rowSet = DiscoveryResponseConvertor.dbSchemaColumnsResponseRowToRowSet(rows);
+            rowSet = DiscoveryResponseConverter.dbSchemaColumnsResponseRowToRowSet(rows);
             break;
         case OperationNames.DBSCHEMA_TABLES:
             List<DbSchemaTablesResponseRow> dbSchemaTablesResponseRows = Utils.getDbSchemaTablesResponseRow(catalog,
                     empty(), empty(), empty());
-            rowSet = DiscoveryResponseConvertor.dbSchemaTablesResponseRowToRowSet(dbSchemaTablesResponseRows);
+            rowSet = DiscoveryResponseConverter.dbSchemaTablesResponseRowToRowSet(dbSchemaTablesResponseRows);
             break;
         case OperationNames.DBSCHEMA_CATALOGS:
-            rowSet = DiscoveryResponseConvertor.dbSchemaCatalogsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.dbSchemaCatalogsResponseRowToRowSet(
                     List.of(correctDescription(dbSchemaService.dbSchemaCatalogsRow(connection.getContext()))));
             break;
         case OperationNames.DBSCHEMA_PROVIDER_TYPES:
@@ -526,7 +526,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty());
             DbSchemaProviderTypesRequest dbSchemaProviderTypesRequest = new DbSchemaProviderTypesRequestR(
                     (PropertiesR) statementRequest.properties(), dbSchemaProviderTypesRestrictions);
-            rowSet = DiscoveryResponseConvertor.dbSchemaProviderTypesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.dbSchemaProviderTypesResponseRowToRowSet(
                     dbSchemaService.dbSchemaProviderTypes(dbSchemaProviderTypesRequest, metaData));
             break;
         case OperationNames.DBSCHEMA_SCHEMATA:
@@ -534,7 +534,7 @@ public class OlapExecuteService implements ExecuteService {
                     null);
             DbSchemaSchemataRequest dbSchemaSchemataRequest = new DbSchemaSchemataRequestR(
                     (PropertiesR) statementRequest.properties(), dbSchemaSchemataRestrictions);
-            rowSet = DiscoveryResponseConvertor.dbSchemaSchemataResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.dbSchemaSchemataResponseRowToRowSet(
                     dbSchemaService.dbSchemaSchemata(dbSchemaSchemataRequest, metaData));
             break;
         case OperationNames.DBSCHEMA_SOURCE_TABLES:
@@ -542,7 +542,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), null, null);
             DbSchemaSourceTablesRequest dbSchemaSourceTablesRequest = new DbSchemaSourceTablesRequestR(
                     (PropertiesR) statementRequest.properties(), dbSchemaSourceTablesRestrictions);
-            rowSet = DiscoveryResponseConvertor.dbSchemaSourceTablesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.dbSchemaSourceTablesResponseRowToRowSet(
                     dbSchemaService.dbSchemaSourceTables(dbSchemaSourceTablesRequest, metaData));
             break;
         case OperationNames.DBSCHEMA_TABLES_INFO:
@@ -550,7 +550,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), null, null);
             DbSchemaTablesInfoRequest dbSchemaTablesInfoRequest = new DbSchemaTablesInfoRequestR(
                     (PropertiesR) statementRequest.properties(), dbSchemaTablesInfoRestrictions);
-            rowSet = DiscoveryResponseConvertor.dbSchemaTablesInfoResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.dbSchemaTablesInfoResponseRowToRowSet(
                     dbSchemaService.dbSchemaTablesInfo(dbSchemaTablesInfoRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_FUNCTIONS:
@@ -558,7 +558,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty());
             MdSchemaFunctionsRequest mdSchemaFunctionsRequest = new MdSchemaFunctionsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaFunctionsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaFunctionsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaFunctionsResponseRowToRowSet(
                     mdSchemaService.mdSchemaFunctions(mdSchemaFunctionsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_DIMENSIONS:
@@ -566,7 +566,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaDimensionsRequest mdSchemaDimensionsRequest = new MdSchemaDimensionsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaDimensionsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaDimensionsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaDimensionsResponseRowToRowSet(
                     mdSchemaService.mdSchemaDimensions(mdSchemaDimensionsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_CUBES:
@@ -574,7 +574,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty());
             MdSchemaCubesRequest mdSchemaCubesRequest = new MdSchemaCubesRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaCubesRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaCubesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaCubesResponseRowToRowSet(
                     mdSchemaService.mdSchemaCubes(mdSchemaCubesRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_ACTIONS:
@@ -582,7 +582,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), null, empty(), empty(), empty(), null, null, empty());
             MdSchemaActionsRequest mdSchemaActionsRequest = new MdSchemaActionsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaActionsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaActionsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaActionsResponseRowToRowSet(
                     mdSchemaService.mdSchemaActions(mdSchemaActionsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_HIERARCHIES:
@@ -590,7 +590,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaHierarchiesRequest mdSchemaHierarchiesRequest = new MdSchemaHierarchiesRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaHierarchiesRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaHierarchiesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaHierarchiesResponseRowToRowSet(
                     mdSchemaService.mdSchemaHierarchies(mdSchemaHierarchiesRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_LEVELS:
@@ -598,7 +598,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaLevelsRequest mdSchemaLevelsRequest = new MdSchemaLevelsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaLevelsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaLevelsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaLevelsResponseRowToRowSet(
                     mdSchemaService.mdSchemaLevels(mdSchemaLevelsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_MEASUREGROUP_DIMENSIONS:
@@ -606,7 +606,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaMeasureGroupDimensionsRequest mdSchemaMeasureGroupDimensionsRequest = new MdSchemaMeasureGroupDimensionsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaMeasureGroupDimensionsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaMeasureGroupDimensionsResponseRowToRowSet(mdSchemaService
+            rowSet = DiscoveryResponseConverter.mdSchemaMeasureGroupDimensionsResponseRowToRowSet(mdSchemaService
                     .mdSchemaMeasureGroupDimensions(mdSchemaMeasureGroupDimensionsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_MEASURES:
@@ -614,7 +614,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaMeasuresRequest mdSchemaMeasuresRequest = new MdSchemaMeasuresRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaMeasuresRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaMeasuresResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaMeasuresResponseRowToRowSet(
                     mdSchemaService.mdSchemaMeasures(mdSchemaMeasuresRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_MEMBERS:
@@ -623,7 +623,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty());
             MdSchemaMembersRequest mdSchemaMembersRequest = new MdSchemaMembersRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaMembersRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaMembersResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaMembersResponseRowToRowSet(
                     mdSchemaService.mdSchemaMembers(mdSchemaMembersRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_PROPERTIES:
@@ -632,7 +632,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty());
             MdSchemaPropertiesRequest mdSchemaPropertiesRequest = new MdSchemaPropertiesRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaPropertiesRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaPropertiesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaPropertiesResponseRowToRowSet(
                     mdSchemaService.mdSchemaProperties(mdSchemaPropertiesRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_SETS:
@@ -640,7 +640,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty(), empty(), empty());
             MdSchemaSetsRequest mdSchemaSetsRequest = new MdSchemaSetsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaSetsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaSetsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaSetsResponseRowToRowSet(
                     mdSchemaService.mdSchemaSets(mdSchemaSetsRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_KPIS:
@@ -648,7 +648,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty());
             MdSchemaKpisRequest mdSchemaKpisRequest = new MdSchemaKpisRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaKpisRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaKpisResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaKpisResponseRowToRowSet(
                     mdSchemaService.mdSchemaKpis(mdSchemaKpisRequest, metaData));
             break;
         case OperationNames.MDSCHEMA_MEASUREGROUPS:
@@ -656,21 +656,21 @@ public class OlapExecuteService implements ExecuteService {
                     empty(), empty(), empty(), empty());
             MdSchemaMeasureGroupsRequest mdSchemaMeasureGroupsRequest = new MdSchemaMeasureGroupsRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaMeasureGroupsRestrictions);
-            rowSet = DiscoveryResponseConvertor.mdSchemaMeasureGroupsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.mdSchemaMeasureGroupsResponseRowToRowSet(
                     mdSchemaService.mdSchemaMeasureGroups(mdSchemaMeasureGroupsRequest, metaData));
             break;
         case OperationNames.DISCOVER_LITERALS:
             DiscoverLiteralsRestrictionsR discoverLiteralsRestrictions = new DiscoverLiteralsRestrictionsR(empty());
             DiscoverLiteralsRequest discoverLiteralsRequest = new DiscoverLiteralsRequestR(
                     (PropertiesR) statementRequest.properties(), discoverLiteralsRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverLiteralsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverLiteralsResponseRowToRowSet(
                     otherDiscoverService.discoverLiterals(discoverLiteralsRequest, metaData));
             break;
         case OperationNames.DISCOVER_KEYWORDS:
             DiscoverKeywordsRestrictionsR discoverKeywordsRestrictions = new DiscoverKeywordsRestrictionsR(empty());
             DiscoverKeywordsRequest discoverKeywordsRequest = new DiscoverKeywordsRequestR(
                     (PropertiesR) statementRequest.properties(), discoverKeywordsRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverKeywordsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverKeywordsResponseRowToRowSet(
                     otherDiscoverService.discoverKeywords(discoverKeywordsRequest, metaData));
             break;
         case OperationNames.DISCOVER_ENUMERATORS:
@@ -678,7 +678,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty());
             DiscoverEnumeratorsRequest discoverEnumeratorsRequest = new DiscoverEnumeratorsRequestR(
                     (PropertiesR) statementRequest.properties(), discoverEnumeratorsRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverEnumeratorsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverEnumeratorsResponseRowToRowSet(
                     otherDiscoverService.discoverEnumerators(discoverEnumeratorsRequest, metaData));
             break;
         case OperationNames.DISCOVER_SCHEMA_ROWSETS:
@@ -686,7 +686,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty());
             DiscoverSchemaRowsetsRequest discoverSchemaRowsetsRequest = new DiscoverSchemaRowsetsRequestR(
                     (PropertiesR) statementRequest.properties(), discoverSchemaRowsetsRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverSchemaRowsetsResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverSchemaRowsetsResponseRowToRowSet(
                     otherDiscoverService.discoverSchemaRowsets(discoverSchemaRowsetsRequest, metaData));
             break;
         case OperationNames.DISCOVER_PROPERTIES:
@@ -694,7 +694,7 @@ public class OlapExecuteService implements ExecuteService {
                     List.of());
             DiscoverPropertiesRequest discoverPropertiesRequest = new DiscoverPropertiesRequestR(
                     (PropertiesR) statementRequest.properties(), discoverPropertiesRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverPropertiesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverPropertiesResponseRowToRowSet(
                     otherDiscoverService.discoverProperties(discoverPropertiesRequest, metaData));
             break;
         case OperationNames.DISCOVER_DATASOURCES:
@@ -702,7 +702,7 @@ public class OlapExecuteService implements ExecuteService {
                     null, empty(), empty(), empty(), null, empty(), empty());
             DiscoverDataSourcesRequest discoverDataSourcesRequest = new DiscoverDataSourcesRequestR(
                     (PropertiesR) statementRequest.properties(), discoverDataSourcesRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverDataSourcesResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverDataSourcesResponseRowToRowSet(
                     otherDiscoverService.dataSources(discoverDataSourcesRequest, metaData));
             break;
         case OperationNames.DISCOVER_XML_METADATA:
@@ -712,7 +712,7 @@ public class OlapExecuteService implements ExecuteService {
                     empty());
             DiscoverXmlMetaDataRequest discoverXmlMetaDataRequest = new DiscoverXmlMetaDataRequestR(
                     (PropertiesR) statementRequest.properties(), discoverXmlMetaDataRestrictions);
-            rowSet = DiscoveryResponseConvertor.discoverXmlMetaDataResponseRowToRowSet(
+            rowSet = DiscoveryResponseConverter.discoverXmlMetaDataResponseRowToRowSet(
                     otherDiscoverService.xmlMetaData(discoverXmlMetaDataRequest, metaData));
             break;
 
@@ -871,9 +871,9 @@ public class OlapExecuteService implements ExecuteService {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(drillThrough, tabFields, rowCountSlot);
             int rowCount = enableRowCount ? rowCountSlot[0] : -1;
-            return Convertor.toStatementResponseRowSet(resultSet, rowCount);
+            return XmlaResponseConverter.toStatementResponseRowSet(resultSet, rowCount);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Drill through SQL failed", e);
             // NOTE: One important error is "cannot drill through on the cell"
             throw new XmlaException(SERVER_FAULT_FC, HSB_DRILL_THROUGH_SQL_CODE, HSB_DRILL_THROUGH_SQL_FAULT_FS, e);
         } finally {

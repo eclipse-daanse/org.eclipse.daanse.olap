@@ -98,16 +98,9 @@ public class ScenarioCalc extends AbstractProfilingNestedUnknownCalc {
                         //}
                         switch (writebackCell.getAllocationPolicy()) {
                             case EQUAL_ALLOCATION:
-                            	//System.out.println("*********************** " + ((Number)(evaluator.evaluateCurrent())).doubleValue());
-                                //d = writebackCell.getNewValue()
-                                //    * atomicCellCount
-                                //    / writebackCell.getAtomicCellCount();
                                 d = writebackCell.getNewValue() * ((Number)(evaluator.evaluateCurrent())).doubleValue() / writebackCell.getCurrentValue();
                                 break;
                             case EQUAL_INCREMENT:
-                                //d += writebackCell.getOffset()
-                                //    * atomicCellCount
-                                //    / writebackCell.getAtomicCellCount();
                             	d += writebackCell.getOffset() * ((Number)(evaluator.evaluateCurrent())).doubleValue() / writebackCell.getCurrentValue();
                                 break;
                             default:

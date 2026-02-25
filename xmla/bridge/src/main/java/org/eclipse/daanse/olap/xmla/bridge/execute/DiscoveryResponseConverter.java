@@ -53,7 +53,7 @@ import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowItemR;
 import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowR;
 
-public class DiscoveryResponseConvertor {
+public class DiscoveryResponseConverter {
 
     private static final String SCOPE = "SCOPE";
     private static final String SCHEMA_NAME = "SCHEMA_NAME";
@@ -72,7 +72,7 @@ public class DiscoveryResponseConvertor {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
             .withZone(ZoneId.systemDefault());
 
-    private DiscoveryResponseConvertor() {
+    private DiscoveryResponseConverter() {
         // constructor
     }
 

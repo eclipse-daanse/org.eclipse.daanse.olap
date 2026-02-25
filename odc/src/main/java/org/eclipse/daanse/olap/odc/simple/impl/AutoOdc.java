@@ -31,11 +31,15 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.metatype.annotations.Designate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Designate(ocd = AutOdcConfig.class, factory = true)
 @Component(configurationPid = Constants.AUTO_ODC_PID, immediate = true)
 public class AutoOdc {
 
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AutoOdc.class);
     private ExecutorService newVirtualThreadPerTaskExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
     private OdcCreator odcCreator;
@@ -74,7 +78,7 @@ public class AutoOdc {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+            	LOGGER.error("Auto ODC generation failed", e);
             }
 
         });

@@ -136,7 +136,6 @@ class UnionFunDefTest {
 
     TupleList tupleList =
         unionFunDefMock.union(listForUnion1, listForUnion2, false);
-    System.out.println(tupleList);
     assertEquals(40, tupleList.size());
   }
 

@@ -30,46 +30,42 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.util;
+package org.eclipse.daanse.olap.util.format.internal;
 
 import java.math.BigInteger;
 
 /**
- * DigitList handles the transcoding between numeric values and
- * strings of characters.  It only represents non-negative numbers.  The
- * division of labor between DigitList and
- * DecimalFormat is that DigitList handles the radix
- * 10 representation issues and numeric conversion, including rounding;
- * DecimalFormat handles the locale-specific issues such as
- * positive and negative representation, digit grouping, decimal point,
- * currency, and so on.
+ * DigitList handles the transcoding between numeric values and strings of
+ * characters. It only represents non-negative numbers. The division of labor
+ * between DigitList and DecimalFormat is that DigitList handles the radix 10
+ * representation issues and numeric conversion, including rounding;
+ * DecimalFormat handles the locale-specific issues such as positive and
+ * negative representation, digit grouping, decimal point, currency, and so on.
  *
- * A DigitList is a representation of a finite numeric value.
- * DigitList objects do not represent NaN or infinite
- * values.  A DigitList value can be converted to a
- * BigDecimal without loss of precision.  Conversion to other
- * numeric formats may involve loss of precision, depending on the specific
- * value.
+ * A DigitList is a representation of a finite numeric value. DigitList objects
+ * do not represent NaN or infinite values. A DigitList value can be converted
+ * to a BigDecimal without loss of precision. Conversion to other numeric
+ * formats may involve loss of precision, depending on the specific value.
  *
- * The DigitList representation consists of a string of
- * characters, which are the digits radix 10, from '0' to '9'.  It also has a
- * base 10 exponent associated with it.  The value represented by a
- * DigitList object can be computed by mulitplying the fraction
- * <em>f</em>, where 0 <= <em>f</em> < 1, derived by placing all the digits of
- * the list to the right of the decimal point, by 10^exponent.
+ * The DigitList representation consists of a string of characters, which are
+ * the digits radix 10, from '0' to '9'. It also has a base 10 exponent
+ * associated with it. The value represented by a DigitList object can be
+ * computed by mulitplying the fraction <em>f</em>, where 0 <= <em>f</em> < 1,
+ * derived by placing all the digits of the list to the right of the decimal
+ * point, by 10^exponent.
  *
  * @see java.util.Locale
  * @see java.text.Format
  * @see java.text.ChoiceFormat
  * @see java.text.MessageFormat
- * @version      1.18 08/12/98
- * @author       Mark Davis, Alan Liu
+ * @version 1.18 08/12/98
+ * @author Mark Davis, Alan Liu
  */
-final class DigitList {
+public final class DigitList {
     /**
-     * The maximum number of significant digits in an IEEE 754 double, that
-     * is, in a Java double.  This must not be increased, or garbage digits
-     * will be generated, and should not be decreased, or accuracy will be lost.
+     * The maximum number of significant digits in an IEEE 754 double, that is, in a
+     * Java double. This must not be increased, or garbage digits will be generated,
+     * and should not be decreased, or accuracy will be lost.
      */
     public static final int MAX_LONG_DIGITS = 19;
     static {
@@ -80,22 +76,22 @@ final class DigitList {
      * These data members are intentionally public and can be set directly.
      *
      * The value represented is given by placing the decimal point before
-     * digits[decimalAt].  If decimalAt is &lt; 0, then leading zeros between
-     * the decimal point and the first nonzero digit are implied.  If decimalAt
-     * is &gt; count, then trailing zeros between the digits[count-1] and the
-     * decimal point are implied.
+     * digits[decimalAt]. If decimalAt is &lt; 0, then leading zeros between the
+     * decimal point and the first nonzero digit are implied. If decimalAt is &gt;
+     * count, then trailing zeros between the digits[count-1] and the decimal point
+     * are implied.
      *
-     * Equivalently, the represented value is given by f * 10^decimalAt.
-     * Here f is a value 0.1 &le; f &lt; 1 arrived at by placing the digits in
-     * Digits to the right of the decimal.
+     * Equivalently, the represented value is given by f * 10^decimalAt. Here f is a
+     * value 0.1 &le; f &lt; 1 arrived at by placing the digits in Digits to the
+     * right of the decimal.
      *
-     * DigitList is normalized, so if it is non-zero, figits[0] is non-zero.
-     * We don't allow denormalized numbers because our exponent is effectively
-     * of unlimited magnitude.  The count value contains the number of
-     * significant digits present in digits[].
+     * DigitList is normalized, so if it is non-zero, figits[0] is non-zero. We
+     * don't allow denormalized numbers because our exponent is effectively of
+     * unlimited magnitude. The count value contains the number of significant
+     * digits present in digits[].
      *
-     * Zero is represented by any DigitList with count == 0 or with each
-     * digits[i] for all i &le; count == '0'.
+     * Zero is represented by any DigitList with count == 0 or with each digits[i]
+     * for all i &le; count == '0'.
      */
     public int decimalAt = 0;
     public int count = 0;
@@ -118,17 +114,17 @@ final class DigitList {
     }
 
     /**
-     * Set the digit list to a representation of the given double value.
-     * This method supports both fixed-point and exponential notation.
-     * @param source Value to be converted; must not be Inf, -Inf, Nan,
-     * or a value &le; 0.
-     * @param maximumDigits The most fractional or total digits which should
-     * be converted.
-     * @param fixedPoint If true, then maximumDigits is the maximum
-     * fractional digits to be converted.  If false, total digits.
+     * Set the digit list to a representation of the given double value. This method
+     * supports both fixed-point and exponential notation.
+     * 
+     * @param source        Value to be converted; must not be Inf, -Inf, Nan, or a
+     *                      value &le; 0.
+     * @param maximumDigits The most fractional or total digits which should be
+     *                      converted.
+     * @param fixedPoint    If true, then maximumDigits is the maximum fractional
+     *                      digits to be converted. If false, total digits.
      */
-    final void set(double source, int maximumDigits, boolean fixedPoint)
-    {
+    public final void set(double source, int maximumDigits, boolean fixedPoint) {
         if (source == 0) {
             source = 0;
         }
@@ -141,7 +137,7 @@ final class DigitList {
         if (fixedPoint) {
             // The negative of the exponent represents the number of leading
             // zeros between the decimal and the first non-zero digit, for a
-            // value < 0.1 (e.g., for 0.00123, -decimalAt == 2).  If this is
+            // value < 0.1 (e.g., for 0.00123, -decimalAt == 2). If this is
             // more than the maximum fraction digits, then we have an underflow
             // for the printed representation.
             if (-decimalAt > maximumDigits) {
@@ -151,7 +147,7 @@ final class DigitList {
                 if (shouldRoundUp(0)) {
                     count = 1;
                     ++decimalAt;
-                    digits[0] = (byte)'1';
+                    digits[0] = (byte) '1';
                 } else {
                     count = 0;
                 }
@@ -166,18 +162,12 @@ final class DigitList {
         }
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
-        round(
-            fixedPoint
-            ? (maximumDigits + decimalAt)
-            : maximumDigits == 0
-            ? -1
-            : maximumDigits);
+        round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
     /**
-     * Given a string representation of the form DDDDD, DDDDD.DDDDD,
-     * or DDDDDE+/-DDDDD, set this object's value to it.  Ignore
-     * any leading '-'.
+     * Given a string representation of the form DDDDD, DDDDD.DDDDD, or
+     * DDDDDE+/-DDDDD, set this object's value to it. Ignore any leading '-'.
      */
     private void set(String rep, int maxCount) {
         decimalAt = -1;
@@ -214,7 +204,7 @@ final class DigitList {
 
                 if (nonZeroDigitSeen) {
                     ensureCapacity(count + 1, count);
-                    digits[count++] = (byte)c;
+                    digits[count++] = (byte) c;
                 }
             }
         }
@@ -225,16 +215,15 @@ final class DigitList {
     }
 
     /**
-     * Return true if truncating the representation to the given number
-     * of digits will result in an increment to the last digit.  This
-     * method implements half-even rounding, the default rounding mode.
+     * Return true if truncating the representation to the given number of digits
+     * will result in an increment to the last digit. This method implements
+     * half-even rounding, the default rounding mode.
      *
-     * @param maximumDigits the number of digits to keep, from 0 to
-     * count-1.  If 0, then all digits are rounded away, and
-     * this method returns true if a one should be generated (e.g., formatting
-     * 0.09 with "#.#").
-     * @return true if digit maximumDigits-1 should be
-     * incremented
+     * @param maximumDigits the number of digits to keep, from 0 to count-1. If 0,
+     *                      then all digits are rounded away, and this method
+     *                      returns true if a one should be generated (e.g.,
+     *                      formatting 0.09 with "#.#").
+     * @return true if digit maximumDigits-1 should be incremented
      */
     private boolean shouldRoundUp(int maximumDigits) {
         // variable not used boolean increment = false;
@@ -248,8 +237,7 @@ final class DigitList {
                         return true;
                     }
                 }
-                return maximumDigits > 0
-                    && (digits[maximumDigits - 1] % 2 != 0);
+                return maximumDigits > 0 && (digits[maximumDigits - 1] % 2 != 0);
             }
         }
         return false;
@@ -257,9 +245,11 @@ final class DigitList {
 
     /**
      * Round the representation to the given number of digits.
-     * @param maximumDigits The maximum number of digits to be shown.
-     * Upon return, count will be less than or equal to maximumDigits.
-     * This now performs rounding when maximumDigits is 0, formerly it did not.
+     * 
+     * @param maximumDigits The maximum number of digits to be shown. Upon return,
+     *                      count will be less than or equal to maximumDigits. This
+     *                      now performs rounding when maximumDigits is 0, formerly
+     *                      it did not.
      */
     public final void round(int maximumDigits) {
         // Eliminate digits beyond maximum digits to be displayed.
@@ -296,31 +286,31 @@ final class DigitList {
         // Eliminate trailing zeros. [Richard/GCL]
         // [dlf] moved outside if block, see ticket #6408
         while (count > 1 && digits[count - 1] == '0') {
-          --count;
+            --count;
         }
     }
 
     /**
      * Utility routine to set the value of the digit list from a long
      */
-    public final void set(long source)
-    {
+    public final void set(long source) {
         set(source, 0);
     }
 
     /**
      * Set the digit list to a representation of the given long value.
-     * @param source Value to be converted; must be >= 0 or ==
-     * Long.MIN_VALUE.
-     * @param maximumDigits The most digits which should be converted.
-     * If maximumDigits is lower than the number of significant digits
-     * in source, the representation will be rounded.  Ignored if <= 0.
+     * 
+     * @param source        Value to be converted; must be >= 0 or ==
+     *                      Long.MIN_VALUE.
+     * @param maximumDigits The most digits which should be converted. If
+     *                      maximumDigits is lower than the number of significant
+     *                      digits in source, the representation will be rounded.
+     *                      Ignored if <= 0.
      */
-    public final void set(long source, int maximumDigits)
-    {
+    public final void set(long source, int maximumDigits) {
         // This method does not expect a negative number. However,
         // "source" can be a Long.MIN_VALUE (-9223372036854775808),
-        // if the number being formatted is a Long.MIN_VALUE.  In that
+        // if the number being formatted is a Long.MIN_VALUE. In that
         // case, it will be formatted as -Long.MIN_VALUE, a number
         // which is outside the legal range of a long, but which can
         // be represented by DigitList.
@@ -344,10 +334,7 @@ final class DigitList {
             // Don't copy trailing zeros
             // we are guaranteed that there is at least one non-zero digit,
             // so we don't have to check lower bounds
-            for (right = MAX_LONG_DIGITS - 1;
-                 digits[right] == (byte) '0';
-                 --right)
-            {
+            for (right = MAX_LONG_DIGITS - 1; digits[right] == (byte) '0'; --right) {
             }
             count = right - left + 1;
             System.arraycopy(digits, left, digits, 0, count);
@@ -360,10 +347,11 @@ final class DigitList {
     /**
      * Set the digit list to a representation of the given BigInteger value.
      *
-     * @param source Value to be converted
-     * @param maximumDigits The most digits which should be converted.
-     * If maximumDigits is lower than the number of significant digits
-     * in source, the representation will be rounded.  Ignored if <= 0.
+     * @param source        Value to be converted
+     * @param maximumDigits The most digits which should be converted. If
+     *                      maximumDigits is lower than the number of significant
+     *                      digits in source, the representation will be rounded.
+     *                      Ignored if <= 0.
      */
     public final void set(BigInteger source, int maximumDigits) {
         String stringDigits = source.toString();
@@ -393,13 +381,12 @@ final class DigitList {
 
     private static byte[] LONG_MIN_REP;
 
-    static
-    {
+    static {
         // Store the representation of LONG_MIN without the leading '-'
         String s = Long.toString(Long.MIN_VALUE);
         LONG_MIN_REP = new byte[MAX_LONG_DIGITS];
         for (int i = 0; i < MAX_LONG_DIGITS; ++i) {
-            LONG_MIN_REP[i] = (byte)s.charAt(i + 1);
+            LONG_MIN_REP[i] = (byte) s.charAt(i + 1);
         }
     }
 }

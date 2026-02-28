@@ -1,47 +1,47 @@
- /*
- * This software is subject to the terms of the Eclipse Public License v1.0
- * Agreement, available at the following URL:
- * http://www.eclipse.org/legal/epl-v10.html.
- * You must accept the terms of that agreement to use this software.
- *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
- *
- * -----------------------------------------------------------------------------
- * Copied from the ICU project's DigitList class.
- *
- * Copyright (C) 1996-2011, International Business Machines Corporation and
- * others. All Rights Reserved.
- *
- * ---- All changes after Fork in 2023 ------------------------
- * 
- * Project: Eclipse daanse
- * 
- * Copyright (c) 2023 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors after Fork in 2023:
- *   SmartCity Jena - initial
- *   Stefan Bischof (bipolis.org) - initial
- */
+/*
+* This software is subject to the terms of the Eclipse Public License v1.0
+* Agreement, available at the following URL:
+* http://www.eclipse.org/legal/epl-v10.html.
+* You must accept the terms of that agreement to use this software.
+*
+* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+*
+* -----------------------------------------------------------------------------
+* Copied from the ICU project's DigitList class.
+*
+* Copyright (C) 1996-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
+*
+* ---- All changes after Fork in 2023 ------------------------
+* 
+* Project: Eclipse daanse
+* 
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors after Fork in 2023:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 
-package org.eclipse.daanse.olap.util;
+package org.eclipse.daanse.olap.util.format.internal;
 
 /**
  * Representation of a number as a list of digits.
  *
  * @author tkafalas
  */
-class DaanseFloatingDecimal {
-    boolean isExceptional;
-    boolean isNegative;
-    int decExponent;
-    char digits[];
-    int nDigits;
+public class DaanseFloatingDecimal {
+    public boolean isExceptional;
+    public boolean isNegative;
+    public int decExponent;
+    public char digits[];
+    public int nDigits;
     private final DigitList digitList = new DigitList();
     private final DigitList expDigitList = new DigitList();
 
@@ -67,7 +67,7 @@ class DaanseFloatingDecimal {
     }
 
     @Override
-	public String toString() {
+    public String toString() {
         final StringBuilder s = new StringBuilder(MAX_SIGNIFICANT_DIGITS);
         if (nDigits == 0) {
             return "0";
@@ -86,8 +86,7 @@ class DaanseFloatingDecimal {
                 s.append(digits);
             } else {
                 if (decExponent < nDigits) {
-                    s.append(digits, 0, decExponent).append(".")
-                            .append(digits, decExponent, nDigits - decExponent);
+                    s.append(digits, 0, decExponent).append(".").append(digits, decExponent, nDigits - decExponent);
                 } else {
                     if (decExponent == nDigits) {
                         s.append(digits);
@@ -98,8 +97,7 @@ class DaanseFloatingDecimal {
                                 s.append('0');
                             }
                         } else {
-                            s.append('.').append(digits).append("E")
-                                .append(decExponent);
+                            s.append('.').append(digits).append("E").append(decExponent);
                         }
                     }
                 }
@@ -109,29 +107,23 @@ class DaanseFloatingDecimal {
     }
 
     /**
-     * Appends {@link #decExponent} to result string. Returns i plus the
-     * number of chars written.
+     * Appends {@link #decExponent} to result string. Returns i plus the number of
+     * chars written.
      *
      * Implementation may assume that exponent has 3 or fewer digits.
      *
      * For example, given {@code decExponent} = 2,
-     * {@code formatExponent(result, 5, true, 2)}
-     * will write '0' into result[5]
-     * and '2' into result[6] and return 7.
+     * {@code formatExponent(result, 5, true, 2)} will write '0' into result[5] and
+     * '2' into result[6] and return 7.
      *
-     * @param result Result buffer
-     * @param i Initial offset into result buffer
-     * @param expSign Whether to print a '+' sign if exponent is positive
-     *                (always prints '-' if negative)
+     * @param result       Result buffer
+     * @param i            Initial offset into result buffer
+     * @param expSign      Whether to print a '+' sign if exponent is positive
+     *                     (always prints '-' if negative)
      * @param minExpDigits Minimum number of digits to write
      * @return Offset into result buffer after writing chars
      */
-    public int formatExponent(
-        char[] result,
-        int i,
-        boolean expSign,
-        int minExpDigits)
-    {
+    public int formatExponent(char[] result, int i, boolean expSign, int minExpDigits) {
         int useExp = nDigits == 0 ? 0 : decExponent - 1;
         expDigitList.set(Math.abs(useExp));
         if (useExp < 0 || expSign) {

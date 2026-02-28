@@ -68,6 +68,7 @@
 	org.eclipse.daanse.olap.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.common-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.util.format;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.sql.guard.api;version='[0.0.1,0.0.2)',\
 	org.mockito.junit-jupiter;version='[4.9.0,4.9.1)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\

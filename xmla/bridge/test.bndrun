@@ -69,6 +69,7 @@
 	org.eclipse.daanse.mdx.parser.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.common;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.util.format;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.sql.guard.api;version='[0.0.1,0.0.2)',\

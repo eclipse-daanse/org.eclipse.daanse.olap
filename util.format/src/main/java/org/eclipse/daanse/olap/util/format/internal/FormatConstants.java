@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.util.format.FormatToken;
 
 /**
  * Constants used by the format classes. Extracted from
- * {@link org.eclipse.daanse.olap.util.Format}.
+ * {@link org.eclipse.daanse.olap.util.format.Format}.
  */
 public class FormatConstants {
 

@@ -50,7 +50,7 @@ import java.math.BigInteger;
  * The DigitList representation consists of a string of characters, which are
  * the digits radix 10, from '0' to '9'. It also has a base 10 exponent
  * associated with it. The value represented by a DigitList object can be
- * computed by mulitplying the fraction <em>f</em>, where 0 <= <em>f</em> < 1,
+ * computed by multiplying the fraction <em>f</em>, where 0 &lt;= <em>f</em> &lt; 1,
  * derived by placing all the digits of the list to the right of the decimal
  * point, by 10^exponent.
  *
@@ -300,12 +300,12 @@ public final class DigitList {
     /**
      * Set the digit list to a representation of the given long value.
      * 
-     * @param source        Value to be converted; must be >= 0 or ==
+     * @param source        Value to be converted; must be &gt;= 0 or ==
      *                      Long.MIN_VALUE.
      * @param maximumDigits The most digits which should be converted. If
      *                      maximumDigits is lower than the number of significant
      *                      digits in source, the representation will be rounded.
-     *                      Ignored if <= 0.
+     *                      Ignored if &lt;= 0.
      */
     public final void set(long source, int maximumDigits) {
         // This method does not expect a negative number. However,
@@ -351,7 +351,7 @@ public final class DigitList {
      * @param maximumDigits The most digits which should be converted. If
      *                      maximumDigits is lower than the number of significant
      *                      digits in source, the representation will be rounded.
-     *                      Ignored if <= 0.
+     *                      Ignored if &lt;= 0.
      */
     public final void set(BigInteger source, int maximumDigits) {
         String stringDigits = source.toString();

@@ -23,7 +23,7 @@ import java.util.Date;
 
 /**
  * BasicFormat is the interface implemented by the classes which do all the
- * work. Whereas {@link org.eclipse.daanse.olap.util.Format} has only one method
+ * work. Whereas {@link org.eclipse.daanse.olap.util.format.Format} has only one method
  * for formatting, this class provides methods for several primitive types. To
  * make it easy to combine formatting objects, all methods write to a
  * {@link StringBuilder}.

@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
-import org.eclipse.daanse.olap.util.Format;
+import org.eclipse.daanse.olap.util.format.Format;
 
 public class FormatFunDef extends AbstractFunctionDefinition {
 

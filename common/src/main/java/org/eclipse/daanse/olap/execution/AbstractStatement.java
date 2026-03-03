@@ -43,7 +43,7 @@ import org.eclipse.daanse.olap.api.query.component.Query;
  *
  * @author jhyde
  */
-public abstract class StatementImpl implements Statement {
+public abstract class AbstractStatement implements Statement {
     private static final AtomicLong SEQ = new AtomicLong();
 
     /**
@@ -75,7 +75,7 @@ public abstract class StatementImpl implements Statement {
     /**
      * Creates a StatementImpl.
      */
-    protected StatementImpl(int queryTimeout) {
+    protected AbstractStatement(int queryTimeout) {
         this.queryTimeout = queryTimeout * 1000l;
         this.id = SEQ.getAndIncrement();
     }

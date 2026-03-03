@@ -42,7 +42,7 @@ import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 
-public class StatementImpl extends org.eclipse.daanse.olap.execution.StatementImpl implements Statement {
+public class StatementImpl extends org.eclipse.daanse.olap.execution.AbstractStatement implements Statement {
 
     private Connection connection;
     private boolean closed;

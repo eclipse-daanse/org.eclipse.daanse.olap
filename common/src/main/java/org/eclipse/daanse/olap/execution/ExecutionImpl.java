@@ -73,7 +73,7 @@ public class ExecutionImpl implements Execution {
      */
     private static final AtomicLong SEQ = new AtomicLong();
 
-    private final StatementImpl statement;
+    private final AbstractStatement statement;
 
     /**
      * ExecutionContext for ScopedValue-based context propagation. This provides the
@@ -128,7 +128,7 @@ public class ExecutionImpl implements Execution {
         }
         this.parent = parentExec;
         this.id = SEQ.getAndIncrement();
-        this.statement = (StatementImpl) statement;
+        this.statement = (AbstractStatement) statement;
         this.duration = duration;
 
         // Initialize ExecutionContext

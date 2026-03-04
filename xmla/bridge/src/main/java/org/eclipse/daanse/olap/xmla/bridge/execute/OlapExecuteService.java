@@ -98,7 +98,7 @@ import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchem
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
@@ -611,7 +611,7 @@ public class OlapExecuteService implements ExecuteService {
             break;
         case OperationNames.MDSCHEMA_MEASURES:
             MdSchemaMeasuresRestrictionsR mdSchemaMeasuresRestrictions = new MdSchemaMeasuresRestrictionsR(empty(),
-                    empty(), empty(), empty(), empty(), empty(), empty(), empty());
+                    empty(), empty(), empty(), empty(), empty());
             MdSchemaMeasuresRequest mdSchemaMeasuresRequest = new MdSchemaMeasuresRequestR(
                     (PropertiesR) statementRequest.properties(), mdSchemaMeasuresRestrictions);
             rowSet = DiscoveryResponseConverter.mdSchemaMeasuresResponseRowToRowSet(
@@ -728,7 +728,8 @@ public class OlapExecuteService implements ExecuteService {
                     r.roles(), r.dateModified(), r.compatibilityLevel(),
                     r.type(), r.version(), r.databaseId(),
                     r.dateQueried(), r.currentlyUsed(), r.popularity(),
-                    r.weightedPopularity(), r.clientCacheRefreshPolicy());
+                    r.weightedPopularity(), r.clientCacheRefreshPolicy(),
+                    r.encryptionLevel(), r.cryptoKeyUpdated());
         }
         return r;
     }

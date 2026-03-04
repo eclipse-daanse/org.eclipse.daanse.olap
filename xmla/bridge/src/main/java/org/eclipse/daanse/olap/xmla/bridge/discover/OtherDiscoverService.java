@@ -64,7 +64,7 @@ import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMeta
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
@@ -215,9 +215,9 @@ public class OtherDiscoverService {
         List<DiscoverLiteralsResponseRow> result = new ArrayList<>();
         for (XmlaConstants.Literal anEnum : XmlaConstants.Literal.values()) {
             result.add(new DiscoverLiteralsResponseRowR(DBLITERAL + anEnum.name(), anEnum.getLiteralValue(),
-                    anEnum.getLiteralInvalidChars(), anEnum.getLiteralInvalidStartingChars(),
-                    anEnum.getLiteralMaxLength(),
-                    LiteralNameEnumValueEnum.fromValue(anEnum.getLiteralNameEnumValue())));
+                    Optional.ofNullable(anEnum.getLiteralInvalidChars()), Optional.ofNullable(anEnum.getLiteralInvalidStartingChars()),
+                    Optional.ofNullable(anEnum.getLiteralMaxLength()),
+                    Optional.ofNullable(LiteralNameEnumValueEnum.fromValue(anEnum.getLiteralNameEnumValue()))));
         }
         return result;
     }

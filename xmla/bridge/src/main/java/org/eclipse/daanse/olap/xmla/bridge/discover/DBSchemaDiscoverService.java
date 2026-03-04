@@ -78,7 +78,7 @@ public class DBSchemaDiscoverService {
         return new DbSchemaCatalogsResponseRowR(Optional.ofNullable(catalog.getName()), catalog.getDescription(),
                 getRoles(catalog.getAccessRoles()), Optional.of(LocalDateTime.now()), Optional.empty(),
                 Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
-                Optional.empty(), Optional.empty(), Optional.empty());
+                Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     public List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request, RequestMetaData metaData) {

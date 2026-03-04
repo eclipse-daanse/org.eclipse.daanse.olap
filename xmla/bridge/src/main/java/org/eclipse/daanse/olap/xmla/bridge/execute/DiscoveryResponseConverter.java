@@ -36,7 +36,7 @@ import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchem
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
@@ -372,7 +372,7 @@ public class DiscoveryResponseConverter {
         if (mdSchemaFunctions != null) {
             rowSetRows = mdSchemaFunctions.stream().map(r -> {
                 List<RowSetRowItem> rowSetRowItem = new ArrayList<>();
-                r.functionalName().ifPresent(v -> rowSetRowItem
+                r.functionName().ifPresent(v -> rowSetRowItem
                         .add(new RowSetRowItemR("FUNCTIONAL_NAME", v, Optional.of(ItemTypeEnum.STRING))));
                 r.description().ifPresent(
                         v -> rowSetRowItem.add(new RowSetRowItemR(DESCRIPTION, v, Optional.of(ItemTypeEnum.STRING))));
@@ -430,7 +430,7 @@ public class DiscoveryResponseConverter {
                         new RowSetRowItemR("DIMENSION_GUID", String.valueOf(v), Optional.of(ItemTypeEnum.STRING))));
                 r.dimensionCaption().ifPresent(v -> rowSetRowItem
                         .add(new RowSetRowItemR("DIMENSION_CAPTION", v, Optional.of(ItemTypeEnum.STRING))));
-                r.dimensionOptional().ifPresent(v -> rowSetRowItem.add(new RowSetRowItemR("DIMENSION_OPTIONAL",
+                r.dimensionOrdinal().ifPresent(v -> rowSetRowItem.add(new RowSetRowItemR("DIMENSION_ORDINAL",
                         String.valueOf(v), Optional.of(ItemTypeEnum.INTEGER))));
                 r.dimensionType().ifPresent(v -> rowSetRowItem.add(new RowSetRowItemR(DIMENSION_TYPE,
                         String.valueOf(v.getValue()), Optional.of(ItemTypeEnum.INTEGER))));
@@ -968,7 +968,7 @@ public class DiscoveryResponseConverter {
                         .add(new RowSetRowItemR("KPI_STATUS_GRAPHIC", v, Optional.of(ItemTypeEnum.STRING))));
                 r.kpiTrendGraphic().ifPresent(v -> rowSetRowItem
                         .add(new RowSetRowItemR("KPI_TREND_GRAPHIC", v, Optional.of(ItemTypeEnum.STRING))));
-                r.kpiWight().ifPresent(
+                r.kpiWeight().ifPresent(
                         v -> rowSetRowItem.add(new RowSetRowItemR("KPI_WIGHT", v, Optional.of(ItemTypeEnum.STRING))));
                 r.kpiCurrentTimeMember().ifPresent(v -> rowSetRowItem
                         .add(new RowSetRowItemR("KPI_CURRENT_TIME_MEMBER", v, Optional.of(ItemTypeEnum.STRING))));
@@ -1027,14 +1027,10 @@ public class DiscoveryResponseConverter {
                     rowSetRowItem.add(
                             new RowSetRowItemR("LITERAL_VALUE", r.literalValue(), Optional.of(ItemTypeEnum.STRING)));
                 }
-                if (r.literalInvalidChars() != null) {
-                    rowSetRowItem.add(new RowSetRowItemR("LITERAL_INVALID_CHARS", r.literalInvalidChars(),
-                            Optional.of(ItemTypeEnum.STRING)));
-                }
-                if (r.literalInvalidStartingChars() != null) {
-                    rowSetRowItem.add(new RowSetRowItemR("LITERAL_INVALID_STARTING_CHARS",
-                            r.literalInvalidStartingChars(), Optional.of(ItemTypeEnum.STRING)));
-                }
+                r.literalInvalidChars().ifPresent(v -> rowSetRowItem
+                        .add(new RowSetRowItemR("LITERAL_INVALID_CHARS", v, Optional.of(ItemTypeEnum.STRING))));
+                r.literalInvalidStartingChars().ifPresent(v -> rowSetRowItem
+                        .add(new RowSetRowItemR("LITERAL_INVALID_STARTING_CHARS", v, Optional.of(ItemTypeEnum.STRING))));
                 if (r.literalMaxLength() != null) {
                     rowSetRowItem.add(new RowSetRowItemR("LITERAL_MAX_LENGTH", String.valueOf(r.literalMaxLength()),
                             Optional.of(ItemTypeEnum.STRING)));

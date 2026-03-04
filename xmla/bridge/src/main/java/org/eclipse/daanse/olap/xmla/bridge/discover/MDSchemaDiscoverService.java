@@ -51,8 +51,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRequest;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
@@ -372,9 +372,9 @@ public class MDSchemaDiscoverService {
         Optional<String> oMeasureName = request.restrictions().measureName();
         Optional<String> oMeasureUniqueName = request.restrictions().measureUniqueName();
         Optional<String> oMeasureGroupName = request.restrictions().measureGroupName();
-        Optional<VisibilityEnum> oMeasureVisibility = request.restrictions().measureVisibility();
-        boolean shouldEmitInvisibleMembers = oMeasureVisibility.isPresent()
-                && VisibilityEnum.NOT_VISIBLE.equals(oMeasureVisibility.get());
+        //Optional<VisibilityEnum> oMeasureVisibility = request.restrictions().measureVisibility();
+        //boolean shouldEmitInvisibleMembers = oMeasureVisibility.isPresent()
+        //        && VisibilityEnum.NOT_VISIBLE.equals(oMeasureVisibility.get());
 
         // ??????????????????
         if (oCatalogName.isEmpty()) {
@@ -391,12 +391,12 @@ public class MDSchemaDiscoverService {
             if (oContext.isPresent()) {
                 Catalog catalog = oContext.get();
                 result.addAll(getMdSchemaMeasuresResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), catalog.getName()).getCatalogReader(), catalog, oSchemaName, oCubeName, oMeasureName,
-                        oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers));
+                        oMeasureUniqueName, oMeasureGroupName));
             }
         } else {
             result.addAll(contextsListSupplyer.get(metaData.sessionId()).stream()
                     .map(c -> getMdSchemaMeasuresResponseRow(contextsListSupplyer.getConnection(metaData.sessionId(), c.getName()).getCatalogReader(), c, oSchemaName, oCubeName, oMeasureName,
-                            oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
+                            oMeasureUniqueName, oMeasureGroupName))
                     .flatMap(Collection::stream).toList());
         }
 

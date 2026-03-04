@@ -81,7 +81,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSource
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
@@ -307,7 +307,7 @@ public class Utils {
                         Optional.ofNullable(description), "(none)", Optional.of(1), Optional.of(OriginEnum.MSOLAP),
                         Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
                         Optional.empty(), Optional.ofNullable(fm.operationAtom().name()), Optional.empty(),
-                        Optional.empty()));
+                        Optional.empty(), Optional.empty()));
             } else {
 
                 buf.setLength(0);
@@ -324,7 +324,8 @@ public class Utils {
                         Optional.ofNullable(description), buf.toString(), Optional.of(varType.ordinal()),
                         Optional.of(OriginEnum.MSOLAP), Optional.empty(), Optional.empty(), Optional.empty(),
                         Optional.empty(), Optional.empty(), Optional.empty(),
-                        Optional.ofNullable(fm.operationAtom().name()), Optional.empty(), Optional.empty()));
+                        Optional.ofNullable(fm.operationAtom().name()), Optional.empty(), Optional.empty(),
+                        Optional.empty()));
             }
         }
         return result;
@@ -396,7 +397,7 @@ public class Utils {
             if (isTableType(oTableType, TABLE)) {
                 result.add(new DbSchemaTablesResponseRowR(Optional.of(catalogName), Optional.ofNullable(null),
                         Optional.of(cube.getName()), Optional.of(TABLE), Optional.empty(), Optional.of(desc),
-                        Optional.empty(), Optional.empty(), Optional.empty()));
+                        Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
             }
 
             if (isTableType(oTableType, SYSTEM_TABLE)) {
@@ -423,7 +424,7 @@ public class Utils {
                         result.add(new DbSchemaTablesResponseRowR(Optional.of(catalogName),
                                 Optional.ofNullable(dbSchema.getName()), Optional.of(tableName), Optional.of(SCHEMA),
                                 Optional.empty(), Optional.ofNullable(table.getDescription()), Optional.empty(),
-                                Optional.empty(), Optional.empty()));
+                                Optional.empty(), Optional.empty(), Optional.empty()));
                     }
                 }
             }
@@ -459,7 +460,7 @@ public class Utils {
 
                 return new DbSchemaTablesResponseRowR(Optional.of(catalogName), Optional.ofNullable(schemaName),
                         Optional.of(tableName), Optional.of(SYSTEM_TABLE), Optional.empty(), Optional.of(desc),
-                        Optional.empty(), Optional.empty(), Optional.empty());
+                        Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
 
             }).toList());
         }
@@ -1507,26 +1508,25 @@ public class Utils {
 
     static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, Catalog catalog,
             Optional<String> oSchemaName, Optional<String> oCubeName, Optional<String> oMeasureName,
-            Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName,
-            boolean shouldEmitInvisibleMembers) {
+            Optional<String> oMeasureUniqueName, Optional<String> oMeasureGroupName) {
         return getMdSchemaMeasuresResponseRow(catalogReader, catalog.getName(), catalog, oCubeName, oMeasureName, oMeasureUniqueName,
-                oMeasureGroupName, shouldEmitInvisibleMembers);
+                oMeasureGroupName);
 
     }
 
     private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, String catalogName, Catalog schema,
             Optional<String> oCubeName, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName,
-            Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
+            Optional<String> oMeasureGroupName) {
         List<Cube> cubes = schema.getCubes() == null ? List.of() : schema.getCubes();
         return getCubesWithFilter(cubes, oCubeName).stream()
                 .map(c -> getMdSchemaMeasuresResponseRow(catalogReader, catalogName, schema.getName(), c, oMeasureName,
-                        oMeasureUniqueName, oMeasureGroupName, shouldEmitInvisibleMembers))
+                        oMeasureUniqueName, oMeasureGroupName))
                 .flatMap(Collection::stream).toList();
     }
 
     private static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasuresResponseRow(CatalogReader catalogReader, String catalogName,
             String schemaName, Cube cube, Optional<String> oMeasureName, Optional<String> oMeasureUniqueName,
-            Optional<String> oMeasureGroupName, boolean shouldEmitInvisibleMembers) {
+            Optional<String> oMeasureGroupName) {
         List<MdSchemaMeasuresResponseRow> result = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         int j = 0;
@@ -1551,19 +1551,19 @@ public class Utils {
         List<org.eclipse.daanse.olap.api.element.Member> measures = getMeasureWithFilterByUniqueName(
                 getMeasureWithFilterByName(members, oMeasureName), oMeasureUniqueName);
         measures.stream().filter(m -> !m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,
-                cube.getName(), levelListStr, shouldEmitInvisibleMembers, m, result));
+                cube.getName(), levelListStr, m, result));
         measures.stream().filter(m -> m.isCalculated()).forEach(m -> populateMeasures(catalogName, schemaName,
-                cube.getName(), null, shouldEmitInvisibleMembers, m, result));
+                cube.getName(), null, m, result));
         return result;
     }
 
     private static void populateMeasures(String catalogName, String schemaName, String cubeName, String levelListStr,
-            boolean shouldEmitInvisibleMembers, Member m, List<MdSchemaMeasuresResponseRow> result) {
+            Member m, List<MdSchemaMeasuresResponseRow> result) {
         Boolean visible = (Boolean) m.getPropertyValue(Property.StandardMemberProperty.$visible.getName());
         if (visible == null) {
             visible = true;
         }
-        if (visible || shouldEmitInvisibleMembers) {
+        if (visible) {
             // TODO: currently this is always null
             String desc = m.getDescription();
             if (desc == null) {

@@ -68,9 +68,9 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRest
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRestrictions;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRequest;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRestrictions;
@@ -848,7 +848,7 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.dimensionName()).contains(dimensionName);
         assertThat(row.dimensionUniqueName()).contains(dimensionUniqueName);
         assertThat(row.dimensionCaption()).contains(dimensionCaption);
-        assertThat(row.dimensionOptional()).contains(dimensionOrdinal);
+        assertThat(row.dimensionOrdinal()).contains(dimensionOrdinal);
         assertThat(row.dimensionType()).isEmpty();
         assertThat(row.dimensionCardinality()).contains(dimensionCardinality);
         assertThat(row.defaultHierarchy()).contains(defaultHierarchy);
@@ -858,7 +858,7 @@ class MDSchemaDiscoverServiceTest {
     private void checkMdSchemaFunctionsResponseRow(MdSchemaFunctionsResponseRow row, String functionalName,
             String description, String parameterList, int returnType, OriginEnum origin, String caption) {
         assertThat(row).isNotNull();
-        assertThat(row.functionalName()).contains(functionalName);
+        assertThat(row.functionName()).contains(functionalName);
         assertThat(row.description()).contains(description);
         assertThat(row.parameterList()).contains(parameterList);
         assertThat(row.returnType()).contains(returnType);
@@ -909,7 +909,7 @@ class MDSchemaDiscoverServiceTest {
         assertThat(row.kpiTrend()).contains(kpiTrend);
         assertThat(row.kpiStatusGraphic()).contains(kpiStatusGraphic);
         assertThat(row.kpiTrendGraphic()).contains(kpiTrendGraphic);
-        assertThat(row.kpiWight()).contains(kpiWight);
+        assertThat(row.kpiWeight()).contains(kpiWight);
         assertThat(row.kpiCurrentTimeMember()).contains(kpiCurrentTimeMember);
         assertThat(row.kpiParentKpiName()).contains(kpiParentKpiName);
         assertThat(row.scope()).contains(scope);

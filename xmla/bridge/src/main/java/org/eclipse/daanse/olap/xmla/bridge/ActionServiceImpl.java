@@ -132,8 +132,8 @@ public class ActionServiceImpl implements ActionService {
         List<MdSchemaActionsResponseRow> result = new ArrayList<>();
         for (Action xmlaAcriton : xmlaActions) {
             result.add(new MdSchemaActionsResponseRowR(xmlaAcriton.catalogName(), xmlaAcriton.schemaName(),
-                    xmlaAcriton.cubeName(), xmlaAcriton.actionName(), Optional.ofNullable(getActionType(xmlaAcriton)),
-                    coordinate.orElse(null), getCoordinateType(xmlaAcriton.coordinateType()), xmlaAcriton.actionCaption(),
+                    Optional.ofNullable(xmlaAcriton.cubeName()), xmlaAcriton.actionName(), Optional.ofNullable(getActionType(xmlaAcriton)),
+                    coordinate, Optional.ofNullable(getCoordinateType(xmlaAcriton.coordinateType())), xmlaAcriton.actionCaption(),
                     xmlaAcriton.description(),
                     Optional.ofNullable((String) xmlaAcriton.content(coordinate.orElse(null), xmlaAcriton.cubeName())),
                     Optional.empty(), Optional.ofNullable(InvocationEnum.NORMAL_OPERATION)));
@@ -211,8 +211,8 @@ public class ActionServiceImpl implements ActionService {
             String coordinate = oCoordinate.get();
 
             result.add(new MdSchemaActionsResponseRowR(Optional.ofNullable(catalogName),
-                    Optional.ofNullable(schemaName), cube.getName(), Optional.ofNullable(da.getName()),
-                    Optional.of(ActionTypeEnum.DRILL_THROUGH), coordinate, CoordinateTypeEnum.CELL,
+                    Optional.ofNullable(schemaName), Optional.ofNullable(cube.getName()), Optional.ofNullable(da.getName()),
+                    Optional.of(ActionTypeEnum.DRILL_THROUGH), Optional.ofNullable(coordinate), Optional.ofNullable(CoordinateTypeEnum.CELL),
                     Optional.ofNullable(da.getCaption()), Optional.ofNullable(da.getDescription()), Optional.of(query),
                     Optional.empty(), Optional.ofNullable(InvocationEnum.NORMAL_OPERATION)));
             // }

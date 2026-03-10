@@ -523,21 +523,16 @@ public class DiscoveryResponseConverter {
                         v -> rowSetRowItem.add(new RowSetRowItemR(CATALOG_NAME, v, Optional.of(ItemTypeEnum.STRING))));
                 r.schemaName().ifPresent(
                         v -> rowSetRowItem.add(new RowSetRowItemR(SCHEMA_NAME, v, Optional.of(ItemTypeEnum.STRING))));
-                if (r.cubeName() != null) {
-                    rowSetRowItem.add(new RowSetRowItemR(CUBE_NAME, r.cubeName(), Optional.of(ItemTypeEnum.STRING)));
-                }
+                r.cubeName().ifPresent(
+                        v -> rowSetRowItem.add(new RowSetRowItemR(CUBE_NAME, v, Optional.of(ItemTypeEnum.STRING))));
                 r.actionName().ifPresent(
                         v -> rowSetRowItem.add(new RowSetRowItemR("ACTION_NAME", v, Optional.of(ItemTypeEnum.STRING))));
                 r.actionType().ifPresent(v -> rowSetRowItem.add(new RowSetRowItemR("ACTION_TYPE",
                         String.valueOf(v.getValue()), Optional.of(ItemTypeEnum.INTEGER))));
-                if (r.coordinate() != null) {
-                    rowSetRowItem
-                            .add(new RowSetRowItemR("COORDINATE", r.coordinate(), Optional.of(ItemTypeEnum.STRING)));
-                }
-                if (r.coordinateType() != null) {
-                    rowSetRowItem.add(new RowSetRowItemR("COORDINATE_TYPE",
-                            String.valueOf(r.coordinateType().getValue()), Optional.of(ItemTypeEnum.INTEGER)));
-                }
+                r.coordinate().ifPresent(
+                        v -> rowSetRowItem.add(new RowSetRowItemR("COORDINATE", v, Optional.of(ItemTypeEnum.STRING))));
+                r.coordinateType().ifPresent(
+                        v -> rowSetRowItem.add(new RowSetRowItemR("COORDINATE_TYPE", String.valueOf(v.getValue()), Optional.of(ItemTypeEnum.INTEGER))));
                 r.actionCaption().ifPresent(v -> rowSetRowItem
                         .add(new RowSetRowItemR("ACTION_CAPTION", v, Optional.of(ItemTypeEnum.STRING))));
                 r.description().ifPresent(

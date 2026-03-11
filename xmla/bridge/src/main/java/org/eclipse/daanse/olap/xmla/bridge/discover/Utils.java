@@ -67,6 +67,7 @@ import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
@@ -332,11 +333,34 @@ public class Utils {
     }
 
     private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Connection connection, Catalog catalog,
-            Optional<String> cubeName, Optional<String> baseCubeName, Optional<CubeSourceEnum> cubeSource) {
-        
-        List<Cube> cubes = connection.getCatalogReader().getCubes();
-        return Utils.getCubesWithFilter(cubes, cubeName).stream()
-                .flatMap(cube -> getMdSchemaCubesResponseRow(catalog.getName(), cube).stream()).toList();
+            Optional<String> cubeName, Optional<String> baseCubeName, Optional<CubeSourceEnum> oCubeSource) {
+        if (oCubeSource.isEmpty()) {
+            List<Cube> cubes = connection.getCatalogReader().getCubes();
+            return Utils.getCubesWithFilter(cubes, cubeName).stream()
+                    .flatMap(cube -> getMdSchemaCubesResponseRow(catalog.getName(), cube).stream()).toList();
+        } else {
+            List<MdSchemaCubesResponseRow> result = new ArrayList<MdSchemaCubesResponseRow>();
+            List<Cube> cubes = connection.getCatalogReader().getCubes();
+            CubeSourceEnum cubeSource =  oCubeSource.get();
+            switch (cubeSource) {
+            case CUBE:
+                result.addAll(Utils.getCubesWithFilter(cubes, cubeName).stream()
+                        .flatMap(cube -> getMdSchemaCubesResponseRow(catalog.getName(), cube).stream()).toList());
+            case DIMENSION:
+                result.addAll(Utils.getCubesWithFilter(cubes, cubeName).stream().flatMap(cube -> {
+                    List<Dimension> dimensions = connection.getCatalogReader().getCubeDimensions(cube);
+                    return dimensions.stream().filter(d -> !d.isMeasures()).flatMap(d -> getMdSchemaCubesResponseRowd(catalog.getName(), d).stream()).toList().stream();
+                    }).toList());
+            case CUBE_DIMENSION:
+                result.addAll(Utils.getCubesWithFilter(cubes, cubeName).stream().flatMap(cube -> {
+                    List<Dimension> dimensions = connection.getCatalogReader().getCubeDimensions(cube);
+                    return Utils.getDimensionsWithFilterByName(dimensions, cubeName).stream().filter(d -> !d.isMeasures()).flatMap(d -> getMdSchemaCubesResponseRowd(catalog.getName(), d).stream()).toList().stream();
+                    }).toList());
+                result.addAll(Utils.getCubesWithFilter(cubes, cubeName).stream()
+                        .flatMap(cube -> getMdSchemaCubesResponseRow(catalog.getName(), cube).stream()).toList());
+            }
+            return result;
+        }
     }
 
     private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(String catalogName, Cube cube) {
@@ -350,12 +374,34 @@ public class Utils {
                 return List.of(new MdSchemaCubesResponseRowR(catalogName, Optional.ofNullable(null),
                         Optional.ofNullable(cube.getName()), Optional.of(CubeTypeEnum.CUBE), // TODO get cube type from
                                                                                              // olap
-                        Optional.empty(), Optional.empty(), Optional.of(LocalDateTime.now()), // TODO get create date
+                        Optional.empty(), Optional.empty(), Optional.of(LocalDateTime.now().toLocalDate().atStartOfDay()), // TODO get create date
                                                                                               // from olap
-                        Optional.empty(), Optional.of(LocalDateTime.now()), Optional.empty(), Optional.ofNullable(desc),
-                        Optional.of(true), Optional.of(false), Optional.of(false), Optional.of(false),
+                        Optional.empty(), Optional.of(LocalDateTime.now().toLocalDate().atStartOfDay()), Optional.empty(), Optional.ofNullable(desc),
+                        Optional.of(true), Optional.of(true), Optional.of(false), Optional.of(true),
                         Optional.ofNullable(cube.getCaption() == null ? cube.getName() : cube.getCaption()),
-                        Optional.ofNullable(cube.getName()), Optional.of(CubeSourceEnum.CUBE), Optional.empty()));
+                        Optional.empty(), Optional.of(CubeSourceEnum.CUBE), Optional.of(PreferredQueryPatternsEnum.CROSS_JOIN)));
+            }
+        }
+        return List.of();
+    }
+
+    private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRowd(String catalogName, Dimension dimension) {
+        if (dimension != null) {
+            if (dimension.isVisible()) {
+                String desc = dimension.getDescription();
+                if (desc == null) {
+                    desc = new StringBuilder(catalogName).append(" Schema - ").append(dimension.getName()).append(" Dimension")
+                            .toString();
+                }
+                return List.of(new MdSchemaCubesResponseRowR(catalogName, Optional.ofNullable(null),
+                        Optional.ofNullable("$"+dimension.getName()), Optional.of(CubeTypeEnum.CUBE), // TODO get cube type from
+                                                                                             // olap
+                        Optional.empty(), Optional.empty(), Optional.of(LocalDateTime.now().toLocalDate().atStartOfDay()), // TODO get create date
+                                                                                              // from olap
+                        Optional.empty(), Optional.of(LocalDateTime.now().toLocalDate().atStartOfDay()), Optional.empty(), Optional.ofNullable(desc),
+                        Optional.of(true), Optional.of(true), Optional.of(false), Optional.of(true),
+                        Optional.ofNullable(dimension.getCaption() == null ? "$"+dimension.getName() : dimension.getCaption()),
+                        Optional.empty(), Optional.of(CubeSourceEnum.DIMENSION), Optional.of(PreferredQueryPatternsEnum.CROSS_JOIN)));
             }
         }
         return List.of();

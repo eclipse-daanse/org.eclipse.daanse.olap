@@ -379,7 +379,7 @@ public class Utils {
                         Optional.empty(), Optional.of(LocalDateTime.now().toLocalDate().atStartOfDay()), Optional.empty(), Optional.ofNullable(desc),
                         Optional.of(true), Optional.of(true), Optional.of(false), Optional.of(true),
                         Optional.ofNullable(cube.getCaption() == null ? cube.getName() : cube.getCaption()),
-                        Optional.empty(), Optional.of(CubeSourceEnum.CUBE), Optional.of(PreferredQueryPatternsEnum.CROSS_JOIN)));
+                        Optional.ofNullable(cube.getName()), Optional.of(CubeSourceEnum.CUBE), Optional.of(PreferredQueryPatternsEnum.CROSS_JOIN)));
             }
         }
         return List.of();

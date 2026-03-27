@@ -208,6 +208,30 @@ public class CSDLUtils {
                                                 levelProperty.setNullable(false);
                                                 dimensionType.getProperty().add(levelProperty);
                                             }
+                                            org.eclipse.daanse.olap.api.element.Property[] properties =  l.getProperties();
+                                            if (properties != null) {
+                                                for (org.eclipse.daanse.olap.api.element.Property property : properties) {
+                                                    if (!property.getName().startsWith("$")) {
+                                                        String propName = removeSquareBrackets(l.getUniqueName()) + "_" + property.getName();
+                                                        TLevel tProperty = biFactory.createTLevel();
+                                                        tProperty.setName(propName);
+                                                        tProperty.setCaption(property.getCaption());
+                                                        tProperty.setReferenceName(propName);
+                                                        SourceType sourceType = biFactory.createSourceType();
+                                                        org.eclipse.daanse.xmla.csdl.model.v2.bi.TPropertyRef propertyRef = biFactory.createTPropertyRef();
+                                                        propertyRef.setName(propName);
+                                                        sourceType.setPropertyRef(propertyRef);
+                                                        tProperty.setSource(sourceType);
+                                                        levels.add(tProperty);
+
+                                                        TEntityProperty propertyProperty = edmFactory.createTEntityProperty();
+                                                        propertyProperty.setName(propName);
+                                                        propertyProperty.setType(getType(property.getType())); 
+                                                        propertyProperty.setNullable(false);
+                                                        dimensionType.getProperty().add(propertyProperty);
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                     THierarchy hierarchyTHierarchy = biFactory.createTHierarchy();

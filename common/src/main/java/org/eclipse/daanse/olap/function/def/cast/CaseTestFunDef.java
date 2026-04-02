@@ -53,7 +53,7 @@ class CaseTestFunDef extends AbstractFunctionDefinition {
             exprCalcs[i] = compiler.compile(args[j++]);
             calcList.add(exprCalcs[i]);
         }
-        final Calc<?> defaultCalc = args.length % 2 == 1 ? compiler.compileScalar(args[args.length - 1], true)
+        final Calc<?> defaultCalc = args.length % 2 == 1 ? compiler.compile(args[args.length - 1])
                 : ConstantCalcs.nullCalcOf(call.getType());
         calcList.add(defaultCalc);
         final Calc<?>[] calcs = calcList.stream().toArray(Calc[]::new);

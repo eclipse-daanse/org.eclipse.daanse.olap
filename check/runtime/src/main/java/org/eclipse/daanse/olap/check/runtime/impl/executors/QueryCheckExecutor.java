@@ -63,13 +63,13 @@ public class QueryCheckExecutor {
             }
 
             switch (language) {
-                case MDX -> executeMdxQuery(result, startTime);
-                case SQL -> executeSqlQuery(result, startTime);
-                case DAX -> executeDaxQuery(result, startTime);
-                default -> {
-                    result.setExecutedSuccessfully(false);
-                    result.setStatus(CheckStatus.FAILURE);
-                }
+            case MDX -> executeMdxQuery(result, startTime);
+            case SQL -> executeSqlQuery(result, startTime);
+            case DAX -> executeDaxQuery(result, startTime);
+            default -> {
+                result.setExecutedSuccessfully(false);
+                result.setStatus(CheckStatus.FAILURE);
+            }
             }
 
         } catch (Exception e) {

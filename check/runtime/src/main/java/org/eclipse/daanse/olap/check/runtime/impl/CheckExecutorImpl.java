@@ -148,32 +148,33 @@ public class CheckExecutorImpl implements CheckExecutor {
         int count = result.getStatus() == CheckStatus.SUCCESS ? 1 : 0;
 
         switch (result) {
-            case CatalogCheckResult catalogResult -> {
-                for (CubeCheckResult cubeResult : catalogResult.getCubeResults()) {
-                    count += countSuccesses(cubeResult);
-                }
+        case CatalogCheckResult catalogResult -> {
+            for (CubeCheckResult cubeResult : catalogResult.getCubeResults()) {
+                count += countSuccesses(cubeResult);
             }
-            case CubeCheckResult cubeResult -> {
-                for (DimensionCheckResult dimResult : cubeResult.getDimensionResults()) {
-                    count += countSuccesses(dimResult);
-                }
+        }
+        case CubeCheckResult cubeResult -> {
+            for (DimensionCheckResult dimResult : cubeResult.getDimensionResults()) {
+                count += countSuccesses(dimResult);
             }
-            case DimensionCheckResult dimResult -> {
-                for (HierarchyCheckResult hierResult : dimResult.getHierarchyResults()) {
-                    count += countSuccesses(hierResult);
-                }
+        }
+        case DimensionCheckResult dimResult -> {
+            for (HierarchyCheckResult hierResult : dimResult.getHierarchyResults()) {
+                count += countSuccesses(hierResult);
             }
-            case HierarchyCheckResult hierResult -> {
-                for (LevelCheckResult levelResult : hierResult.getLevelResults()) {
-                    count += countSuccesses(levelResult);
-                }
+        }
+        case HierarchyCheckResult hierResult -> {
+            for (LevelCheckResult levelResult : hierResult.getLevelResults()) {
+                count += countSuccesses(levelResult);
             }
-            case LevelCheckResult levelResult -> {
-                for (MemberCheckResult memberResult : levelResult.getMemberResults()) {
-                    count += countSuccesses(memberResult);
-                }
+        }
+        case LevelCheckResult levelResult -> {
+            for (MemberCheckResult memberResult : levelResult.getMemberResults()) {
+                count += countSuccesses(memberResult);
             }
-            default -> {}
+        }
+        default -> {
+        }
         }
 
         return count;
@@ -183,32 +184,33 @@ public class CheckExecutorImpl implements CheckExecutor {
         int count = result.getStatus() == CheckStatus.FAILURE ? 1 : 0;
 
         switch (result) {
-            case CatalogCheckResult catalogResult -> {
-                for (CubeCheckResult cubeResult : catalogResult.getCubeResults()) {
-                    count += countFailures(cubeResult);
-                }
+        case CatalogCheckResult catalogResult -> {
+            for (CubeCheckResult cubeResult : catalogResult.getCubeResults()) {
+                count += countFailures(cubeResult);
             }
-            case CubeCheckResult cubeResult -> {
-                for (DimensionCheckResult dimResult : cubeResult.getDimensionResults()) {
-                    count += countFailures(dimResult);
-                }
+        }
+        case CubeCheckResult cubeResult -> {
+            for (DimensionCheckResult dimResult : cubeResult.getDimensionResults()) {
+                count += countFailures(dimResult);
             }
-            case DimensionCheckResult dimResult -> {
-                for (HierarchyCheckResult hierResult : dimResult.getHierarchyResults()) {
-                    count += countFailures(hierResult);
-                }
+        }
+        case DimensionCheckResult dimResult -> {
+            for (HierarchyCheckResult hierResult : dimResult.getHierarchyResults()) {
+                count += countFailures(hierResult);
             }
-            case HierarchyCheckResult hierResult -> {
-                for (LevelCheckResult levelResult : hierResult.getLevelResults()) {
-                    count += countFailures(levelResult);
-                }
+        }
+        case HierarchyCheckResult hierResult -> {
+            for (LevelCheckResult levelResult : hierResult.getLevelResults()) {
+                count += countFailures(levelResult);
             }
-            case LevelCheckResult levelResult -> {
-                for (MemberCheckResult memberResult : levelResult.getMemberResults()) {
-                    count += countFailures(memberResult);
-                }
+        }
+        case LevelCheckResult levelResult -> {
+            for (MemberCheckResult memberResult : levelResult.getMemberResults()) {
+                count += countFailures(memberResult);
             }
-            default -> {}
+        }
+        default -> {
+        }
         }
 
         return count;

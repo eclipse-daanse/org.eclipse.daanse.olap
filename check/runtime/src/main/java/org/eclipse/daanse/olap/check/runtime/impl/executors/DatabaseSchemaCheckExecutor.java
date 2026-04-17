@@ -109,7 +109,7 @@ public class DatabaseSchemaCheckExecutor {
     private Optional<? extends DatabaseSchema> findSchema() {
         String schemaName = check.getSchemaName();
 
-        return schemas.stream().filter(s -> schemaName != null && schemaName.equals(s.getName())).findFirst();
+        return schemas.stream().filter(s -> ((schemaName == null && s.getName() == null) || (schemaName != null && schemaName.equals(s.getName())))).findFirst();
     }
 
     private AttributeCheckResult executeAttributeCheck(DatabaseSchemaAttributeCheck attrCheck, DatabaseSchema schema) {

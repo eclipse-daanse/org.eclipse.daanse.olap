@@ -13,11 +13,22 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.execution.Statement;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.query.component.SqlQuery;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.CellSet;
+import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.check.model.check.CellCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CellValueCheck;
@@ -141,14 +152,91 @@ public class QueryCheckExecutor {
     }
 
     private void executeSqlQuery(QueryCheckResult result, long startTime) {
-        // TODO: Implement SQL query execution
-        // SQL queries would typically use JDBC to execute against the underlying
-        // database
-        result.setExecutedSuccessfully(false);
-        result.setStatus(CheckStatus.FAILURE);
+        try {
+            // Execute the Sql query
+            QueryComponent queryComponent  = connection.parseStatement(check.getQuery());
+            if (queryComponent instanceof SqlQuery sqlQuery) {
+                ResultSet resultSet  = sqlQuery.execute();
+                List<List<Object>> res = getSqlResult(resultSet);
+                resultSet.close();
+                result.setExecutedSuccessfully(true);
+                int rowCount = res.size();
+                int columnCount = 0;
+                if (res.size() > 0) {
+                    List<Object> row = res.get(0);
+                    if (row != null) {
+                        columnCount = row.size(); 
+                        }
+                    }
+
+                result.setRowCount(rowCount);
+                result.setColumnCount(columnCount);
+                result.setStatus(CheckStatus.SUCCESS);
+
+                // Check expected row count (-1 means not specified)
+                int expectedRowCount = check.getExpectedRowCount();
+                if (expectedRowCount >= 0 && rowCount != expectedRowCount) {
+                    result.setStatus(CheckStatus.FAILURE);
+                }
+
+                // Check expected column count (-1 means not specified)
+                int expectedColumnCount = check.getExpectedColumnCount();
+                if (expectedColumnCount >= 0 && columnCount != expectedColumnCount) {
+                    result.setStatus(CheckStatus.FAILURE);
+                }
+
+                // Check execution time (-1 means not specified)
+                long executionTime = System.currentTimeMillis() - startTime;
+                long maxExecutionTime = check.getMaxExecutionTimeMs();
+                if (maxExecutionTime > 0 && executionTime > maxExecutionTime) {
+                    result.setStatus(CheckStatus.FAILURE);
+                }
+
+                // Execute cell value checks
+                for (CellValueCheck cellCheck : check.getCellChecks()) {
+                    CellCheckResult cellResult = executeCellCheck(cellCheck, res);
+                    result.getCellResults().add(cellResult);
+                    if (cellResult.getStatus() == CheckStatus.FAILURE) {
+                        result.setStatus(CheckStatus.FAILURE);
+                    }
+                }
+            } else {
+                result.setStatus(CheckStatus.FAILURE);
+            }
+
+        } catch (Exception e) {
+            result.setExecutedSuccessfully(false);
+            result.setStatus(CheckStatus.FAILURE);
+        }
     }
 
-    private void executeDaxQuery(QueryCheckResult result, long startTime) {
+    private List<List<Object>> getSqlResult(ResultSet rs) throws SQLException {
+        List<List<Object>> rows = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
+        ResultSetMetaData md = rs.getMetaData();
+        int columnCount = md.getColumnCount();
+
+        // populate column defs
+        for (int i = 0; i < columnCount; i++) {
+            columns.add(md.getColumnLabel(i + 1));
+        }
+
+        // Populate data; assume that SqlStatement is already positioned
+        // on first row (or isDone() is true), and assume that the
+        // number of rows returned is limited.
+        while (rs.next()) {
+            List<Object> row = new ArrayList();
+            for (int i = 0; i < columnCount; i++) {
+                row.add(rs.getObject(i + 1));
+            }
+            rows.add(row);
+        }
+
+
+        return rows;
+	}
+
+	private void executeDaxQuery(QueryCheckResult result, long startTime) {
         // TODO: Implement DAX query execution
         // DAX queries would need to use appropriate DAX execution mechanism
         result.setExecutedSuccessfully(false);
@@ -209,4 +297,58 @@ public class QueryCheckExecutor {
 
         return result;
     }
+
+    private CellCheckResult executeCellCheck(CellValueCheck cellCheck, List<List<Object>> res) {
+        CellCheckResult result = factory.createCellCheckResult();
+        result.setCheckName(cellCheck.getName());
+
+        // Copy coordinates
+        EList<Integer> coords = cellCheck.getCoordinates();
+        result.getCoordinates().addAll(coords);
+        result.setExpectedValue(cellCheck.getExpectedValue());
+
+        try {
+            int rowIndex = 0;
+            int colIndex = 0;
+            if (coords != null && coords.size() > 0) {
+                rowIndex = coords.get(0);
+            };
+            if (coords != null && coords.size() > 1) {
+            	colIndex = coords.get(1);
+            };
+
+            List<Object> rowObject = res.size() > rowIndex ? res.get(rowIndex) : List.of();
+            Object cellValue = rowObject.size() > colIndex ? rowObject.get(colIndex) : null;
+            String actualValue = cellValue != null ? cellValue.toString() : null;
+
+            result.setActualValue(actualValue);
+
+            // Compare values
+            boolean matches;
+            double expectedNumeric = cellCheck.getExpectedNumericValue();
+
+            // Check if numeric comparison is needed (non-zero expectedNumericValue
+            // indicates it's set)
+            if (expectedNumeric != 0.0 || cellCheck.getExpectedValue() == null) {
+                // Numeric comparison with tolerance
+                Double actual = cellValue instanceof Number ? ((Number) cellValue).doubleValue() : null;
+                double tolerance = cellCheck.getTolerance();
+
+                matches = actual != null && Math.abs(expectedNumeric - actual) <= tolerance;
+            } else {
+                // String comparison
+                matches = AttributeCheckHelper.compareValues(cellCheck.getExpectedValue(), actualValue,
+                        cellCheck.getMatchMode(), true // cell values are case-sensitive by default
+                );
+            }
+
+            result.setStatus(matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+
+        } catch (Exception e) {
+            result.setStatus(CheckStatus.FAILURE);
+        }
+
+        return result;
+    }
+
 }

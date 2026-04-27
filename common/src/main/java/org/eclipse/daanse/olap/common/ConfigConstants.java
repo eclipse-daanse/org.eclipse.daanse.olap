@@ -28,6 +28,8 @@ public class ConfigConstants {
     public static final String SOLVE_ORDER_MODE = "solveOrderMode";
     public static final String CHOOSE_AGGREGATE_BY_VOLUME = "chooseAggregateByVolume";
     public static final String DISABLE_CACHING = "disableCaching";
+    public static final String DISABLE_CACHING_CATALOGS = "disableCachingCatalogs";
+    public static final String DISABLE_CACHING_CUBES = "disableCachingCubes";
     public static final String DISABLE_LOCAL_SEGMENT_CACHE = "disableLocalSegmentCache";
     public static final String ENABLE_GROUPING_SETS = "enableGroupingSets";
     public static final String ENABLE_SESSION_CACHING = "enableSessionCaching";
@@ -81,6 +83,8 @@ public class ConfigConstants {
     public static final String SOLVE_ORDER_MODE_DEFAULT_VALUE = "ABSOLUTE";
     public static final boolean CHOOSE_AGGREGATE_BY_VOLUME_DEFAULT_VALUE = false;
     public static final boolean DISABLE_CACHING_DEFAULT_VALUE = false;
+    public static final String DISABLE_CACHING_CATALOGS_DEFAULT_VALUE = "";
+    public static final String DISABLE_CACHING_CUBES_DEFAULT_VALUE = "";
     public static final boolean DISABLE_LOCAL_SEGMENT_CACHE_DEFAULT_VALUE = false;
     public static final boolean ENABLE_GROUPING_SETS_DEFAULT_VALUE = false;
     public static final boolean ENABLE_SESSION_CACHING_DEFAULT_VALUE = false;

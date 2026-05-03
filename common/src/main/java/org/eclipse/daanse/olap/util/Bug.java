@@ -280,7 +280,7 @@ public class Bug {
      * @return Whether to avoid a test
      */
     public static boolean avoidMemoryOverflow(Dialect dialect, boolean memoryMonitor) {
-        return dialect.getDialectName().equals("access")
+        return dialect.name().equals("access")
             && memoryMonitor;
     }
 
@@ -305,7 +305,7 @@ public class Bug {
     public static boolean avoidSlowTestOnLucidDB(Dialect dialect) {
         return
             !Bug759Fixed
-            && dialect.getDialectName().equals("luciddb")
+            && dialect.name().equals("luciddb")
             && !LoggerFactory.getLogger("daanse.test.PerformanceTest")
                 .isDebugEnabled();
     }

@@ -20,15 +20,28 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.check.model.check.AttributeCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheckResult;
+import org.eclipse.daanse.olap.check.model.check.CellCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckExecutionResult;
 import org.eclipse.daanse.olap.check.model.check.CheckFailure;
 import org.eclipse.daanse.olap.check.model.check.CheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckSkipped;
+import org.eclipse.daanse.olap.check.model.check.CheckStatus;
 import org.eclipse.daanse.olap.check.model.check.CubeCheckResult;
+import org.eclipse.daanse.olap.check.model.check.DatabaseColumnCheckResult;
+import org.eclipse.daanse.olap.check.model.check.DatabaseSchemaCheckResult;
+import org.eclipse.daanse.olap.check.model.check.DatabaseTableCheckResult;
 import org.eclipse.daanse.olap.check.model.check.DimensionCheckResult;
+import org.eclipse.daanse.olap.check.model.check.DrillThroughActionCheckResult;
 import org.eclipse.daanse.olap.check.model.check.HierarchyCheckResult;
+import org.eclipse.daanse.olap.check.model.check.KPICheckResult;
 import org.eclipse.daanse.olap.check.model.check.LevelCheckResult;
+import org.eclipse.daanse.olap.check.model.check.MeasureCheckResult;
+import org.eclipse.daanse.olap.check.model.check.MemberCheckResult;
+import org.eclipse.daanse.olap.check.model.check.NamedSetCheckResult;
+import org.eclipse.daanse.olap.check.model.check.PropertyCheckResult;
+import org.eclipse.daanse.olap.check.model.check.QueryCheckResult;
 import org.eclipse.daanse.olap.check.reporter.api.CheckResultReporter;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -180,17 +193,186 @@ public class FileCheckResultReporter implements CheckResultReporter {
     private void collectFailuresFromChildren(StringBuilder sb, CheckResult result) {
         switch (result) {
         case CatalogCheckResult r -> {
-            collectFailures(sb, list(r.getCubeResults()));
-            collectFailures(sb, list(r.getDatabaseSchemaResults()));
-            collectFailures(sb, list(r.getQueryResults()));
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Catalog : ").append(esc(r.getCatalogName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getCubeResults()));
+                collectFailures(sb, list(r.getDatabaseSchemaResults()));
+                collectFailures(sb, list(r.getQueryResults()));
+        	}
         }
         case CubeCheckResult r -> {
-            collectFailures(sb, list(r.getDimensionResults()));
-            collectFailures(sb, list(r.getMeasureResults()));
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Cube : ").append(esc(r.getCubeName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getDimensionResults()));
+                collectFailures(sb, list(r.getMeasureResults()));
+                collectFailures(sb, list(r.getDrillThroughActionResults()));
+                collectFailures(sb, list(r.getNamedSetResults()));
+                collectFailures(sb, list(r.getKpiResults()));
+            }
         }
-        case DimensionCheckResult r -> collectFailures(sb, list(r.getHierarchyResults()));
-        case HierarchyCheckResult r -> collectFailures(sb, list(r.getLevelResults()));
-        case LevelCheckResult r -> collectFailures(sb, list(r.getMemberResults()));
+        case DatabaseSchemaCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Database : ").append(esc(r.getSchemaName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getTableResults()));
+            }
+        }
+        case DatabaseTableCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Table : ").append(esc(r.getTableName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getColumnResults()));
+            }
+        }
+        case DatabaseColumnCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Column : ").append(esc(r.getColumnName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+            }
+        }
+        case QueryCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append(esc(r.getQueryLanguage().getName())).append(": ").append(esc(r.getQuery()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getCellResults()));
+            }
+        }
+        case DimensionCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Dimension : ").append(esc(r.getDimensionName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getHierarchyResults()));
+            }
+        }
+        case MeasureCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Measure : ").append(esc(r.getMeasureName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+            }
+        }
+        case DrillThroughActionCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Action : ").append(esc(r.getActionName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+            }
+        }
+        case NamedSetCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Named Set : ").append(esc(r.getNamedSetName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+            }
+        }
+        case KPICheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("KPI : ").append(esc(r.getKpiName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+            }
+        }
+        case HierarchyCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Hierarchy : ").append(esc(r.getHierarchyName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getLevelResults()));
+            }
+        }
+        case LevelCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Level : ").append(esc(r.getLevelName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getMemberResults()));
+            }
+        }
+        case MemberCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Member : ").append(esc(r.getMemberName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append("");
+                sb.append(" |\n");
+                collectFailures(sb, list(r.getAttributeResults()));
+                collectFailures(sb, list(r.getPropertyResults()));
+            }
+        }
+        case PropertyCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Property : ").append(esc(r.getPropertyName()));
+                sb.append(" | ").append(r.getExpectedValue());
+                sb.append(" | ").append(r.getActualValue());
+                sb.append(" |\n");
+            }
+        }
+        case AttributeCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("Attribute : ").append(esc(r.getAttributeName()));
+                sb.append(" | ").append(r.getExpectedValue());
+                sb.append(" | ").append(r.getActualValue());
+                sb.append(" |\n");
+            }
+        }
+        case CellCheckResult r -> {
+            if (CheckStatus.FAILURE.equals(r.getStatus())) {
+                sb.append("| ").append(esc(r.getCheckName()));
+                sb.append(" | ").append("");
+                sb.append(" | ").append(r.getExpectedValue());
+                sb.append(" | ").append(r.getActualValue());
+                sb.append(" |\n");
+            }
+        }
         default -> {
         }
         }

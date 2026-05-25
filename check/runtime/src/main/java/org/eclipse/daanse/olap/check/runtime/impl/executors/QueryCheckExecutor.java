@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.execution.Statement;
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.SqlQuery;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -97,76 +99,21 @@ public class QueryCheckExecutor {
     private void executeMdxQuery(QueryCheckResult result, long startTime) {
         try {
             // Execute the MDX query
-            Result mdxResult = connection.execute(connection.parseQuery(check.getQuery()));
-
-            result.setExecutedSuccessfully(true);
-
-            // Get axes for counting rows/columns
-            Axis[] axes = mdxResult.getAxes();
-            int rowCount = 0;
-            int columnCount = 0;
-
-            if (axes.length > 0) {
-                columnCount = axes[0].getPositions().size();
-            }
-            if (axes.length > 1) {
-                rowCount = axes[1].getPositions().size();
-            }
-
-            result.setRowCount(rowCount);
-            result.setColumnCount(columnCount);
-            result.setStatus(CheckStatus.SUCCESS);
-
-            // Check expected row count (-1 means not specified)
-            int expectedRowCount = check.getExpectedRowCount();
-            if (expectedRowCount >= 0 && rowCount != expectedRowCount) {
-                result.setStatus(CheckStatus.FAILURE);
-            }
-
-            // Check expected column count (-1 means not specified)
-            int expectedColumnCount = check.getExpectedColumnCount();
-            if (expectedColumnCount >= 0 && columnCount != expectedColumnCount) {
-                result.setStatus(CheckStatus.FAILURE);
-            }
-
-            // Check execution time (-1 means not specified)
-            long executionTime = System.currentTimeMillis() - startTime;
-            long maxExecutionTime = check.getMaxExecutionTimeMs();
-            if (maxExecutionTime > 0 && executionTime > maxExecutionTime) {
-                result.setStatus(CheckStatus.FAILURE);
-            }
-
-            // Execute cell value checks
-            for (CellValueCheck cellCheck : check.getCellChecks()) {
-                CellCheckResult cellResult = executeCellCheck(cellCheck, mdxResult);
-                result.getCellResults().add(cellResult);
-                if (cellResult.getStatus() == CheckStatus.FAILURE) {
-                    result.setStatus(CheckStatus.FAILURE);
-                }
-            }
-
-        } catch (Exception e) {
-            result.setExecutedSuccessfully(false);
-            result.setStatus(CheckStatus.FAILURE);
-        }
-    }
-
-    private void executeSqlQuery(QueryCheckResult result, long startTime) {
-        try {
-            // Execute the Sql query
             QueryComponent queryComponent  = connection.parseStatement(check.getQuery());
-            if (queryComponent instanceof SqlQuery sqlQuery) {
-                ResultSet resultSet  = sqlQuery.execute();
-                List<List<Object>> res = getSqlResult(resultSet);
-                resultSet.close();
+            if (queryComponent instanceof Query query) {
+                Result mdxResult = connection.execute(query);
                 result.setExecutedSuccessfully(true);
-                int rowCount = res.size();
+
+                // Get axes for counting rows/columns
+                Axis[] axes = mdxResult.getAxes();
+                int rowCount = 0;
                 int columnCount = 0;
-                if (res.size() > 0) {
-                    List<Object> row = res.get(0);
-                    if (row != null) {
-                        columnCount = row.size(); 
-                        }
+
+                if (axes.length > 0) {
+                    columnCount = axes[0].getPositions().size();
+                    }
+                if (axes.length > 1) {
+                    rowCount = axes[1].getPositions().size();
                     }
 
                 result.setRowCount(rowCount);
@@ -194,12 +141,34 @@ public class QueryCheckExecutor {
 
                 // Execute cell value checks
                 for (CellValueCheck cellCheck : check.getCellChecks()) {
-                    CellCheckResult cellResult = executeCellCheck(cellCheck, res);
+                    CellCheckResult cellResult = executeCellCheck(cellCheck, mdxResult);
                     result.getCellResults().add(cellResult);
                     if (cellResult.getStatus() == CheckStatus.FAILURE) {
                         result.setStatus(CheckStatus.FAILURE);
                     }
                 }
+
+            } else if (queryComponent instanceof DrillThrough drillThrough) {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(drillThrough, Optional.empty(), null);
+                checkResultSet(result, resultSet, startTime);
+            } else {
+                result.setStatus(CheckStatus.FAILURE);
+            }
+        } catch (Exception e) {
+            result.setExecutedSuccessfully(false);
+            result.setStatus(CheckStatus.FAILURE);
+        }
+    }
+
+
+    private void executeSqlQuery(QueryCheckResult result, long startTime) {
+        try {
+            // Execute the Sql query
+            QueryComponent queryComponent  = connection.parseStatement(check.getQuery());
+            if (queryComponent instanceof SqlQuery sqlQuery) {
+                ResultSet resultSet  = sqlQuery.execute();
+                checkResultSet(result, resultSet, startTime);
             } else {
                 result.setStatus(CheckStatus.FAILURE);
             }
@@ -207,6 +176,52 @@ public class QueryCheckExecutor {
         } catch (Exception e) {
             result.setExecutedSuccessfully(false);
             result.setStatus(CheckStatus.FAILURE);
+        }
+    }
+
+    private void checkResultSet(QueryCheckResult result, ResultSet resultSet, long startTime) throws SQLException {
+        List<List<Object>> res = getSqlResult(resultSet);
+        resultSet.close();
+        result.setExecutedSuccessfully(true);
+        int rowCount = res.size();
+        int columnCount = 0;
+        if (res.size() > 0) {
+            List<Object> row = res.get(0);
+            if (row != null) {
+                columnCount = row.size(); 
+                }
+            }
+
+        result.setRowCount(rowCount);
+        result.setColumnCount(columnCount);
+        result.setStatus(CheckStatus.SUCCESS);
+
+        // Check expected row count (-1 means not specified)
+        int expectedRowCount = check.getExpectedRowCount();
+        if (expectedRowCount >= 0 && rowCount != expectedRowCount) {
+            result.setStatus(CheckStatus.FAILURE);
+        }
+
+        // Check expected column count (-1 means not specified)
+        int expectedColumnCount = check.getExpectedColumnCount();
+        if (expectedColumnCount >= 0 && columnCount != expectedColumnCount) {
+            result.setStatus(CheckStatus.FAILURE);
+        }
+
+        // Check execution time (-1 means not specified)
+        long executionTime = System.currentTimeMillis() - startTime;
+        long maxExecutionTime = check.getMaxExecutionTimeMs();
+        if (maxExecutionTime > 0 && executionTime > maxExecutionTime) {
+            result.setStatus(CheckStatus.FAILURE);
+        }
+
+        // Execute cell value checks
+        for (CellValueCheck cellCheck : check.getCellChecks()) {
+            CellCheckResult cellResult = executeCellCheck(cellCheck, res);
+            result.getCellResults().add(cellResult);
+            if (cellResult.getStatus() == CheckStatus.FAILURE) {
+                result.setStatus(CheckStatus.FAILURE);
+            }
         }
     }
 

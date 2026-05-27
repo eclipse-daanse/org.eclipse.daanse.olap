@@ -51,7 +51,16 @@ public interface Scenario {
 
     List<WritebackCell> getWritebackCells();
 
-    void setCellValue(Connection connection, List<Member> members, double newValue, double currentValue,
+    /**
+     * Pushes a writeback value into the scenario.
+     *
+     * Historically both {@code newValue} and {@code currentValue} were {@code double}
+     * primitives. They are widened to {@link Object} so non-numeric writeback
+     * (e.g. comments backed by a {@code TextAggMeasure}) can pass through. Numeric
+     * call-sites can keep passing {@link Number}s; the implementation re-narrows them
+     * only when the target {@code RolapWritebackMeasure} declares a numeric datatype.
+     */
+    void setCellValue(Connection connection, List<Member> members, Object newValue, Object currentValue,
             AllocationPolicy allocationPolicy, Object[] allocationArgs);
 
     List<Map<String, Map.Entry<DataTypeJdbc, Object>>> getSessionValues();

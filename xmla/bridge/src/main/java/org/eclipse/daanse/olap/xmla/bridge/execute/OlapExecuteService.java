@@ -402,6 +402,9 @@ public class OlapExecuteService implements ExecuteService {
     private StatementResponse executeTransactionCommand(Connection connection, StatementRequest statementRequest,
             TransactionCommand transactionCommand, String userId) {
         String sessionId = statementRequest.sessionId();
+
+        LOGGER.info("Writeback[xmla] TransactionCommand {} sessionId='{}' userId='{}'",
+                transactionCommand.getCommand(), sessionId, userId);
         if (transactionCommand.getCommand() == Command.BEGIN) {
             ScenarioSession session = ScenarioSession.create(sessionId);
             Scenario scenario = connection.createScenario();
@@ -413,6 +416,9 @@ public class OlapExecuteService implements ExecuteService {
             ScenarioSession session = ScenarioSession.get(sessionId);
             Scenario scenario = session.getScenario();
             List<Cube> cubes = connection.getCatalog().getCubes();
+            int cubeCount = cubes == null ? 0 : cubes.size();
+            int rowCount = scenario.getSessionValues() == null ? 0 : scenario.getSessionValues().size();
+            LOGGER.info("Writeback[xmla] COMMIT iterating {} cube(s) with {} pending row(s)", cubeCount, rowCount);
             if (cubes != null) {
                 for (Cube cube : cubes) {
                     cube.commit(scenario.getSessionValues(), userId);
@@ -425,50 +431,123 @@ public class OlapExecuteService implements ExecuteService {
     }
 
     private StatementResponse executeUpdate(Connection connection, StatementRequest statementRequest, Update update) {
+        // INFO so operators can see exactly what Excel/XMLA sent — answers
+        // "is the text value being sent at all?" without having to enable
+        // DEBUG. One log line per UPDATE arrival (with clause count) plus
+        // one log line per clause (tuple, value, value type, allocation).
+        int clauseCount = update.getUpdateClauses() == null ? 0 : update.getUpdateClauses().size();
+        LOGGER.info("Writeback[xmla] UPDATE cube='{}' clauses={} sessionId='{}'",
+                update.getCubeName(), clauseCount, statementRequest.sessionId());
+
         ScenarioSession session = ScenarioSession.get(statementRequest.sessionId());
-        if (session != null) {
-            Scenario scenario = session.getScenario();
-            connection.setScenario(scenario);
-            for (UpdateClause updateClause : update.getUpdateClauses()) {
-                if (updateClause instanceof UpdateClause updateClauseImpl) {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new org.eclipse.daanse.olap.query.component.QueryPrintWriter(sw);
-                    updateClause.getTupleExp().unparse(pw);
-                    String tupleString = sw.toString();
+        if (session == null) {
+            LOGGER.warn("Writeback[xmla] UPDATE has no ScenarioSession for sessionId='{}' — clauses ignored",
+                    statementRequest.sessionId());
+            return new StatementResponseR(null, null);
+        }
+        Scenario scenario = session.getScenario();
+        connection.setScenario(scenario);
+        int clauseIdx = 0;
+        for (UpdateClause updateClause : update.getUpdateClauses()) {
+            if (updateClause instanceof UpdateClause updateClauseImpl) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new org.eclipse.daanse.olap.query.component.QueryPrintWriter(sw);
+                updateClause.getTupleExp().unparse(pw);
+                String tupleString = sw.toString();
 
-                    Statement pstmt = connection.createStatement();
-                    CellSet cellSet = pstmt.executeQuery(new StringBuilder("SELECT ").append(tupleString)
-                            .append(" ON 0 FROM ").append(update.getCubeName())
-                            // .append(" CELL PROPERTIES CELL_ORDINAL")
-                            .toString());
-                    CellSetAxis axis = cellSet.getAxes().getFirst();
-                    if (axis.getPositionCount() == 0) {
-                        // Empty tuple exception
-                    }
-                    if (axis.getPositionCount() == 1) {
-                        // More than one tuple exception
-                    }
-                    // Cell writeBackCell = cellSet.getCell(Arrays.asList(0));
-
-                    sw = new StringWriter();
-                    pw = new org.eclipse.daanse.olap.query.component.QueryPrintWriter(sw);
-                    updateClause.getValueExp().unparse(pw);
-                    String valueString = sw.toString();
-
-                    pstmt = connection.createStatement();
-                    cellSet = pstmt.executeQuery(new StringBuilder("WITH MEMBER [Measures].[m1] AS ")
-                            .append(valueString).append(" SELECT [Measures].[m1] ON 0 FROM ")
-                            .append(update.getCubeName()).append(" CELL PROPERTIES VALUE").toString());
-                    Cell cell = cellSet.getCell(Arrays.asList(0));
-                    AllocationPolicy allocationPolicy = convertAllocation(updateClauseImpl.getAllocation());
-                    String cubeName = update.getCubeName();
-                    Cube cube = connection.getCatalog().lookupCube(cubeName)
-                            .orElseThrow(() -> createCubeNotFoundException(cubeName));
-                    List<Map<String, Map.Entry<DataTypeJdbc, Object>>> values = cube.getAllocationValues(tupleString,
-                            cell.getValue(), allocationPolicy);
-                    scenario.getSessionValues().addAll(values);
-                    connection.getCacheControl(null).flushSchemaCache();
+                Statement pstmt = connection.createStatement();
+                CellSet cellSet = pstmt.executeQuery(new StringBuilder("SELECT ").append(tupleString)
+                        .append(" ON 0 FROM ").append(update.getCubeName())
+                        // .append(" CELL PROPERTIES CELL_ORDINAL")
+                        .toString());
+                CellSetAxis axis = cellSet.getAxes().getFirst();
+                if (axis.getPositionCount() == 0) {
+                    // Empty tuple exception
                 }
+                if (axis.getPositionCount() == 1) {
+                    // More than one tuple exception
+                }
+                // Cell writeBackCell = cellSet.getCell(Arrays.asList(0));
+
+                sw = new StringWriter();
+                pw = new org.eclipse.daanse.olap.query.component.QueryPrintWriter(sw);
+                updateClause.getValueExp().unparse(pw);
+                String valueString = sw.toString();
+
+                pstmt = connection.createStatement();
+                cellSet = pstmt.executeQuery(new StringBuilder("WITH MEMBER [Measures].[m1] AS ")
+                        .append(valueString).append(" SELECT [Measures].[m1] ON 0 FROM ")
+                        .append(update.getCubeName()).append(" CELL PROPERTIES VALUE").toString());
+                Cell cell = cellSet.getCell(Arrays.asList(0));
+                AllocationPolicy allocationPolicy = convertAllocation(updateClauseImpl.getAllocation());
+                Object resolvedValue = cell.getValue();
+
+                // Pull the resolved members from the tuple position so we can
+                // route text-typed writebacks through ScenarioImpl.setCellValue
+                // (which has a dedicated writeTextRow short-path). The
+                // existing numeric allocation path (getAllocationValues) hard-
+                // casts value to Double and silently drops text writebacks.
+                List<org.eclipse.daanse.olap.api.element.Member> resolvedMembers = java.util.List.of();
+                if (!axis.getPositions().isEmpty()) {
+                    resolvedMembers = axis.getPositions().get(0).getMembers();
+                }
+
+                // The measure should be first in the list handed to
+                // ScenarioImpl.setCellValue. If Excel arranged it elsewhere
+                // in the tuple, reorder.
+                org.eclipse.daanse.olap.api.element.Member measureMember = null;
+                List<org.eclipse.daanse.olap.api.element.Member> reordered = new ArrayList<>(resolvedMembers.size());
+                for (org.eclipse.daanse.olap.api.element.Member rm : resolvedMembers) {
+                    if (measureMember == null && rm instanceof org.eclipse.daanse.olap.api.element.Measure) {
+                        measureMember = rm;
+                    } else {
+                        reordered.add(rm);
+                    }
+                }
+                if (measureMember != null) {
+                    reordered.add(0, measureMember);
+                }
+
+                // Detect text-typed measures via the DATATYPE property stored
+                // on the member (set by RolapBaseCubeMeasure's constructor).
+                // "String" is the local enum literal; everything else (Numeric,
+                // Integer) means numeric allocation.
+                boolean isText = false;
+                if (measureMember != null) {
+                    Object dt = measureMember.getPropertyValue(
+                            org.eclipse.daanse.olap.common.StandardProperty.DATATYPE.getName());
+                    isText = "String".equals(dt);
+                }
+
+                LOGGER.info(
+                        "Writeback[xmla] UPDATE clause[{}] tuple='{}' valueExp='{}' resolvedValue={} valueType={} allocation={} targetMeasure='{}' isTextMeasure={}",
+                        clauseIdx++, tupleString, valueString, resolvedValue,
+                        resolvedValue == null ? "<null>" : resolvedValue.getClass().getSimpleName(),
+                        allocationPolicy,
+                        measureMember == null ? "<unresolved>" : measureMember.getUniqueName(),
+                        isText);
+
+                String cubeName = update.getCubeName();
+                Cube cube = connection.getCatalog().lookupCube(cubeName)
+                        .orElseThrow(() -> createCubeNotFoundException(cubeName));
+
+                if (isText && measureMember != null) {
+                    // Text writeback: bypass numeric allocation. Hand the
+                    // resolved members + raw value to setCellValue, which
+                    // takes the TEXT short path and pushes one session row
+                    // with the target column populated.
+                    LOGGER.info("Writeback[xmla] UPDATE clause[{}] routing TEXT measure '{}' through setCellValue",
+                            clauseIdx - 1, measureMember.getUniqueName());
+                    scenario.setCellValue(connection, reordered, resolvedValue, null, allocationPolicy, new Object[0]);
+                    LOGGER.info("Writeback[xmla] UPDATE clause[{}] text writeback added; sessionValues size={}",
+                            clauseIdx - 1, scenario.getSessionValues().size());
+                } else {
+                    List<Map<String, Map.Entry<DataTypeJdbc, Object>>> values = cube.getAllocationValues(tupleString,
+                            resolvedValue, allocationPolicy);
+                    LOGGER.info("Writeback[xmla] UPDATE clause[{}] produced {} session row(s)", clauseIdx - 1, values.size());
+                    scenario.getSessionValues().addAll(values);
+                }
+                connection.getCacheControl(null).flushSchemaCache();
             }
         }
         return new StatementResponseR(null, null);

@@ -143,7 +143,7 @@ public interface Cube extends OlapElement, MetaElement {
     void commit(List<Map<String, Map.Entry<DataTypeJdbc, Object>>> sessionValues, String userId);
 
     List<Map<String, Entry<DataTypeJdbc, Object>>> getAllocationValues(String tupleString, Object value,
-            AllocationPolicy allocationPolicy);
+            AllocationPolicy allocationPolicy, Role role);
 
     /**
      * Returns the time hierarchy for this cube. If there is no time hierarchy,

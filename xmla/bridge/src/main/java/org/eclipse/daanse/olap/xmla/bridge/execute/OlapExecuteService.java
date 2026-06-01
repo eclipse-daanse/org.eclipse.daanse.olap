@@ -448,6 +448,13 @@ public class OlapExecuteService implements ExecuteService {
         Scenario scenario = session.getScenario();
         connection.setScenario(scenario);
         int clauseIdx = 0;
+        String cubeName = update.getCubeName();
+        Cube cube = connection.getCatalog().lookupCube(cubeName)
+                .orElseThrow(() -> createCubeNotFoundException(cubeName));
+        if (scenario.getSessionValues() != null && scenario.getSessionValues().isEmpty()) {
+            cube.modifyFact(scenario.getSessionValues());
+        }
+        try {
         for (UpdateClause updateClause : update.getUpdateClauses()) {
             if (updateClause instanceof UpdateClause updateClauseImpl) {
                 StringWriter sw = new StringWriter();
@@ -527,10 +534,6 @@ public class OlapExecuteService implements ExecuteService {
                         measureMember == null ? "<unresolved>" : measureMember.getUniqueName(),
                         isText);
 
-                String cubeName = update.getCubeName();
-                Cube cube = connection.getCatalog().lookupCube(cubeName)
-                        .orElseThrow(() -> createCubeNotFoundException(cubeName));
-
                 if (isText && measureMember != null) {
                     // Text writeback: bypass numeric allocation. Hand the
                     // resolved members + raw value to setCellValue, which
@@ -543,12 +546,15 @@ public class OlapExecuteService implements ExecuteService {
                             clauseIdx - 1, scenario.getSessionValues().size());
                 } else {
                     List<Map<String, Map.Entry<DataTypeJdbc, Object>>> values = cube.getAllocationValues(tupleString,
-                            resolvedValue, allocationPolicy);
+                            resolvedValue, allocationPolicy, connection.getRole());
                     LOGGER.info("Writeback[xmla] UPDATE clause[{}] produced {} session row(s)", clauseIdx - 1, values.size());
                     scenario.getSessionValues().addAll(values);
                 }
                 connection.getCacheControl(null).flushSchemaCache();
             }
+        }
+        } finally {
+            cube.restoreFact();
         }
         return new StatementResponseR(null, null);
     }

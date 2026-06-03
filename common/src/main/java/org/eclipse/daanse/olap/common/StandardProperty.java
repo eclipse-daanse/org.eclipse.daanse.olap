@@ -446,6 +446,10 @@ public final class StandardProperty extends PropertyBase {
 			Datatype.TYPE_NUMERIC, false, false, true,
 			"Number of fact rows that contributed to this cell. If the cell is " + "not drillable, value is -1.");
 
+	public static final StandardProperty UPDATEABLE = new StandardProperty("UPDATEABLE",
+			Datatype.TYPE_NUMERIC, false, false, true,
+			"If the cell is " + "not updateable");
+
 	/**
 	 * The various property names which define a format string.
 	 */
@@ -464,7 +468,7 @@ public final class StandardProperty extends PropertyBase {
 			PARENT_COUNT, DESCRIPTION_PROPERTY, VISIBLE, CELL_FORMATTER, CELL_FORMATTER_SCRIPT,
 			CELL_FORMATTER_SCRIPT_LANGUAGE, BACK_COLOR, CELL_EVALUATION_LIST, CELL_ORDINAL, FORE_COLOR, FONT_NAME,
 			FONT_SIZE, FONT_FLAGS, FORMAT_STRING, FORMATTED_VALUE, NON_EMPTY_BEHAVIOR, SOLVE_ORDER, VALUE, DATATYPE,
-			MEMBER_KEY, KEY, SCENARIO, DISPLAY_FOLDER, FORMAT_EXP, ACTION_TYPE, DRILLTHROUGH_COUNT);
+			MEMBER_KEY, KEY, SCENARIO, DISPLAY_FOLDER, FORMAT_EXP, ACTION_TYPE, DRILLTHROUGH_COUNT, UPDATEABLE);
 
 	static {
 		// Populate synonyms.

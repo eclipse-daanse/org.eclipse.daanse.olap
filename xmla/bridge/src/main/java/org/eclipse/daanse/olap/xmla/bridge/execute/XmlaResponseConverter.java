@@ -136,6 +136,7 @@ public class XmlaResponseConverter {
         cellPropertyMap.put("BACK_COLOR", new CellPropertyR("BACK_COLOR", "BackColor", XSD_UNSIGNED_INT));
         cellPropertyMap.put("FORE_COLOR", new CellPropertyR("FORE_COLOR", "ForeColor", XSD_UNSIGNED_INT));
         cellPropertyMap.put("FONT_FLAGS", new CellPropertyR("FONT_FLAGS", "FontFlags", "xsd:int"));
+        cellPropertyMap.put("UPDATEABLE", new CellPropertyR("UPDATEABLE", "Updateable", XSD_UNSIGNED_INT));
     }
 
     protected static final List<Property> defaultProps = List.of(

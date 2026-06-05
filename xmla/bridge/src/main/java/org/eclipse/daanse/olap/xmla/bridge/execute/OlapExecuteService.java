@@ -451,9 +451,7 @@ public class OlapExecuteService implements ExecuteService {
         String cubeName = update.getCubeName();
         Cube cube = connection.getCatalog().lookupCube(cubeName)
                 .orElseThrow(() -> createCubeNotFoundException(cubeName));
-        if (scenario.getSessionValues() != null && scenario.getSessionValues().isEmpty()) {
-            cube.modifyFact(scenario.getSessionValues());
-        }
+        cube.modifyFact(scenario.getSessionValues()); //need modifyFact because data can be in "wb" table
         try {
         for (UpdateClause updateClause : update.getUpdateClauses()) {
             if (updateClause instanceof UpdateClause updateClauseImpl) {

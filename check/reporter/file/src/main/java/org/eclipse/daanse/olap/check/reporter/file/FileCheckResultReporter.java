@@ -29,9 +29,6 @@ import org.eclipse.daanse.olap.check.model.check.CheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckSkipped;
 import org.eclipse.daanse.olap.check.model.check.CheckStatus;
 import org.eclipse.daanse.olap.check.model.check.CubeCheckResult;
-import org.eclipse.daanse.olap.check.model.check.DatabaseColumnCheckResult;
-import org.eclipse.daanse.olap.check.model.check.DatabaseSchemaCheckResult;
-import org.eclipse.daanse.olap.check.model.check.DatabaseTableCheckResult;
 import org.eclipse.daanse.olap.check.model.check.DimensionCheckResult;
 import org.eclipse.daanse.olap.check.model.check.DrillThroughActionCheckResult;
 import org.eclipse.daanse.olap.check.model.check.HierarchyCheckResult;
@@ -175,7 +172,6 @@ public class FileCheckResultReporter implements CheckResultReporter {
         switch (result) {
         case CatalogCheckResult r -> {
             r.getCubeResults().forEach(c -> appendCheckResult(sb, c, depth));
-            r.getDatabaseSchemaResults().forEach(c -> appendCheckResult(sb, c, depth));
             r.getQueryResults().forEach(c -> appendCheckResult(sb, c, depth));
         }
         case CubeCheckResult r -> {
@@ -201,7 +197,6 @@ public class FileCheckResultReporter implements CheckResultReporter {
                 sb.append(" |\n");
                 collectFailures(sb, list(r.getAttributeResults()));
                 collectFailures(sb, list(r.getCubeResults()));
-                collectFailures(sb, list(r.getDatabaseSchemaResults()));
                 collectFailures(sb, list(r.getQueryResults()));
         	}
         }
@@ -218,38 +213,6 @@ public class FileCheckResultReporter implements CheckResultReporter {
                 collectFailures(sb, list(r.getDrillThroughActionResults()));
                 collectFailures(sb, list(r.getNamedSetResults()));
                 collectFailures(sb, list(r.getKpiResults()));
-            }
-        }
-        case DatabaseSchemaCheckResult r -> {
-            if (CheckStatus.FAILURE.equals(r.getStatus())) {
-                sb.append("| ").append(esc(r.getCheckName()));
-                sb.append(" | ").append("Database : ").append(esc(r.getSchemaName()));
-                sb.append(" | ").append("");
-                sb.append(" | ").append("");
-                sb.append(" |\n");
-                collectFailures(sb, list(r.getAttributeResults()));
-                collectFailures(sb, list(r.getTableResults()));
-            }
-        }
-        case DatabaseTableCheckResult r -> {
-            if (CheckStatus.FAILURE.equals(r.getStatus())) {
-                sb.append("| ").append(esc(r.getCheckName()));
-                sb.append(" | ").append("Table : ").append(esc(r.getTableName()));
-                sb.append(" | ").append("");
-                sb.append(" | ").append("");
-                sb.append(" |\n");
-                collectFailures(sb, list(r.getAttributeResults()));
-                collectFailures(sb, list(r.getColumnResults()));
-            }
-        }
-        case DatabaseColumnCheckResult r -> {
-            if (CheckStatus.FAILURE.equals(r.getStatus())) {
-                sb.append("| ").append(esc(r.getCheckName()));
-                sb.append(" | ").append("Column : ").append(esc(r.getColumnName()));
-                sb.append(" | ").append("");
-                sb.append(" | ").append("");
-                sb.append(" |\n");
-                collectFailures(sb, list(r.getAttributeResults()));
             }
         }
         case QueryCheckResult r -> {
@@ -382,7 +345,6 @@ public class FileCheckResultReporter implements CheckResultReporter {
         switch (result) {
         case CatalogCheckResult r -> {
             collectSkipped(sb, list(r.getCubeResults()));
-            collectSkipped(sb, list(r.getDatabaseSchemaResults()));
             collectSkipped(sb, list(r.getQueryResults()));
         }
         case CubeCheckResult r -> {

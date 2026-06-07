@@ -75,7 +75,6 @@ public class LogCheckResultReporter implements CheckResultReporter {
         switch (result) {
         case CatalogCheckResult r -> {
             r.getCubeResults().forEach(c -> reportCheckResult(c, indent));
-            r.getDatabaseSchemaResults().forEach(c -> reportCheckResult(c, indent));
             r.getQueryResults().forEach(c -> reportCheckResult(c, indent));
         }
         case CubeCheckResult r -> {

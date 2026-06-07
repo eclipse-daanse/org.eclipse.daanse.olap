@@ -19,15 +19,12 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
-import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheck;
 import org.eclipse.daanse.olap.check.model.check.CatalogCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckResult;
 import org.eclipse.daanse.olap.check.model.check.CheckStatus;
 import org.eclipse.daanse.olap.check.model.check.CubeCheck;
 import org.eclipse.daanse.olap.check.model.check.CubeCheckResult;
-import org.eclipse.daanse.olap.check.model.check.DatabaseSchemaCheck;
-import org.eclipse.daanse.olap.check.model.check.DatabaseSchemaCheckResult;
 import org.eclipse.daanse.olap.check.model.check.OlapCheckFactory;
 import org.eclipse.daanse.olap.check.model.check.QueryCheck;
 import org.eclipse.daanse.olap.check.model.check.QueryCheckResult;
@@ -81,23 +78,6 @@ public class CatalogCheckExecutor {
 
                 // If any child fails, mark parent as failed
                 if (cubeResult.getStatus() == CheckStatus.FAILURE) {
-                    result.setStatus(CheckStatus.FAILURE);
-                }
-            }
-
-            // Execute database schema checks
-            List<? extends DatabaseSchema> schemas = catalogReader.getDatabaseSchemas();
-            for (DatabaseSchemaCheck schemaCheck : check.getDatabaseSchemaChecks()) {
-                if (!schemaCheck.isEnabled()) {
-                    continue;
-                }
-
-                DatabaseSchemaCheckExecutor schemaExecutor = new DatabaseSchemaCheckExecutor(schemaCheck, schemas,
-                        factory);
-                DatabaseSchemaCheckResult schemaResult = schemaExecutor.execute();
-                result.getDatabaseSchemaResults().add(schemaResult);
-
-                if (schemaResult.getStatus() == CheckStatus.FAILURE) {
                     result.setStatus(CheckStatus.FAILURE);
                 }
             }

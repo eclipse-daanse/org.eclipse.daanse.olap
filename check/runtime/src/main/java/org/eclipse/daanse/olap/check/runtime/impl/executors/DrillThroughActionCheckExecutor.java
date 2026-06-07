@@ -113,7 +113,7 @@ public class DrillThroughActionCheckExecutor {
                     attrCheck.getMatchMode(), attrCheck.isCaseSensitive());
         }
 
-        result.setStatus(matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+        result.setStatus(AttributeCheckHelper.finalStatus(matches, actualValue, attrCheck.isSkipIfMissing()));
         return result;
     }
 

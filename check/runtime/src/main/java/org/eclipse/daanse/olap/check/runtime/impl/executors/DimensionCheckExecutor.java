@@ -71,6 +71,7 @@ public class DimensionCheckExecutor {
 
             if (foundDimension.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
+                result.setAbsent(true);
                 result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
@@ -79,6 +80,13 @@ public class DimensionCheckExecutor {
             Dimension dimension = foundDimension.get();
             result.setDimensionUniqueName(dimension.getUniqueName());
             result.setStatus(CheckStatus.SUCCESS);
+
+            // Verify the isMeasure flag if the check declared one.
+            // Boolean (boxed) — null means "don't assert".
+            Boolean expectedIsMeasure = check.getIsMeasure();
+            if (expectedIsMeasure != null && expectedIsMeasure.booleanValue() != dimension.isMeasures()) {
+                result.setStatus(CheckStatus.FAILURE);
+            }
 
             // Execute attribute checks
             for (DimensionAttributeCheck attrCheck : check.getDimensionAttributeChecks()) {
@@ -153,7 +161,7 @@ public class DimensionCheckExecutor {
                     attrCheck.getMatchMode(), attrCheck.isCaseSensitive());
         }
 
-        result.setStatus(matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+        result.setStatus(AttributeCheckHelper.finalStatus(matches, actualValue, attrCheck.isSkipIfMissing()));
         return result;
     }
 

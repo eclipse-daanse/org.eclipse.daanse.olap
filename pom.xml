@@ -63,6 +63,7 @@
     <module>odc</module>
     <module>check</module>
     <module>util.format</module>
+    <module>testkit</module>
   </modules>
 
   <dependencies>

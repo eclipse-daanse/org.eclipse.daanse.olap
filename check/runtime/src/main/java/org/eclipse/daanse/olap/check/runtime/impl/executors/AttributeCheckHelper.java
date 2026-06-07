@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.olap.check.runtime.impl.executors;
 
+import org.eclipse.daanse.olap.check.model.check.CheckStatus;
 import org.eclipse.daanse.olap.check.model.check.MatchMode;
 
 /**
@@ -22,6 +23,21 @@ public class AttributeCheckHelper {
 
     private AttributeCheckHelper() {
         // Utility class
+    }
+
+    /**
+     * Compute the final {@link CheckStatus} for an attribute comparison, honouring
+     * the {@code skipIfMissing} contract: when the attribute being checked is
+     * absent on the live element (actualValue == null or empty) and the check
+     * declares {@code skipIfMissing=true}, the result is reported as
+     * {@link CheckStatus#SKIPPED} rather than {@link CheckStatus#FAILURE}.
+     */
+    public static CheckStatus finalStatus(boolean matches, Object actualValue, boolean skipIfMissing) {
+        boolean missing = actualValue == null || (actualValue instanceof String s && s.isEmpty());
+        if (skipIfMissing && missing) {
+            return CheckStatus.SKIPPED;
+        }
+        return matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE;
     }
 
     public static boolean compareValues(String expected, String actual, MatchMode matchMode, boolean caseSensitive) {

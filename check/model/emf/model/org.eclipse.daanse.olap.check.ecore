@@ -209,20 +209,6 @@
     <eLiterals name="DESCRIPTION" value="2"/>
     <eLiterals name="IS_DEFAULT" value="3"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseSchemaAttribute">
-    <eLiterals name="NAME"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseTableAttribute">
-    <eLiterals name="NAME"/>
-    <eLiterals name="DESCRIPTION" value="1"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="DatabaseColumnAttribute">
-    <eLiterals name="NAME"/>
-    <eLiterals name="TYPE" value="1"/>
-    <eLiterals name="NULLABLE" value="2"/>
-    <eLiterals name="COLUMN_SIZE" value="3"/>
-    <eLiterals name="DECIMAL_DIGITS" value="4"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="PropertyValueType">
     <eLiterals name="STRING"/>
     <eLiterals name="INTEGER" value="1"/>
@@ -257,6 +243,7 @@
     <eLiterals name="DATABASE_SCHEMA" value="10"/>
     <eLiterals name="DATABASE_TABLE" value="11"/>
     <eLiterals name="DATABASE_COLUMN" value="12"/>
+    <eLiterals name="ROLE" value="13"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SkipReason">
     <eLiterals name="DISABLED"/>
@@ -311,8 +298,6 @@
         eType="#//CubeCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="catalogAttributeChecks"
         upperBound="-1" eType="#//CatalogAttributeCheck" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseSchemaChecks" upperBound="-1"
-        eType="#//DatabaseSchemaCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="queryChecks" upperBound="-1"
         eType="#//QueryCheck" containment="true"/>
   </eClassifiers>
@@ -324,6 +309,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CubeCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -351,10 +338,13 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DimensionCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensionUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isMeasure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchyChecks" upperBound="-1"
         eType="#//HierarchyCheck" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dimensionAttributeChecks"
@@ -373,6 +363,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HierarchyCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -393,6 +385,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LevelCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -414,6 +408,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MemberCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -435,6 +431,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PropertyCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -452,6 +450,8 @@
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MeasureCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -470,6 +470,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="KPICheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kpiName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -484,6 +486,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedSetCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="namedSetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -499,6 +503,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DrillThroughActionCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -514,6 +520,8 @@
         defaultValueLiteral="EQUALS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skipIfMissing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -527,6 +535,17 @@
         defaultValueLiteral="-1"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cellChecks" upperBound="-1"
         eType="#//CellValueCheck" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="axisChecks" upperBound="-1"
+        eType="#//AxisCheck" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxisCheck">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="axisIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedPositionCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedFirstMemberUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedFirstMemberCaption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CellValueCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -555,55 +574,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="LevelCountCheck" eSuperTypes="#//CountCheck"/>
   <eClassifiers xsi:type="ecore:EClass" name="MemberCountCheck" eSuperTypes="#//CountCheck"/>
   <eClassifiers xsi:type="ecore:EClass" name="MeasureCountCheck" eSuperTypes="#//CountCheck"/>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaCheck" eSuperTypes="#//OlapCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="schemaAttributeChecks"
-        upperBound="-1" eType="#//DatabaseSchemaAttributeCheck" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tableChecks" upperBound="-1"
-        eType="#//DatabaseTableCheck" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaAttributeCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseSchemaAttribute"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode"
-        defaultValueLiteral="EQUALS"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableCheck" eSuperTypes="#//OlapCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tableAttributeChecks" upperBound="-1"
-        eType="#//DatabaseTableAttributeCheck" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="columnChecks" upperBound="-1"
-        eType="#//DatabaseColumnCheck" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableAttributeCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseTableAttribute"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode"
-        defaultValueLiteral="EQUALS"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnCheck" eSuperTypes="#//OlapCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="columnAttributeChecks"
-        upperBound="-1" eType="#//DatabaseColumnAttributeCheck" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnAttributeCheck">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="#//DatabaseColumnAttribute"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        defaultValueLiteral="-1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchMode" eType="#//MatchMode"
-        defaultValueLiteral="EQUALS"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CheckGroup" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopOnFirstFailure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
@@ -647,6 +617,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementType" eType="#//ElementType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectAbsent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ElementAttributeCheck" eSuperTypes="#//OlapCheck">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -676,6 +648,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//CheckStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="absent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionTimeMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startedAt" eType="#//Instant"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endedAt" eType="#//Instant"/>
@@ -702,8 +676,6 @@
         eType="#//CubeCheckResult" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1"
         eType="#//AttributeCheckResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="databaseSchemaResults"
-        upperBound="-1" eType="#//DatabaseSchemaCheckResult" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="queryResults" upperBound="-1"
         eType="#//QueryCheckResult" containment="true"/>
   </eClassifiers>
@@ -781,25 +753,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1"
         eType="#//AttributeCheckResult" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseSchemaCheckResult" eSuperTypes="#//CheckResult">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1"
-        eType="#//AttributeCheckResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tableResults" upperBound="-1"
-        eType="#//DatabaseTableCheckResult" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseTableCheckResult" eSuperTypes="#//CheckResult">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1"
-        eType="#//AttributeCheckResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="columnResults" upperBound="-1"
-        eType="#//DatabaseColumnCheckResult" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DatabaseColumnCheckResult" eSuperTypes="#//CheckResult">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeResults" upperBound="-1"
-        eType="#//AttributeCheckResult" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryCheckResult" eSuperTypes="#//CheckResult">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryLanguage" eType="#//QueryLanguage"/>
@@ -808,6 +761,17 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cellResults" upperBound="-1"
         eType="#//CellCheckResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="axisResults" upperBound="-1"
+        eType="#//AxisCheckResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxisCheckResult" eSuperTypes="#//CheckResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="axisIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedPositionCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualPositionCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedFirstMemberUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualFirstMemberUniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedFirstMemberCaption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actualFirstMemberCaption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CellCheckResult" eSuperTypes="#//CheckResult">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="coordinates" upperBound="-1"

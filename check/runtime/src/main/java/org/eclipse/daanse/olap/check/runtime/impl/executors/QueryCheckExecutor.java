@@ -31,7 +31,11 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
+import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.check.model.check.AxisCheck;
+import org.eclipse.daanse.olap.check.model.check.AxisCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CellCheckResult;
 import org.eclipse.daanse.olap.check.model.check.CellValueCheck;
 import org.eclipse.daanse.olap.check.model.check.CheckStatus;
@@ -88,6 +92,7 @@ public class QueryCheckExecutor {
         } catch (Exception e) {
             result.setExecutedSuccessfully(false);
             result.setStatus(CheckStatus.FAILURE);
+            appendError(result, e);
         }
 
         result.setEndedAt(Instant.now());
@@ -99,7 +104,7 @@ public class QueryCheckExecutor {
     private void executeMdxQuery(QueryCheckResult result, long startTime) {
         try {
             // Execute the MDX query
-            QueryComponent queryComponent  = connection.parseStatement(check.getQuery());
+            QueryComponent queryComponent = connection.parseStatement(check.getQuery());
             if (queryComponent instanceof Query query) {
                 Result mdxResult = connection.execute(query);
                 result.setExecutedSuccessfully(true);
@@ -111,10 +116,10 @@ public class QueryCheckExecutor {
 
                 if (axes.length > 0) {
                     columnCount = axes[0].getPositions().size();
-                    }
+                }
                 if (axes.length > 1) {
                     rowCount = axes[1].getPositions().size();
-                    }
+                }
 
                 result.setRowCount(rowCount);
                 result.setColumnCount(columnCount);
@@ -148,6 +153,15 @@ public class QueryCheckExecutor {
                     }
                 }
 
+                // Execute axis checks
+                for (AxisCheck axisCheck : check.getAxisChecks()) {
+                    AxisCheckResult axisResult = executeAxisCheck(axisCheck, axes);
+                    result.getAxisResults().add(axisResult);
+                    if (axisResult.getStatus() == CheckStatus.FAILURE) {
+                        result.setStatus(CheckStatus.FAILURE);
+                    }
+                }
+
             } else if (queryComponent instanceof DrillThrough drillThrough) {
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(drillThrough, Optional.empty(), null);
@@ -158,16 +172,16 @@ public class QueryCheckExecutor {
         } catch (Exception e) {
             result.setExecutedSuccessfully(false);
             result.setStatus(CheckStatus.FAILURE);
+            appendError(result, e);
         }
     }
-
 
     private void executeSqlQuery(QueryCheckResult result, long startTime) {
         try {
             // Execute the Sql query
-            QueryComponent queryComponent  = connection.parseStatement(check.getQuery());
+            QueryComponent queryComponent = connection.parseStatement(check.getQuery());
             if (queryComponent instanceof SqlQuery sqlQuery) {
-                ResultSet resultSet  = sqlQuery.execute();
+                ResultSet resultSet = sqlQuery.execute();
                 checkResultSet(result, resultSet, startTime);
             } else {
                 result.setStatus(CheckStatus.FAILURE);
@@ -176,6 +190,7 @@ public class QueryCheckExecutor {
         } catch (Exception e) {
             result.setExecutedSuccessfully(false);
             result.setStatus(CheckStatus.FAILURE);
+            appendError(result, e);
         }
     }
 
@@ -188,9 +203,9 @@ public class QueryCheckExecutor {
         if (res.size() > 0) {
             List<Object> row = res.get(0);
             if (row != null) {
-                columnCount = row.size(); 
-                }
+                columnCount = row.size();
             }
+        }
 
         result.setRowCount(rowCount);
         result.setColumnCount(columnCount);
@@ -247,11 +262,10 @@ public class QueryCheckExecutor {
             rows.add(row);
         }
 
-
         return rows;
-	}
+    }
 
-	private void executeDaxQuery(QueryCheckResult result, long startTime) {
+    private void executeDaxQuery(QueryCheckResult result, long startTime) {
         // TODO: Implement DAX query execution
         // DAX queries would need to use appropriate DAX execution mechanism
         result.setExecutedSuccessfully(false);
@@ -308,6 +322,7 @@ public class QueryCheckExecutor {
 
         } catch (Exception e) {
             result.setStatus(CheckStatus.FAILURE);
+            appendCellError(result, e);
         }
 
         return result;
@@ -327,10 +342,12 @@ public class QueryCheckExecutor {
             int colIndex = 0;
             if (coords != null && coords.size() > 0) {
                 rowIndex = coords.get(0);
-            };
+            }
+            ;
             if (coords != null && coords.size() > 1) {
-            	colIndex = coords.get(1);
-            };
+                colIndex = coords.get(1);
+            }
+            ;
 
             List<Object> rowObject = res.size() > rowIndex ? res.get(rowIndex) : List.of();
             Object cellValue = rowObject.size() > colIndex ? rowObject.get(colIndex) : null;
@@ -361,9 +378,79 @@ public class QueryCheckExecutor {
 
         } catch (Exception e) {
             result.setStatus(CheckStatus.FAILURE);
+            appendCellError(result, e);
         }
 
         return result;
+    }
+
+    private AxisCheckResult executeAxisCheck(AxisCheck check, Axis[] axes) {
+        AxisCheckResult result = factory.createAxisCheckResult();
+        result.setCheckName(check.getName());
+        result.setAxisIndex(check.getAxisIndex());
+        result.setExpectedPositionCount(check.getExpectedPositionCount());
+        result.setExpectedFirstMemberUniqueName(check.getExpectedFirstMemberUniqueName());
+        result.setExpectedFirstMemberCaption(check.getExpectedFirstMemberCaption());
+
+        int idx = check.getAxisIndex();
+        if (idx < 0 || idx >= axes.length) {
+            result.setStatus(CheckStatus.FAILURE);
+            result.setAbsent(true);
+            return result;
+        }
+        java.util.List<Position> positions = axes[idx].getPositions();
+        int actualCount = positions.size();
+        result.setActualPositionCount(actualCount);
+
+        if (!positions.isEmpty() && !positions.get(0).isEmpty()) {
+            Member first = positions.get(0).get(0);
+            result.setActualFirstMemberUniqueName(first.getUniqueName());
+            result.setActualFirstMemberCaption(first.getCaption());
+        }
+
+        boolean ok = true;
+        if (check.getExpectedPositionCount() >= 0 && actualCount != check.getExpectedPositionCount()) {
+            ok = false;
+        }
+        String expUn = check.getExpectedFirstMemberUniqueName();
+        if (expUn != null && !expUn.isEmpty() && !expUn.equals(result.getActualFirstMemberUniqueName())) {
+            ok = false;
+        }
+        String expCap = check.getExpectedFirstMemberCaption();
+        if (expCap != null && !expCap.isEmpty() && !expCap.equals(result.getActualFirstMemberCaption())) {
+            ok = false;
+        }
+        result.setStatus(ok ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+        return result;
+    }
+
+    private static void appendError(QueryCheckResult result, Throwable e) {
+        String existing = result.getCheckDescription();
+        String text = (existing == null || existing.isBlank() ? "" : existing + " | ") + summarize(e);
+        result.setCheckDescription(text);
+    }
+
+    private static void appendCellError(CellCheckResult result, Throwable e) {
+        String existing = result.getCheckName();
+        result.setCheckName((existing == null ? "cell" : existing) + " (" + summarize(e) + ")");
+    }
+
+    private static String summarize(Throwable e) {
+        StringBuilder sb = new StringBuilder();
+        Throwable t = e;
+        int depth = 0;
+        while (t != null && depth < 4) {
+            if (depth > 0) {
+                sb.append(" <- ");
+            }
+            sb.append(t.getClass().getSimpleName());
+            if (t.getMessage() != null) {
+                sb.append(": ").append(t.getMessage().replace('\n', ' '));
+            }
+            t = t.getCause();
+            depth++;
+        }
+        return sb.toString();
     }
 
 }

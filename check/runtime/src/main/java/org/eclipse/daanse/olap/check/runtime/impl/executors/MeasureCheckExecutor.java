@@ -68,6 +68,7 @@ public class MeasureCheckExecutor {
 
             if (foundMeasure.isEmpty()) {
                 result.setStatus(CheckStatus.FAILURE);
+                result.setAbsent(true);
                 result.setEndedAt(Instant.now());
                 result.setExecutionTimeMs(System.currentTimeMillis() - startTime);
                 return result;
@@ -127,7 +128,7 @@ public class MeasureCheckExecutor {
                     attrCheck.getMatchMode(), attrCheck.isCaseSensitive());
         }
 
-        result.setStatus(matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+        result.setStatus(AttributeCheckHelper.finalStatus(matches, actualValue, attrCheck.isSkipIfMissing()));
         return result;
     }
 

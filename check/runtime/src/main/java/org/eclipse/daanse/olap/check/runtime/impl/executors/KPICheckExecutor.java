@@ -103,7 +103,7 @@ public class KPICheckExecutor {
         boolean matches = AttributeCheckHelper.compareValues(attrCheck.getExpectedValue(), actualValue,
                 attrCheck.getMatchMode(), attrCheck.isCaseSensitive());
 
-        result.setStatus(matches ? CheckStatus.SUCCESS : CheckStatus.FAILURE);
+        result.setStatus(AttributeCheckHelper.finalStatus(matches, actualValue, attrCheck.isSkipIfMissing()));
         return result;
     }
 

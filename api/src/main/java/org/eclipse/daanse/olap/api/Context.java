@@ -176,4 +176,6 @@ public interface Context<C extends Connection> {
     ExpressionCompiler createDependencyTestingCompiler(ExpressionCompiler compiler);
 
     List<CustomAggregatorFactory> getCustomAggregators();
+
+    boolean isCashEnabled(String cube);
 }

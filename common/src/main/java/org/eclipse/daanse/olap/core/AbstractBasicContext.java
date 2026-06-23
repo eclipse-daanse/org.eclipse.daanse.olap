@@ -14,7 +14,9 @@
 package org.eclipse.daanse.olap.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -35,6 +37,7 @@ import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.MdxStatementStartEvent;
 import org.eclipse.daanse.olap.api.monitor.event.ServertEventCommon;
 import org.eclipse.daanse.olap.api.result.ResultShepherd;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -248,5 +251,35 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 			}
 			return dflt;
 		}
+	}
+	
+	@Override
+	public boolean isCashEnabled(String cubeName) {
+		final String catalog = getName();
+		if (getConfigValue(ConfigConstants.DISABLE_CACHING, ConfigConstants.DISABLE_CACHING_DEFAULT_VALUE, Boolean.class)) {
+			return false;
+		} else {
+			String catalogNames = getConfigValue(ConfigConstants.DISABLE_CACHING_CATALOGS, ConfigConstants.DISABLE_CACHING_CATALOGS_DEFAULT_VALUE, String.class);
+			String[] catalogNamesArray = catalogNames.split(";");
+			if (catalogNamesArray != null && Arrays.stream(catalogNamesArray).anyMatch(it -> catalog.equals(it))) {
+				return false;
+			} else {
+				String catalogCubeNames = getConfigValue(ConfigConstants.DISABLE_CACHING_CUBES, ConfigConstants.DISABLE_CACHING_CUBES_DEFAULT_VALUE, String.class);
+				String[] cubesNamesArray = catalogCubeNames.split(";");
+				if (cubesNamesArray != null){
+					Map<String, List<String>> map = new HashMap<>();
+					for (String p : catalogNamesArray) {
+						String[] arr = p.split("-->");
+						if (arr != null && arr.length == 2) {
+							map.computeIfAbsent(arr[0], k -> new ArrayList<>()).add(arr[1]);
+						}
+					}
+					if (map.containsKey(catalog) && map.get(catalog).contains(cubeName)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 }

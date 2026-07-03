@@ -44,16 +44,23 @@ class CaseTestFunDef extends AbstractFunctionDefinition {
     @Override
     public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
         final Expression[] args = call.getArgs();
+        // When the CASE result type is a (non-boolean) scalar, a value branch that is a tuple/member
+        // must be coerced to its scalar cell value; compile such branches with compileScalar so the
+        // result is the value, not the raw Member[]. (Boolean has its own dedicated calc below.)
+        final boolean scalar = call.getType() instanceof org.eclipse.daanse.olap.api.type.ScalarType
+                && !(call.getType() instanceof BooleanType);
         final BooleanCalc[] conditionCalcs = new BooleanCalc[args.length / 2];
         final Calc<?>[] exprCalcs = new Calc[args.length / 2];
         final List<Calc<?>> calcList = new ArrayList<>();
         for (int i = 0, j = 0; i < exprCalcs.length; i++) {
             conditionCalcs[i] = compiler.compileBoolean(args[j++]);
             calcList.add(conditionCalcs[i]);
-            exprCalcs[i] = compiler.compile(args[j++]);
+            exprCalcs[i] = scalar ? compiler.compileScalar(args[j++], true) : compiler.compile(args[j++]);
             calcList.add(exprCalcs[i]);
         }
-        final Calc<?> defaultCalc = args.length % 2 == 1 ? compiler.compile(args[args.length - 1])
+        final Calc<?> defaultCalc = args.length % 2 == 1
+                ? (scalar ? compiler.compileScalar(args[args.length - 1], true)
+                        : compiler.compile(args[args.length - 1]))
                 : ConstantCalcs.nullCalcOf(call.getType());
         calcList.add(defaultCalc);
         final Calc<?>[] calcs = calcList.stream().toArray(Calc[]::new);

@@ -42,6 +42,14 @@ import org.eclipse.daanse.olap.api.formatter.MemberPropertyFormatter;
  *
  * Uses provided context data to instantiate a formatter for the element
  * either by specified class name or script.
+ *
+ * <p><b>TODO (planned):</b> migrate formatter resolution to OSGi Declarative Services. Each formatter
+ * implementation would be published as a {@code @Component} (e.g. with a {@code name} service property),
+ * all of them {@code @Reference}-injected here into a {@code Map<String, CellFormatter/MemberFormatter/…>}
+ * keyed by that name, and a catalog's {@code formatter='…'} would be resolved by a map lookup instead of
+ * reflective {@link Class#forName} loading. That removes the cross-bundle class-visibility problem entirely
+ * (no class loader guessing); the {@code Class.forName} + thread-context-class-loader fallback in
+ * {@link #createFormatter} is the interim bridge until then.
  */
 public class FormatterFactory {
 
@@ -85,7 +93,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | ClassCastException e) {
             throw new OlapRuntimeException(MessageFormat.format(cellFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
@@ -109,7 +117,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | ClassCastException e) {
             throw new OlapRuntimeException(MessageFormat.format(memberFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
@@ -134,7 +142,7 @@ public class FormatterFactory {
             if (context.getFormatterClassName() != null) {
                 return createFormatter(context.getFormatterClassName());
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | ClassCastException e) {
             throw new OlapRuntimeException(MessageFormat.format(propertyFormatterLoadFailed,
                 context.getFormatterClassName(),
                 context.getElementName(),
@@ -147,8 +155,25 @@ public class FormatterFactory {
         ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
         InstantiationException, IllegalAccessException {
         @SuppressWarnings("unchecked")
-        Class<T> clazz = (Class<T>) Class.forName(className);
+        Class<T> clazz = (Class<T>) loadFormatterClass(className);
         Constructor<T> constructor = clazz.getConstructor();
         return constructor.newInstance();
+    }
+
+    // Interim, to be replaced by DS-injected formatters looked up by name (see the class javadoc TODO):
+    // reflective class loading cannot reliably see a formatter defined in another bundle under OSGi.
+    private static Class<?> loadFormatterClass(String className) throws ClassNotFoundException {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            // A formatter class named in a catalog can live in a bundle (e.g. a test fragment, or the
+            // application bundle) that this format bundle's class loader cannot see. Fall back to the
+            // thread context class loader before giving up.
+            ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+            if (tccl != null) {
+                return Class.forName(className, true, tccl);
+            }
+            throw e;
+        }
     }
 }

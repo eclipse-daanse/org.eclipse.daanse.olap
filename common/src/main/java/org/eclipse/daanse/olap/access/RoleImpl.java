@@ -29,6 +29,7 @@ package org.eclipse.daanse.olap.access;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -1210,13 +1211,24 @@ public class RoleImpl implements Role {
     private static class MemberAccess {
         private final Member member;
         private final AccessMember access;
-        // We use a weak hash map so that it naturally clears
-        // when more memory is required by other parts.
-        // This cache is useful for optimization, but cannot be
-        // let to grow indefinitely. This would cause problems
-        // on high cardinality dimensions.
+        // A bounded cache of "is this granted member a descendant of
+        // parentMember?". The previous WeakHashMap keyed by getUniqueName()
+        // was ineffective: the key strings are freshly built per call and,
+        // with no other strong reference, were GC-eligible almost immediately,
+        // so entries rarely survived to be reused. A size-capped strong map
+        // keeps the cache effective while still bounding growth on
+        // high-cardinality dimensions (the original intent). Insertion order
+        // keeps get() non-mutating.
+        private static final int MAX_PARENTS_CACHED = 1000;
         private final Map<String, Boolean> parentsCache =
-            new WeakHashMap<>();
+            new LinkedHashMap<>(16, 0.75f, false) {
+                @Override
+                protected boolean removeEldestEntry(
+                    Map.Entry<String, Boolean> eldest)
+                {
+                    return size() > MAX_PARENTS_CACHED;
+                }
+            };
         public MemberAccess(
             Member member,
             AccessMember access)

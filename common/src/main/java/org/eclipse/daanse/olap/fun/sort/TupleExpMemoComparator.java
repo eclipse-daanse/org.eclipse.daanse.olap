@@ -37,7 +37,6 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
-import org.eclipse.daanse.olap.api.exception.CellRequestQuantumExceededException;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 
@@ -54,7 +53,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 
 abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator {
-  Cache<List<Member>, Object> valueCache = Caffeine.newBuilder().maximumSize( 100000 ).build();
+  // Lazily created on first eval() so subclasses that never memoize
+  // (HierarchicalTupleComparator evaluates directly) don't allocate an unused
+  // cache. A comparator is used by a single sort on one thread, so no
+  // synchronization is needed.
+  private Cache<List<Member>, Object> valueCache;
 
   private int[] dependentHierarchiesIndices;
   private int count = 0;
@@ -65,19 +68,13 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
 
   // applies the Calc to a tuple, memorizing results
   protected Object eval( List<Member> key ) {
-    try {
-      return valueCache.get( key, this::evaluateCalc );
-    } catch ( Exception e ) {
-      if ( e.getCause() instanceof CellRequestQuantumExceededException ) {
-        // this exception can occur if evaluation required greater than
-        // mondrian.result.limit batched cells.  Throwing the exception
-        // results in currently batched cells being loaded, followed by
-        // another iteration.
-        // the guava Cache wraps the exception, but we want this one to percolate up.
-        throw CellRequestQuantumExceededException.INSTANCE;
-      }
-      throw e;
+    if ( valueCache == null ) {
+      valueCache = Caffeine.newBuilder().maximumSize( 100000 ).build();
     }
+    // Loader exceptions (e.g. CellRequestQuantumExceededException, which drives
+    // the batch-reload protocol) propagate unwrapped: Caffeine does not wrap
+    // them, unlike the former Guava cache.
+    return valueCache.get( key, this::evaluateCalc );
   }
 
   private List<Member> dependentMembers( List<Member> tuple ) {

@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.olap.function.def.vba.cint;
 
+import org.eclipse.daanse.olap.api.result.NotLoaded;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -31,6 +32,12 @@ public class CIntCalc extends AbstractProfilingNestedIntegerCalc {
     }
 
     public static int cInt(Object expression) {
+        if (expression == null || expression == NotLoaded.INSTANCE) {
+            // MDX NULL coerces to 0; NotLoaded is the marker of the dirty
+            // evaluation pass, whose results are discarded, so 0 is a safe
+            // dummy there as well.
+            return 0;
+        }
         if (expression instanceof Number number) {
             final int intValue = number.intValue();
             if (number instanceof Float || number instanceof Double) {

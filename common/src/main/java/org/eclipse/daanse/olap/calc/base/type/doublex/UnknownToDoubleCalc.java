@@ -13,13 +13,12 @@
 */
 package org.eclipse.daanse.olap.calc.base.type.doublex;
 
-import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.result.NotLoaded;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.olap.fun.FunUtil;
 
 public class UnknownToDoubleCalc extends AbstractProfilingNestedDoubleCalc {
 
@@ -32,11 +31,12 @@ public class UnknownToDoubleCalc extends AbstractProfilingNestedDoubleCalc {
 
 		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o == null) {
-			return FunUtil.DOUBLE_NULL;
-			// null;
-			// TODO: !!! JUST REFACTORING 0 must be null
-		} else if (Objects.equals(o, FunUtil.DOUBLE_NULL)) {
-			return FunUtil.DOUBLE_NULL;
+			return null;
+		} else if (o == NotLoaded.INSTANCE) {
+			// Dirty evaluation pass: the cell is not loaded yet and this
+			// pass's results are discarded. Substitute the same dummy the
+			// old Double(0) marker used to inject, but keep the lie local.
+			return 0.0;
 		} else if (o instanceof Double d) {
 			return d;
 		} else if (o instanceof Number n) {

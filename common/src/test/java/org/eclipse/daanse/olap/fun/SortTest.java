@@ -41,7 +41,7 @@ class SortTest {
 
   /**
    * Access properties via this object and their values will be reset.
-   */
+ */
 
   @AfterEach
   public void afterEach() {
@@ -54,12 +54,15 @@ class SortTest {
     // order. For example, NaN compares greater than
     // Double.NEGATIVE_INFINITY, -34.5, -0.001, 0, 0.00000567, 1, 3.14;
     // equal to NaN; and less than Double.POSITIVE_INFINITY.
+    //
+    // The unboxed order has no NULL slot: a primitive double cannot carry
+    // MDX NULL, so every value — however tiny — sorts numerically.
     double[] values = {
       Double.NEGATIVE_INFINITY,
-      FunUtil.DOUBLE_NULL,
       -34.5,
       -0.001,
       0,
+      1.25e-8,
       0.00000567,
       1,
       3.14,

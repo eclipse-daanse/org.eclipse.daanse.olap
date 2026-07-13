@@ -17,8 +17,8 @@ package org.eclipse.daanse.olap.function.def.operators.multiply;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.olap.fun.FunUtil;
 
 public class MultiplyCalc extends AbstractProfilingNestedDoubleCalc {
 
@@ -32,8 +32,8 @@ public class MultiplyCalc extends AbstractProfilingNestedDoubleCalc {
         final Double v1 = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
         // Multiply and divide return null if EITHER arg is
         // null.
-        if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL || v0 == null|| v1 == null) {
-            return FunUtil.DOUBLE_NULL;
+        if (NullSemantics.isNull(v0) || NullSemantics.isNull(v1)) {
+            return null;
         } else {
             return v0 * v1;
         }

@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.function.def.topbottompercentsum;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.result.NotLoaded;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
@@ -24,6 +25,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.common.Util;
@@ -51,6 +53,10 @@ public class TopBottomPercentSumCalc extends AbstractProfilingNestedTupleListCal
         if (list.isEmpty()) {
             return list;
         }
+        if (target == null) {
+            // A NULL target behaves like 0 .
+            target = 0.0;
+        }
         Map<List<Member>, Object> mapMemberToValue = Sorter.evaluateTuples(evaluator, calc, list);
         final int savepoint = evaluator.savepoint();
         try {
@@ -72,10 +78,13 @@ public class TopBottomPercentSumCalc extends AbstractProfilingNestedTupleListCal
             }
             final List<Member> key = list.get(i);
             final Object o = mapMemberToValue.get(key);
-            if (o == Util.nullValue) {
+            if (NullSemantics.isNull(o)) {
                 nullCount++;
             } else if (o instanceof Number n) {
                 runningTotal += n.doubleValue();
+            } else if (o == NotLoaded.INSTANCE) {
+                // dirty batching pass, results discarded - the legacy
+                // Double(0) marker used to add 0 to the running total here
             } else if (o instanceof Exception) {
                 // ignore the error
             } else {

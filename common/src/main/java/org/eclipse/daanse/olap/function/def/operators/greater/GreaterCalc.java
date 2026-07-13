@@ -17,6 +17,7 @@ package org.eclipse.daanse.olap.function.def.operators.greater;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.fun.FunUtil;
 
@@ -30,7 +31,9 @@ public class GreaterCalc extends AbstractProfilingNestedBooleanCalc {
     public Boolean evaluateInternal(Evaluator evaluator) {
         final Double v0 = getChildCalc(0, DoubleCalc.class).evaluate(evaluator);
         final Double v1 = getChildCalc(1, DoubleCalc.class).evaluate(evaluator);
-        if (Double.isNaN(v0) || Double.isNaN(v1) || v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {
+        // Null check first: MDX NULL is Java null and Double.isNaN
+        // would throw on unboxing. NULL comparisons yield BOOLEAN_NULL (false).
+        if (NullSemantics.isNull(v0) || NullSemantics.isNull(v1) || Double.isNaN(v0) || Double.isNaN(v1)) {
             return FunUtil.BOOLEAN_NULL;
         }
         return v0 > v1;

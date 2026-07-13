@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
+import org.eclipse.daanse.olap.api.result.NotLoaded;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.access.AccessMember;
 import org.eclipse.daanse.olap.api.agg.Segment;
@@ -74,6 +75,8 @@ import org.eclipse.daanse.olap.api.type.MemberType;
 import org.eclipse.daanse.olap.api.type.ScalarType;
 import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
+import org.eclipse.daanse.olap.calc.base.CompensatedSum;
+import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.element.PropertyBase;
@@ -107,21 +110,15 @@ public class FunUtil extends Util {
   public static final NullMember NullMember = new NullMember();
 
 
-  /**
-   * Special value which indicates that a {@code double} computation has returned the MDX EMPTY value. See {@link
-   * DoubleCalc}.
-   */
-  public static final double DOUBLE_EMPTY = -0.000000012345;
-
 //  /**
 //   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
 //   * org.eclipse.daanse.olap.calc.api.IntegerCalc}.
-//   */
+// */
 //  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
 
   /**
    * Null value in three-valued boolean logic. Actually, a placeholder until we actually implement 3VL.
-   */
+ */
   public static final boolean BOOLEAN_NULL = false;
     private final static String memberNotInLevelHierarchy = "The member ''{0}'' is not in the same hierarchy as the level ''{1}''.";
 
@@ -131,7 +128,7 @@ public class FunUtil extends Util {
    * @param functionMetaData  Function meta data
    * @param message Explanatory message
    * @return Exception that can be used as a cell result
-   */
+ */
   public static RuntimeException newEvalException(
 		  FunctionMetaData functionMetaData ,
     String message ) {
@@ -143,7 +140,7 @@ public class FunUtil extends Util {
    *
    * @param throwable Exception
    * @return Exception that can be used as a cell result
-   */
+ */
   public static RuntimeException newEvalException( Throwable throwable ) {
     return new DaanseEvaluationException(
       new StringBuilder(throwable.getClass().getName()).append(": ").append(throwable.getMessage()).toString() );
@@ -155,7 +152,7 @@ public class FunUtil extends Util {
    * @param message   Explanatory message
    * @param throwable Exception
    * @return Exception that can be used as a cell result
-   */
+ */
   public static RuntimeException newEvalException(
     String message,
     Throwable throwable ) {
@@ -188,7 +185,7 @@ public class FunUtil extends Util {
 
   /**
    * Returns an argument whose value is a literal.
-   */
+ */
 
   public static String getLiteralArg(
     ResolvedFunCall call,
@@ -232,7 +229,7 @@ public class FunUtil extends Util {
   /**
    * Returns the ordinal of a literal argument. If the argument does not belong to the supplied enumeration, returns
    * -1.
-   */
+ */
   public static <E extends Enum<E>> E getLiteralArg(
     ResolvedFunCall call,
     int i,
@@ -277,7 +274,7 @@ public class FunUtil extends Util {
    * Throws an error if the expressions don't have the same hierarchy.
    *
    * @throws DaanseEvaluationException if expressions don't have the same hierarchy
-   */
+ */
   public static void checkCompatible( Expression left, Expression right, FunctionDefinition funDef ) {
     final Type leftType = TypeUtil.stripSetType( left.getType() );
     final Type rightType = TypeUtil.stripSetType( right.getType() );
@@ -289,7 +286,7 @@ public class FunUtil extends Util {
 
   /**
    * Adds every element of {@code right} which is not in {@code set} to both {@code set} and {@code left}.
-   */
+ */
   public static void addUnique(
     TupleList left,
     TupleList right,
@@ -339,7 +336,7 @@ public class FunUtil extends Util {
    *
    * @param memberList Member list
    * @return List of non-calculated members
-   */
+ */
   static List<Member> removeCalculatedMembers( List<Member> memberList ) {
     List<Member> clone = new ArrayList<>();
     for ( Member member : memberList ) {
@@ -357,7 +354,7 @@ public class FunUtil extends Util {
    *
    * @param memberList Member list
    * @return List of non-calculated members
-   */
+ */
   public static TupleList removeCalculatedMembers( TupleList memberList ) {
     if ( memberList.getArity() == 1 ) {
       return new UnaryTupleList(
@@ -383,7 +380,7 @@ public class FunUtil extends Util {
    * Returns whether {@code m0} is an ancestor of {@code m1}.
    *
    * @param strict if true, a member is not an ancestor of itself
-   */
+ */
   public static boolean isAncestorOf( Member m0, Member m1, boolean strict ) {
     if ( strict ) {
       if ( m1 == null ) {
@@ -405,44 +402,15 @@ public class FunUtil extends Util {
    *
    * MDX requires a total order:
    *
-   * -inf &lt; NULL &lt; ... &lt; -1 &lt; ... &lt; 0 &lt; ... &lt; NaN &lt; +inf
+   * -inf &lt; ... &lt; -1 &lt; ... &lt; 0 &lt; ... &lt; NaN &lt; +inf
    *
-   * but this is different than Java semantics, specifically with regard to {@link Double#NaN}.
-   */
+   * which differs from Java semantics with regard to {@link Double#NaN}.
+   * A primitive {@code double} cannot carry MDX NULL; NULL
+   * ordering exists only at the boxed/object level
+   * ({@link #compareValues(Object, Object)}).
+ */
   public static int compareValues( double d1, double d2 ) {
-    if ( Double.isNaN( d1 ) ) {
-      if ( d2 == Double.POSITIVE_INFINITY ) {
-        return -1;
-      } else if ( Double.isNaN( d2 ) ) {
-        return 0;
-      } else {
-        return 1;
-      }
-    } else if ( Double.isNaN( d2 ) ) {
-      if ( d1 == Double.POSITIVE_INFINITY ) {
-        return 1;
-      } else {
-        return -1;
-      }
-    } else if ( d1 == d2 ) {
-      return 0;
-    } else if ( d1 == FunUtil.DOUBLE_NULL) {
-      if ( d2 == Double.NEGATIVE_INFINITY ) {
-        return 1;
-      } else {
-        return -1;
-      }
-    } else if ( d2 == FunUtil.DOUBLE_NULL) {
-      if ( d1 == Double.NEGATIVE_INFINITY ) {
-        return -1;
-      } else {
-        return 1;
-      }
-    } else if ( d1 < d2 ) {
-      return -1;
-    } else {
-      return 1;
-    }
+    return NullSemantics.compare( d1, d2 );
   }
 
   /**
@@ -454,48 +422,15 @@ public class FunUtil extends Util {
    * @param value0 First cell value
    * @param value1 Second cell value
    * @return -1, 0, or 1, depending upon whether first cell value is less than, equal to, or greater than the second
-   */
+ */
   public static int compareValues( Object value0, Object value1 ) {
-    if ( value0 == value1 ) {
-      return 0;
-    }
-    // null is less than anything else
-    if ( value0 == null ) {
-      return -1;
-    }
-    if ( value1 == null ) {
-      return 1;
-    }
-
-    if ( value0 == Util.valueNotReadyException ) {
-      // the left value is not in cache; continue as best as we can
-      return -1;
-    } else if ( value1 == Util.valueNotReadyException ) {
-      // the right value is not in cache; continue as best as we can
-      return 1;
-    } else if ( value0 == Util.nullValue ) {
-      return -1; // null == -infinity
-    } else if ( value1 == Util.nullValue ) {
-      return 1; // null == -infinity
-    } else if ( value0 instanceof String str) {
-      return str.compareToIgnoreCase( (String) value1 );
-    } else if ( value0 instanceof Number numberValue0) {
-      return FunUtil.compareValues(
-          numberValue0.doubleValue(),
-        ( (Number) value1 ).doubleValue() );
-    } else if ( value0 instanceof Date date) {
-      return date.compareTo( (Date) value1 );
-    } else if ( value0 instanceof OrderKey orderKey && value1 instanceof OrderKey orderKeyOther) {
-      return orderKey.compareTo( orderKeyOther);
-    } else {
-      throw Util.newInternal( "cannot compare " + value0 );
-    }
+    return NullSemantics.compareCellValues( value0, value1 );
   }
 
   /**
    * Turns the mapped values into relative values (percentages) for easy use by the general topOrBottom function. This
    * might also be a useful function in itself.
-   */
+ */
   public static void toPercent(
     TupleList members,
     Map<List<Member>, Object> mapMemberToValue ) {
@@ -520,7 +455,7 @@ public class FunUtil extends Util {
     }
   }
 
-  public static double percentile(
+  public static Double percentile(
     Evaluator evaluator,
     TupleList members,
     Calc exp,
@@ -529,7 +464,8 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.isEmpty() ) {
-      return FunUtil.DOUBLE_NULL;
+      // Percentile({}) is NULL — Java null.
+      return null;
     }
     double[] asArray = new double[ sw.v.size() ];
     for ( int i = 0; i < asArray.length; i++ ) {
@@ -587,8 +523,8 @@ public class FunUtil extends Util {
    * @param exp       Expression to rank members
    * @param range     Quartile (1, 2 or 3)
    *  range more or equals 1 and range less or equals 3
-   */
-  public static double quartile(
+ */
+  public static Double quartile(
     Evaluator evaluator,
     TupleList members,
     Calc exp,
@@ -599,7 +535,8 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.isEmpty() ) {
-      return FunUtil.DOUBLE_NULL;
+      // Quartile({}) is NULL — Java null.
+      return null;
     }
 
     double[] asArray = new double[ sw.v.size() ];
@@ -626,7 +563,7 @@ public class FunUtil extends Util {
     } else {
       final int size = sw.v.size();
       if ( size == 0 ) {
-        return Util.nullValue;
+        return null;
       } else {
         Double min = ( (Number) sw.v.get( 0 ) ).doubleValue();
         for ( int i = 1; i < size; i++ ) {
@@ -650,7 +587,7 @@ public class FunUtil extends Util {
     } else {
       final int size = sw.v.size();
       if ( size == 0 ) {
-        return Util.nullValue;
+        return null;
       } else {
         Double max = ( (Number) sw.v.get( 0 ) ).doubleValue();
         for ( int i = 1; i < size; i++ ) {
@@ -677,19 +614,19 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.isEmpty() ) {
-      return Util.nullValue;
+      return null;
     } else {
-      double stdev = 0.0;
+      CompensatedSum squaredDeviations = new CompensatedSum();
       double avg = FunUtil.avg( sw );
       for ( int i = 0; i < sw.v.size(); i++ ) {
-        stdev +=
-          Math.pow( ( ( (Number) sw.v.get( i ) ).doubleValue() - avg ), 2 );
+        double diff = ( (Number) sw.v.get( i ) ).doubleValue() - avg;
+        squaredDeviations.add( diff * diff );
       }
       int n = sw.v.size();
       if ( !biased ) {
         n--;
       }
-      return Double.valueOf( stdev / n );
+      return Double.valueOf( squaredDeviations.value() / n );
     }
   }
 
@@ -698,16 +635,16 @@ public class FunUtil extends Util {
     TupleList memberList,
     Calc exp1,
     Calc exp2 ) {
-    SetWrapper sw1 = FunUtil.evaluateSet( evaluator, memberList, exp1 );
-    SetWrapper sw2 = FunUtil.evaluateSet( evaluator, memberList, exp2 );
-    Object covar = FunUtil.covariance( sw1, sw2, false );
-    Object var1 = FunUtil.var( sw1, false ); // this should be false, yes?
-    Object var2 = FunUtil.var( sw2, false );
-
-    return ( (Number) covar ).doubleValue()
-      / Math.sqrt(
-      ( (Number) var1 ).doubleValue()
-        * ( (Number) var2 ).doubleValue() );
+    PairedValues pairs = FunUtil.evaluatePairs( evaluator, memberList, exp1, exp2 );
+    if ( pairs.errorCount > 0 || pairs.size() == 0 ) {
+      return Double.NaN;
+    }
+    // Pearson r over pairwise-complete observations: covariance and both
+    // variances are computed from the SAME aligned pairs.
+    double covar = pairs.covariance( false );
+    double var1 = pairs.variance1( false );
+    double var2 = pairs.variance2( false );
+    return covar / Math.sqrt( var1 * var2 );
   }
 
   public static Object covariance(
@@ -716,47 +653,106 @@ public class FunUtil extends Util {
     Calc exp1,
     Calc exp2,
     boolean biased ) {
-    final int savepoint = evaluator.savepoint();
-    SetWrapper sw1;
-    try {
-      sw1 = FunUtil.evaluateSet( evaluator, members, exp1 );
-    } finally {
-      evaluator.restore( savepoint );
+    PairedValues pairs = FunUtil.evaluatePairs( evaluator, members, exp1, exp2 );
+    if ( pairs.errorCount > 0 ) {
+      return Double.NaN;
     }
-    SetWrapper sw2;
-    try {
-      sw2 = FunUtil.evaluateSet( evaluator, members, exp2 );
-    } finally {
-      evaluator.restore( savepoint );
+    if ( pairs.size() == 0 ) {
+      return null;
     }
-    // todo: because evaluateSet does not add nulls to the SetWrapper, this
-    // solution may lead to mismatched lists and is therefore not robust
-    return FunUtil.covariance( sw1, sw2, biased );
+    return Double.valueOf( pairs.covariance( biased ) );
   }
 
+  /**
+   * Evaluates two expressions pairwise over the same tuples. A pair is kept
+   * only if BOTH values are non-NULL (pairwise deletion), which keeps x and
+   * y positionally aligned: dropping NULLs per set independently would
+   * silently pair values of different tuples whenever the NULL patterns
+   * differed.
+ */
+  private static PairedValues evaluatePairs(
+    Evaluator evaluator,
+    TupleList members,
+    Calc<?> calc1,
+    Calc<?> calc2 ) {
+    PairedValues pairs = new PairedValues();
+    final TupleCursor cursor = members.tupleCursor();
+    int currentIteration = 0;
+    Execution execution = evaluator.getQuery().getStatement().getCurrentExecution();
+    final int savepoint = evaluator.savepoint();
+    try {
+      while ( cursor.forward() ) {
+        CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
+        cursor.setContext( evaluator );
+        Object o1 = calc1.evaluate( evaluator );
+        Object o2 = calc2.evaluate( evaluator );
+        if ( o1 == NotLoaded.INSTANCE || o2 == NotLoaded.INSTANCE ) {
+          // dirty pass; keep iterating so the batching cell reader sees
+          // every dependent cell, but poison the result
+          pairs.errorCount++;
+        } else if ( NullSemantics.isNull( o1 ) || NullSemantics.isNull( o2 ) ) {
+          // pairwise deletion: skip the tuple entirely
+        } else if ( o1 instanceof Number n1 && o2 instanceof Number n2 ) {
+          pairs.add( n1.doubleValue(), n2.doubleValue() );
+        } else {
+          pairs.errorCount++;
+        }
+      }
+    } finally {
+      evaluator.restore( savepoint );
+    }
+    return pairs;
+  }
 
-  private static Object covariance(
-    SetWrapper sw1,
-    SetWrapper sw2,
-    boolean biased ) {
-    if ( sw1.v.size() != sw2.v.size() ) {
-      return Util.nullValue;
+  /** Aligned x/y samples for the paired statistics (Covariance, Correlation). */
+  private static final class PairedValues {
+    private final List<Double> x = new ArrayList<>();
+    private final List<Double> y = new ArrayList<>();
+    int errorCount;
+
+    void add( double v1, double v2 ) {
+      x.add( v1 );
+      y.add( v2 );
     }
-    double avg1 = FunUtil.avg( sw1 );
-    double avg2 = FunUtil.avg( sw2 );
-    double covar = 0.0;
-    for ( int i = 0; i < sw1.v.size(); i++ ) {
-      // all of this casting seems inefficient - can we make SetWrapper
-      // contain an array of double instead?
-      double diff1 = ( ( (Number) sw1.v.get( i ) ).doubleValue() - avg1 );
-      double diff2 = ( ( (Number) sw2.v.get( i ) ).doubleValue() - avg2 );
-      covar += ( diff1 * diff2 );
+
+    int size() {
+      return x.size();
     }
-    int n = sw1.v.size();
-    if ( !biased ) {
-      n--;
+
+    private static double mean( List<Double> values ) {
+      CompensatedSum sum = new CompensatedSum();
+      for ( Double v : values ) {
+        sum.add( v );
+      }
+      return sum.value() / values.size();
     }
-    return Double.valueOf( covar / n );
+
+    private static double squaredDeviations( List<Double> values, double mean ) {
+      CompensatedSum sum = new CompensatedSum();
+      for ( Double v : values ) {
+        double diff = v - mean;
+        sum.add( diff * diff );
+      }
+      return sum.value();
+    }
+
+    double covariance( boolean biased ) {
+      double meanX = mean( x );
+      double meanY = mean( y );
+      CompensatedSum covar = new CompensatedSum();
+      for ( int i = 0; i < x.size(); i++ ) {
+        covar.add( ( x.get( i ) - meanX ) * ( y.get( i ) - meanY ) );
+      }
+      return covar.value() / ( biased ? x.size() : x.size() - 1 );
+    }
+
+    double variance1( boolean biased ) {
+      return squaredDeviations( x, mean( x ) ) / ( biased ? x.size() : x.size() - 1 );
+    }
+
+    double variance2( boolean biased ) {
+      return squaredDeviations( y, mean( y ) ) / ( biased ? y.size() : y.size() - 1 );
+    }
   }
 
   public static Object stdev(
@@ -779,7 +775,7 @@ public class FunUtil extends Util {
       return Double.NaN;
     } else {
         return (sw.v.isEmpty())
-            ? Util.nullValue
+            ? null
             : Double.valueOf(FunUtil.avg(sw));
     }
   }
@@ -787,23 +783,26 @@ public class FunUtil extends Util {
   // TODO: parameterize inclusion of nulls; also, maybe make _avg a method of
   // setwrapper, so we can cache the result (i.e. for correl)
   private static double avg(SetWrapper sw ) {
-    double sum = 0.0;
+    CompensatedSum sum = new CompensatedSum();
     for ( int i = 0; i < sw.v.size(); i++ ) {
-      sum += ( (Number) sw.v.get( i ) ).doubleValue();
+      sum.add( ( (Number) sw.v.get( i ) ).doubleValue() );
     }
     // TODO: should look at context and optionally include nulls
-    return sum / sw.v.size();
+    return sum.value() / sw.v.size();
   }
 
   public static Object sum(
     Evaluator evaluator,
     TupleList members,
     Calc exp ) {
-    double d = FunUtil.sumDouble( evaluator, members, exp );
-    return d == FunUtil.DOUBLE_NULL ? Util.nullValue : Double.valueOf( d );
+    return FunUtil.sumDouble( evaluator, members, exp );
   }
 
-  public static double sumDouble(
+  /**
+   * Sums {@code exp} over {@code members}. Returns Java {@code null} (MDX
+   * NULL) for an empty set.
+ */
+  public static Double sumDouble(
     Evaluator evaluator,
     TupleList members,
     Calc exp ) {
@@ -811,17 +810,22 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.isEmpty() ) {
-      return FunUtil.DOUBLE_NULL;
+      return null;
     } else {
-      double sum = 0.0;
+      CompensatedSum sum = new CompensatedSum();
       for ( int i = 0; i < sw.v.size(); i++ ) {
-        sum += ( (Number) sw.v.get( i ) ).doubleValue();
+        sum.add( ( (Number) sw.v.get( i ) ).doubleValue() );
       }
-      return sum;
+      return sum.value();
     }
   }
 
-  public static double sumDouble(
+  /**
+   * Sums {@code exp} over {@code iterable}. Returns Java {@code null} (MDX
+   * NULL) for an empty set — there is no primitive sentinel
+   * anymore.
+ */
+  public static Double sumDouble(
     Evaluator evaluator,
     TupleIterable iterable,
     Calc exp ) {
@@ -829,13 +833,13 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.isEmpty() ) {
-      return FunUtil.DOUBLE_NULL;
+      return null;
     } else {
-      double sum = 0.0;
+      CompensatedSum sum = new CompensatedSum();
       for ( int i = 0; i < sw.v.size(); i++ ) {
-        sum += ( (Number) sw.v.get( i ) ).doubleValue();
+        sum.add( ( (Number) sw.v.get( i ) ).doubleValue() );
       }
-      return sum;
+      return sum.value();
     }
   }
 
@@ -876,7 +880,7 @@ public class FunUtil extends Util {
    * values.
    *
    *  exp != null
-   */
+ */
   static SetWrapper evaluateSet(
     Evaluator evaluator,
     TupleIterable members,
@@ -896,9 +900,9 @@ public class FunUtil extends Util {
         currentIteration++, execution );
       cursor.setContext( evaluator );
       Object o = calc.evaluate( evaluator );
-      if ( o == null || o == Util.nullValue ) {
+      if ( NullSemantics.isNull( o ) ) {
         retval.nullCount++;
-      } else if ( o == Util.valueNotReadyException ) {
+      } else if ( o == NotLoaded.INSTANCE ) {
         // Carry on summing, so that if we are running in a
         // BatchingCellReader, we find out all the dependent cells we
         // need
@@ -920,7 +924,7 @@ public class FunUtil extends Util {
    * might be null) - this allows higher level code to determine how to handle the lack of data rather than having a
    * non-equal number (if one is plotting x,y values it helps to have the same number and know where a potential gap is
    * the data is.
-   */
+ */
   public static SetWrapper[] evaluateSet(
     Evaluator evaluator,
     TupleList list,
@@ -944,10 +948,7 @@ public class FunUtil extends Util {
         DoubleCalc calc = calcs[ i ];
         SetWrapper retval = retvals[ i ];
         Double o = calc.evaluate( evaluator );
-        if (o == null) {
-          LOGGER.debug("Calc evaluated to null: {}", calc);
-        }
-        if ( o == FunUtil.DOUBLE_NULL) {
+        if ( NullSemantics.isNull( o ) ) {
           retval.nullCount++;
           retval.v.add( null );
         } else {
@@ -1019,7 +1020,7 @@ public class FunUtil extends Util {
    * @param ancestorMember The cousin's ancestor.
    * @return The child of {@code ancestorMember} in the same position under {@code ancestorMember} as {@code member} is
    * under its parent.
-   */
+ */
   public static Member cousin(
     CatalogReader schemaReader,
     Member member,
@@ -1079,7 +1080,7 @@ public class FunUtil extends Util {
    * @param targetLevel The desired targetLevel of the ancestor. If {@code null}, then the distance completely
    *                    determines the desired ancestor.
    * @return The ancestor member, or {@code null} if no such ancestor exists.
-   */
+ */
   public static Member ancestor(
     Evaluator evaluator,
     Member member,
@@ -1160,7 +1161,7 @@ public class FunUtil extends Util {
    * @param m1 First member
    * @param m2 Second member
    * @return -1 if m1 collates less than m2, 1 if m1 collates after m2, 0 if m1 == m2.
-   */
+ */
   public static int compareSiblingMembers( Member m1, Member m2 ) {
     // calculated members collate after non-calculated
     final boolean calculated1 = m1.isCalculatedInQuery();
@@ -1191,7 +1192,7 @@ public class FunUtil extends Util {
 
   /**
    * Returns whether one of the members in a tuple is null.
-   */
+ */
   public static boolean tupleContainsNullMember( Member[] tuple ) {
     for ( Member member : tuple ) {
       if ( member.isNull() ) {
@@ -1203,7 +1204,7 @@ public class FunUtil extends Util {
 
   /**
    * Returns whether one of the members in a tuple is null.
-   */
+ */
   public static boolean tupleContainsNullMember( List<Member> tuple ) {
     for ( Member member : tuple ) {
       if ( member.isNull() ) {
@@ -1240,7 +1241,7 @@ public class FunUtil extends Util {
    * @param newArgs   Output parameter for the resolved arguments
    * @param operationAtom      Operation Atom
    * @return resolved function definition
-   */
+ */
   public static FunctionDefinition resolveFunArgs(
     Validator validator,
     FunctionDefinition funDef,
@@ -1264,7 +1265,7 @@ public class FunUtil extends Util {
    * @param validator Validator used to validate function arguments and resolve the function
    * @param funDef    Function definition, or null to deduce definition from name, syntax and argument types
    * @param args      Arguments to the function
-   */
+ */
   private static void checkNativeCompatible(
     Validator validator,
     FunctionDefinition funDef,
@@ -1336,7 +1337,7 @@ public class FunUtil extends Util {
    * The members are allowed to be in different positions. For example,
    * ([Gender].[M], [Store].[USA]) IS ([Store].[USA],
    * [Gender].[M]) returns {@code true}.
-   */
+ */
   public static boolean equalTuple( Member[] members0, Member[] members1 ) {
     final int count = members0.length;
     if ( count != members1.length ) {
@@ -1394,7 +1395,7 @@ public class FunUtil extends Util {
    * @param evaluator          Evaluator, determines non-empty criteria
    * @param level              Level
    * @param includeCalcMembers Whether to include calculated members
-   */
+ */
   static List<Member> getNonEmptyLevelMembers(
     final Evaluator evaluator,
     final Level level,
@@ -1484,7 +1485,7 @@ public class FunUtil extends Util {
    * @param members     Output array of members
    * @param hierarchies Hierarchies of the members
    * @return Position where parsing ended in string
-   */
+ */
   private static int parseTuple(
     final Evaluator evaluator,
     String string,
@@ -1512,7 +1513,7 @@ public class FunUtil extends Util {
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members
-   */
+ */
   public static Member[] parseTuple(
     Evaluator evaluator,
     String string,
@@ -1575,7 +1576,7 @@ public class FunUtil extends Util {
    *
    * @param exp Expression
    * @return Whether worth caching
-   */
+ */
   public static boolean worthCaching( Expression exp ) {
     // Literal is not worth caching.
     if ( exp instanceof Literal ) {
@@ -1611,7 +1612,7 @@ public class FunUtil extends Util {
    * @return true if each member from leftTuple is somewhere in the hierarchy chain of the corresponding member from
    * rightTuple, false otherwise. If there is no explicit corresponding member from either right or left, then the
    * default member is used.
-   */
+ */
   public static boolean existsInTuple(
     final List<Member> leftTuple, final List<Member> rightTuple,
     final List<Hierarchy> leftHierarchies,
@@ -1657,7 +1658,7 @@ public class FunUtil extends Util {
    * @param tuple            tuple containing the target member
    * @param tupleHierarchies list of the hierarchies explicitly contained in the tuple, in the same order.
    * @return target member
-   */
+ */
   private static Member getCorrespondingMember(
     final Member member, final List<Member> tuple,
     final List<Hierarchy> tupleHierarchies,
@@ -1703,11 +1704,11 @@ public class FunUtil extends Util {
    *
    * Nulls compare last, exceptions (including the
    * object which indicates the the cell is not in the cache yet) next, then numbers and strings are compared by value.
-   */
+ */
   public static class DescendingValueComparator implements Comparator<Object> {
     /**
      * The singleton.
-     */
+ */
     public static final DescendingValueComparator instance =
       new DescendingValueComparator();
 
@@ -1719,7 +1720,7 @@ public class FunUtil extends Util {
 
   /**
    * Null member of unknown hierarchy.
-   */
+ */
   private static class NullMember implements Member {
     @Override
 	public Member getParentMember() {

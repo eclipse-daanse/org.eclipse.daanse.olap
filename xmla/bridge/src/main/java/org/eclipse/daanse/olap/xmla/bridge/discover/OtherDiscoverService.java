@@ -26,9 +26,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Catalog;
 import org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaServiceConfig;
 import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
+import org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional.CsdlEmitterImpl;
+import org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional.CsdlRequest;
+import org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional.CsdlVersion;
+import org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional.LocalePolicy;
 import org.eclipse.daanse.xmla.api.PropertyDefinition;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.XmlaConstants;
@@ -129,6 +134,7 @@ public class OtherDiscoverService {
             MdSchemaPropertiesRequest.class, MdSchemaSetsRequest.class);
     private ContextListSupplyer contextsListSupplyer;
     private ContextGroupXmlaServiceConfig config;
+    private CsdlEmitterImpl csdlEmitter = new CsdlEmitterImpl();
 
     public OtherDiscoverService(ContextListSupplyer contextsListSupplyer, ContextGroupXmlaServiceConfig config) {
         this.contextsListSupplyer = contextsListSupplyer;
@@ -345,7 +351,11 @@ public class OtherDiscoverService {
                 Catalog catalog = oCatalog.get();
 
                 if (catalog != null) {
-                    TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
+                    //TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
+                    CatalogReader reader = catalog.getCatalogReaderWithDefaultRole();
+                    LocalePolicy lp = new LocalePolicy.ServerDefault();
+                    CsdlRequest req = new CsdlRequest(CsdlVersion.V2_0, perspectiveName, lp);
+                    TSchema schema = csdlEmitter.emit(reader, req);
                     //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
                     result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDLModelAsString(schema)));
                 }

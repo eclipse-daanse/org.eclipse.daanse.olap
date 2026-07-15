@@ -23,7 +23,7 @@
  */
 package org.eclipse.daanse.olap.util;
 
-import org.eclipse.daanse.jdbc.db.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.slf4j.LoggerFactory;
 
 /**

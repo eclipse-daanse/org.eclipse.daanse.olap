@@ -63,8 +63,6 @@
 	net.bytebuddy.byte-buddy-agent;version='[1.17.5,1.17.6)',\
 	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
 	org.apache.felix.scr;version='[2.2.10,2.2.11)',\
-	org.eclipse.daanse.jdbc.db.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.jdbc.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.lcid.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.api;version='[0.0.1,0.0.2)',\
@@ -73,7 +71,9 @@
 	org.eclipse.daanse.olap.util.format;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.xmla.bridge-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.sql.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.sql.guard.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.sql.model;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.csdl.model.v2.an;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.csdl.model.v2.bi;version='[0.0.1,0.0.2)',\

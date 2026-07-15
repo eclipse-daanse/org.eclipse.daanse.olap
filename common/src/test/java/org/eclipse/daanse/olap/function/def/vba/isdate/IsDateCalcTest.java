@@ -18,6 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
@@ -32,9 +33,24 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class IsDateCalcTest {
 
+    // The fixture strings ("October 19, 1962", "4:35:47 PM") are US-locale forms and
+    // IsDate parses with the default locale — pin it so the expectations hold everywhere.
+    private static Locale defaultLocale;
+
     private IsDateCalc isDateCalc;
     private Calc<Object> inputCalc;
     private Evaluator evaluator;
+
+    @org.junit.jupiter.api.BeforeAll
+    static void pinLocale() {
+        defaultLocale = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @org.junit.jupiter.api.AfterAll
+    static void restoreLocale() {
+        Locale.setDefault(defaultLocale);
+    }
 
     @BeforeEach
     void setUp() {

@@ -33,56 +33,23 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 public class DimensionEntityEmitter {
 
-    TEntityProperty levelProperty(TEntityType owner, Level level, EmitContext ctx) {
-        TEntityProperty p = ctx.edm().createTEntityProperty();
-        p.setName(ctx.names().columnNameOf(level));
-        EdmType t = ctx.types().levelType(level.getDatatype());
-        p.setType(t.type().getLiteral());
-        applyFacets(p, t.facets());
-        TProperty biProp = ctx.bi().createTProperty();
-        biProp.setCaption(level.getCaption());
-        p.setBiProperty(biProp);
-        owner.getProperty().add(p);
-        ctx.registerProperty(owner.getName(), p.getName());
-        return p;
-    }
-    
- private void applyFacets(TEntityProperty p, Facets f) {
-     if (f != null) {
-         p.setMaxLength(f.maxLength());
-         p.setNullable(f.nullable());
-         p.setPrecision(f.precision());
-         p.setScale(f.scale());
-         p.setUnicode(f.unicode());
-         p.setFixedLength(f.fixedLength());
-     }
-        
-    }
-
     void emitDimensionEntity(TSchema schema, EntityContainerType container,
                              Cube cube, Dimension dim, EmitContext ctx) {
         String table = ctx.names().tableNameOf(dim);
-        String qname = ctx.names().namespaceOf(ctx.catalog()) + "." + table;
-
         EntitySetType entitySet = ctx.edm().createEntitySetType();
         entitySet.setName(table);
-        entitySet.setEntityType(qname);
-        TEntitySet biSet = ctx.bi().createTEntitySet();
-        biSet.setCaption(dim.getCaption());
+        entitySet.setEntityType(ctx.qualified(table));
+        
+        attachDocumentation(entitySet::setDocumentation, dim, ctx);
+        
+        TEntitySet biEntitySet = ctx.bi().createTEntitySet();
         if (!dim.isVisible()) {
-            biSet.setHidden(true);
+            biEntitySet.setHidden(true);
         }
-        if (!table.equals(dim.getName())) {
-            biSet.setReferenceName(dim.getName());
-        }
-        entitySet.setBiEntitySet(biSet);
-        container.getEntitySet().add(entitySet);
+        biEntitySet.setCaption(table);
+        entitySet.setBiEntitySet(biEntitySet);
 
-        TEntityType entityType = ctx.edm().createTEntityType();
-        entityType.setName(table);
-        entityType.setBiEntityType(ctx.bi().createTEntityType());
-        attachDocumentation(entityType::setDocumentation, dim, ctx);
-        schema.getEntityType().add(entityType);
+        container.getEntitySet().add(entitySet);
     }
     
     

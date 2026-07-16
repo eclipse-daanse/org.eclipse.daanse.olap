@@ -16,6 +16,8 @@ import java.util.Locale;
 
 public sealed interface LocalePolicy {
     record Fixed(Locale locale) implements LocalePolicy {}
-    record FromConnection() implements LocalePolicy {}
-    record ServerDefault() implements LocalePolicy {}
+    record FromConnection(Locale locale) implements LocalePolicy {}
+    record ServerDefault(Locale locale) implements LocalePolicy {}
+    
+    public  Locale locale();
 }

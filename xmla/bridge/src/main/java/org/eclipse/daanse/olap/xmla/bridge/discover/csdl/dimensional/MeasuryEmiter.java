@@ -160,8 +160,7 @@ public class MeasuryEmiter {
     }
 
     private boolean isEmittedVisibleMeasure(Member def, EmitContext ctx) {
-        // TODO
-        return false;
+        return !def.isHidden();
     }
 
     private void applyFormatAndVisibility(TMeasure bi, Member member) {

@@ -78,8 +78,9 @@ public final class DefaultTypeMapper implements TypeMapper {
                 new EdmType.Facets(true, null, null, null, Boolean.TRUE, Boolean.FALSE));
     }
     private static EdmType decimal(int p, int s) {
-        return new EdmType(EDMSimpleType.DECIMAL, new EdmType.Facets(false,
-                BigInteger.valueOf(p), BigInteger.valueOf(s), null, false, false));
+        return new EdmType(EDMSimpleType.DECIMAL, EdmType.Facets.NONE);
+        //return new EdmType(EDMSimpleType.DECIMAL, new EdmType.Facets(false,
+        //        BigInteger.valueOf(p), BigInteger.valueOf(s), null, false, false));
     }
     private static EdmType plain(EDMSimpleType t) {
         return new EdmType(t, EdmType.Facets.NONE);
@@ -87,80 +88,62 @@ public final class DefaultTypeMapper implements TypeMapper {
 
     @Override
     public void apply(TEntityProperty p, Datatype datatype) {
-        p.setType(getType(datatype));
+        p.setType(getType(datatype).type());
     }
 
     @Override
     public void apply(TEntityProperty p, org.eclipse.daanse.olap.api.element.Property.Datatype type) {
-        p.setType(getType(type));
+        p.setType(getType(type).type());
     }
 
     private EdmType widenForSum(EdmType t) {
         return decimal(19, 4);
     }
 
-    private String getType(Datatype type) {
+    private EdmType getType(Datatype type) {
         if (type != null) {
             switch (type) {
             case VARCHAR:
-                return "String";
-            case NUMERIC:
-                return "Decimal";
-            case INTEGER:
-                return "Int64";
-            case BIGINT:
-                return "Int64";
-            case SMALLINT:
-                return "Int64";
+                return stringType();
+            case NUMERIC, DECIMAL:
+                return decimal(19, 4);
+            case INTEGER, BIGINT, SMALLINT:
+                return plain(EDMSimpleType.INT64);
             case BOOLEAN:
-                return "Boolean";
-            case DATE:
-                return "DateTime";
+                return plain(EDMSimpleType.BOOLEAN);
+            case DATE, TIMESTAMP:
+                return plain(EDMSimpleType.DATE_TIME);
             case TIME:
-                return "DateTime";
-            case TIMESTAMP:
-                return "Timestamp";
-            case DOUBLE:
-                return "Double";
-            case REAL:
-                return "Double";
-            case FLOAT:
-                return "Double";
-            case DECIMAL:
-                return "Decimal";
+                return plain(EDMSimpleType.TIME);
+            case DOUBLE, REAL, FLOAT:
+                return plain(EDMSimpleType.DOUBLE);
             default:
-                return "String";
+                return stringType();
             }
         }
-        return "String";
+        return stringType();
     }
     
-    private String getType(org.eclipse.daanse.olap.api.element.Property.Datatype type) {
+    private EdmType getType(org.eclipse.daanse.olap.api.element.Property.Datatype type) {
         if (type != null) {
             switch (type) {
             case TYPE_STRING:
-                return "String";
+                return stringType();
             case TYPE_NUMERIC:
-                return "Decimal";
-            case TYPE_INTEGER:
-                return "Int64";
-            case TYPE_LONG:
-                return "Int64";
+                return decimal(19, 4);
+            case TYPE_INTEGER, TYPE_LONG:
+                return plain(EDMSimpleType.INT64);
             case TYPE_BOOLEAN:
-                return "Boolean";
-            case TYPE_DATE:
-                return "DateTime";
-            case TYPE_TIME:
-                return "DateTime";
-            case TYPE_TIMESTAMP:
-                return "Timestamp";
+                return plain(EDMSimpleType.BOOLEAN);
+            case TYPE_DATE, TYPE_TIME, TYPE_TIMESTAMP:
+                return plain(EDMSimpleType.DATE_TIME);
             case TYPE_OTHER:
-                return "String";
+                return stringType();
             default:
-                return "String";
+                return stringType();
             }
         }
-        return "String";
+        return stringType();
     }
 
     @Override

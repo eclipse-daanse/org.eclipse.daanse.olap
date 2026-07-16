@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -353,7 +354,7 @@ public class OtherDiscoverService {
                 if (catalog != null) {
                     //TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
                     CatalogReader reader = catalog.getCatalogReaderWithDefaultRole();
-                    LocalePolicy lp = new LocalePolicy.ServerDefault();
+                    LocalePolicy lp = new LocalePolicy.ServerDefault(Locale.getDefault());
                     CsdlRequest req = new CsdlRequest(CsdlVersion.V2_0, perspectiveName, lp);
                     TSchema schema = csdlEmitter.emit(reader, req);
                     //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));

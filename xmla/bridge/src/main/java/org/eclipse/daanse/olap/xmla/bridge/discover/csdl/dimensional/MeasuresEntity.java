@@ -40,6 +40,7 @@ public class MeasuresEntity {
         TDocumentation documentation = edmFactory.createTDocumentation();
         TText summary = edmFactory.createTText();
         summary.getMixed().add(FeatureMapUtil.createRawTextEntry(description));
+        documentation.setSummary(summary);
         anchor.setDocumentation(documentation);
     }
 

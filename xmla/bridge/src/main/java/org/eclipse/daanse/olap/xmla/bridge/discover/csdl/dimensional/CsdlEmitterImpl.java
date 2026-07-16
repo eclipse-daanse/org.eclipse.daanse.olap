@@ -22,11 +22,14 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional.AssociationEmitter.RelationshipUsage;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiFactory;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiPackage;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TEntityContainer;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TEntityType;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EdmFactory;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EntityContainerType;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.TSchema;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 
 public class CsdlEmitterImpl implements CsdlEmitter{
     private static EdmFactory edmFactory = EdmFactory.eINSTANCE;
@@ -46,12 +49,17 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                 
                 TSchema schema = edmFactory.createTSchema();
                 schema.setNamespace(names.namespaceOf(catalog));
+                
+                EStructuralFeature versionFeature = ExtendedMetaData.INSTANCE
+                        .demandFeature(BiPackage.eNS_URI, "Version", false);
+                schema.getAnyAttribute().add(versionFeature, req.version());
+                
                 EntityContainerType container = edmFactory.createEntityContainerType();
                 container.setName(names.namespaceOf(catalog));
 
                 TEntityContainer biContainer = biFactory.createTEntityContainer();
                 biContainer.setCaption(cube.getName());
-                biContainer.setCulture("en-US");
+                biContainer.setCulture(req.localePolicy().locale().getDisplayName());
                 //biContainer.setCulture("de-DE");
                 container.setBiEntityContainer(biContainer);
                 schema.getEntityContainer().add(container);
@@ -72,8 +80,9 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                                 .createTEntityType();
                         TEntityType biEntityType = biFactory.createTEntityType();
                         edmEntityType.setBiEntityType(biEntityType);
-                        
                         edmEntityType.setName(names.tableNameOf(dimension));
+                        dimensionEntityEmitter.emitDimensionEntity(schema, container, cube, dimension, ctx);
+                        
                         schema.getEntityType().add(edmEntityType);
                         if (dimension.isMeasures()) {
                             List<Member> measures = cube.getMeasures();
@@ -86,9 +95,8 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                                 calculatedMeasureEmitter.emit(reader, cube);
                             }
                         } else {
-                            RelationshipUsage relationshipUsage = new RelationshipUsage(dimension, Optional.empty(), Optional.empty(), true);
+                            RelationshipUsage relationshipUsage = new RelationshipUsage(oMeasureDimension.get(), Optional.empty(), Optional.empty(), true);
                             hierarchyEmitter.emitDimension(dimension, edmEntityType, biEntityType);
-                            dimensionEntityEmitter.emitDimensionEntity(schema, container, cube, dimension, ctx);
                             associationEmitter.emit(cube, dimension, relationshipUsage);
                         }
                     }
@@ -98,7 +106,7 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                 throw new CsdlEmitException("Cube is absent");
             }
         } else {
-            throw new CsdlEmitException("Cube is absent");
+            throw new CsdlEmitException("perspective is absent in requers");
         }
     }
 

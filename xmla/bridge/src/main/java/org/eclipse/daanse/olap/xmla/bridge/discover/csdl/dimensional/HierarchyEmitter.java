@@ -23,7 +23,6 @@ import org.eclipse.daanse.olap.api.element.DimensionType;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Property;
-import org.eclipse.daanse.olap.api.type.LevelType;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiFactory;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.ContainsHiddenMembersType;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.SourceType;

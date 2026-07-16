@@ -45,10 +45,11 @@ public class DisplayFolderBuilder {
           biEntity.getDisplayFolders().getDisplayFolder().add(dFolder);
         }
     }
+
     private List<String> getFolders(String displayFolder) {
-        if (displayFolder != null) {
-            Arrays.asList(displayFolder.split(Pattern.quote("\\")));
+        if (displayFolder == null || displayFolder.isBlank()) {
+            return List.of();
         }
-        return List.of();
+        return Arrays.asList(displayFolder.split("[\\\\/]"));
     }
 }

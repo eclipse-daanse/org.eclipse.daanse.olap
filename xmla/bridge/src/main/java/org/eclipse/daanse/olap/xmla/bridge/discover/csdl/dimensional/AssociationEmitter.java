@@ -47,8 +47,8 @@ public final class AssociationEmitter {
 
     public record RelationshipUsage(
             Dimension dimension,
-            Optional<String> factForeignKeyColumn,   
-            Optional<String> dimensionKeyColumn,     
+            Optional<String> factForeignKeyColumn,
+            Optional<String> dimensionKeyColumn,
             boolean active) {
     }
 

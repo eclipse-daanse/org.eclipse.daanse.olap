@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.sql.model.type.Datatype;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EDMSimpleType;
@@ -189,6 +190,31 @@ public final class DefaultTypeMapper implements TypeMapper {
                 }
             }
             return Optional.empty();
+    }
+
+    @Override
+    public Optional<EdmType>forMeasure(Optional<DataTypeJdbc> dataType) {
+        if (dataType.isPresent()) {
+            switch (dataType.get()) {
+            case VARCHAR:
+                return  Optional.of(stringType());
+            case NUMERIC, FLOAT, REAL, DOUBLE:
+                return Optional.of(decimal(19, 4));
+            case INTEGER, BIGINT, SMALLINT:
+                return Optional.of(plain(EDMSimpleType.INT64));
+            case BOOLEAN:
+                return Optional.of(plain(EDMSimpleType.BOOLEAN));
+            case DATE:
+                return Optional.of(plain(EDMSimpleType.DATE_TIME));
+            case TIME:
+                return Optional.of(plain(EDMSimpleType.TIME));
+            case TIMESTAMP:
+                return Optional.of(plain(EDMSimpleType.DATE_TIME));
+            default:
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 }
 

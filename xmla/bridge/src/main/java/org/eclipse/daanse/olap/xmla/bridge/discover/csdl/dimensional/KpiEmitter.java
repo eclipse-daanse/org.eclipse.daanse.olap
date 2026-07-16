@@ -88,8 +88,6 @@ public final class KpiEmitter {
         tKpi.setStatusGraphic(isBlank(kpi.getStatusGraphic())
                 ? DEFAULT_STATUS_GRAPHIC
                 : kpi.getStatusGraphic());
-        ctx.checkKnownGraphic(tKpi.getStatusGraphic());
-
 
         if (!isBlank(kpi.getDescription())) {
             TDocumentation doc = bi.createTDocumentation();

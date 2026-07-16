@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.MetaData;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiFactory;
-import org.eclipse.daanse.xmla.csdl.model.v2.edm.AssociationSetType;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EdmFactory;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EntityContainerType;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityType;
@@ -43,6 +42,7 @@ public final class EmitContext {
     private final CsdlRequest request;
     private final CatalogReader reader;
     private final TSchema schema;
+    private final Set<String> properties = new HashSet<String>();
 
     public EmitContext(CsdlNames names, TypeMapper types, CsdlRequest request, CatalogReader reader, TSchema schema) {
         super();
@@ -127,13 +127,7 @@ public final class EmitContext {
     }
 
     public void registerProperty(String name) {
-        // TODO 
-        
-    }
-
-    public void checkKnownGraphic(String statusGraphic) {
-        // TODO 
-        
+        properties.add(name);
     }
 
     public String uniquePropertyName(String string) {
@@ -145,8 +139,7 @@ public final class EmitContext {
     }
 
     public boolean factEntityHasProperty(String factEntity, String fk) {
-        // TODO Auto-generated method stub
-        return false;
+        return properties.contains(fk);
     }
 
     public String unique(String s) {
@@ -159,11 +152,6 @@ public final class EmitContext {
 
     public boolean emitAllTranslations() {
         return false;
-    }
-
-    public MetaData metaDataOf(OlapElement element) {
-        // TODO 
-        return null;
     }
 
     public Locale discoveredLocales() {

@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.DimensionType;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.OrderByProperty;
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.BiFactory;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.ContainsHiddenMembersType;
@@ -32,6 +33,7 @@ import org.eclipse.daanse.xmla.csdl.model.v2.bi.THideMembers;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.THierarchy;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TLevel;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TProperty;
+import org.eclipse.daanse.xmla.csdl.model.v2.bi.TPropertyRef;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TPropertyRefs;
 import org.eclipse.daanse.xmla.csdl.model.v2.bi.TPropertyStatistics;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EdmFactory;
@@ -62,7 +64,7 @@ public final class HierarchyEmitter {
         if (dimension.getDimensionType() == DimensionType.TIME_DIMENSION) {
             biEntity.setContents("Time");
         }
-        dimension.getHierarchies().stream()
+        ctx.reader().getDimensionHierarchies(dimension).stream()
             .sorted(Comparator.comparingInt(Hierarchy::getOrdinalInCube))
             .forEach(h -> emitHierarchy(h, edmEntity, biEntity));
     }
@@ -70,7 +72,7 @@ public final class HierarchyEmitter {
     private void emitHierarchy(Hierarchy hierarchy,
                                org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityType edmEntity,
                                TEntityType biEntity) {
-        List<? extends Level> levels = hierarchy.getLevels();
+        List<? extends Level> levels =  ctx.reader().getHierarchyLevels(hierarchy);
         List<? extends Level> real = levels.stream()
             .filter(l -> !l.isAll())
             .filter(l -> l.getLevelType() != null)
@@ -138,15 +140,11 @@ public final class HierarchyEmitter {
     }
 
     private Optional<THideMembers> hideMembersOf(Level level) {
-        //TODO
-        //if (level instanceof RolapLevel rl) {
-        //    return switch (rl.getHideMemberCondition()) {
-        //        case Never         -> Optional.empty();          // Default -> weglassen
-        //        case IfBlankName   -> Optional.of(THideMembers.NO_NAME);
-        //        case IfParentsName -> Optional.of(THideMembers.PARENT_NAME);
-        //    };
-        //}
-        return Optional.empty();
+        return switch (level.getHideMemberCondition()) {
+            case NEVER         -> Optional.empty();
+            case IF_BLANK_NAME   -> Optional.of(THideMembers.NO_NAME);
+            case IF_PARENTS_NAME -> Optional.of(THideMembers.PARENT_NAME);
+        };
     }
 
     private TEntityProperty emitLevelProperty(
@@ -165,7 +163,14 @@ public final class HierarchyEmitter {
     }
 
     private Optional<TPropertyRefs> orderByOf(Level level) {
-        // TODO Auto-generated method stub
+        if (level.getOrderByProperty().isPresent()) {
+            OrderByProperty obp = level.getOrderByProperty().get(); 
+            TPropertyRefs propertyRefs = bi.createTPropertyRefs();
+            TPropertyRef propertyRef = bi.createTPropertyRef();
+            propertyRef.setName(ctx.mangle(level.getUniqueName() + "_" + obp.property().getName()));
+            propertyRefs.getPropertyRef().add(propertyRef);
+            return Optional.of(propertyRefs);
+        }
         return Optional.empty();
     }
 

@@ -29,6 +29,7 @@
 package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.sql.model.type.Datatype;
 import org.eclipse.daanse.olap.api.formatter.MemberFormatter;
@@ -102,4 +103,13 @@ public interface Level extends OlapElement, MetaElement {
     String getParentAsLeafNameFormat();
 
     Datatype getDatatype();
+
+    default HideMemberCondition getHideMemberCondition() {
+        return HideMemberCondition.NEVER;
+    }
+
+    default Optional<OrderByProperty> getOrderByProperty() {
+        return Optional.empty();
+    }
+
 }

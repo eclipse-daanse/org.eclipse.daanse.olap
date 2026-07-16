@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.olap.api.element;
 
+import java.util.Optional;
+
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
+
 public interface StoredMeasure extends Measure {
 
     String getAggregateFunction();
@@ -22,4 +26,7 @@ public interface StoredMeasure extends Measure {
      */
     Cube getCube();
 
+    default Optional<DataTypeJdbc> getDataType() {
+        return Optional.empty();
+    }
 }

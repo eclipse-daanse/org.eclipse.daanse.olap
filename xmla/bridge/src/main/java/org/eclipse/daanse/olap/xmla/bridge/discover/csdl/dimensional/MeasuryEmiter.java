@@ -20,6 +20,7 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Measure;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.StoredMeasure;
 import org.eclipse.daanse.olap.common.StandardProperty;
@@ -181,11 +182,10 @@ public class MeasuryEmiter {
         if (dt instanceof String s) {
             return dataTypeLiteralToEdm(s, ctx);
         }
+        if (member instanceof StoredMeasure sm) {
+            return ctx.types().forMeasure(sm.getDataType());
+        }
         
-        //TODO rolap
-        //if (member instanceof org.eclipse.daanse.rolap.element.RolapBaseCubeMeasure rbm) {
-        //    return Optional.of(ctx.types().levelType(rbm.getDatatype()));
-        //}
         return Optional.empty();
     }
 

@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.sql.model.type.Datatype;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.EDMSimpleType;
 import org.eclipse.daanse.xmla.csdl.model.v2.edm.TEntityProperty;
@@ -33,8 +34,10 @@ public interface TypeMapper {
     }
 
     void apply(TEntityProperty p, Datatype datatype);
-    
+
     void apply(TEntityProperty p, org.eclipse.daanse.olap.api.element.Property.Datatype type);
-    
+
     boolean applyFromDatatypeProperty(TEntityProperty p, Object datatype);
+
+    Optional<EdmType> forMeasure(Optional<DataTypeJdbc> dataType);
 }

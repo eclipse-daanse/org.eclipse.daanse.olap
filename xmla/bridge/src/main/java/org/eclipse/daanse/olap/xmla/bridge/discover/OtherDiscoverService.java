@@ -352,12 +352,10 @@ public class OtherDiscoverService {
                 Catalog catalog = oCatalog.get();
 
                 if (catalog != null) {
-                    //TSchema schema = CSDLUtils.getCSDLModel(catalog, perspectiveName);
                     CatalogReader reader = catalog.getCatalogReaderWithDefaultRole();
                     LocalePolicy lp = new LocalePolicy.ServerDefault(Locale.getDefault());
                     CsdlRequest req = new CsdlRequest(CsdlVersion.V2_0, perspectiveName, lp);
                     TSchema schema = csdlEmitter.emit(reader, req);
-                    //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, perspectiveName)));
                     result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDLModelAsString(schema)));
                 }
             }
@@ -365,9 +363,11 @@ public class OtherDiscoverService {
             List<Catalog> cs = contextsListSupplyer.get(metaData.sessionId());
             if (cs != null) {
                 Catalog catalog = cs.get(0);
-                TSchema schema = CSDLUtils.getCSDLModel(catalog, Optional.empty());
-                //result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDL(catalog, Optional.empty())));
-                
+                CatalogReader reader = catalog.getCatalogReaderWithDefaultRole();
+                LocalePolicy lp = new LocalePolicy.ServerDefault(Locale.getDefault());
+                CsdlRequest req = new CsdlRequest(CsdlVersion.V2_0, perspectiveName, lp);
+                TSchema schema = csdlEmitter.emit(reader, req);
+                result.add(new DiscoverCsdlMetaDataResponseRowR(CSDLUtils.getCSDLModelAsString(schema)));
             }
         }
         return result;

@@ -13,6 +13,7 @@
 package org.eclipse.daanse.olap.xmla.bridge.discover.csdl.dimensional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
@@ -60,7 +61,6 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                 TEntityContainer biContainer = biFactory.createTEntityContainer();
                 biContainer.setCaption(cube.getName());
                 biContainer.setCulture(req.localePolicy().locale().getDisplayName());
-                //biContainer.setCulture("de-DE");
                 container.setBiEntityContainer(biContainer);
                 schema.getEntityContainer().add(container);
 
@@ -71,8 +71,8 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                 MeasuryEmiter measuryEmiter = new MeasuryEmiter();
                 AssociationEmitter associationEmitter = new AssociationEmitter(ctx);
                 DimensionEntityEmitter dimensionEntityEmitter = new DimensionEntityEmitter();
-                
-                List<? extends Dimension> dimensions = cube.getDimensions();
+
+                List<? extends Dimension> dimensions = reader.getCubeDimensions(cube);
                 Optional<? extends Dimension> oMeasureDimension = dimensions.stream().filter(d -> d.isMeasures()).findAny();
                 if (dimensions != null) {
                     for (Dimension dimension : dimensions) {
@@ -88,6 +88,7 @@ public class CsdlEmitterImpl implements CsdlEmitter{
                             List<Member> measures = cube.getMeasures();
                             if (measures != null) {
                                 measuryEmiter.emitMeasures(schema, edmEntityType, cube, ctx);
+                                
                                 MeasuresEntity measuresEntity = new MeasuresEntity(edmEntityType, biEntityType);
                                 CalculatedMeasureEmitter calculatedMeasureEmitter = new CalculatedMeasureEmitter(ctx, types, measuresEntity, folders);
                                 KpiEmitter kpiEmitter = new KpiEmitter(ctx, measuresEntity, folders);

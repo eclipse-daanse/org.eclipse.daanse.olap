@@ -47,7 +47,6 @@ public class CsdlNamesImpl implements CsdlNames{
 
     @Override
     public String qualifiedTypeName(Catalog catalog, Dimension dimension) {
-        // TODO
         return removeSquareBrackets(catalog.getName()) + "." + removeSquareBrackets(dimension.getUniqueName());
     }
 

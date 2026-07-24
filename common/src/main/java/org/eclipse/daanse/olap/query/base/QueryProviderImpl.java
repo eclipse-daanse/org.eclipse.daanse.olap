@@ -81,9 +81,9 @@ public class QueryProviderImpl implements QueryProvider {
         return new UpdateImpl(convertName(updateStatement.cubeName()), convertUpdateClauses(updateStatement.updateClauses()));
     }
 
-    private List<UpdateClause> convertUpdateClauses(List<org.eclipse.daanse.mdx.model.api.select.UpdateClause> updateClauses) {
-        if (updateClauses != null) {
-            return updateClauses.stream().map(this::convertUpdateClause).toList();
+    private List<UpdateClause> convertUpdateClauses(List<? extends org.eclipse.daanse.mdx.model.api.select.UpdateClause> list) {
+        if (list != null) {
+            return list.stream().map(this::convertUpdateClause).toList();
         }
         return List.of();
     }

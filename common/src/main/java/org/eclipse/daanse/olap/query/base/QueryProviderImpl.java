@@ -92,7 +92,7 @@ public class QueryProviderImpl implements QueryProvider {
         Expression tuple = MdxToQueryConverter.getExpression(updateClause.tupleExp());
         Expression value = MdxToQueryConverter.getExpression(updateClause.valueExp());
         Allocation allocation = updateClause.allocation();
-        Expression weight = MdxToQueryConverter.getExpression(updateClause.weight());
+        Expression weight = MdxToQueryConverter.getExpression(updateClause.weight().get());
         return new UpdateImpl.UpdateClauseImpl(tuple, value, allocation, weight);
     }
 
@@ -103,7 +103,7 @@ public class QueryProviderImpl implements QueryProvider {
         if (dmvStatement.columns() != null) {
             dmvStatement.columns().forEach(c -> columns.addAll(convertColumns(c.objectIdentifiers())));
         }
-        Expression whereExpression = MdxToQueryConverter.getExpression(dmvStatement.where());
+        Expression whereExpression = MdxToQueryConverter.getExpression(dmvStatement.where().get());
         return new DmvQueryImpl(tableName, columns, whereExpression);
     }
 

@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,7 +32,7 @@ public class DistinctFunDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
             "Eliminates duplicate tuples from a set.", DataType.SET,
-            new FunctionParameterR[] { new FunctionParameterR( DataType.SET ) });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET) }).interfaceName(FunctionInterface.FILTER);
 
     public DistinctFunDef() {
         super(functionMetaData);

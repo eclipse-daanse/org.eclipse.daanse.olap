@@ -30,7 +30,7 @@ public class IsDateFunDef  extends AbstractFunctionDefinition {
         Returns a Boolean value indicating whether an expression can be
         converted to a date.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR( DataType.VALUE, "expression" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "expression") });
 
     public IsDateFunDef() {
         super(functionMetaData);

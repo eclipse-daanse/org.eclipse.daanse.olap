@@ -32,9 +32,9 @@ public class SLNFunDef  extends AbstractFunctionDefinition {
         asset for a single period.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.NUMERIC, "Cost" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Salvage" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Life" )});
+                    FunctionParameterR.param(DataType.NUMERIC, "Cost"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Salvage"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Life")});
 
     public SLNFunDef() {
         super(functionMetaData);

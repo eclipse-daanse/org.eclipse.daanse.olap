@@ -32,7 +32,7 @@ public class RTrimFunDef  extends AbstractFunctionDefinition {
         without trailing spaces.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.STRING, "String" )});
+                    FunctionParameterR.param(DataType.STRING, "String")});
 
     public RTrimFunDef() {
         super(functionMetaData);

@@ -28,19 +28,17 @@ import org.osgi.service.component.annotations.Component;
 public class TopCountResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("TopCount");
     private static String DESCRIPTION = "Returns a specified number of items from the top of a set, optionally ordering the set first.";
-    private static FunctionParameterR[] xnn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Count"), new FunctionParameterR(DataType.NUMERIC) };
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Count") };
+    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC, "Count"),
+            FunctionParameterR.param(DataType.NUMERIC)
+                    .describedAs("Expression that ranks the members; without it the members keep their natural order.")
+                    .asOptional() };
     // {"fxxnn", "fxxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
             xnn);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xn);
 
     public TopCountResolver() {
-        super(List.of(new TopBottomCountFunDef(functionMetaData, true),
-                new TopBottomCountFunDef(functionMetaData1, true)));
+        super(List.of(new TopBottomCountFunDef(functionMetaData, true)));
     }
 }

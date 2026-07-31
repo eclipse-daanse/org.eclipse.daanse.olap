@@ -15,17 +15,17 @@ package org.eclipse.daanse.olap.function.core.resolver;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
-import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
-import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 public abstract class AbstractMetaDataMultiResolver implements FunctionResolver {
@@ -52,25 +52,23 @@ public abstract class AbstractMetaDataMultiResolver implements FunctionResolver 
 	}
 
 	@Override
-	public FunctionDefinition resolve(Expression[] expressions, Validator validator, List<Conversion> conversions) {
-		outer: for (FunctionMetaData functionMetaData : fmds) {
-			DataType[] parameterTypes = functionMetaData.parameterDataTypes();
-			if (parameterTypes.length != expressions.length) {
+	public Optional<FunctionResolutionResult> resolve(Expression[] expressions, Validator validator) {
+		for (FunctionMetaData functionMetaData : fmds) {
+			Optional<FunctionMetaDataMatcher.Match> match = FunctionMetaDataMatcher.match(functionMetaData,
+					expressions, validator);
+			if (match.isEmpty()) {
 				continue;
 			}
-			conversions.clear();
-			for (int i = 0; i < expressions.length; i++) {
-				if (!validator.canConvert(i, expressions[i], parameterTypes[i], conversions)) {
-					continue outer;
-				}
-			}
-
-			FunctionParameterR[] paramDataTypesOfExpr = Expressions.functionParameterOf(expressions);
 			FunctionMetaData fmdTarget = new FunctionMetaDataR(operationAtom, functionMetaData.description(),
-					functionMetaData.returnCategory(), paramDataTypesOfExpr);
-			return createFunDef(expressions, functionMetaData, fmdTarget);
+					functionMetaData.returnCategory(),
+					Expressions.boundParametersOf(expressions, functionMetaData, match.get().bindings()));
+			FunctionDefinition def = createFunDef(expressions, functionMetaData, fmdTarget);
+			if (def != null) {
+				return Optional.of(new FunctionResolutionResultR(def, functionMetaData, match.get().bindings(),
+						match.get().conversions()));
+			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -81,8 +79,7 @@ public abstract class AbstractMetaDataMultiResolver implements FunctionResolver 
 	@Override
 	public boolean requiresScalarExpressionOnArgument(int k) {
 		for (FunctionMetaData fmd : fmds) {
-			DataType[] parameterTypes = fmd.parameterDataTypes();
-			if ((k < parameterTypes.length) && parameterTypes[k] == DataType.SET) {
+			if (FunctionMetaDataMatcher.setPossibleAt(fmd, k)) {
 				return false;
 			}
 		}

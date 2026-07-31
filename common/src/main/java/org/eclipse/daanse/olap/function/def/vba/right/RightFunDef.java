@@ -33,8 +33,8 @@ public class RightFunDef  extends AbstractFunctionDefinition {
         characters from the right side of a string.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] { 
-                    new FunctionParameterR( DataType.STRING, "Sstring" ),
-                    new FunctionParameterR( DataType.INTEGER, "Length" ) });
+                    FunctionParameterR.param(DataType.STRING, "Sstring"),
+                    FunctionParameterR.param(DataType.INTEGER, "Length") });
 
     public RightFunDef() {
         super(functionMetaData);

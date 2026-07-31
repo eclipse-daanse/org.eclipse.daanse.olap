@@ -29,7 +29,7 @@ public class OctFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (String) representing the octal value of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { new FunctionParameterR( DataType.VALUE, "Number" ) });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "Number") });
 
     public OctFunDef() {
         super(functionMetaData);

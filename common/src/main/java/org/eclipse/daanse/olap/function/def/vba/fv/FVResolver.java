@@ -32,24 +32,15 @@ public class FVResolver extends AbstractFunctionDefinitionMultiResolver {
             Returns a Double specifying the future value of an annuity based on
             periodic, fixed payments and a fixed interest rate.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "NPer"), new FunctionParameterR(DataType.NUMERIC, "Pmt") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "NPer"), new FunctionParameterR(DataType.NUMERIC, "Pmt"),
-            new FunctionParameterR(DataType.NUMERIC, "Pv") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "NPer"), new FunctionParameterR(DataType.NUMERIC, "Pmt"),
-            new FunctionParameterR(DataType.NUMERIC, "Pv"), new FunctionParameterR(DataType.LOGICAL, "Type") };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate"),
+            FunctionParameterR.param(DataType.NUMERIC, "NPer"), FunctionParameterR.param(DataType.NUMERIC, "Pmt"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "Type").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p3);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public FVResolver() {
-        super(List.of(new FVFunDef(functionMetaData1), new FVFunDef(functionMetaData2),
-                new FVFunDef(functionMetaData3)));
+        super(List.of(new FVFunDef(functionMetaData)));
     }
 }

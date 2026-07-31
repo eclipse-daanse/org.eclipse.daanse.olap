@@ -32,30 +32,16 @@ public class RateResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Double specifying the interest rate per period for an
         annuity.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pmt"), new FunctionParameterR(DataType.NUMERIC, "Pv")};
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pmt"), new FunctionParameterR(DataType.NUMERIC, "Pv"),
-            new FunctionParameterR(DataType.NUMERIC, "Fv")};
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pmt"), new FunctionParameterR(DataType.NUMERIC, "Pv"),
-            new FunctionParameterR(DataType.NUMERIC, "Fv"), new FunctionParameterR(DataType.LOGICAL, "Due")};
-    private static FunctionParameterR[] p4 = { new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pmt"), new FunctionParameterR(DataType.NUMERIC, "Pv"),
-            new FunctionParameterR(DataType.NUMERIC, "Fv"), new FunctionParameterR(DataType.LOGICAL, "Due"),
-            new FunctionParameterR(DataType.NUMERIC, "Guess")};
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "NPer"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pmt"), FunctionParameterR.param(DataType.NUMERIC, "Pv"),
+            FunctionParameterR.param(DataType.NUMERIC, "Fv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "Due").asOptional(),
+            FunctionParameterR.param(DataType.NUMERIC, "Guess").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p3);
-    private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p4);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public RateResolver() {
-        super(List.of(new RateFunDef(functionMetaData1), new RateFunDef(functionMetaData2),
-                new RateFunDef(functionMetaData3), new RateFunDef(functionMetaData4)));
+        super(List.of(new RateFunDef(functionMetaData)));
     }
 }

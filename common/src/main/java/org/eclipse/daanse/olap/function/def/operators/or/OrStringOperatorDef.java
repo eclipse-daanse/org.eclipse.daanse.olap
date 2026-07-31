@@ -29,8 +29,8 @@ public class OrStringOperatorDef extends AbstractFunctionDefinition {
     // <String Expression> || <String Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("||");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Concatenates two strings.",
-            DataType.STRING, new FunctionParameterR[] { new FunctionParameterR(  DataType.STRING, "String1" ),
-                    new FunctionParameterR( DataType.STRING, "String2" )});
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1"),
+                    FunctionParameterR.param(DataType.STRING, "String2")});
 
     public OrStringOperatorDef() {
         super(functionMetaData);

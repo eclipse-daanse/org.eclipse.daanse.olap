@@ -30,24 +30,21 @@ public class DrilldownMemberResolver extends AbstractFunctionDefinitionMultiReso
     private static FunctionOperationAtom atom = new FunctionOperationAtom("DrilldownMember");
     private static List<String> reservedWords = List.of("RECURSIVE");
     private static String DESCRIPTION = "Drills down the members in a set that are present in a second specified set.";
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
-    private static FunctionParameterR[] xxy = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2"), new FunctionParameterR(DataType.SYMBOL, "Recursive", Optional.of(reservedWords)) };
-    // {"fxxx", "fxxxy"}
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xxy);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
+                    FunctionParameterR.param(DataType.SET, "Set2"),
+                    new FunctionParameterR(DataType.SYMBOL, "Recursive", Optional.of(reservedWords))
+                            .describedAs("RECURSIVE drills down every matching member at every level, not only the first match.")
+                            .asOptional() });
 
     @Override
     public List<String> getReservedWords() {
         return reservedWords;
     }
 
-    
+
     public DrilldownMemberResolver() {
-        super(List.of(new DrilldownMemberFunDef(functionMetaData1), new DrilldownMemberFunDef(functionMetaData2)));
+        super(List.of(new DrilldownMemberFunDef(functionMetaData)));
     }
 }

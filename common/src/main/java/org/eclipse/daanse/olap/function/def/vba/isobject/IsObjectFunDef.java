@@ -31,7 +31,7 @@ public class IsObjectFunDef  extends AbstractFunctionDefinition {
         an object variable.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.VALUE, "VarName" )});
+                    FunctionParameterR.param(DataType.VALUE, "VarName")});
 
     public IsObjectFunDef() {
         super(functionMetaData);

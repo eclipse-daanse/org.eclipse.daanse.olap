@@ -36,7 +36,7 @@ public class IsEmptyPostfixResolver extends AbstractFunctionDefinitionMultiResol
 
     private static FunctionMetaData postfixMetaDataTuple = new FunctionMetaDataR(pAtom,
         "A shortcut function for the PeriodsToDate function that specifies the level to be Month.",
-        DataType.LOGICAL, new FunctionParameterR[]{ new FunctionParameterR( DataType.TUPLE)});
+        DataType.LOGICAL, new FunctionParameterR[]{ FunctionParameterR.param(DataType.TUPLE)});
 
     public IsEmptyPostfixResolver() {
         super(List.of(new IsEmptyFunDef(postfixMetaDataMember), new IsEmptyFunDef(postfixMetaDataTuple)));

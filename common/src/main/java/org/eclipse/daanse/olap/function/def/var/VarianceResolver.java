@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,17 +29,14 @@ import org.osgi.service.component.annotations.Component;
 public class VarianceResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Variance");
     private static String DESCRIPTION = "Alias for Var.";
-    private static FunctionParameterR[] x = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC) };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC).asOptional() };
     // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, x);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn);
+            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL);
 
     public VarianceResolver() {
-        super(List.of(new VarFunDef(functionMetaData), new VarFunDef(functionMetaData1)));
+        super(List.of(new VarFunDef(functionMetaData)));
     }
 }

@@ -32,21 +32,15 @@ public class InStrRevResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns the position of an occurrence of one string within another,
         from the end of string.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.STRING, "String Check"), new FunctionParameterR(DataType.STRING, "String Match") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.STRING, "String Check"),
-            new FunctionParameterR(DataType.STRING, "String Match"), new FunctionParameterR(DataType.INTEGER, "Start") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.STRING, "String Check"),
-            new FunctionParameterR(DataType.STRING, "String Match"), new FunctionParameterR(DataType.INTEGER, "Start"),
-            new FunctionParameterR(DataType.INTEGER, "Compare") };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match"),
+            FunctionParameterR.param(DataType.INTEGER, "Start").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Compare").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p3);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.INTEGER, params);
 
     public InStrRevResolver() {
-        super(List.of(new InStrRevFunDef(functionMetaData1), new InStrRevFunDef(functionMetaData2), new InStrRevFunDef(functionMetaData3)));
+        super(List.of(new InStrRevFunDef(functionMetaData)));
     }
 }

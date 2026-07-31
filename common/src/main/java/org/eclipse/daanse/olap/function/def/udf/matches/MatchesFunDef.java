@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -30,7 +31,7 @@ public class MatchesFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns true if the string matches the regular expression.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL , new FunctionParameterR[] { new FunctionParameterR( DataType.STRING, "String" ), new FunctionParameterR( DataType.STRING, "regex" ) });
+            DataType.LOGICAL , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String"), FunctionParameterR.param(DataType.STRING, "regex") }).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public MatchesFunDef() {
         super(functionMetaData);

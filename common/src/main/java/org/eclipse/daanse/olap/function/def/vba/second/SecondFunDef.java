@@ -31,7 +31,7 @@ public class SecondFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Integer) specifying a whole number between 0 and
         59, inclusive, representing the second of the minute.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.INTEGER, new FunctionParameterR[] { new FunctionParameterR( DataType.DATE_TIME, "Date" ) });
+            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date") });
 
     public SecondFunDef() {
         super(functionMetaData);

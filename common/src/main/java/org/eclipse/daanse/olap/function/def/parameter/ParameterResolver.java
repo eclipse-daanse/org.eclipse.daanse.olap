@@ -45,29 +45,29 @@ public class ParameterResolver extends AbstractMetaDataMultiResolver {
     private static final List<String> RESERVED_WORDS = List.of("NUMERIC", "STRING");
     private static String DESCRIPTION = "Returns default value of parameter.";
 
-    private static FunctionParameterR[] SySS = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), new FunctionParameterR(DataType.STRING, "DefaultValue"),
-            new FunctionParameterR(DataType.STRING, "Description") };
-    private static FunctionParameterR[] SyS = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), new FunctionParameterR(DataType.STRING, "DefaultValue") };
+    private static FunctionParameterR[] SySS = { FunctionParameterR.param(DataType.STRING, "Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue"),
+            FunctionParameterR.param(DataType.STRING, "Description") };
+    private static FunctionParameterR[] SyS = { FunctionParameterR.param(DataType.STRING, "Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue") };
 
-    private static FunctionParameterR[] SynS = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), new FunctionParameterR(DataType.NUMERIC, "DefaultValue"),
-            new FunctionParameterR(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Syn = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), new FunctionParameterR(DataType.NUMERIC, "DefaultValue") };
+    private static FunctionParameterR[] SynS = { FunctionParameterR.param(DataType.STRING, "Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue"),
+            FunctionParameterR.param(DataType.STRING, "Description") };
+    private static FunctionParameterR[] Syn = { FunctionParameterR.param(DataType.STRING, "Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue") };
 
-    private static FunctionParameterR[] ShmS = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.HIERARCHY), new FunctionParameterR(DataType.MEMBER, "DefaultValue"),
-            new FunctionParameterR(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Shm = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.HIERARCHY), new FunctionParameterR(DataType.MEMBER, "DefaultValue") };
+    private static FunctionParameterR[] ShmS = { FunctionParameterR.param(DataType.STRING, "Name"),
+            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.MEMBER, "DefaultValue"),
+            FunctionParameterR.param(DataType.STRING, "Description") };
+    private static FunctionParameterR[] Shm = { FunctionParameterR.param(DataType.STRING, "Name"),
+            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.MEMBER, "DefaultValue") };
 
-    private static FunctionParameterR[] ShxS = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.HIERARCHY), new FunctionParameterR(DataType.SET, "DefaultValue"),
-            new FunctionParameterR(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Shx = { new FunctionParameterR(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.HIERARCHY), new FunctionParameterR(DataType.SET, "DefaultValue") };
+    private static FunctionParameterR[] ShxS = { FunctionParameterR.param(DataType.STRING, "Name"),
+            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.SET, "DefaultValue"),
+            FunctionParameterR.param(DataType.STRING, "Description") };
+    private static FunctionParameterR[] Shx = { FunctionParameterR.param(DataType.STRING, "Name"),
+            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.SET, "DefaultValue") };
 
     // {"fSSySS", "fSSyS", "fnSynS", "fnSyn", "fmShmS", "fmShm","fxShxS", "fxShx"}
 

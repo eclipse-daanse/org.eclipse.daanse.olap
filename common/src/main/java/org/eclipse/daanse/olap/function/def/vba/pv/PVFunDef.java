@@ -34,11 +34,11 @@ public class PVFunDef  extends AbstractFunctionDefinition {
         interest rate.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] { 
-                    new FunctionParameterR( DataType.NUMERIC, "Rate" ),
-                    new FunctionParameterR( DataType.NUMERIC, "NPer" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Pmt" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Fv" ),
-                    new FunctionParameterR( DataType.LOGICAL, "Due" ) });
+                    FunctionParameterR.param(DataType.NUMERIC, "Rate"),
+                    FunctionParameterR.param(DataType.NUMERIC, "NPer"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Pmt"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Fv"),
+                    FunctionParameterR.param(DataType.LOGICAL, "Due") });
 
     public PVFunDef() {
         super(functionMetaData);

@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
@@ -39,9 +40,12 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.function.CandidateReport;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionService;
+import org.eclipse.daanse.olap.api.function.ResolutionExplanation;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -219,83 +223,75 @@ public abstract class ValidatorImpl implements Validator {
         Expression[] args,
         OperationAtom operationAtom)
     {
-        // Compute signature first. It makes debugging easier.
-		final String signature = FunctionPrinter.getSignature(operationAtom, DataType.UNKNOWN,
-				Expressions.categoriesOf(args));
-
-        // Resolve function by its upper-case name first.  If there is only one
-        // function with that name, stop immediately.  If there is more than
-        // function, use some custom method, which generally involves looking
-        // at the type of one of its arguments.
-        List<FunctionResolver> resolvers = functionService.getResolvers(operationAtom);
-        assert resolvers != null;
-
-        final List<FunctionResolver.Conversion> conversionList =
-            new ArrayList<>();
-        int minConversionCost = Integer.MAX_VALUE;
-        List<FunctionDefinition> matchDefs = new ArrayList<>();
-        List<FunctionResolver.Conversion> matchConversionList = null;
-        for (FunctionResolver resolver : resolvers) {
-            conversionList.clear();
-            FunctionDefinition def = resolver.resolve(args, this, conversionList);
-            if (def != null) {
-                int conversionCost = sumConversionCost(conversionList);
-                if (conversionCost < minConversionCost) {
-                    minConversionCost = conversionCost;
-                    matchDefs.clear();
-                    matchDefs.add(def);
-                    matchConversionList =
-                        new ArrayList<>(conversionList);
-                } else if (conversionCost == minConversionCost) {
-                    matchDefs.add(def);
-                } else {
-                    // ignore this match -- it required more coercions than
-                    // other overloadings we've seen
-                }
-            }
-        }
-        switch (matchDefs.size()) {
+        ResolutionExplanation explanation = explainDef(args, operationAtom);
+        List<FunctionResolutionResult> bestMatches = explanation.bestMatches();
+        switch (bestMatches.size()) {
         case 0:
             throw new OlapRuntimeException(MessageFormat.format(noFunctionMatchesSignature,
-                signature));
+                explanation.signature()));
         case 1:
             break;
         default:
             final StringBuilder buf = new StringBuilder();
-            for (FunctionDefinition matchDef : matchDefs) {
+            for (FunctionResolutionResult match : bestMatches) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
-                buf.append(matchDef.getSignature());
+                buf.append(match.definition().getSignature());
             }
             throw new OlapRuntimeException(MessageFormat.format(
                 moreThanOneFunctionMatchesSignature,
-                    signature,
+                    explanation.signature(),
                     buf.toString()));
         }
 
-        final FunctionDefinition matchDef = matchDefs.get(0);
-        for (FunctionResolver.Conversion conversion : matchConversionList) {
+        final FunctionResolutionResult winner = bestMatches.get(0);
+        for (FunctionResolver.Conversion conversion : winner.conversions()) {
             conversion.checkValid();
             conversion.apply(this, Arrays.asList(args));
         }
 
-        return matchDef;
+        return winner.definition();
+    }
+
+    /**
+     * Side-effect-free resolution trace: every resolver's outcome and the
+     * minimum-cost matches. Used by getDef; also the entry point for
+     * diagnosing why a call resolved (or failed to resolve) the way it did.
+     */
+    public ResolutionExplanation explainDef(Expression[] args, OperationAtom operationAtom) {
+        final String signature = FunctionPrinter.getSignature(operationAtom, DataType.UNKNOWN,
+                Expressions.categoriesOf(args));
+
+        List<FunctionResolver> resolvers = functionService.getResolvers(operationAtom);
+        assert resolvers != null;
+
+        List<CandidateReport> candidates = new ArrayList<>();
+        int minConversionCost = Integer.MAX_VALUE;
+        List<FunctionResolutionResult> bestMatches = new ArrayList<>();
+        for (FunctionResolver resolver : resolvers) {
+            Optional<FunctionResolutionResult> result = resolver.resolve(args, this);
+            if (result.isPresent()) {
+                candidates.add(new CandidateReport(resolver, result, Optional.empty()));
+                int conversionCost = result.get().cost();
+                if (conversionCost < minConversionCost) {
+                    minConversionCost = conversionCost;
+                    bestMatches.clear();
+                    bestMatches.add(result.get());
+                } else if (conversionCost == minConversionCost) {
+                    bestMatches.add(result.get());
+                }
+            } else {
+                candidates.add(new CandidateReport(resolver, Optional.empty(),
+                        Optional.of("no overload matches")));
+            }
+        }
+        return new ResolutionExplanation(operationAtom, signature, candidates, bestMatches);
     }
 
     @Override
 	public boolean alwaysResolveFunDef() {
         return false;
-    }
-
-    private int sumConversionCost(
-        List<FunctionResolver.Conversion> conversionList)
-    {
-        int cost = 0;
-        for (FunctionResolver.Conversion conversion : conversionList) {
-            cost += conversion.getCost();
-        }
-        return cost;
     }
 
     @Override

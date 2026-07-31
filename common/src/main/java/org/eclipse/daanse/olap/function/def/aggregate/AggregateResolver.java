@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,15 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class AggregateResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Aggregate");
     private static String DESCRIPTION = "Returns a calculated value using the appropriate aggregate function, based on the context of the query.";
-    // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(DataType.SET) });
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(DataType.SET),
-                    new FunctionParameterR(DataType.NUMERIC) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public AggregateResolver() {
-        super(List.of(new AggregateFunDef(functionMetaData), new AggregateFunDef(functionMetaData1)));
+        super(List.of(new AggregateFunDef(functionMetaData)));
     }
 }

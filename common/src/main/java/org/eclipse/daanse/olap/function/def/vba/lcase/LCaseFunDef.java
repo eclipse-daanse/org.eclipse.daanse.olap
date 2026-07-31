@@ -31,7 +31,7 @@ public class LCaseFunDef  extends AbstractFunctionDefinition {
         Returns a String that has been converted to lowercase.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.STRING, "String" )});
+                    FunctionParameterR.param(DataType.STRING, "String")});
 
     public LCaseFunDef() {
         super(functionMetaData);

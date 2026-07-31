@@ -14,23 +14,20 @@
 package org.eclipse.daanse.olap.function.def.vba.space;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
-import org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class SpaceResolverTest {
@@ -48,13 +45,33 @@ class SpaceResolverTest {
 
     @Test
     void shouldResolveWithValidIntegerArgument() {
-        List<Conversion> conversions = List.of();
-        when(validator.canConvert(anyInt(), eq(expression), any(), eq(conversions))).thenReturn(true);
+        when(validator.canConvert(anyInt(), eq(expression), any(), any())).thenReturn(true);
 
         Expression[] args = { expression };
-        FunctionDefinition result = spaceResolver.resolve(args, validator, conversions);
+        Optional<FunctionResolutionResult> result = spaceResolver.resolve(args, validator);
 
-        assertThat(result).isInstanceOf(SpaceFunDef.class);
+        assertThat(result).isPresent();
+        assertThat(result.get().definition()).isInstanceOf(SpaceFunDef.class);
+        assertThat(result.get().matchedMetaData()).isNotNull();
+        assertThat(result.get().bindings()).hasSize(1);
+    }
+
+    @Test
+    void shouldNotResolveWhenValidatorCannotConvert() {
+        when(validator.canConvert(anyInt(), eq(expression), any(), any())).thenReturn(false);
+
+        Expression[] args = { expression };
+        Optional<FunctionResolutionResult> result = spaceResolver.resolve(args, validator);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void shouldNotResolveWithWrongArgumentCount() {
+        when(validator.canConvert(anyInt(), any(Expression.class), any(), any())).thenReturn(true);
+
+        assertThat(spaceResolver.resolve(new Expression[] {}, validator)).isEmpty();
+        assertThat(spaceResolver.resolve(new Expression[] { expression, expression }, validator)).isEmpty();
     }
 
     @Test
@@ -84,36 +101,6 @@ class SpaceResolverTest {
         DataType parameterType = metaData.parameters()[0].dataType();
 
         assertThat(parameterType).isEqualTo(DataType.INTEGER);
-    }
-
-    @Test
-    @Disabled
-    void shouldFailWithNoArguments() {
-        List<Conversion> conversions = List.of();
-        Expression[] args = {};
-
-        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
-    }
-
-    @Test
-    @Disabled
-    void shouldFailWithTooManyArguments() {
-        List<Conversion> conversions = List.of();
-        Expression[] args = { expression, expression };
-        when(validator.canConvert(anyInt(), any(Expression.class), any(), eq(conversions))).thenReturn(true);
-
-        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
-    }
-
-    @Test
-    @Disabled
-    void shouldFailWhenValidatorCannotConvert() {
-        List<Conversion> conversions = List.of();
-        when(validator.canConvert(anyInt(), eq(expression), any(), eq(conversions))).thenReturn(false);
-
-        Expression[] args = { expression };
-
-        assertThatExceptionOfType(Exception.class).isThrownBy(() -> spaceResolver.resolve(args, validator, conversions));
     }
 
     @Test

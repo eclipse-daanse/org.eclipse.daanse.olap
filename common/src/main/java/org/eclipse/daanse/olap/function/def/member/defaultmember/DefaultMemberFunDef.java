@@ -22,6 +22,7 @@ import org.eclipse.daanse.olap.api.calc.HierarchyCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
@@ -32,7 +33,7 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class DefaultMemberFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtomDefaultMember = new PlainPropertyOperationAtom("DefaultMember");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtomDefaultMember,
-            "Returns the default member of a hierarchy.", DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(  DataType.HIERARCHY ) });
+            "Returns the default member of a hierarchy.", DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) }).interfaceName(FunctionInterface.NAVIGATION);
 
     public DefaultMemberFunDef() {
         super(functionMetaData);

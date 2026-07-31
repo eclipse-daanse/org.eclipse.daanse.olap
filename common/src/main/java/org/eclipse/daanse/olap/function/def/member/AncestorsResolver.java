@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -33,10 +34,10 @@ public class AncestorsResolver extends AbstractFunctionDefinitionMultiResolver {
     //{"fxml", "fxmn"}
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ), new FunctionParameterR( DataType.LEVEL ) });
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.NAVIGATION);
 
     private static FunctionMetaData functionMetaDataWithNumeric = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ), new FunctionParameterR( DataType.NUMERIC ) });
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.NUMERIC) }).interfaceName(FunctionInterface.NAVIGATION);
 
 
     public AncestorsResolver() {

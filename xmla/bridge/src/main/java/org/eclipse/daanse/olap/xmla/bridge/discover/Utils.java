@@ -282,56 +282,6 @@ public class Utils {
         return getMdSchemaCubesResponseRow(connection, catalog, cubeName, baseCubeName, cubeSource);
     }
 
-    static List<MdSchemaFunctionsResponseRow> getMdSchemaFunctionsResponseRow(Context c, Optional<String> oLibraryName,
-            Optional<InterfaceNameEnum> oInterfaceName, Optional<OriginEnum> oOrigin, RequestMetaData metaData) {
-        List<MdSchemaFunctionsResponseRow> result = new ArrayList<>();
-        List<FunctionMetaData> fmList = c.getFunctionService().getFunctionMetaDatas();
-        StringBuilder buf = new StringBuilder(50);
-        for (FunctionMetaData fm : fmList) {
-            if (fm.operationAtom() instanceof EmptyOperationAtom//
-                    || fm.operationAtom() instanceof InternalOperationAtom//
-                    || fm.operationAtom() instanceof ParenthesesOperationAtom//
-            ) {
-                continue;
-            }
-
-            DataType[] paramCategories = fm.parameterDataTypes();
-            DataType returnCategory = fm.returnCategory();
-
-            // Convert Windows newlines in 'description' to UNIX format.
-            String description = fm.description();
-            if (description != null) {
-                description = fm.description().replace("\r", "");
-            }
-            if ((paramCategories == null) || (paramCategories.length == 0)) {
-                result.add(new MdSchemaFunctionsResponseRowR(Optional.ofNullable(fm.operationAtom().name()),
-                        Optional.ofNullable(description), "(none)", Optional.of(1), Optional.of(OriginEnum.MSOLAP),
-                        Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
-                        Optional.empty(), Optional.ofNullable(fm.operationAtom().name()), Optional.empty(),
-                        Optional.empty(), Optional.empty()));
-            } else {
-
-                buf.setLength(0);
-                for (int j = 0; j < paramCategories.length; j++) {
-                    DataType v = paramCategories[j];
-                    if (j > 0) {
-                        buf.append(", ");
-                    }
-                    buf.append(v.getPrittyName());
-                }
-
-                VarType varType = VarType.forCategory(returnCategory.getName());
-                result.add(new MdSchemaFunctionsResponseRowR(Optional.ofNullable(fm.operationAtom().name()),
-                        Optional.ofNullable(description), buf.toString(), Optional.of(varType.ordinal()),
-                        Optional.of(OriginEnum.MSOLAP), Optional.empty(), Optional.empty(), Optional.empty(),
-                        Optional.empty(), Optional.empty(), Optional.empty(),
-                        Optional.ofNullable(fm.operationAtom().name()), Optional.empty(), Optional.empty(),
-                        Optional.empty()));
-            }
-        }
-        return result;
-    }
-
     private static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Connection connection, Catalog catalog,
             Optional<String> cubeName, Optional<String> baseCubeName, Optional<CubeSourceEnum> oCubeSource) {
         if (oCubeSource.isEmpty()) {

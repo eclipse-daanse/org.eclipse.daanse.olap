@@ -13,13 +13,20 @@
 */
 package org.eclipse.daanse.olap.function.def.cache;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.osgi.service.component.annotations.Component;
 
@@ -27,16 +34,15 @@ import org.osgi.service.component.annotations.Component;
 public class CacheFunResolver extends NoExpressionRequiredFunctionResolver {
 
     @Override
-    public FunctionDefinition resolve(
+    public Optional<FunctionResolutionResult> resolve(
         Expression[] args,
-        Validator validator,
-        List<Conversion> conversions)
+        Validator validator)
     {
         if (args.length != 1) {
-            return null;
+            return Optional.empty();
         }
         final Expression exp = args[0];
-        return new CacheFunDef(exp.getCategory());
+        return Optional.of(FunctionResolutionResultR.of(new CacheFunDef(exp.getCategory()), List.<Conversion>of()));
     }
 
     @Override
@@ -44,5 +50,14 @@ public class CacheFunResolver extends NoExpressionRequiredFunctionResolver {
         return CacheFunDef.functionAtom;
     }
 
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+            FunctionMetaDataR.of(CacheFunDef.functionAtom,
+                    "Evaluates and returns its sole argument, applying statement-level caching", DataType.VALUE,
+                    param(DataType.VALUE)));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
+    }
 
 }

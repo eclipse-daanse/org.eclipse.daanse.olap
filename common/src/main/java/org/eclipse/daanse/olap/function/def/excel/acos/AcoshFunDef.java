@@ -33,7 +33,7 @@ public class AcoshFunDef  extends AbstractFunctionDefinition {
         value whose hyperbolic cosine is Arg1, so Acosh(Cosh(number))
         equals Arg1.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Number" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
 
     public AcoshFunDef() {
         super(functionMetaData);

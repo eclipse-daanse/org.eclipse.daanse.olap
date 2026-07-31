@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class ExistsResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Exists");
     private static String DESCRIPTION = "Returns the the set of tuples of the first set that exist with one or more tuples of the second set.";
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
+    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set1"),
+            FunctionParameterR.param(DataType.SET, "Set2") };
     // {"fxxx"}
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
+            DataType.SET, xx).interfaceName(FunctionInterface.FILTER);
 
     public ExistsResolver() {
         super(List.of(new ExistsFunDef(functionMetaData1)));

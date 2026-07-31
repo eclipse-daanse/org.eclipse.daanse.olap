@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -29,7 +30,7 @@ public class NameFunDef extends AbstractFunctionDefinition {
     // <Member>.Name
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Name");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
-            "Returns the name of a member.", DataType.STRING, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ) });
+            "Returns the name of a member.", DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.METADATA);
 
     public NameFunDef() {
         super(functionMetaData);

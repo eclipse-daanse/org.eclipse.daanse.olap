@@ -24,6 +24,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -47,7 +48,7 @@ public class ExtractFunDef extends AbstractFunctionDefinition {
     public ExtractFunDef(FunctionParameterR[] parameterTypes) {
         super(new FunctionMetaDataR(functionAtom,
                 "Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.",
-                DataType.SET, parameterTypes));
+                DataType.SET, parameterTypes).interfaceName(FunctionInterface.FILTER));
     }
 
     @Override

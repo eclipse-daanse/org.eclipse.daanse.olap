@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -35,7 +36,7 @@ public class MemberLevelFunDef extends AbstractFunctionDefinition {
     static OperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Level");
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
-            "Returns a member's level.", DataType.LEVEL, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ) });
+            "Returns a member's level.", DataType.LEVEL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.METADATA);
 
     public MemberLevelFunDef() {
         super(functionMetaData);

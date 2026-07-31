@@ -29,8 +29,8 @@ public class OrOperatorDef extends AbstractFunctionDefinition {
     // <Logical Expression> OR <Logical Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("OR");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Returns the disjunction of two conditions.",
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.LOGICAL, "Condition1" ),
-                    new FunctionParameterR( DataType.LOGICAL, "Condition2" )});
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition1"),
+                    FunctionParameterR.param(DataType.LOGICAL, "Condition2")});
 
     public OrOperatorDef() {
         super(functionMetaData);

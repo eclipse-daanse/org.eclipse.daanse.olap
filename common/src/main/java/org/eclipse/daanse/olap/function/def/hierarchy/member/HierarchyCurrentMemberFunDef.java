@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.HierarchyCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -32,7 +33,7 @@ public class HierarchyCurrentMemberFunDef extends AbstractFunctionDefinition {
 
     static final FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the current member along a hierarchy during an iteration.",
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(  DataType.HIERARCHY ) });
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) }).interfaceName(FunctionInterface.NAVIGATION);
 
     static final HierarchyCurrentMemberFunDef instance = new HierarchyCurrentMemberFunDef();
 

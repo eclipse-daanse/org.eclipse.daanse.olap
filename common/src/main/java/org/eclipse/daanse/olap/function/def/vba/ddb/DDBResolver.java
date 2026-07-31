@@ -33,15 +33,15 @@ public class DDBResolver extends AbstractFunctionDefinitionMultiResolver {
             specific time period using the double-declining balance method or
             some other method you specify.""";
     
-    private static FunctionParameterR[] p1 = { new FunctionParameterR( DataType.NUMERIC, "Cost" ), new FunctionParameterR( DataType.NUMERIC, "Salvage" ), new FunctionParameterR( DataType.NUMERIC, "Life" ) , new FunctionParameterR( DataType.NUMERIC, "Period" )};
-    private static FunctionParameterR[] p2 = { new FunctionParameterR( DataType.NUMERIC, "Cost" ), new FunctionParameterR( DataType.NUMERIC, "Salvage" ), new FunctionParameterR( DataType.NUMERIC, "Life" ), new FunctionParameterR( DataType.NUMERIC, "Period" ), new FunctionParameterR( DataType.NUMERIC, "Factor" ) };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Cost"),
+            FunctionParameterR.param(DataType.NUMERIC, "Salvage"), FunctionParameterR.param(DataType.NUMERIC, "Life"),
+            FunctionParameterR.param(DataType.NUMERIC, "Period"),
+            FunctionParameterR.param(DataType.NUMERIC, "Factor").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public DDBResolver() {
-        super(List.of(new DDBFunDef(functionMetaData1), new DDBFunDef(functionMetaData2)));
+        super(List.of(new DDBFunDef(functionMetaData)));
     }
 }    

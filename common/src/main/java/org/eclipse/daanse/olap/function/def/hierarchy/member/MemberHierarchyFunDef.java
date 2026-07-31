@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,7 +32,7 @@ public class MemberHierarchyFunDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns a member's hierarchy.", DataType.HIERARCHY,
-            new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ,"Member" ) });
+            new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ,"Member" ) }).interfaceName(FunctionInterface.METADATA);
 
     public MemberHierarchyFunDef() {
         super(functionMetaData);

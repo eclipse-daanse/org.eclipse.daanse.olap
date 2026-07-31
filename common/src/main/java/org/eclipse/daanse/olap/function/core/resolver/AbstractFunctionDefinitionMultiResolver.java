@@ -14,9 +14,12 @@
 package org.eclipse.daanse.olap.function.core.resolver;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
+import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 public class AbstractFunctionDefinitionMultiResolver extends AbstractMetaDataMultiResolver {
@@ -29,13 +32,34 @@ public class AbstractFunctionDefinitionMultiResolver extends AbstractMetaDataMul
 	}
 
 	@Override
+	public Optional<FunctionResolutionResult> resolve(Expression[] expressions, Validator validator) {
+		for (FunctionDefinition functionDefinition : functionDefinitions) {
+			FunctionMetaData functionMetaData = functionDefinition.getFunctionMetaData();
+			Optional<FunctionMetaDataMatcher.Match> match = FunctionMetaDataMatcher.match(functionMetaData,
+					expressions, validator);
+			if (match.isPresent()) {
+				// createFunDef stays the hook for resolvers that need a fresh,
+				// per-call definition (e.g. NativizeSet holds per-call state).
+				FunctionDefinition def = createFunDef(expressions, functionMetaData, functionMetaData);
+				if (def != null) {
+					return Optional.of(new FunctionResolutionResultR(def, functionMetaData,
+							match.get().bindings(), match.get().conversions()));
+				}
+			}
+		}
+		return Optional.empty();
+	}
+
+	@Override
 	protected FunctionDefinition createFunDef(Expression[] args, FunctionMetaData functionMetaData,
 			FunctionMetaData fmdTarget) {
 
 		if (functionMetaData == null) {
 			return null;
 		}
-		return functionDefinitions.stream().filter(fd -> fd.getFunctionMetaData().equals(functionMetaData)).findAny()
+		// identity, not equals: the metadata instance comes from the matched
+		// definition itself
+		return functionDefinitions.stream().filter(fd -> fd.getFunctionMetaData() == functionMetaData).findAny()
 				.orElse(null);
 	}
 

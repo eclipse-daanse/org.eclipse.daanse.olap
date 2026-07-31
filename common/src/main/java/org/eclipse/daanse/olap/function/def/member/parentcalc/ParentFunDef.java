@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,7 +32,7 @@ public class ParentFunDef extends AbstractFunctionDefinition {
     // <Member>.Parent
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Parent");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
-            "Returns the parent of a member.", DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR( DataType.MEMBER ) });
+            "Returns the parent of a member.", DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.NAVIGATION);
 
     public ParentFunDef() {
         super(functionMetaData);

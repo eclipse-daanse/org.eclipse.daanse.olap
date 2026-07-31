@@ -58,12 +58,12 @@ public abstract class AbstractFunctionDefinition implements FunctionDefinition {
 	public Expression createCall(Validator validator, Expression[] args) {
 		DataType[] categories = functionMetaData.parameterDataTypes();
 
-		if (categories.length != args.length) {
+		if (args.length < functionMetaData.minArity() || args.length > functionMetaData.maxArity()) {
 			throw new IllegalArgumentException("Categories does not match arguments count");
 		}
 
 		for (int i = 0; i < args.length; i++) {
-			args[i] = validateArgument(validator, args, i, categories[i]);
+			args[i] = validateArgument(validator, args, i, i < categories.length ? categories[i] : categories[categories.length - 1]);
 		}
 
 		final Type type = getResultType(validator, args);

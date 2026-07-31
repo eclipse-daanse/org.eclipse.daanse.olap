@@ -30,7 +30,7 @@ public class SinhFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the hyperbolic sine of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Number" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
 
     public SinhFunDef() {
         super(functionMetaData);

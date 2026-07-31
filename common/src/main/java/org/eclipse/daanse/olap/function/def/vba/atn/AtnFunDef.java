@@ -31,7 +31,7 @@ public class AtnFunDef  extends AbstractFunctionDefinition {
         Returns a Double specifying the arctangent of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.NUMERIC, "Number" )});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
 
     public AtnFunDef() {
         super(functionMetaData);

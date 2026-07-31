@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,19 +32,16 @@ public class ExceptResolver extends AbstractFunctionDefinitionMultiResolver {
     
     private static List<String> reservedWords = List.of("ALL");
     private static String DESCRIPTION = "Finds the difference between two sets, optionally retaining duplicates.";
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
-    private static FunctionParameterR[] xxy = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2"), new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(reservedWords) ) };
-    // {"fxxx", "fxxxy"}
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xxy);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
+                    FunctionParameterR.param(DataType.SET, "Set2"),
+                    new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(reservedWords))
+                            .describedAs("ALL retains duplicates while removing matching members.")
+                            .asOptional() }).interfaceName(FunctionInterface.FILTER);
 
     public ExceptResolver() {
-        super(List.of(new ExceptFunDef(functionMetaData1), new ExceptFunDef(functionMetaData2)));
+        super(List.of(new ExceptFunDef(functionMetaData)));
     }
     
     @Override

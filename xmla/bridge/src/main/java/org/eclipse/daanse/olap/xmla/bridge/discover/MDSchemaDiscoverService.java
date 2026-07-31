@@ -81,10 +81,17 @@ public class MDSchemaDiscoverService {
     protected static final Logger LOGGER = LoggerFactory.getLogger(MDSchemaDiscoverService.class);
     private ContextListSupplyer contextsListSupplyer;
     private ActionService actionService;
+    private org.eclipse.daanse.olap.api.function.FunctionTextService functionTextService =
+            new org.eclipse.daanse.olap.function.core.text.FunctionTextServiceImpl();
 
     public MDSchemaDiscoverService(ContextListSupplyer contextsListSupplyer, ActionService actionService) {
         this.contextsListSupplyer = contextsListSupplyer;
         this.actionService = actionService;
+    }
+
+    /** Injects a localized text source; without one the inline (English) texts are served. */
+    public void setFunctionTextService(org.eclipse.daanse.olap.api.function.FunctionTextService functionTextService) {
+        this.functionTextService = functionTextService;
     }
 
     public List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request, RequestMetaData metaData) {
@@ -194,12 +201,15 @@ public class MDSchemaDiscoverService {
 
     public List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request,
             RequestMetaData metaData) {
-        Optional<String> oLibraryName = request.restrictions().libraryName();
-        Optional<InterfaceNameEnum> oInterfaceName = request.restrictions().interfaceName();
-        Optional<OriginEnum> oOrigin = request.restrictions().origin();
-        return contextsListSupplyer.getContexts().stream().map(c -> Utils.getMdSchemaFunctionsResponseRow(c,
-                oLibraryName, oInterfaceName, oOrigin, metaData)).flatMap(Collection::stream).toList();
-
+        // The function catalog is context independent — use the first context and
+        // emit every function exactly once.
+        List<org.eclipse.daanse.olap.api.Context<?>> contexts = contextsListSupplyer.getContexts();
+        if (contexts.isEmpty()) {
+            return List.of();
+        }
+        java.util.Locale locale = MdSchemaFunctionsRowMapper.localeOf(request.properties().localeIdentifier());
+        return MdSchemaFunctionsRowMapper.rows(contexts.get(0).getFunctionService(), functionTextService, locale,
+                request.restrictions());
     }
 
     public List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request,

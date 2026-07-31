@@ -32,7 +32,7 @@ public class AggregateChildrenFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtom$AggregateChildren = new InternalOperationAtom("$AggregateChildren");
     static FunctionMetaData functionMetaData$AggregateChildren = new FunctionMetaDataR(functionAtom$AggregateChildren,
             "Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(  DataType.HIERARCHY ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) });
 
     public AggregateChildrenFunDef() {
         super(functionMetaData$AggregateChildren);

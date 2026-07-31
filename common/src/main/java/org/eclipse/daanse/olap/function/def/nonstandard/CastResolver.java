@@ -13,18 +13,22 @@
  */
 package org.eclipse.daanse.olap.function.def.nonstandard;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.exceptions.CastInvalidTypeException;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.osgi.service.component.annotations.Component;
@@ -33,14 +37,14 @@ import org.osgi.service.component.annotations.Component;
 public class CastResolver extends NoExpressionRequiredFunctionResolver {
 
     @Override
-    public FunctionDefinition resolve(
-        Expression[] args, Validator validator, List<Conversion> conversions)
+    public Optional<FunctionResolutionResult> resolve(
+        Expression[] args, Validator validator)
     {
         if (args.length != 2) {
-            return null;
+            return Optional.empty();
         }
         if (!(args[1] instanceof Literal literal)) {
-            return null;
+            return Optional.empty();
         }
         String typeName = (String) literal.getValue();
         DataType returnCategory;
@@ -59,11 +63,21 @@ public class CastResolver extends NoExpressionRequiredFunctionResolver {
 
         FunctionMetaData functionMetaData = new FunctionMetaDataR(CastFunDef.functionAtom, "Converts values to another type.",
                 returnCategory, Expressions.functionParameterOf(args));
-        return new CastFunDef(functionMetaData);
+        return Optional.of(FunctionResolutionResultR.of(new CastFunDef(functionMetaData), List.<Conversion>of()));
     }
 
     @Override
     public OperationAtom getFunctionAtom() {
         return CastFunDef.functionAtom;
+    }
+
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+        FunctionMetaDataR.of(CastFunDef.functionAtom, "Converts values to another type.", DataType.VALUE,
+            param(DataType.VALUE),
+            param(DataType.STRING, "Type_Name").reserved("String", "Numeric", "Integer", "Boolean")));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
     }
 }

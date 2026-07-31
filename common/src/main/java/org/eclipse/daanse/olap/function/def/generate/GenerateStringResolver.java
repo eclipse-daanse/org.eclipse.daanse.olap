@@ -28,12 +28,12 @@ import org.osgi.service.component.annotations.Component;
 public class GenerateStringResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Generate");
     private static String DESCRIPTION = "Applies a set to a string expression and joins resulting sets by string concatenation.";
-    private static FunctionParameterR[] xS = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.STRING) };
-    private static FunctionParameterR[] xSS = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.STRING), new FunctionParameterR(DataType.STRING, "Separator") };
-    private static FunctionParameterR[] xnS = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC), new FunctionParameterR(DataType.STRING, "Separator") };
+    private static FunctionParameterR[] xS = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.STRING) };
+    private static FunctionParameterR[] xSS = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.STRING), FunctionParameterR.param(DataType.STRING, "Separator") };
+    private static FunctionParameterR[] xnS = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC), FunctionParameterR.param(DataType.STRING, "Separator") };
     // {"fSxS", "fSxSS", "fSxnS"}
 
 

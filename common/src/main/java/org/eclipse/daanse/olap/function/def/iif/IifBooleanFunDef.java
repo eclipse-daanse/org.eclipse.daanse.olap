@@ -28,8 +28,8 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class IifBooleanFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom BOOLEAN_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
-    static FunctionParameterR[] params = { new FunctionParameterR(DataType.LOGICAL, "Condition"),
-            new FunctionParameterR(DataType.LOGICAL, "Boolean1"), new FunctionParameterR(DataType.LOGICAL, "Boolean2") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition"),
+            FunctionParameterR.param(DataType.LOGICAL, "Boolean1"), FunctionParameterR.param(DataType.LOGICAL, "Boolean2") };
     static final FunctionMetaData BOOLEAN_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(BOOLEAN_INSTANCE_FUNCTION_ATOM, "Returns boolean determined by a logical test.",
             DataType.LOGICAL, params);
     // IIf(<Logical Expression>, <Boolean Expression>, <Boolean Expression>)

@@ -49,4 +49,33 @@ public class Expressions {
         return Stream.of(expressions).map(e -> new FunctionParameterR(e.getCategory())).toArray(FunctionParameterR[]::new);
     }
 
+    /**
+     * Per-call parameters: the declared parameter each argument was bound to,
+     * keeping name/description/flags, with the data type replaced by the actual
+     * expression category. Falls back to bare category parameters when no
+     * binding is available for an argument.
+     */
+    public static FunctionParameterR[] boundParametersOf(Expression[] expressions,
+            org.eclipse.daanse.olap.api.function.FunctionMetaData matched,
+            java.util.List<org.eclipse.daanse.olap.api.function.ArgumentBinding> bindings) {
+        FunctionParameterR[] result = new FunctionParameterR[expressions.length];
+        org.eclipse.daanse.olap.api.function.FunctionParameter[] declared = matched.parameters();
+        for (org.eclipse.daanse.olap.api.function.ArgumentBinding binding : bindings) {
+            int argIndex = binding.argumentIndex();
+            if (argIndex < 0 || argIndex >= result.length) {
+                continue;
+            }
+            org.eclipse.daanse.olap.api.function.FunctionParameter parameter = declared[binding.parameterIndex()];
+            result[argIndex] = new FunctionParameterR(expressions[argIndex].getCategory(), parameter.name(),
+                    parameter.description(), parameter.reservedWords(), parameter.optional(), parameter.repeatable(),
+                    parameter.repeatGroup(), parameter.skippable());
+        }
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] == null) {
+                result[i] = new FunctionParameterR(expressions[i].getCategory());
+            }
+        }
+        return result;
+    }
+
 }

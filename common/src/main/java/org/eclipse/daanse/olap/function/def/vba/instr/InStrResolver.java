@@ -32,12 +32,12 @@ public class InStrResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Variant (Long) specifying the position of the first
         occurrence of one string within another.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.STRING, "String Check"), new FunctionParameterR(DataType.STRING, "String Match") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.INTEGER, "Start"), new FunctionParameterR(DataType.STRING, "String Check"),
-            new FunctionParameterR(DataType.STRING, "String Match") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.INTEGER, "Start"), new FunctionParameterR(DataType.STRING, "String Check"),
-            new FunctionParameterR(DataType.STRING, "String Match"),
-            new FunctionParameterR(DataType.INTEGER, "Compare") };
+    private static FunctionParameterR[] p1 = { FunctionParameterR.param(DataType.STRING, "String Check"), FunctionParameterR.param(DataType.STRING, "String Match") };
+    private static FunctionParameterR[] p2 = { FunctionParameterR.param(DataType.INTEGER, "Start"), FunctionParameterR.param(DataType.STRING, "String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match") };
+    private static FunctionParameterR[] p3 = { FunctionParameterR.param(DataType.INTEGER, "Start"), FunctionParameterR.param(DataType.STRING, "String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match"),
+            FunctionParameterR.param(DataType.INTEGER, "Compare") };
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.INTEGER, p1);

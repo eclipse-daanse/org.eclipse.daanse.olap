@@ -29,8 +29,8 @@ public class MinusOperatorDef extends AbstractFunctionDefinition {
     // <Numeric Expression> - <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("-");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Subtracts two numbers.",
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(  DataType.NUMERIC, "Numeric1" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Numeric2" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2") });
 
     public MinusOperatorDef() {
         super(functionMetaData);

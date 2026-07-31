@@ -28,7 +28,7 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class KPICurrentTimeMemberFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom KPI_CURRENT_TIME_MEMBER_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("KPICurrentTimeMember");
-    static FunctionParameterR[] params = { new FunctionParameterR(DataType.STRING, "Kpi") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi") };
     static final FunctionMetaData FUNCTION_META_DATA = new FunctionMetaDataR(KPI_CURRENT_TIME_MEMBER_INSTANCE_FUNCTION_ATOM, "Returns KPI current time member.",
     		DataType.MEMBER, params);
     // KPITrend(<String>)

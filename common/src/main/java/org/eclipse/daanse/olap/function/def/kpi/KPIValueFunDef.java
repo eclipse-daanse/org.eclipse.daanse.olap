@@ -28,7 +28,7 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class KPIValueFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom KPI_VALUE_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("KPIValue");
-    static FunctionParameterR[] params = { new FunctionParameterR(DataType.STRING, "Kpi") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi") };
     static final FunctionMetaData FUNCTION_META_DATA = new FunctionMetaDataR(KPI_VALUE_INSTANCE_FUNCTION_ATOM, "Returns KPI Value.",
     		DataType.MEMBER, params);
     // KPIValue(<String>)

@@ -32,7 +32,7 @@ public class AsinhFunDef  extends AbstractFunctionDefinition {
         hyperbolic sine is the value whose hyperbolic sine is Arg1,
         so Asinh(Sinh(number)) equals Arg1.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Number" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
 
     public AsinhFunDef() {
         super(functionMetaData);

@@ -32,7 +32,7 @@ public class ChrWFunDef  extends AbstractFunctionDefinition {
         the first letter in a string.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.INTEGER, "charcode" )});
+                    FunctionParameterR.param(DataType.INTEGER, "charcode")});
 
     public ChrWFunDef() {
         super(functionMetaData);

@@ -29,7 +29,7 @@ public class CDblFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns an expression that has been converted to a Variant of subtype Double.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.VALUE, "expression" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "expression") });
 
     public CDblFunDef() {
         super(functionMetaData);

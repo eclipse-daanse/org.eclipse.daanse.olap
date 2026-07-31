@@ -39,15 +39,15 @@ public class DatePartFunDef  extends AbstractFunctionDefinition {
         final DateTimeCalc dateTimeCalc = compiler.compileDateTime(call.getArg(1));
         IntegerCalc firstDayOfWeek = null;
         IntegerCalc firstWeekOfYear = null;
-        if (call.getArgCount() == 2) {
+        if (call.getArgCount() == 3) {
             firstDayOfWeek = new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), Calendar.SUNDAY);
             firstWeekOfYear = new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         }
-        if (call.getArgCount() == 3) {
+        if (call.getArgCount() == 4) {
             firstDayOfWeek = compiler.compileInteger(call.getArg(3));
             firstWeekOfYear = new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         }
-        if (call.getArgCount() == 4) {
+        if (call.getArgCount() == 5) {
             firstDayOfWeek = compiler.compileInteger(call.getArg(3));
             firstWeekOfYear = compiler.compileInteger(call.getArg(4));
         }

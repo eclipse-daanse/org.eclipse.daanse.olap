@@ -33,26 +33,16 @@ public class PPmtResolver extends AbstractFunctionDefinitionMultiResolver {
         of an annuity based on periodic, fixed payments and a fixed
         interest rate.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "Per"), new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pv") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "Per"), new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pv"), new FunctionParameterR(DataType.NUMERIC, "Fv") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.NUMERIC, "Rate"),
-            new FunctionParameterR(DataType.NUMERIC, "Per"), new FunctionParameterR(DataType.NUMERIC, "NPer"),
-            new FunctionParameterR(DataType.NUMERIC, "Pv"), new FunctionParameterR(DataType.NUMERIC, "Fv"),
-            new FunctionParameterR(DataType.LOGICAL, "due") };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate"),
+            FunctionParameterR.param(DataType.NUMERIC, "Per"), FunctionParameterR.param(DataType.NUMERIC, "NPer"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pv"),
+            FunctionParameterR.param(DataType.NUMERIC, "Fv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "due").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p3);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public PPmtResolver() {
-        super(List.of(new PPmtFunDef(functionMetaData1), new PPmtFunDef(functionMetaData2),
-                new PPmtFunDef(functionMetaData3)));
+        super(List.of(new PPmtFunDef(functionMetaData)));
     }
 }

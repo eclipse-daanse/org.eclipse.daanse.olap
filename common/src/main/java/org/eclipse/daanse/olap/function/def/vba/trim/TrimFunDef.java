@@ -31,7 +31,7 @@ public class TrimFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (String) containing a copy of a specified string
         without leading and trailing spaces.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { new FunctionParameterR( DataType.STRING, "String" ) });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String") });
 
     public TrimFunDef() {
         super(functionMetaData);

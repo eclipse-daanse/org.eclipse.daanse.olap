@@ -32,7 +32,7 @@ public class AcosFunDef  extends AbstractFunctionDefinition {
         is the angle whose cosine is Arg1. The returned angle is given in
         radians in the range 0 (zero) to pi.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Number" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
 
     public AcosFunDef() {
         super(functionMetaData);

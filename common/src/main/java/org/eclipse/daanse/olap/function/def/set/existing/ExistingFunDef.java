@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleIteratorCalc;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -35,7 +36,7 @@ public class ExistingFunDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
             "Forces the set to be evaluated within the current context.", DataType.SET,
-            new FunctionParameterR[] { new FunctionParameterR( DataType.SET ) });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET) }).interfaceName(FunctionInterface.FILTER);
 
     protected ExistingFunDef() {
         super(functionMetaData);

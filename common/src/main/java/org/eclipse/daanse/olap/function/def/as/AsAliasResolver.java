@@ -25,15 +25,22 @@
  */
 package org.eclipse.daanse.olap.function.def.as;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
 import org.osgi.service.component.annotations.Component;
@@ -42,9 +49,10 @@ import org.osgi.service.component.annotations.Component;
 public class AsAliasResolver extends NoExpressionRequiredFunctionResolver {
 
 	@Override
-	public FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions) {
+	public Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator) {
+		List<Conversion> conversions = new ArrayList<>();
 		if (!validator.canConvert(0, args[0], DataType.SET, conversions)) {
-			return null;
+			return Optional.empty();
 		}
 
 		// By the time resolve is called, the id argument has already been
@@ -57,11 +65,21 @@ public class AsAliasResolver extends NoExpressionRequiredFunctionResolver {
 
 		QueryImpl.ScopedNamedSet scopedNamedSet = (QueryImpl.ScopedNamedSet) nse.getNamedSet();
 
-		return new AsAliasFunDef(scopedNamedSet);
+		return Optional.of(FunctionResolutionResultR.of(new AsAliasFunDef(scopedNamedSet), conversions));
 	}
 
 	@Override
 	public OperationAtom getFunctionAtom() {
 		return AsAliasFunDef.functionAtom;
+	}
+
+	private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+			FunctionMetaDataR.of(AsAliasFunDef.functionAtom, AsAliasFunDef.DESCRIPTION, DataType.SET,
+					param(DataType.SET, "Set_Expression"),
+					param(DataType.STRING, "Alias")));
+
+	@Override
+	public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+		return REPRESENTATIVE_METADATAS;
 	}
 }

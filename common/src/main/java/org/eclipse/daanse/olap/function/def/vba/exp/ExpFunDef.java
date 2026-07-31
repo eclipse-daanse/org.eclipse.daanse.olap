@@ -32,7 +32,7 @@ public class ExpFunDef  extends AbstractFunctionDefinition {
         raised to a power.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.NUMERIC, "Number" )});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
 
     public ExpFunDef() {
         super(functionMetaData);

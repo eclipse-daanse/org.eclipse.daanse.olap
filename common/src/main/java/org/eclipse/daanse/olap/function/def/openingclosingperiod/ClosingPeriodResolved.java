@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -33,14 +34,14 @@ public class ClosingPeriodResolved extends AbstractFunctionDefinitionMultiResolv
     // {"fm", "fml", "fmlm", "fmm"}
 
     private static FunctionMetaData functionMetaDataWithoutParam = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] {});
+            DataType.MEMBER, new FunctionParameterR[] {}).interfaceName(FunctionInterface.DATETIME);
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL) });
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.DATETIME);
     private static FunctionMetaData functionMetaDataWithLevelMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL),
-                    new FunctionParameterR(DataType.MEMBER) });
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL),
+                    FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.DATETIME);
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.MEMBER) });
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.DATETIME);
 
     public ClosingPeriodResolved() {
         super(List.of(new OpeningClosingPeriodFunDef(functionMetaDataWithoutParam, false),

@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -32,17 +33,11 @@ public class OpeningPeriodResolved extends AbstractFunctionDefinitionMultiResolv
     private static String DESCRIPTION = "Returns the first descendant of a member at a level.";
     // {"fm", "fml", "fmlm"}
 
-    private static FunctionMetaData functionMetaDataWithoutParam = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] {});
-    private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL) });
-    private static FunctionMetaData functionMetaDataWithLevelMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL),
-                    new FunctionParameterR(DataType.MEMBER) });
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).asOptional(),
+                    FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
 
     public OpeningPeriodResolved() {
-        super(List.of(new OpeningClosingPeriodFunDef(functionMetaDataWithoutParam, true),
-                new OpeningClosingPeriodFunDef(functionMetaDataWithLevel, true),
-                new OpeningClosingPeriodFunDef(functionMetaDataWithLevelMember, true)));
+        super(List.of(new OpeningClosingPeriodFunDef(functionMetaData, true)));
     }
 }

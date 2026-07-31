@@ -14,10 +14,11 @@
 package org.eclipse.daanse.olap.function.core.resolver;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.EmptyOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -32,8 +33,8 @@ public class NullReservedWordsResolver implements FunctionResolver {
     }
 
     @Override
-    public FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions) {
-        return null;
+    public Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator) {
+        return Optional.empty();
     }
 
     @Override

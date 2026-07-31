@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -33,7 +34,7 @@ public class DimensionOfDimensionFunDef extends AbstractFunctionDefinition {
 
 	private static final FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"Returns the dimension that contains a specified dimension.", DataType.DIMENSION,
-			new FunctionParameterR[] { new FunctionParameterR( DataType.DIMENSION ) });
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) }).interfaceName(FunctionInterface.METADATA);
 
 	public DimensionOfDimensionFunDef() {
 		super(functionMetaData);

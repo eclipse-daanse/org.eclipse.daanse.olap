@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,13 +29,13 @@ import org.osgi.service.component.annotations.Component;
 public class NonEmptyCrossJoinResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("NonEmptyCrossJoin");
     private static String DESCRIPTION = "Returns the cross product of two sets, excluding empty tuples and tuples without associated fact table data.";
-    private static FunctionParameterR set1 = new FunctionParameterR(DataType.SET, "Set1");
-    private static FunctionParameterR set2 = new FunctionParameterR(DataType.SET, "Set2");
+    private static FunctionParameterR set1 = FunctionParameterR.param(DataType.SET, "Set1");
+    private static FunctionParameterR set2 = FunctionParameterR.param(DataType.SET, "Set2");
     private static FunctionParameterR[] xx = { set1, set2};
     // {"fxxx"}
     
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
+            DataType.SET, xx).interfaceName(FunctionInterface.FILTER);
 
     public NonEmptyCrossJoinResolver() {
         super(List.of(new NonEmptyCrossJoinFunDef(functionMetaData)));

@@ -13,13 +13,16 @@
  */
 package org.eclipse.daanse.olap.function.def.crossjoin;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.InfixOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -33,22 +36,22 @@ public class StarCrossJoinResolver extends AbstractFunctionDefinitionMultiResolv
 
     static final OperationAtom atom = new InfixOperationAtom("*");
 
-    static final FunctionParameterR[] starCrossJoinSetSetParam = { new FunctionParameterR(DataType.SET), new FunctionParameterR(DataType.SET) };
+    static final FunctionParameterR[] starCrossJoinSetSetParam = { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.SET) };
     static final FunctionMetaData starCrossJoinSetSet = new FunctionMetaDataR(atom,
             "Returns the cross product of two sets.", DataType.SET,
             starCrossJoinSetSetParam);
 
-    static final FunctionParameterR[] starCrossJoinSetMemberParam = { new FunctionParameterR(DataType.SET), new FunctionParameterR(DataType.MEMBER) };
+    static final FunctionParameterR[] starCrossJoinSetMemberParam = { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.MEMBER) };
     static final FunctionMetaData starCrossJoinSetMember = new FunctionMetaDataR(atom,
             "Returns the cross product of Set and Member.", DataType.SET,
             starCrossJoinSetMemberParam);
 
-    static final FunctionParameterR[] starCrossJoinMemberSetParam = { new FunctionParameterR(DataType.MEMBER), new FunctionParameterR(DataType.SET) };
+    static final FunctionParameterR[] starCrossJoinMemberSetParam = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET) };
     static final FunctionMetaData starCrossJoinMemberSet = new FunctionMetaDataR(atom,
             "Returns the cross product of Member and Set.", DataType.SET,
             starCrossJoinMemberSetParam);
 
-    static final FunctionParameterR[] starCrossJoinMemberMemberParam = { new FunctionParameterR(DataType.MEMBER), new FunctionParameterR(DataType.MEMBER) };
+    static final FunctionParameterR[] starCrossJoinMemberMemberParam = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.MEMBER) };
     static final FunctionMetaData starCrossJoinMemberMember = new FunctionMetaDataR(atom,
             "Returns the cross product of two Members.", DataType.SET,
             starCrossJoinMemberMemberParam);
@@ -59,15 +62,25 @@ public class StarCrossJoinResolver extends AbstractFunctionDefinitionMultiResolv
     }
 
     @Override
-    public FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions) {
+    public Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator) {
         // This function only applies in contexts which require a set.
         // Elsewhere, "*" is the multiplication operator.
         // This means that [Measures].[Unit Sales] * [Gender].[M] is
         // well-defined.
         if (validator.requiresExpression()) {
-            return null;
+            return Optional.empty();
         }
-        return super.resolve(args, validator, conversions);
+        return super.resolve(args, validator);
+    }
+
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+            FunctionMetaDataR.of(atom, "Returns the cross product of two sets.", DataType.SET,
+                    param(DataType.SET, "Set1"),
+                    param(DataType.SET, "Set2").repeatable(1)));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
     }
 
 }

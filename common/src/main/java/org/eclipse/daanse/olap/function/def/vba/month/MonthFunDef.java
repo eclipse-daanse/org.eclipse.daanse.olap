@@ -31,7 +31,7 @@ public class MonthFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Integer) specifying a whole number between 1 and "
         + "12, inclusive, representing the month of the year.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.INTEGER, new FunctionParameterR[] { new FunctionParameterR( DataType.DATE_TIME, "Date" ) });
+            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date") });
 
     public MonthFunDef() {
         super(functionMetaData);

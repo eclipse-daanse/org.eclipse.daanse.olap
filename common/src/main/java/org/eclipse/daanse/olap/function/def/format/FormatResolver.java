@@ -28,9 +28,9 @@ import org.osgi.service.component.annotations.Component;
 public class FormatResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Format");
     private static String DESCRIPTION = "Formats a number or date to a string.";
-    private static FunctionParameterR[] mS = { new FunctionParameterR(DataType.MEMBER, "Value"), new FunctionParameterR(DataType.STRING, "Format") };
-    private static FunctionParameterR[] nS = { new FunctionParameterR(DataType.NUMERIC, "Value"), new FunctionParameterR(DataType.STRING, "Format") };
-    private static FunctionParameterR[] DS = { new FunctionParameterR(DataType.DATE_TIME, "Value"), new FunctionParameterR(DataType.STRING, "Format") };
+    private static FunctionParameterR[] mS = { FunctionParameterR.param(DataType.MEMBER, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
+    private static FunctionParameterR[] nS = { FunctionParameterR.param(DataType.NUMERIC, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
+    private static FunctionParameterR[] DS = { FunctionParameterR.param(DataType.DATE_TIME, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
     // {"fSmS", "fSnS", "fSDS"}
 
 

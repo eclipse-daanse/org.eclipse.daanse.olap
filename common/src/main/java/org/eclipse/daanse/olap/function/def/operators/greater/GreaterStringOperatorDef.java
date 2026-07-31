@@ -30,7 +30,7 @@ public class GreaterStringOperatorDef extends AbstractFunctionDefinition {
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom(">");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom,
             "Returns whether an expression is greater than another.", DataType.LOGICAL,
-            new FunctionParameterR[] { new FunctionParameterR(  DataType.STRING, "String1" ), new FunctionParameterR( DataType.STRING, "String2" ) });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1"), FunctionParameterR.param(DataType.STRING, "String2") });
 
     public GreaterStringOperatorDef() {
         super(functionMetaData);

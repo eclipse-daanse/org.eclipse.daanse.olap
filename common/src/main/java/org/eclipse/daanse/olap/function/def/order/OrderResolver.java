@@ -36,7 +36,6 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = FunctionResolver.class)
 public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
     private final List<String> reservedWords;
-    static FunctionParameterR[] argTypes;
 
     public OrderResolver() {
 
@@ -46,7 +45,9 @@ public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
     @Override
     public Optional<FunctionResolutionResult> resolve( Expression[] args, Validator validator ) {
       List<Conversion> conversions = new ArrayList<>();
-      OrderResolver.argTypes = new FunctionParameterR[args.length];
+      // per call: a shared array would hand half-filled parameters to a
+      // concurrently resolving thread
+      FunctionParameterR[] argTypes = new FunctionParameterR[args.length];
 
       if ( args.length < 2 ) {
         return Optional.empty();
@@ -55,14 +56,14 @@ public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
       if ( !validator.canConvert( 0, args[0], DataType.SET, conversions ) ) {
         return Optional.empty();
       }
-      OrderResolver.argTypes[0] = FunctionParameterR.param(DataType.SET);
+      argTypes[0] = FunctionParameterR.param(DataType.SET);
       // after fist args, should be: value [, symbol]
       int i = 1;
       while ( i < args.length ) {
         if ( !validator.canConvert( i, args[i], DataType.VALUE, conversions ) ) {
           return Optional.empty();
         } else {
-          OrderResolver.argTypes[i] = FunctionParameterR.param(DataType.VALUE);
+          argTypes[i] = FunctionParameterR.param(DataType.VALUE);
           i++;
         }
         // if symbol is not specified, skip to the next
@@ -72,13 +73,13 @@ public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
           if ( !validator.canConvert( i, args[i], DataType.SYMBOL, conversions ) ) {
             // continue, will default sort flag for prev arg to ASC
           } else {
-            OrderResolver.argTypes[i] = FunctionParameterR.param(DataType.SYMBOL);
+            argTypes[i] = FunctionParameterR.param(DataType.SYMBOL);
             i++;
           }
         }
       }
 
-      return Optional.of(FunctionResolutionResultR.of(new OrderFunDef( OrderResolver.argTypes ), conversions));
+      return Optional.of(FunctionResolutionResultR.of(new OrderFunDef( argTypes ), conversions));
     }
 
     @Override

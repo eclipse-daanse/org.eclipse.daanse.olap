@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -33,7 +34,7 @@ class AncestorLevelFunDef extends AbstractFunctionDefinition {
 
 	static final FunctionMetaData fmdLevel = new FunctionMetaDataR(AncestorResolver.operationAtom,
 			"Returns the ancestor of a member at a specified level.", DataType.MEMBER,
-			new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ), new FunctionParameterR( DataType.LEVEL ) });
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.NAVIGATION);
 
 	public AncestorLevelFunDef() {
 		super(fmdLevel);

@@ -30,19 +30,18 @@ public class ToggleDrillStateResolver extends AbstractFunctionDefinitionMultiRes
     private static FunctionOperationAtom atom = new FunctionOperationAtom("ToggleDrillState");
     static final List<String> ReservedWords = List.of("RECURSIVE");
     private static String DESCRIPTION = "Toggles the drill state of members. This function is a combination of DrillupMember and DrilldownMember.";
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
-    private static FunctionParameterR[] xxy = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2"), new FunctionParameterR(DataType.SYMBOL, "RECURSIVE", Optional.of(ReservedWords)) };
+    private static FunctionParameterR[] xxy = { FunctionParameterR.param(DataType.SET, "Set1"),
+            FunctionParameterR.param(DataType.SET, "Set2"),
+            new FunctionParameterR(DataType.SYMBOL, "RECURSIVE", Optional.of(ReservedWords))
+                    .describedAs("RECURSIVE toggles the drill state of every descendant of the members in the second set.")
+                    .asOptional() };
     // {"fxxx", "fxxxy"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
-            xx);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xxy);
+            xxy);
 
     public ToggleDrillStateResolver() {
-        super(List.of(new ToggleDrillStateFunDef(functionMetaData), new ToggleDrillStateFunDef(functionMetaData1)));
+        super(List.of(new ToggleDrillStateFunDef(functionMetaData)));
     }
 
     @Override

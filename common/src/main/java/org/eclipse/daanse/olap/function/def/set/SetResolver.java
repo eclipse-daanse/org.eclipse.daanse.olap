@@ -13,15 +13,22 @@
  */
 package org.eclipse.daanse.olap.function.def.set;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.osgi.service.component.annotations.Component;
 
@@ -29,39 +36,48 @@ import org.osgi.service.component.annotations.Component;
 public class SetResolver  extends NoExpressionRequiredFunctionResolver {
 
     @Override
-    public FunctionDefinition resolve(
+    public Optional<FunctionResolutionResult> resolve(
         Expression[] args,
-        Validator validator,
-        List<Conversion> conversions)
+        Validator validator)
     {
+        List<Conversion> conversions = new ArrayList<>();
         FunctionParameterR[] parameterTypes = new FunctionParameterR[args.length];
         for (int i = 0; i < args.length; i++) {
             if (validator.canConvert(
                     i, args[i], DataType.MEMBER, conversions))
             {
-                parameterTypes[i] = new FunctionParameterR(DataType.MEMBER);
+                parameterTypes[i] = FunctionParameterR.param(DataType.MEMBER);
                 continue;
             }
             if (validator.canConvert(
                     i, args[i], DataType.TUPLE, conversions))
             {
-                parameterTypes[i] = new FunctionParameterR(DataType.TUPLE);
+                parameterTypes[i] = FunctionParameterR.param(DataType.TUPLE);
                 continue;
             }
             if (validator.canConvert(
                     i, args[i], DataType.SET, conversions))
             {
-                parameterTypes[i] = new FunctionParameterR(DataType.SET);
+                parameterTypes[i] = FunctionParameterR.param(DataType.SET);
                 continue;
             }
-            return null;
+            return Optional.empty();
         }
 
-        return new SetFunDef(parameterTypes);
+        return Optional.of(FunctionResolutionResultR.of(new SetFunDef(parameterTypes), conversions));
     }
 
     @Override
     public OperationAtom getFunctionAtom() {
         return SetFunDef.functionAtom;
+    }
+
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+        FunctionMetaDataR.of(SetFunDef.functionAtom, SetFunDef.DESCRIPTION, DataType.SET,
+            param(DataType.VALUE, "Member_or_Set").asOptional().repeatable(1)));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
     }
 }

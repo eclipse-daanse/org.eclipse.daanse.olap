@@ -31,17 +31,14 @@ public class MidResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
         Returns a specified number of characters from a string.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.STRING, "Value"),
-            new FunctionParameterR(DataType.INTEGER, "Begin Index")};
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.STRING, "Value"),
-            new FunctionParameterR(DataType.INTEGER, "Begin Index"), new FunctionParameterR(DataType.INTEGER, "Length")};
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Value"),
+            FunctionParameterR.param(DataType.INTEGER, "Begin Index"),
+            FunctionParameterR.param(DataType.INTEGER, "Length").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p2);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.STRING, params);
 
     public MidResolver() {
-        super(List.of(new MidFunDef(functionMetaData1), new MidFunDef(functionMetaData2)));
+        super(List.of(new MidFunDef(functionMetaData)));
     }
 }

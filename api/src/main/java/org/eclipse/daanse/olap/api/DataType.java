@@ -72,7 +72,7 @@ public enum DataType {
         return name;
     }
 
-    public String getPrittyName() {
+    public String getPrettyName() {
         return prittyName;
     }
 }

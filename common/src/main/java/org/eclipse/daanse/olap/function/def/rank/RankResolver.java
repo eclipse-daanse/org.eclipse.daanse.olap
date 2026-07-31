@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,24 +29,24 @@ import org.osgi.service.component.annotations.Component;
 public class RankResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Rank");
     private static String DESCRIPTION = "Returns the one-based rank of a tuple in a set.";
-    private static FunctionParameterR[] tx = { new FunctionParameterR(DataType.TUPLE), new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] txn = { new FunctionParameterR(DataType.TUPLE), new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC) };
-    private static FunctionParameterR[] mx = { new FunctionParameterR(DataType.MEMBER), new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] mxn = { new FunctionParameterR(DataType.MEMBER), new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC) };
+    private static FunctionParameterR[] tx = { FunctionParameterR.param(DataType.TUPLE), FunctionParameterR.param(DataType.SET) };
+    private static FunctionParameterR[] txn = { FunctionParameterR.param(DataType.TUPLE), FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC) };
+    private static FunctionParameterR[] mx = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET) };
+    private static FunctionParameterR[] mxn = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC) };
 
     // {"fitx", "fitxn", "fimx", "fimxn"}
 
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, tx);
+            DataType.INTEGER, tx).interfaceName(FunctionInterface.STATISTICAL);
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, txn);
+            DataType.INTEGER, txn).interfaceName(FunctionInterface.STATISTICAL);
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, mx);
+            DataType.INTEGER, mx).interfaceName(FunctionInterface.STATISTICAL);
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, mxn);
+            DataType.INTEGER, mxn).interfaceName(FunctionInterface.STATISTICAL);
 
     public RankResolver() {
         super(List.of(new RankFunDef(functionMetaData), new RankFunDef(functionMetaData1), new RankFunDef(functionMetaData2), new RankFunDef(functionMetaData3)));

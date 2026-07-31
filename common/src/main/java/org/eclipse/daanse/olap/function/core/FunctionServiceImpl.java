@@ -79,7 +79,7 @@ public class FunctionServiceImpl implements FunctionService {
 	@Override
 	public void removeResolver(FunctionResolver resolver) {
 
-		this.resolvers.add(resolver);
+		this.resolvers.remove(resolver);
 		reInitialize();
 	}
 

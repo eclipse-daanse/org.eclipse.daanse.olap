@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class PercentileResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Percentile");
     private static String DESCRIPTION = "Returns the value of the tuple that is at a given percentile of a set.";
-    private static FunctionParameterR[] xnn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC), new FunctionParameterR(DataType.NUMERIC) };
+    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC), FunctionParameterR.param(DataType.NUMERIC) };
     // {"fnxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xnn);
+            DataType.NUMERIC, xnn).interfaceName(FunctionInterface.STATISTICAL);
 
     public PercentileResolver() {
         super(List.of(new PercentileFunDef(functionMetaData)));

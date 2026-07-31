@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.operation.MethodOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -32,7 +33,7 @@ public class LagResolver extends AbstractFunctionDefinitionMultiResolver {
     // {"mmmn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ), new FunctionParameterR( DataType.NUMERIC ) });
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.NUMERIC) }).interfaceName(FunctionInterface.NAVIGATION);
 
     public LagResolver() {
         super(List.of(new LeadLagFunDef(functionMetaData)));

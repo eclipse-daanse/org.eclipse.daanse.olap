@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,20 +29,14 @@ import org.osgi.service.component.annotations.Component;
 public class PeriodsToDateResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("PeriodsToDate");
     private static String DESCRIPTION = "Returns a set of periods (members) from a specified level starting with the first period and ending with a specified member.";
-    private static FunctionParameterR[] p = { };
-    private static FunctionParameterR[] l = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] lm = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC) };
+    private static FunctionParameterR[] lm = { FunctionParameterR.param(DataType.SET).asOptional(),
+            FunctionParameterR.param(DataType.NUMERIC).asOptional() };
     // {"fx", "fxl", "fxlm"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, p);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, l);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, lm);
+            DataType.SET, lm).interfaceName(FunctionInterface.DATETIME);
 
     public PeriodsToDateResolver() {
-        super(List.of(new PeriodsToDateFunDef(functionMetaData), new PeriodsToDateFunDef(functionMetaData1), new PeriodsToDateFunDef(functionMetaData2)));
+        super(List.of(new PeriodsToDateFunDef(functionMetaData)));
     }
 }

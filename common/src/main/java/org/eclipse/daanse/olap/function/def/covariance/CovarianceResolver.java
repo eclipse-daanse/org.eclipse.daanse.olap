@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,18 +29,13 @@ import org.osgi.service.component.annotations.Component;
 public class CovarianceResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Covariance");
     private static String DESCRIPTION = "Returns the covariance of two series evaluated over a set (biased).";
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC) };
-    private static FunctionParameterR[] xnn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Numeric Expression1"), new FunctionParameterR(DataType.NUMERIC, "Numeric Expression2") };
-    // {"fnxn", "fnxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xnn);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression1"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression2").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CovarianceResolver() {
-        super(List.of(new CovarianceFunDef(functionMetaData), new CovarianceFunDef(functionMetaData1)));
+        super(List.of(new CovarianceFunDef(functionMetaData)));
     }
 }

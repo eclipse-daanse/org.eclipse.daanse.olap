@@ -14,11 +14,12 @@
 package org.eclipse.daanse.olap.function.def.strtotuple;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -28,6 +29,7 @@ import org.eclipse.daanse.olap.api.type.StringType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.component.HierarchyExpressionImpl;
 import org.osgi.service.component.annotations.Component;
@@ -37,40 +39,39 @@ public class StrToTupleResolver extends NoExpressionRequiredFunctionResolver {
 
 
     @Override
-    public FunctionDefinition resolve(
+    public Optional<FunctionResolutionResult> resolve(
         Expression[] args,
-        Validator validator,
-        List<Conversion> conversions)
+        Validator validator)
     {
         if (args.length < 1) {
-            return null;
+            return Optional.empty();
         }
         Type type = args[0].getType();
         if (!(type instanceof StringType)
             && !(type instanceof NullType))
         {
-            return null;
+            return Optional.empty();
         }
         for (int i = 1; i < args.length; i++) {
             Expression exp = args[i];
             if (!(exp instanceof DimensionExpression
                 || exp instanceof HierarchyExpressionImpl))
             {
-                return null;
+                return Optional.empty();
             }
         }
         FunctionParameterR[] argTypes = new FunctionParameterR[args.length];
-        argTypes[0] = new FunctionParameterR(DataType.STRING);
+        argTypes[0] = FunctionParameterR.param(DataType.STRING);
         for (int i = 1; i < argTypes.length; i++) {
-            argTypes[i] = new FunctionParameterR(DataType.HIERARCHY);
+            argTypes[i] = FunctionParameterR.param(DataType.HIERARCHY);
         }
-        return new StrToTupleFunDef(functionMetaDataFor(argTypes));
+        return Optional.of(FunctionResolutionResultR.of(new StrToTupleFunDef(functionMetaDataFor(argTypes)), List.<Conversion>of()));
     }
 
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
-        return List.of( functionMetaDataFor(new FunctionParameterR[] {new FunctionParameterR(DataType.STRING)}));
+        return List.of( functionMetaDataFor(new FunctionParameterR[] {FunctionParameterR.param(DataType.STRING)}));
     }
 
     private FunctionMetaData functionMetaDataFor(FunctionParameterR[] argTypes) {

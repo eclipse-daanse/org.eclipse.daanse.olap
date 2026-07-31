@@ -29,8 +29,8 @@ public class GreaterOrEqualStringOperatorDef extends AbstractFunctionDefinition 
     // <String Expression> >= <String Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom(">=");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Returns whether an expression is greater than or equal to another.",
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.STRING, "String1" ),
-                    new FunctionParameterR( DataType.STRING, "String2" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1"),
+                    FunctionParameterR.param(DataType.STRING, "String2") });
 
     public GreaterOrEqualStringOperatorDef() {
         super(functionMetaData);

@@ -18,7 +18,9 @@ import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -37,24 +39,14 @@ public class CurrentDateMemberResolver extends AbstractFunctionDefinitionMultiRe
             namely the Visual Basic format strings.
             See http://www.apostate.com/programming/vb-format.html.""";
 
-    private final static String DESCRIPTION1 = """
-            Returns the exact member within the specified dimension
-            corresponding to the current date, in the format specified by
-            the format parameter.
-            If there is no such date, returns the NULL member.
-            Format strings are the same as used by the MDX Format function,
-            namely the Visual Basic format strings.
-            See http://www.apostate.com/programming/vb-format.html.""";
-
-    private static FunctionParameterR[] fp = { new FunctionParameterR(DataType.HIERARCHY),
-            new FunctionParameterR(DataType.STRING, "Format"), new FunctionParameterR(DataType.SYMBOL, "MatchType", Optional.of(reservedWords)) };
-    private static FunctionParameterR[] fp1 = { new FunctionParameterR(DataType.HIERARCHY),
-            new FunctionParameterR(DataType.STRING, "Format") };
+    private static FunctionParameterR[] fp = { FunctionParameterR.param(DataType.HIERARCHY),
+            FunctionParameterR.param(DataType.STRING, "Format"),
+            new FunctionParameterR(DataType.SYMBOL, "MatchType", Optional.of(reservedWords))
+                    .describedAs("EXACT (default), BEFORE or AFTER — how the current date is matched to a member.")
+                    .asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, fp);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION1,
-            DataType.MEMBER, fp1);
+            DataType.MEMBER, fp).interfaceName(FunctionInterface.DATETIME).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     @Override
     public List<String> getReservedWords() {
@@ -62,7 +54,7 @@ public class CurrentDateMemberResolver extends AbstractFunctionDefinitionMultiRe
     }
 
     public CurrentDateMemberResolver() {
-        super(List.of(new CurrentDateMemberFunDef(functionMetaData), new CurrentDateMemberFunDef(functionMetaData1)));
+        super(List.of(new CurrentDateMemberFunDef(functionMetaData)));
     }
 
 }

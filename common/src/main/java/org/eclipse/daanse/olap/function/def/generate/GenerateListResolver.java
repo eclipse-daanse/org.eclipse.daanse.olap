@@ -29,19 +29,15 @@ import org.osgi.service.component.annotations.Component;
 public class GenerateListResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Generate");
     private static String DESCRIPTION = "Applies a set to each member of another set and joins the resulting sets by union.";
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
-    private static FunctionParameterR[] xxy = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2"), new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(GenerateFunDef.ReservedWords)) };
-    // {"fxxx", "fxxxy"}
 
-    
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xxy);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
+                    FunctionParameterR.param(DataType.SET, "Set2"),
+                    new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(GenerateFunDef.ReservedWords))
+                            .describedAs("ALL retains duplicates produced by the iteration; without it duplicates are removed.")
+                            .asOptional() });
 
     public GenerateListResolver() {
-        super(List.of(new GenerateFunDef(functionMetaData1), new GenerateFunDef(functionMetaData2)));
+        super(List.of(new GenerateFunDef(functionMetaData)));
     }
 }

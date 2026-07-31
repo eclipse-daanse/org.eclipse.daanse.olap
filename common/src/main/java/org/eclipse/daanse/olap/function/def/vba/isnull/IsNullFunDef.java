@@ -31,7 +31,7 @@ public class IsNullFunDef  extends AbstractFunctionDefinition {
         contains no valid data (Null).""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.VALUE, "VarName" )});
+                    FunctionParameterR.param(DataType.VALUE, "VarName")});
 
     public IsNullFunDef() {
         super(functionMetaData);

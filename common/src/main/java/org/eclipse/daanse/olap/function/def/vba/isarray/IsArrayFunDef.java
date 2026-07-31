@@ -30,7 +30,7 @@ public class IsArrayFunDef  extends AbstractFunctionDefinition {
         Returns a Boolean value indicating whether a variable is an array.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.VALUE, "VarName" )});
+                    FunctionParameterR.param(DataType.VALUE, "VarName")});
 
     public IsArrayFunDef() {
         super(functionMetaData);

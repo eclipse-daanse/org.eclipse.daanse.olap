@@ -15,11 +15,13 @@
 package org.eclipse.daanse.olap.function.core.resolver;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -46,22 +48,15 @@ public class ParametersCheckingFunctionDefinitionResolver implements FunctionRes
 	}
 
 	@Override
-	public FunctionDefinition resolve(Expression[] expressions, Validator validator, List<Conversion> conversions) {
-		DataType[] parameterDataTypes = functionDefinition.getFunctionMetaData().parameterDataTypes();
-		if (parameterDataTypes.length != expressions.length) {
-			return null;
+	public Optional<FunctionResolutionResult> resolve(Expression[] expressions, Validator validator) {
+		FunctionMetaData functionMetaData = functionDefinition.getFunctionMetaData();
+		Optional<FunctionMetaDataMatcher.Match> match = FunctionMetaDataMatcher.match(functionMetaData, expressions,
+				validator);
+		if (match.isEmpty() || !checkExpressions(expressions)) {
+			return Optional.empty();
 		}
-
-		for (int i = 0; i < expressions.length; i++) {
-			if (!validator.canConvert(i, expressions[i], parameterDataTypes[i], conversions)) {
-				return null;
-			}
-		}
-
-		if (checkExpressions(expressions)) {
-			return functionDefinition;
-		}
-		return null;
+		return Optional.of(new FunctionResolutionResultR(functionDefinition, functionMetaData,
+				match.get().bindings(), match.get().conversions()));
 	}
 
 	protected boolean checkExpressions(Expression[] expressions) {
@@ -70,8 +65,7 @@ public class ParametersCheckingFunctionDefinitionResolver implements FunctionRes
 
 	@Override
 	public boolean requiresScalarExpressionOnArgument(int k) {
-		DataType[] parameterDataTypes = functionDefinition.getFunctionMetaData().parameterDataTypes();
-		return (k >= parameterDataTypes.length) || (parameterDataTypes[k] != DataType.SET);
+		return !FunctionMetaDataMatcher.setPossibleAt(functionDefinition.getFunctionMetaData(), k);
 	}
 
 	@Override

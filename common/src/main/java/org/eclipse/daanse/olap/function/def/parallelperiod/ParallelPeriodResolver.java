@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -32,21 +33,12 @@ public class ParallelPeriodResolver extends AbstractFunctionDefinitionMultiResol
     private static String DESCRIPTION = "Returns a member from a prior period in the same relative position as a specified member.";
     // {"fm", "fml", "fmln", "fmlnm"}
 
-    private static FunctionMetaData functionMetaDataWithoutParam = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] {});
-    private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL) });
-    private static FunctionMetaData functionMetaDataWithLevelNumeric = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL),
-                    new FunctionParameterR(DataType.NUMERIC) });
-    private static FunctionMetaData functionMetaDataWithLevelNumericMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.LEVEL),
-                    new FunctionParameterR(DataType.NUMERIC), new FunctionParameterR(DataType.MEMBER) });
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).asOptional(),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional(),
+                    FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
 
     public ParallelPeriodResolver() {
-        super(List.of(new ParallelPeriodFunDef(functionMetaDataWithoutParam),
-                new ParallelPeriodFunDef(functionMetaDataWithLevel),
-                new ParallelPeriodFunDef(functionMetaDataWithLevelNumeric),
-                new ParallelPeriodFunDef(functionMetaDataWithLevelNumericMember)));
+        super(List.of(new ParallelPeriodFunDef(functionMetaData)));
     }
 }

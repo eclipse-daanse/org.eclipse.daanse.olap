@@ -32,6 +32,7 @@
 package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.query.Validator;
@@ -47,23 +48,18 @@ public interface FunctionResolver {
 
     /**
      * Given a particular set of arguments the function is applied to, returns the
-     * correct overloaded form of the function.
+     * correct overloaded form of the function together with the matched overload,
+     * the argument bindings and the implicit conversions performed. If several
+     * resolvers match, the validator chooses the one whose result has the lowest
+     * conversion cost.
      *
+     * @param args      Expressions which this function call is applied to.
+     * @param validator Validator
      *
-     * The method adds an item to conversions every time it performs an implicit
-     * type-conversion. If there are several candidate functions with the same
-     * signature, the validator will choose the one which used the fewest implicit
-     * conversions.
-     *
-     *
-     * @param args        Expressions which this function call is applied to.
-     * @param validator   Validator
-     * @param conversions List of implicit conversions performed (out)
-     *
-     * @return The function definition which matches these arguments, or null if no
-     *         function definition that this resolver knows about matches.
+     * @return The match, or empty if no overload this resolver knows about
+     *         matches.
      */
-    FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions);
+    Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator);
 
     /**
      * iIndicated whether a argument with a given positionOfArgument must be a

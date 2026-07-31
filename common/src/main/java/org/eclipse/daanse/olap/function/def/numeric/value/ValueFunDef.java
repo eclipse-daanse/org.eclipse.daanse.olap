@@ -28,7 +28,7 @@ public class ValueFunDef extends AbstractFunctionDefinition {
     // <Measure>.Value
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Value");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
-            "Returns the value of a measure.", DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.MEMBER ) });
+            "Returns the value of a measure.", DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) });
 
     public ValueFunDef() {
         super(functionMetaData);

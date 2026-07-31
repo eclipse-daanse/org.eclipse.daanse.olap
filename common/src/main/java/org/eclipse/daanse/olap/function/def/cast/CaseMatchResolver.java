@@ -13,15 +13,22 @@
 */
 package org.eclipse.daanse.olap.function.def.cast;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.osgi.service.component.annotations.Component;
@@ -33,9 +40,10 @@ public class CaseMatchResolver extends NoExpressionRequiredFunctionResolver {
     }
 
     @Override
-    public FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions) {
+    public Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator) {
+        List<Conversion> conversions = new ArrayList<>();
         if (args.length < 3) {
-            return null;
+            return Optional.empty();
         }
         DataType valueType = args[0].getCategory();
         DataType returnType = args[2].getCategory();
@@ -60,10 +68,11 @@ public class CaseMatchResolver extends NoExpressionRequiredFunctionResolver {
 
         Util.assertTrue(j == args.length);
         if (mismatchingArgs != 0) {
-            return null;
+            return Optional.empty();
         }
 
-        return new CaseMatchFunDef(returnType, Expressions.functionParameterOf(args));
+        return Optional.of(FunctionResolutionResultR
+                .of(new CaseMatchFunDef(returnType, Expressions.functionParameterOf(args)), conversions));
     }
 
     @Override
@@ -74,5 +83,17 @@ public class CaseMatchResolver extends NoExpressionRequiredFunctionResolver {
     @Override
     public OperationAtom getFunctionAtom() {
         return CaseMatchFunDef.functionAtom;
+    }
+
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+            FunctionMetaDataR.of(CaseMatchFunDef.functionAtom, CaseMatchFunDef.DESCRIPTION, DataType.VALUE,
+                    param(DataType.VALUE, "Match_Expression"),
+                    param(DataType.VALUE, "Case_Value").repeatable(1),
+                    param(DataType.VALUE, "Value_Expression").repeatable(1),
+                    param(DataType.VALUE, "Else_Value").asOptional()));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
     }
 }

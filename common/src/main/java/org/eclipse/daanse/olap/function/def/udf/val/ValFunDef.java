@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -29,7 +30,7 @@ public class ValFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("Val");
     static String description = "VB function Val";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC , new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Value" ) });
+            DataType.NUMERIC , new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Value") }).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public ValFunDef() {
         super(functionMetaData);

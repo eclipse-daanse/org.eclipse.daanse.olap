@@ -30,7 +30,7 @@ public class SqrtPiFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the square root of (number * pi).""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "Number" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
 
     public SqrtPiFunDef() {
         super(functionMetaData);

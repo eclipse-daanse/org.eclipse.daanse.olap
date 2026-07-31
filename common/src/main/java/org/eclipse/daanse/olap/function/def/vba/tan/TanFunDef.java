@@ -31,7 +31,7 @@ public class TanFunDef  extends AbstractFunctionDefinition {
         Returns a Double specifying the tangent of an angle.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.NUMERIC, "Number" )});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
 
     public TanFunDef() {
         super(functionMetaData);

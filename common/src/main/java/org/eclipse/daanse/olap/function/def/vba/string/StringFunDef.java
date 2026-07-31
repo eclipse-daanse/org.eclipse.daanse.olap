@@ -29,7 +29,7 @@ public class StringFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("String");
     static String description = "";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { new FunctionParameterR( DataType.INTEGER, "Number" ), new FunctionParameterR( DataType.STRING, "Character" ) });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Number"), FunctionParameterR.param(DataType.STRING, "Character") });
 
     public StringFunDef() {
         super(functionMetaData);

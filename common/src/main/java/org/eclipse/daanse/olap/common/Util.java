@@ -2106,12 +2106,10 @@ public class Util {
                 // conversions are necessary.
                 List<FunctionResolver> resolvers = functionService.getResolvers(operationAtom);
                 final FunctionResolver resolver = resolvers.get(0);
-                final List<FunctionResolver.Conversion> conversionList =
-                    new ArrayList<>();
-                final FunctionDefinition def =
-                    resolver.resolve(args, this, conversionList);
-                assert conversionList.isEmpty();
-                return def;
+                return resolver.resolve(args, this).map(result -> {
+                    assert result.conversions().isEmpty();
+                    return result.definition();
+                }).orElse(null);
             }
 
             @Override

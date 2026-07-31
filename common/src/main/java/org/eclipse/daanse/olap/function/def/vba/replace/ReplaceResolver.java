@@ -32,25 +32,16 @@ public class ReplaceResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a string in which a specified substring has been replaced
         with another substring a specified number of times.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.STRING, "expression"), new FunctionParameterR(DataType.STRING, "find"), new FunctionParameterR(DataType.STRING, "replace") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.STRING, "expression"), new FunctionParameterR(DataType.STRING, "find"), new FunctionParameterR(DataType.STRING, "replace"),
-            new FunctionParameterR(DataType.INTEGER, "start") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.STRING, "expression"), new FunctionParameterR(DataType.STRING, "find"), new FunctionParameterR(DataType.STRING, "replace"),
-            new FunctionParameterR(DataType.INTEGER, "start"), new FunctionParameterR(DataType.INTEGER, "coun")};
-    private static FunctionParameterR[] p4 = { new FunctionParameterR(DataType.STRING, "expression"), new FunctionParameterR(DataType.STRING, "find"), new FunctionParameterR(DataType.STRING, "replace"),
-            new FunctionParameterR(DataType.INTEGER, "start"), new FunctionParameterR(DataType.INTEGER, "coun"), new FunctionParameterR(DataType.INTEGER, "compare") }; // compare is currently ignored
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "expression"),
+            FunctionParameterR.param(DataType.STRING, "find"), FunctionParameterR.param(DataType.STRING, "replace"),
+            FunctionParameterR.param(DataType.INTEGER, "start").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "coun").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "compare").asOptional() }; // compare is currently ignored
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p3);
-    private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p4);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public ReplaceResolver() {
-        super(List.of(new ReplaceFunDef(functionMetaData1), new ReplaceFunDef(functionMetaData2),
-                new ReplaceFunDef(functionMetaData3), new ReplaceFunDef(functionMetaData4)));
+        super(List.of(new ReplaceFunDef(functionMetaData)));
     }
 }

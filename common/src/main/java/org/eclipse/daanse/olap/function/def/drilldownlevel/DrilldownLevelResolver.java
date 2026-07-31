@@ -30,15 +30,17 @@ public class DrilldownLevelResolver extends AbstractFunctionDefinitionMultiResol
     private static FunctionOperationAtom atom = new FunctionOperationAtom("DrilldownLevel");
     private static List<String> RESERVED_WORDS = List.of("INCLUDE_CALC_MEMBERS");
     private static String DESCRIPTION = "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.";
-    private static FunctionParameterR[] x = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] xl = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.LEVEL) };
-    private static FunctionParameterR[] xen = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.EMPTY), new FunctionParameterR(DataType.NUMERIC, "Index") };
-    private static FunctionParameterR[] xeny = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.EMPTY), new FunctionParameterR(DataType.NUMERIC, "Index"), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))};
-    private static FunctionParameterR[] xeey = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.EMPTY), new FunctionParameterR(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS)) };
+    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET) };
+    private static FunctionParameterR[] xl = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.LEVEL) };
+    private static FunctionParameterR[] xen = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.NUMERIC, "Index") };
+    private static FunctionParameterR[] xeny = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.NUMERIC, "Index"), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))
+                    .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.")};
+    private static FunctionParameterR[] xeey = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))
+                    .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.") };
     // {"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"}
 
 

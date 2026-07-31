@@ -33,7 +33,7 @@ public class LeftFunDef  extends AbstractFunctionDefinition {
         string.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.STRING, "String" ), new FunctionParameterR( DataType.INTEGER, "Length" )});
+                    FunctionParameterR.param(DataType.STRING, "String"), FunctionParameterR.param(DataType.INTEGER, "Length")});
 
     public LeftFunDef() {
         super(functionMetaData);

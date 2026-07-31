@@ -30,7 +30,7 @@ public class TypeNameFunDef  extends AbstractFunctionDefinition {
         Returns a String that provides information about a variable.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.VALUE, "VarName" )});
+                    FunctionParameterR.param(DataType.VALUE, "VarName")});
 
     public TypeNameFunDef() {
         super(functionMetaData);

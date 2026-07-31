@@ -31,24 +31,15 @@ public class DateDiffResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
             Returns a Variant (Long) specifying the number of time intervals
             between two specified dates.""";
-    private static FunctionParameterR[] p1 = { new FunctionParameterR( DataType.STRING, "IntervalName" ), new FunctionParameterR( DataType.DATE_TIME, "Date1" ),
-            new FunctionParameterR( DataType.DATE_TIME, "Date2" ) };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR( DataType.STRING, "IntervalName" ), 
-            new FunctionParameterR( DataType.DATE_TIME, "Date1" ), new FunctionParameterR( DataType.DATE_TIME, "Date2" ),
-            new FunctionParameterR( DataType.INTEGER, "First Day Of Week" ) };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR( DataType.STRING, "IntervalName" ),
-            new FunctionParameterR( DataType.DATE_TIME, "Date1" ), new FunctionParameterR( DataType.DATE_TIME, "Date2" ),
-            new FunctionParameterR( DataType.INTEGER, "First Day Of Week" ), new FunctionParameterR( DataType.INTEGER, "First Week Of Year" ) };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName"),
+            FunctionParameterR.param(DataType.DATE_TIME, "Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2"),
+            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").asOptional() };
 
-
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, p3);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, params);
 
     public DateDiffResolver() {
-        super(List.of(new DateDiffFunDef(functionMetaData1), new DateDiffFunDef(functionMetaData2), new DateDiffFunDef(functionMetaData3)));
+        super(List.of(new DateDiffFunDef(functionMetaData)));
     }
 }    

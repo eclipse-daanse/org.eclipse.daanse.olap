@@ -18,7 +18,9 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -29,7 +31,7 @@ public class CurrentDateStringFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("CurrentDateString");
     static String description = "Returns the current date formatted as specified by the format parameter.";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING , new FunctionParameterR[] { new FunctionParameterR( DataType.STRING, "Format") });
+            DataType.STRING , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "Format") }).interfaceName(FunctionInterface.DATETIME).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public CurrentDateStringFunDef() {
         super(functionMetaData);

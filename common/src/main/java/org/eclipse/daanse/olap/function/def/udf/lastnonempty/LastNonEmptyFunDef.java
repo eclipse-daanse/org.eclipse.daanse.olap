@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -30,7 +31,7 @@ public class LastNonEmptyFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the last member of a set whose value is not empty""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.MEMBER , new FunctionParameterR[] { new FunctionParameterR( DataType.SET ), new FunctionParameterR( DataType.MEMBER ) });
+            DataType.MEMBER , new FunctionParameterR[] { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.MEMBER) }).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public LastNonEmptyFunDef() {
         super(functionMetaData);

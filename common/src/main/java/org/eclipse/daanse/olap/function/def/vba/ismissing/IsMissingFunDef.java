@@ -31,7 +31,7 @@ public class IsMissingFunDef  extends AbstractFunctionDefinition {
         argument has been passed to a procedure.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.VALUE, "VarName" )});
+                    FunctionParameterR.param(DataType.VALUE, "VarName")});
 
     public IsMissingFunDef() {
         super(functionMetaData);

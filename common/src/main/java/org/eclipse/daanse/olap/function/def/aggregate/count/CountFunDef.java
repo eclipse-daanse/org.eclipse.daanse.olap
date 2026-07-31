@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -29,7 +30,7 @@ public class CountFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Count");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the number of tuples in a set including empty cells.", DataType.NUMERIC,
-            new FunctionParameterR[] { new FunctionParameterR(  DataType.SET )});
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET)}).interfaceName(FunctionInterface.STATISTICAL);
 
     public CountFunDef() {
         super(functionMetaData);

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -30,18 +31,15 @@ public class CountResolver extends AbstractFunctionDefinitionMultiResolver {
     static final List<String> ReservedWords =  List.of( "INCLUDEEMPTY", "EXCLUDEEMPTY" );
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Count");
     private static String DESCRIPTION = "Returns the number of tuples in a set, empty cells included unless the optional EXCLUDEEMPTY flag is used.";
-    private static FunctionParameterR[] x = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] xy = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.SYMBOL, "PrePost", Optional.of(ReservedWords)) };
-    // {"fnx", "fnxy"}
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, x);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xy);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    new FunctionParameterR(DataType.SYMBOL, "Empty_Flag", Optional.of(ReservedWords))
+                            .describedAs("INCLUDEEMPTY (default) counts empty cells, EXCLUDEEMPTY skips them.")
+                            .asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CountResolver() {
-        super(List.of(new CountFunDef(functionMetaData1), new CountFunDef(functionMetaData2)));
+        super(List.of(new CountFunDef(functionMetaData)));
     }
 
     @Override

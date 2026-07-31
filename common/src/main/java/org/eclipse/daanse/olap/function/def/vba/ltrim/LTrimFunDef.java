@@ -32,7 +32,7 @@ public class LTrimFunDef  extends AbstractFunctionDefinition {
         without leading spaces.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    new FunctionParameterR( DataType.STRING, "String" )});
+                    FunctionParameterR.param(DataType.STRING, "String")});
 
     public LTrimFunDef() {
         super(functionMetaData);

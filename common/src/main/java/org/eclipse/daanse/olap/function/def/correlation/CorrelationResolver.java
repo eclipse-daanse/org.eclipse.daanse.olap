@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,16 +29,13 @@ import org.osgi.service.component.annotations.Component;
 public class CorrelationResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Correlation");
     private static String DESCRIPTION = "Returns the correlation of two series evaluated over a set.";
-    // {"fnxn", "fnxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(DataType.SET),
-                    new FunctionParameterR(DataType.NUMERIC) });
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(DataType.SET),
-                    new FunctionParameterR(DataType.NUMERIC), new FunctionParameterR(DataType.NUMERIC) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    FunctionParameterR.param(DataType.NUMERIC),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CorrelationResolver() {
-        super(List.of(new CorrelationFunDef(functionMetaData), new CorrelationFunDef(functionMetaData1)));
+        super(List.of(new CorrelationFunDef(functionMetaData)));
     }
 }

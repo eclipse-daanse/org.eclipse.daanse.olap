@@ -33,19 +33,19 @@ public class IsResolver extends AbstractFunctionDefinitionMultiResolver {
     //{"ibmm", "ibll", "ibhh", "ibdd", "ibtt"}
 
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR( DataType.MEMBER, "Member1" ), new FunctionParameterR( DataType.MEMBER, "Member2" )});
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "Member1"), FunctionParameterR.param(DataType.MEMBER, "Member2")});
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.LEVEL, "Level1" ), new FunctionParameterR( DataType.LEVEL, "Level2" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL, "Level1"), FunctionParameterR.param(DataType.LEVEL, "Level2") });
 
     private static FunctionMetaData functionMetaDataWithHierrchy = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.HIERARCHY, "Hierarchy1" ), new FunctionParameterR( DataType.HIERARCHY, "Hierarchy2" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy1"), FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy2") });
 
     private static FunctionMetaData functionMetaDataWithDimension = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.DIMENSION, "Dimension1" ), new FunctionParameterR( DataType.DIMENSION, "Dimension2" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION, "Dimension1"), FunctionParameterR.param(DataType.DIMENSION, "Dimension2") });
 
     private static FunctionMetaData functionMetaDataWithTuple = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { new FunctionParameterR(  DataType.TUPLE, "Tuple1" ), new FunctionParameterR( DataType.TUPLE, "Tuple2" ) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.TUPLE, "Tuple1"), FunctionParameterR.param(DataType.TUPLE, "Tuple2") });
 
     public IsResolver() {
         super(List.of(new IsFunDef(functionMetaDataWithMember), new IsFunDef(functionMetaDataWithLevel),

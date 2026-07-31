@@ -35,7 +35,7 @@ public class ParamRefResolver  extends AbstractMetaDataMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("ParamRef");
     private static String DESCRIPTION = "Returns the current value of this parameter. If it is null, returns the default value.";
     
-    private static FunctionParameterR[] S = { new FunctionParameterR(DataType.STRING, "Name") };
+    private static FunctionParameterR[] S = { FunctionParameterR.param(DataType.STRING, "Name") };
     //"fvS"
     
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,

@@ -17,6 +17,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleListCalc;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueUnknownCalc;
@@ -29,7 +30,7 @@ class AvgFunDef extends AbstractAggregateFunDef {
 
 	static final FunctionMetaData fmd = new FunctionMetaDataR(AvgResolver.operationAtom,
 			"Returns the average value of a numeric expression evaluated over a set.", DataType.NUMERIC,
-			new FunctionParameterR[] { new FunctionParameterR(  DataType.SET ) });
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.SET) }).interfaceName(FunctionInterface.STATISTICAL);
 
 	public AvgFunDef() {
 		super(fmd);

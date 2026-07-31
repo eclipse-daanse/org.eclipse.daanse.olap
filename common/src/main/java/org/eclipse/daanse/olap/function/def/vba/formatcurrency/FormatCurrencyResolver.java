@@ -32,32 +32,16 @@ public class FormatCurrencyResolver extends AbstractFunctionDefinitionMultiResol
         Returns an expression formatted as a currency value using the
         currency symbol defined in the system control panel.""";
 
-    private static FunctionParameterR[] p0 = { new FunctionParameterR(DataType.VALUE, "expression") };
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.VALUE, "expression"),
-            new FunctionParameterR(DataType.INTEGER, "numDigitsAfterDecimal")};
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.VALUE, "expression"),
-            new FunctionParameterR(DataType.INTEGER, "numDigitsAfterDecimal"), new FunctionParameterR(DataType.INTEGER, "includeLeadingDigit") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.VALUE, "expression"),
-            new FunctionParameterR(DataType.INTEGER, "numDigitsAfterDecimal"), new FunctionParameterR(DataType.INTEGER, "includeLeadingDigit"),
-            new FunctionParameterR(DataType.INTEGER, "useParensForNegativeNumbers") };
-    private static FunctionParameterR[] p4 = { new FunctionParameterR(DataType.VALUE, "expression"),
-            new FunctionParameterR(DataType.INTEGER, "numDigitsAfterDecimal"), new FunctionParameterR(DataType.INTEGER, "includeLeadingDigit"),
-            new FunctionParameterR(DataType.INTEGER, "useParensForNegativeNumbers"), new FunctionParameterR(DataType.INTEGER, "groupDigits") };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "expression"),
+            FunctionParameterR.param(DataType.INTEGER, "numDigitsAfterDecimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "includeLeadingDigit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "useParensForNegativeNumbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "groupDigits").asOptional() };
 
-
-    private static FunctionMetaData functionMetaData0 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p0);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p3);
-    private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p4);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.STRING, params);
 
     public FormatCurrencyResolver() {
-        super(List.of(new FormatCurrencyFunDef(functionMetaData0), new FormatCurrencyFunDef(functionMetaData1), new FormatCurrencyFunDef(functionMetaData2),
-                new FormatCurrencyFunDef(functionMetaData3), new FormatCurrencyFunDef(functionMetaData4)));
+        super(List.of(new FormatCurrencyFunDef(functionMetaData)));
     }
 }

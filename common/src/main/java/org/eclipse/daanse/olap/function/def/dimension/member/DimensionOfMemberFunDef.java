@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.MemberCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,7 +32,7 @@ public class DimensionOfMemberFunDef extends AbstractFunctionDefinition {
 
 	private static final FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"Returns the dimension that contains a specified member.", DataType.DIMENSION,
-			new FunctionParameterR[] { new FunctionParameterR( DataType.MEMBER )});
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER)}).interfaceName(FunctionInterface.METADATA);
 
 	public DimensionOfMemberFunDef() {
 		super(functionMetaData);

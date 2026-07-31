@@ -31,7 +31,7 @@ public class MinuteFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Integer) specifying a whole number between 0 and
         59, inclusive, representing the minute of the hour.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.INTEGER, new FunctionParameterR[] { new FunctionParameterR( DataType.DATE_TIME, "Date" ) });
+            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date") });
 
     public MinuteFunDef() {
         super(functionMetaData);

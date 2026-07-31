@@ -32,30 +32,16 @@ public class FormatPercentResolver extends AbstractFunctionDefinitionMultiResolv
         Returns an expression formatted as a percentage (multipled by 100)
         with a trailing % character.""";
 
-    private static FunctionParameterR[] p1 = { new FunctionParameterR(DataType.VALUE, "Expression") };
-    private static FunctionParameterR[] p2 = { new FunctionParameterR(DataType.VALUE, "Expression"), new FunctionParameterR(DataType.INTEGER, "Digits After Decimal") };
-    private static FunctionParameterR[] p3 = { new FunctionParameterR(DataType.VALUE, "Expression"), new FunctionParameterR(DataType.INTEGER, "Digits After Decimal"),
-            new FunctionParameterR(DataType.INTEGER, "Include Leading Digit")};
-    private static FunctionParameterR[] p4 = { new FunctionParameterR(DataType.VALUE, "Expression"), new FunctionParameterR(DataType.INTEGER, "Digits After Decimal"),
-            new FunctionParameterR(DataType.INTEGER, "Include Leading Digit"), new FunctionParameterR(DataType.INTEGER, "Use Parens For Negative Numbers")};
-    private static FunctionParameterR[] p5 = { new FunctionParameterR(DataType.VALUE, "Expression"), new FunctionParameterR(DataType.INTEGER, "Digits After Decimal"),
-            new FunctionParameterR(DataType.INTEGER, "Include Leading Digit"), new FunctionParameterR(DataType.INTEGER, "Use Parens For Negative Numbers"),
-            new FunctionParameterR(DataType.INTEGER, "Group Digits")};
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression"),
+            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Group Digits").asOptional() };
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p1);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p2);
-    private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p3);
-    private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p4);
-    private static FunctionMetaData functionMetaData5 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, p5);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.STRING, params);
 
     public FormatPercentResolver() {
-        super(List.of(new FormatPercentFunDef(functionMetaData1), new FormatPercentFunDef(functionMetaData2),
-                new FormatPercentFunDef(functionMetaData3), new FormatPercentFunDef(functionMetaData4),
-                new FormatPercentFunDef(functionMetaData5)));
+        super(List.of(new FormatPercentFunDef(functionMetaData)));
     }
 }

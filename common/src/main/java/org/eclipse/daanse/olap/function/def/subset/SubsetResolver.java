@@ -28,17 +28,17 @@ import org.osgi.service.component.annotations.Component;
 public class SubsetResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Subset");
     private static String DESCRIPTION = "Returns a subset of elements from a set.";
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET), new FunctionParameterR(DataType.NUMERIC, "Start") };
-    private static FunctionParameterR[] xnn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Start"), new FunctionParameterR(DataType.NUMERIC, "Count") };
+    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET),
+            FunctionParameterR.param(DataType.NUMERIC, "Start")
+                    .describedAs("Zero-based position of the first member to return."),
+            FunctionParameterR.param(DataType.NUMERIC, "Count")
+                    .describedAs("Number of members to return; omitted = to the end of the set.").asOptional() };
     // {"fxxn", "fxxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xn);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.SET, xnn);
 
     public SubsetResolver() {
-        super(List.of(new SubsetFunDef(functionMetaData), new SubsetFunDef(functionMetaData1)));
+        super(List.of(new SubsetFunDef(functionMetaData)));
     }
 }

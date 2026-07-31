@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.function.def.member.defaultmember;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.PlainPropertyOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -29,7 +30,7 @@ public class NonFunctionDefaultMemberResolver extends NonFunctionResolver {
         // implicit cast to hierarchy, and we create a FunInfo for
         // documentation & backwards compatibility.
         super(new FunctionMetaDataR(new PlainPropertyOperationAtom("DefaultMember"), "Returns the default member of a dimension.",
-                DataType.MEMBER, new FunctionParameterR[] { new FunctionParameterR(DataType.DIMENSION) }));
+                DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) }).interfaceName(FunctionInterface.NAVIGATION));
     }
 
 }

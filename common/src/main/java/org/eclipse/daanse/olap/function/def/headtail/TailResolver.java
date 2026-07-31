@@ -28,17 +28,13 @@ import org.osgi.service.component.annotations.Component;
 public class TailResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Tail");
     private static String DESCRIPTION = "Returns a subset from the end of a set.";
-    private static FunctionParameterR[] x = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Count") };
-    // {"fxx", "fxxn"}
 
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, x);
-    private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xn);
+    private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    FunctionParameterR.param(DataType.NUMERIC, "Count")
+                            .describedAs("Number of members to return; defaults to 1.").asOptional() });
 
     public TailResolver() {
-        super(List.of(new HeadTailFunDef(functionMetaData1), new HeadTailFunDef(functionMetaData2)));
+        super(List.of(new HeadTailFunDef(functionMetaData)));
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,19 +29,13 @@ import org.osgi.service.component.annotations.Component;
 public class LinRegSlopeResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("LinRegSlope");
     private static String DESCRIPTION = "Calculates the linear regression of a set and returns the value of a in the regression line y = ax + b.";
-    private static FunctionParameterR[] xn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Y") };
-    private static FunctionParameterR[] xnn = { new FunctionParameterR(DataType.SET),
-            new FunctionParameterR(DataType.NUMERIC, "Y"), new FunctionParameterR(DataType.NUMERIC, "X") };
-    // {"fnxn", "fnxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xnn);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+                    FunctionParameterR.param(DataType.NUMERIC, "Y"),
+                    FunctionParameterR.param(DataType.NUMERIC, "X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public LinRegSlopeResolver() {
-        super(List.of(new LinRegFunDef(functionMetaData, LinRegFunDef.POINT),
-                new LinRegFunDef(functionMetaData1, LinRegFunDef.SLOPE)));
+        super(List.of(new LinRegFunDef(functionMetaData, LinRegFunDef.SLOPE)));
     }
 }

@@ -581,14 +581,14 @@ class FunctionMetaDataExportTest {
             if (p.description != null && !p.description.isBlank()) {
                 sb.append(p.description);
             } else {
-                sb.append("A ").append(p.dataType.getPrittyName()).append(" expression");
+                sb.append("A ").append(p.dataType.getPrettyName()).append(" expression");
                 if (p.optional)
                     sb.append(" (optional)");
             }
             sb.append(".\n");
         }
 
-        sb.append("#' @return MDX string returning ").append(g.returnType.getPrittyName()).append(".\n");
+        sb.append("#' @return MDX string returning ").append(g.returnType.getPrettyName()).append(".\n");
         sb.append("#' @family ").append(category).append("\n");
         sb.append("#' @export\n");
     }

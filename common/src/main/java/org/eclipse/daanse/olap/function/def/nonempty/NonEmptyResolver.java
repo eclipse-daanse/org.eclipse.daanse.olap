@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -28,17 +29,14 @@ import org.osgi.service.component.annotations.Component;
 public class NonEmptyResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("NonEmpty");
     private static String DESCRIPTION = "Returns the set of tuples that are not empty from a specified set, based on the cross product of the specified set with a second set.";
-    private static FunctionParameterR[] x = { new FunctionParameterR(DataType.SET) };
-    private static FunctionParameterR[] xx = { new FunctionParameterR(DataType.SET, "Set1"),
-            new FunctionParameterR(DataType.SET, "Set2") };
+    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set1"),
+            FunctionParameterR.param(DataType.SET, "Set2").asOptional() };
     // {"fxx", "fxxx"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
-            x);
-    private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx);
+            xx).interfaceName(FunctionInterface.FILTER);
 
     public NonEmptyResolver() {
-        super(List.of(new NonEmptyFunDef(functionMetaData), new NonEmptyFunDef(functionMetaData1)));
+        super(List.of(new NonEmptyFunDef(functionMetaData)));
     }
 }

@@ -13,31 +13,39 @@
  */
 package org.eclipse.daanse.olap.function.def.set.extract;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.eclipse.daanse.olap.function.core.resolver.NoExpressionRequiredFunctionResolver;
 
 public class ExtractResolver extends NoExpressionRequiredFunctionResolver {
     @Override
-    public FunctionDefinition resolve(Expression[] args, Validator validator, List<Conversion> conversions) {
+    public Optional<FunctionResolutionResult> resolve(Expression[] args, Validator validator) {
+        List<Conversion> conversions = new ArrayList<>();
         if (args.length < 2) {
-            return null;
+            return Optional.empty();
         }
         if (!validator.canConvert(0, args[0], DataType.SET, conversions)) {
-            return null;
+            return Optional.empty();
         }
         for (int i = 1; i < args.length; ++i) {
             if (!validator.canConvert(0, args[i], DataType.HIERARCHY, conversions)) {
-                return null;
+                return Optional.empty();
             }
         }
 
@@ -55,15 +63,26 @@ public class ExtractResolver extends NoExpressionRequiredFunctionResolver {
         final List<Hierarchy> extractedHierarchies = new ArrayList<>();
         ExtractFunDef.findExtractedHierarchies(args, extractedHierarchies, extractedOrdinals);
         FunctionParameterR[] parameterTypes = new FunctionParameterR[args.length];
-        parameterTypes[0] = new FunctionParameterR(DataType.SET);
-        Arrays.fill(parameterTypes, 1, parameterTypes.length, new FunctionParameterR(DataType.HIERARCHY));
+        parameterTypes[0] = FunctionParameterR.param(DataType.SET);
+        Arrays.fill(parameterTypes, 1, parameterTypes.length, FunctionParameterR.param(DataType.HIERARCHY));
 
-        return new ExtractFunDef(parameterTypes);
+        return Optional.of(FunctionResolutionResultR.of(new ExtractFunDef(parameterTypes), conversions));
     }
 
     @Override
     public OperationAtom getFunctionAtom() {
         return ExtractFunDef.functionAtom;
+    }
+
+    private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+        FunctionMetaDataR.of(ExtractFunDef.functionAtom,
+            "Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.", DataType.SET,
+            param(DataType.SET),
+            param(DataType.HIERARCHY, "Hierarchy").repeatable(1)).interfaceName(FunctionInterface.FILTER));
+
+    @Override
+    public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+        return REPRESENTATIVE_METADATAS;
     }
 
 }

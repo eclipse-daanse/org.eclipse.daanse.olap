@@ -29,8 +29,8 @@ public class PlusOperatorDef extends AbstractFunctionDefinition{
     // <Numeric Expression> + <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("+");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Adds two numbers.",
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR(  DataType.NUMERIC, "Numeric1" ),
-                    new FunctionParameterR( DataType.NUMERIC, "Numeric1" )});
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric1")});
 
     public PlusOperatorDef() {
         super(functionMetaData);

@@ -308,34 +308,40 @@ class MDSchemaDiscoverServiceTest {
 
         MdSchemaFunctionsRequest request = mock(MdSchemaFunctionsRequest.class);
         MdSchemaFunctionsRestrictions restrictions = mock(MdSchemaFunctionsRestrictions.class);
+        Properties properties = mock(Properties.class);
         FunctionService functionService = mock(FunctionService.class);
         OperationAtom functionAtom1 = new FunctionOperationAtom("functionAtom1Name");
         OperationAtom functionAtom2 = new MethodOperationAtom("functionAtom2Name");
-        FunctionMetaData functionMetaData1 = mock(FunctionMetaData.class);
-        FunctionMetaData functionMetaData2 = mock(FunctionMetaData.class);
-        when(functionMetaData1.parameterDataTypes())
-                .thenAnswer(setupDummyArrayAnswer(DataType.INTEGER, DataType.MEMBER));
-        when(functionMetaData1.returnCategory()).thenReturn(DataType.INTEGER);
-        when(functionMetaData1.description()).thenReturn("functionMetaData1Description");
-        when(functionMetaData2.parameterDataTypes()).thenAnswer(setupDummyArrayAnswer(DataType.CUBE));
-        when(functionMetaData2.returnCategory()).thenReturn(DataType.MEMBER);
-        when(functionMetaData2.description()).thenReturn("functionMetaData2Description");
-
-        when(functionMetaData1.operationAtom()).thenReturn(functionAtom1);
-        when(functionMetaData2.operationAtom()).thenReturn(functionAtom2);
+        FunctionMetaData functionMetaData1 = org.eclipse.daanse.olap.function.core.FunctionMetaDataR.of(
+                (FunctionOperationAtom) functionAtom1, "functionMetaData1Description", DataType.INTEGER,
+                org.eclipse.daanse.olap.function.core.FunctionParameterR.param(DataType.INTEGER),
+                org.eclipse.daanse.olap.function.core.FunctionParameterR.param(DataType.MEMBER));
+        FunctionMetaData functionMetaData2 = new org.eclipse.daanse.olap.function.core.FunctionMetaDataR(functionAtom2,
+                "functionMetaData2Description", DataType.MEMBER,
+                new org.eclipse.daanse.olap.function.core.FunctionParameterR[] {
+                        org.eclipse.daanse.olap.function.core.FunctionParameterR.param(DataType.CUBE) });
 
         when(functionService.getFunctionMetaDatas())
                 .thenAnswer(setupDummyListAnswer(functionMetaData1, functionMetaData2));
 
         when(request.restrictions()).thenReturn(restrictions);
+        when(request.properties()).thenReturn(properties);
+        when(properties.localeIdentifier()).thenReturn(Optional.empty());
+        when(restrictions.functionName()).thenReturn(Optional.empty());
+        when(restrictions.origin()).thenReturn(Optional.empty());
+        when(restrictions.interfaceName()).thenReturn(Optional.empty());
+        when(restrictions.libraryName()).thenReturn(Optional.empty());
         when(context1.getFunctionService()).thenReturn(functionService);
         List<MdSchemaFunctionsResponseRow> rows = service.mdSchemaFunctions(request, requestMetaData);
         assertThat(rows).isNotNull().hasSize(2);
         checkMdSchemaFunctionsResponseRow(rows.get(0), "functionAtom1Name", "functionMetaData1Description",
-                "Integer, Member", 2, OriginEnum.MSOLAP, "functionAtom1Name");
-        checkMdSchemaFunctionsResponseRow(rows.get(1), "functionAtom2Name", "functionMetaData2Description", "Cube", 12,
-                OriginEnum.MSOLAP, "functionAtom2Name");
-
+                "«Index», «Member»", 3, OriginEnum.MSOLAP, "functionAtom1Name");
+        checkMdSchemaFunctionsResponseRow(rows.get(1), "functionAtom2Name", "functionMetaData2Description", "«Cube»",
+                12, OriginEnum.MSOLAP, "functionAtom2Name");
+        assertThat(rows.get(0).parameterInfo()).isPresent();
+        assertThat(rows.get(0).parameterInfo().get()).hasSize(2);
+        // method syntax exposes the calling object type
+        assertThat(rows.get(1).object()).contains("Cube");
     }
 
     @Test

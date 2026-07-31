@@ -34,7 +34,7 @@ public class Atan2FunDef  extends AbstractFunctionDefinition {
         (x_num, y_num). The angle is given in radians between -pi and pi,
         excluding -pi.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { new FunctionParameterR( DataType.NUMERIC, "x" ), new FunctionParameterR( DataType.NUMERIC, "y" ) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "x"), FunctionParameterR.param(DataType.NUMERIC, "y") });
 
     public Atan2FunDef() {
         super(functionMetaData);

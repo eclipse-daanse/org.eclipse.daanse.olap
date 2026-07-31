@@ -13,20 +13,27 @@
  */
 package org.eclipse.daanse.olap.function.def.properties;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Property;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionResolutionResult;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.common.Util;
+import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
+import org.eclipse.daanse.olap.function.core.resolver.FunctionResolutionResultR;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -56,19 +63,19 @@ public class PropertiesResolver  implements FunctionResolver {
         }
 
         @Override
-        public FunctionDefinition resolve(
+        public Optional<FunctionResolutionResult> resolve(
             Expression[] args,
-            Validator validator,
-            List<Conversion> conversions)
+            Validator validator)
         {
+            List<Conversion> conversions = new ArrayList<>();
             if (!matches(args, PropertiesFunDef.PARAMETER_TYPES, validator, conversions)) {
-                return null;
+                return Optional.empty();
             }
             DataType returnType = deducePropertyCategory(args[0], args[1]);
 
 
-            return new PropertiesFunDef(
-                returnType);
+            return Optional.of(FunctionResolutionResultR.of(new PropertiesFunDef(
+                returnType), conversions));
         }
 
         /**
@@ -127,6 +134,17 @@ public class PropertiesResolver  implements FunctionResolver {
         @Override
         public OperationAtom getFunctionAtom() {
             return PropertiesFunDef.functionAtom;
+        }
+
+        private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
+            FunctionMetaDataR.of(PropertiesFunDef.functionAtom, "Returns the value of a member property.",
+                DataType.VALUE,
+                param(DataType.MEMBER),
+                param(DataType.STRING, "Property_Name")));
+
+        @Override
+        public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
+            return REPRESENTATIVE_METADATAS;
         }
 
     }

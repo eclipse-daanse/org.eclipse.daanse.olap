@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
+import org.eclipse.daanse.olap.api.function.FunctionOrigin;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
@@ -29,7 +30,7 @@ public class NullValueFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the null value""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC , new FunctionParameterR[] { });
+            DataType.NUMERIC , new FunctionParameterR[] { }).origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public NullValueFunDef() {
         super(functionMetaData);

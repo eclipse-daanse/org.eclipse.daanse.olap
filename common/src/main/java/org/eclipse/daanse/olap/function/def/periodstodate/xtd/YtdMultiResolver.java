@@ -19,6 +19,7 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAt
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
@@ -31,16 +32,12 @@ public class YtdMultiResolver extends AbstractFunctionDefinitionMultiResolver {
 
 	private static OperationAtom atom = new FunctionOperationAtom("Ytd");
 
-	private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom,
+	private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"A shortcut function for the PeriodsToDate function that specifies the level to be Year.",
-			DataType.SET, new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ) });
-
-	private static FunctionMetaData functionMetaDataWithoutMember = new FunctionMetaDataR(atom,
-			"A shortcut function for the PeriodsToDate function that specifies the level to be Year.",
-			DataType.SET, new FunctionParameterR[] {  });
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
 
 	public YtdMultiResolver() {
-		super(List.of(new XtdFunDef(functionMetaDataWithMember, LevelType.TIME_YEARS),new XtdFunDef(functionMetaDataWithoutMember, LevelType.TIME_YEARS)));
+		super(List.of(new XtdFunDef(functionMetaData, LevelType.TIME_YEARS)));
 	}
 
 }

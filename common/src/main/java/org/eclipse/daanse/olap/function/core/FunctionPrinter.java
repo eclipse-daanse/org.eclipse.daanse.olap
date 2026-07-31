@@ -277,7 +277,7 @@ public class FunctionPrinter {
 	}
 
 	private static String getTypeDescription(DataType type) {
-		return new StringBuilder("<").append(type.getPrittyName()).append(">").toString();
+		return new StringBuilder("<").append(type.getPrettyName()).append(">").toString();
 	}
 
 	private static String getTypeDescriptionCommaList(DataType[] types, int start) {
@@ -287,7 +287,7 @@ public class FunctionPrinter {
 			if (i > start) {
 				sb.append(", ");
 			}
-			sb.append("<").append(types[i].getPrittyName()).append(">");
+			sb.append("<").append(types[i].getPrettyName()).append(">");
 		}
 		return sb.toString();
 	}

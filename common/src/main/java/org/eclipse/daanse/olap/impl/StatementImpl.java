@@ -37,7 +37,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.Result;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
@@ -57,7 +56,7 @@ public class StatementImpl extends org.eclipse.daanse.olap.execution.AbstractSta
     CellSetImpl openCellSet;
 
     public StatementImpl(Connection connection) {
-        super(connection.getContext().getConfigValue(ConfigConstants.QUERY_TIMEOUT, ConfigConstants.QUERY_TIMEOUT_DEFAULT_VALUE, Integer.class));
+        super(connection.getContext().getConfig().queryTimeout());
         assert connection != null;
         this.connection = connection;
         this.context = connection.getContext();

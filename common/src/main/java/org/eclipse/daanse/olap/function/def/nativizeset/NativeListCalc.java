@@ -30,7 +30,6 @@ import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.AbstractProfilingNestedTupleListCalc;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.Util;
 
 public class NativeListCalc  extends AbstractProfilingNestedTupleListCalc {
@@ -107,7 +106,7 @@ public class NativeListCalc  extends AbstractProfilingNestedTupleListCalc {
     {
         CrossJoinAnalyzer analyzer =
             new CrossJoinAnalyzer(simplifiedList, substitutionMap,
-                evaluator.getQuery().getConnection().getContext().getConfigValue(ConfigConstants.NATIVIZE_MAX_RESULTS, ConfigConstants.NATIVIZE_MAX_RESULTS_DEFAULT_VALUE, Integer.class));
+                evaluator.getQuery().getConnection().getContext().getConfig().nativizeMaxResults());
         String crossJoin = analyzer.getCrossJoinExpression();
 
         // If the crossjoin expression is empty, then the simplified list
@@ -157,7 +156,7 @@ public class NativeListCalc  extends AbstractProfilingNestedTupleListCalc {
         List<Member> tuple = simplifiedList.get(0);
         long nativizeMinThreshold =
             evaluator.getQuery().getConnection().getContext()
-            .getConfigValue(ConfigConstants.NATIVIZE_MIN_THRESHOLD, ConfigConstants.NATIVIZE_MIN_THRESHOLD_DEFAULT_VALUE, Integer.class);
+            .getConfig().nativizeMinThreshold();
         long estimatedCardinality = simplifiedList.size();
 
         for (Member member : tuple) {

@@ -36,7 +36,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 import org.eclipse.daanse.olap.function.def.cache.CacheFunDef;
@@ -102,8 +101,8 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Expression funArg = call.getArg(0);
 
-        if (compiler.getEvaluator().getQuery().getConnection().getContext().getConfigValue(ConfigConstants.USE_AGGREGATES, ConfigConstants.USE_AGGREGATES_DEFAULT_VALUE ,Boolean.class)
-            || compiler.getEvaluator().getQuery().getConnection().getContext().getConfigValue(ConfigConstants.READ_AGGREGATES, ConfigConstants.READ_AGGREGATES_DEFAULT_VALUE ,Boolean.class))
+        if (compiler.getEvaluator().getQuery().getConnection().getContext().getConfig().useAggregates()
+            || compiler.getEvaluator().getQuery().getConnection().getContext().getConfig().readAggregates())
         {
             return funArg.accept(compiler);
         }
@@ -147,7 +146,7 @@ public class NativizeSetFunDef extends AbstractFunctionDefinition {
                 evaluator.getCatalogReader()
                     .getLevelCardinality(level, false, true);
             final int minThreshold = evaluator.getQuery().getConnection().getContext()
-                .getConfigValue(ConfigConstants.NATIVIZE_MIN_THRESHOLD, ConfigConstants.NATIVIZE_MIN_THRESHOLD_DEFAULT_VALUE, Integer.class);
+                .getConfig().nativizeMinThreshold();
             final boolean isHighCard = cardinality > minThreshold;
             NativizeSetFunDef.logHighCardinality(
                 NativizeSetFunDef.ESTIMATE_MESSAGE, minThreshold, cardinality, isHighCard);

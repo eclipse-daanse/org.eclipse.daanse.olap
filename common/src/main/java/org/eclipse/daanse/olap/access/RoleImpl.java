@@ -58,7 +58,7 @@ import org.eclipse.daanse.olap.api.element.VirtualCube;
 import org.eclipse.daanse.olap.api.element.db.DatabaseColumn;
 import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.api.element.db.DatabaseTable;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.ExecutionConfig;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.element.OlapElementBase;
 import org.slf4j.Logger;
@@ -1257,8 +1257,7 @@ public class RoleImpl implements Role {
                 }
             }
             // Not a parent. Cache it and return.
-            if (SystemWideProperties.instance()
-                .EnableRolapCubeMemberCache)
+            if (ExecutionConfig.current().enableRolapCubeMemberCache())
             {
                 parentsCache.put(
                     parentMember.getUniqueName(), Boolean.FALSE);

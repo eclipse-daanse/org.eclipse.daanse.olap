@@ -24,6 +24,9 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.connection.Connection;
+
 /**
  * Execution context using JDK 25 ScopedValues for thread-safe, immutable
  * context propagation.
@@ -343,6 +346,25 @@ public final class ExecutionContext {
      */
     public void setExecution(Execution execution) {
         this.execution = execution;
+    }
+
+    /**
+     * Returns the Context this execution belongs to, or null if there is none -
+     * during catalog build or in standalone tools, for instance.
+     *
+     * @return the Context, or null outside a statement
+     */
+    public Context<?> getContext() {
+        Execution ex = getExecution();
+        if (ex == null) {
+            return null;
+        }
+        var stmt = ex.getDaanseStatement();
+        if (stmt == null) {
+            return null;
+        }
+        Connection connection = stmt.getDaanseConnection();
+        return connection == null ? null : connection.getContext();
     }
 
     /**

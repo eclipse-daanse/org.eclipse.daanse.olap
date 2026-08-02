@@ -55,7 +55,7 @@ import org.eclipse.daanse.olap.api.result.Datatype;
 import org.eclipse.daanse.olap.api.result.IDaanseOlap4jProperty;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Property;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.xmla.api.RowsetDefinitionType;
 import org.eclipse.daanse.xmla.api.XmlaException;
@@ -413,7 +413,8 @@ public class XmlaResponseConverter {
     }
 
     private static List<String> getQueryCellPropertyNames(CellSet cellSet) {
-        final boolean matchCase = SystemWideProperties.instance().CaseSensitive;
+        final boolean matchCase = cellSet.getStatement().getDaanseConnection().getContext().getConfig()
+            .caseSensitive();
         List<String> queryCellPropertyNames = new ArrayList<>();
         final Statement statement = cellSet.getStatement();
         for (QueryComponent queryPart : statement.getQuery().getCellProperties()) {

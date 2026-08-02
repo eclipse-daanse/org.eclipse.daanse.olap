@@ -145,7 +145,7 @@ import org.eclipse.daanse.olap.util.type.TypeUtil;
  *     takes longer to execute than the value of this parameter, the system
  *     will kill it.
  *
- * The SystemWideProperties#QueryLimit parameter limits the number
+ * The ConfigConstants#QUERY_LIMIT setting limits the number
  *     of cells returned by a query.
  *
  * At any time while a query is executing, another thread can cancel the
@@ -327,6 +327,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         this.subcube = subcube;
         this.axes = axes;
         normalizeAxes();
+        applyNonEmptyOnAllAxis();
         this.slicerAxis = slicerAxis;
         this.cellProperties = cellProps;
         this.parameters.addAll(Arrays.asList(parameters));
@@ -512,6 +513,28 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return alertedNonNativeFunDefs.add(funDef);
     }
 
+    /**
+     * With enableNonEmptyOnAllAxis every axis of the query behaves as if it had
+     * been written NON EMPTY. The slicer is excluded.
+     *
+     * <p>
+     * This lives here rather than in the axis constructor because axes are built
+     * while parsing, before any execution is bound - the axis has no way to reach
+     * the Context, this class does.
+     * </p>
+     */
+    private void applyNonEmptyOnAllAxis() {
+        boolean nonEmptyOnAllAxis = statement.getDaanseConnection().getContext().getConfig().enableNonEmptyOnAllAxis();
+        if (!nonEmptyOnAllAxis) {
+            return;
+        }
+        for (QueryAxis axis : axes) {
+            if (axis != null && !axis.getAxisOrdinal().isFilter()) {
+                axis.setNonEmpty(true);
+            }
+        }
+    }
+
     private void normalizeAxes() {
         for (int i = 0; i < axes.length; i++) {
             AxisOrdinal correctOrdinal =
@@ -578,9 +601,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             !strictValidation
             && (load
                 ? getConnection().getContext()
-                        .getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS, ConfigConstants.IGNORE_INVALID_MEMBERS_DEFAULT_VALUE, Boolean.class)
+                        .getConfig().ignoreInvalidMembers()
                 : getConnection().getContext()
-                .getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY, ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY_DEFAULT_VALUE, Boolean.class));
+                .getConfig().ignoreInvalidMembersDuringQuery());
     }
 
     /**
@@ -1487,7 +1510,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 		ExpressionCompiler compiler = factory.createExpressionCompiler(evaluator, validator, resultStyleList);
 
         final int expDeps =
-            statement.getQuery().getConnection().getContext().getConfigValue(ConfigConstants.TEST_EXP_DEPENDENCIES, ConfigConstants.TEST_EXP_DEPENDENCIES_DEFAULT_VALUE, Integer.class);
+            statement.getQuery().getConnection().getContext().getConfig().testExpDependencies();
         final ProfileHandler profileHandler = statement.getProfileHandler();
         if (profileHandler != null) {
             // Cannot test dependencies and profile at the same time. Profiling

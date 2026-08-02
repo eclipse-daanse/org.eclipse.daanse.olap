@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -34,6 +36,7 @@ import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.CellSetAxisMetaData;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.common.ExecutionConfig;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.model.record.mddataset.CellTypeR;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,6 +70,14 @@ class XmlaNullCellCharacterizationTest {
         Query query = mock(Query.class);
         lenient().when(cellSet.getStatement()).thenReturn(statement);
         lenient().when(statement.getQuery()).thenReturn(query);
+
+        // The converter reads caseSensitive from the statement's context to look up
+        // cell property names. Without this chain the mock chain ends in null.
+        Connection connection = mock(Connection.class);
+        Context<?> context = mock(Context.class);
+        lenient().when(statement.getDaanseConnection()).thenReturn(connection);
+        lenient().doReturn(context).when(connection).getContext();
+        lenient().when(context.getConfig()).thenReturn(ExecutionConfig.DEFAULTS);
         // no explicit CELL PROPERTIES in the MDX -> defaults VALUE + FORMATTED_VALUE
         lenient().when(query.getCellProperties()).thenReturn(new QueryComponent[0]);
 

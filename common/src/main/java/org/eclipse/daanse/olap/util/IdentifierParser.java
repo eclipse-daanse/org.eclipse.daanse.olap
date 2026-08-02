@@ -48,8 +48,6 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.ArrayTupleList;
-import org.eclipse.daanse.olap.common.ConfigConstants;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
 import org.eclipse.daanse.olap.fun.FunUtil;
@@ -78,14 +76,13 @@ public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierPar
             this.schemaReader = schemaReader;
             this.cube = cube;
             this.hierarchyList = hierarchyList;
-            final SystemWideProperties props = SystemWideProperties.instance();
             final boolean load = cube.isLoadInProgress();
             this.ignoreInvalid =
                 (load
                     ?  cube.getCatalog().getInternalConnection().getContext()
-                            .getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS, ConfigConstants.IGNORE_INVALID_MEMBERS_DEFAULT_VALUE, Boolean.class)
+                            .getConfig().ignoreInvalidMembers()
                     : cube.getCatalog().getInternalConnection().getContext()
-                    .getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY, ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY_DEFAULT_VALUE, Boolean.class));
+                    .getConfig().ignoreInvalidMembersDuringQuery());
         }
 
         protected Member resolveMember(Hierarchy expectedHierarchy) {

@@ -47,8 +47,6 @@ import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
-import org.eclipse.daanse.olap.common.ConfigConstants;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
@@ -76,7 +74,9 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
     {
         // If expression cache is enabled, wrap first expression (the set)
         // in a function which will use the expression cache.
-        if (i == 0 && SystemWideProperties.instance().EnableExpCache) {
+        // Validation runs while parsing, where no execution is bound, so the setting
+        // comes from the query's connection.
+        if (i == 0 && validator.getQuery().getConnection().getContext().getConfig().enableExpCache()) {
             Expression arg = args[0];
             if (FunUtil.worthCaching(arg)) {
                 final Expression cacheCall =
@@ -146,7 +146,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
 
     public static void crossProd(Evaluator evaluator, int currLen) {
         long iterationLimit =
-            evaluator.getQuery().getConnection().getContext().getConfigValue(ConfigConstants.ITERATION_LIMIT, ConfigConstants.ITERATION_LIMIT_DEFAULT_VALUE, Integer.class);
+            evaluator.getQuery().getConnection().getContext().getConfig().iterationLimit();
         final int productLen = currLen * evaluator.getIterationLength();
         if (iterationLimit > 0 && productLen > iterationLimit) {
                 throw new ResourceLimitExceededException(MessageFormat.format(
@@ -197,7 +197,7 @@ public abstract class AbstractAggregateFunDef extends AbstractFunctionDefinition
                 return AbstractAggregateFunDef.ignoreUnrelatedDimensions(
                     tuplesForAggregation, baseCube);
             } else if (evaluator.getQuery().getConnection().getContext()
-                    .getConfigValue(ConfigConstants.IGNORE_MEASURE_FOR_NON_JOINING_DIMENSION, ConfigConstants.IGNORE_MEASURE_FOR_NON_JOINING_DIMENSION_DEFAULT_VALUE, Boolean.class))
+                    .getConfig().ignoreMeasureForNonJoiningDimension())
             {
                 return AbstractAggregateFunDef.ignoreMeasureForNonJoiningDimension(
                     tuplesForAggregation, baseCube);

@@ -35,7 +35,8 @@ import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleList;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.ExecutionConfig;
+import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 /**
  * Implementation of {@link TupleList} that stores tuples end-to-end in an array.
@@ -46,7 +47,20 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
     private final int maxMembers;
     private transient Member[] objectData;
     private int size;
-    private final int cjMaxSize = SystemWideProperties.instance().ResultLimit;
+    private final int cjMaxSize;
+
+    /**
+     * The result limit of the running execution, or the default outside one.
+     *
+     * <p>
+     * Lists are normally built while a query runs, so the execution context - and
+     * with it the Context carrying the limit - is bound. Callers that have no
+     * execution, tests among them, pass the limit explicitly instead.
+     * </p>
+     */
+    private static int currentResultLimit() {
+        return ExecutionConfig.current().resultLimit();
+    }
 
     /**
      * Creates an empty ArrayTupleList with an initial capacity of 10 tuples.
@@ -65,20 +79,37 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
      * @param initialCapacity Initial capacity
      */
     public ArrayTupleList( int arity, int initialCapacity ) {
-        this( arity, new Member[ initialCapacity * arity ], 0 );
+        this( arity, initialCapacity, currentResultLimit() );
+    }
+
+    /**
+     * Creates an empty ArrayTupleList with an explicit maximum size, for callers
+     * outside a running execution.
+     *
+     * @param arity           Arity
+     * @param initialCapacity Initial capacity
+     * @param cjMaxSize       Maximum number of tuples, 0 for no limit
+     */
+    public ArrayTupleList( int arity, int initialCapacity, int cjMaxSize ) {
+        this( arity, new Member[ initialCapacity * arity ], 0, cjMaxSize );
     }
 
     private ArrayTupleList( int arity, Member[] members, int size ) {
+        this( arity, members, size, currentResultLimit() );
+    }
+
+    private ArrayTupleList( int arity, Member[] members, int size, int cjMaxSize ) {
         super( arity );
         assert members.length % arity == 0;
         objectData = members;
         this.size = size;
+        this.cjMaxSize = cjMaxSize;
         maxMembers = maxNumberOfMembers();
     }
 
     /**
      * Get the upper limit of the size of the Member[] backing ArrayTupleLists
-     * This uses the {@link SystemWideProperties#ResultLimit} as the value
+     * This uses {@link ConfigConstants#RESULT_LIMIT} as the value
      * setting the maximum number of tuples.  Member max = (tuple max * arity),
      * or max int if undefined.
      */

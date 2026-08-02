@@ -34,7 +34,7 @@ import java.util.List;
  *
  * There are a few ways to declare a SegmentCache implementation in
  * Mondrian. The first one is to set the
- * SystemWideProperties#SegmentCache property.
+ * segment cache configuration.
  *
  * The second one is to use the Java Services API. This is the preferred
  * mean. You will need to create a jar file, accessible through the same

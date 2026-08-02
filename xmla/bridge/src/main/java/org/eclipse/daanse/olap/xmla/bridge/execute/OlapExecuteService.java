@@ -926,8 +926,7 @@ public class OlapExecuteService implements ExecuteService {
         Optional<String> tabFields = statementRequest.properties().tableFields();
 //        Optional<Boolean> advanced = statementRequest.properties().advancedFlag();
         Connection connection = drillThrough.getQuery().getConnection();
-        final boolean enableRowCount = connection.getContext().getConfigValue(ConfigConstants.ENABLE_TOTAL_COUNT,
-                ConfigConstants.ENABLE_TOTAL_COUNT_DEFAULT_VALUE, Boolean.class);
+        final boolean enableRowCount = connection.getContext().getConfig().enableTotalCount();
         final int[] rowCountSlot = enableRowCount ? new int[] { 0 } : null;
         Statement statement;
         ResultSet resultSet = null;

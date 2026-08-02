@@ -23,7 +23,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.exceptions.CurrentMemberWithCompoundSlicerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,7 @@ public class HierarchyCurrentMemberCalc extends AbstractProfilingNestedMemberCal
         //if (evaluator instanceof RolapEvaluator rev) {
 
             String alertValue = evaluator.getCatalogReader().getContext()
-                    .getConfigValue(ConfigConstants.CURRENT_MEMBER_WITH_COMPOUND_SLICER_ALERT, ConfigConstants.CURRENT_MEMBER_WITH_COMPOUND_SLICER_ALERT_DEFAULT_VALUE, String.class);
+                    .getConfig().currentMemberWithCompoundSlicerAlert();
 
             if (alertValue.equalsIgnoreCase("OFF")) {
                 return; // No validation

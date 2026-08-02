@@ -55,7 +55,6 @@ import org.eclipse.daanse.olap.api.type.MemberType;
 import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
 
@@ -100,9 +99,9 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
         if (dimensionProperties == null || axisOrdinal == null) {
             throw new IllegalArgumentException("QueryAxis: dimensionProperties and axisOrdinal should not be null");
         }
-        this.nonEmpty = nonEmpty
-            || (SystemWideProperties.instance().EnableNonEmptyOnAllAxis
-            && !axisOrdinal.isFilter());
+        // enableNonEmptyOnAllAxis is applied by QueryImpl, not here: axes are built
+        // while parsing, where no Context is bound, so an axis cannot read it.
+        this.nonEmpty = nonEmpty;
         this.exp = set;
         this.axisOrdinal = axisOrdinal;
         this.subtotalVisibility = subtotalVisibility;

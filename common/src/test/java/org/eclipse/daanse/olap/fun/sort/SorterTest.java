@@ -40,6 +40,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Comparator;
 
+import java.util.Map;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleIterable;
@@ -51,6 +52,7 @@ import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.common.ConfigConstants;
+import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
@@ -117,8 +119,9 @@ class SorterTest {
         when(execution.getDaanseStatement()).thenReturn(statement);
         when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(rolapConnection.getContext()).thenReturn(context);
-        when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL,
-                ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(1000);
+        // CancellationChecker reads this through Context.getConfig().
+        when(context.getConfig()).thenReturn(new MapContextConfig(
+                () -> Map.of(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, 1000)));
 
     }
 

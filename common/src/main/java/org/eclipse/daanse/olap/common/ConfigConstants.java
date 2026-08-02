@@ -13,8 +13,24 @@
  */
 package org.eclipse.daanse.olap.common;
 
-import java.util.concurrent.TimeUnit;
-
+/**
+ * The configuration keys of an OLAP context and the value each one takes when it
+ * is not configured.
+ *
+ * <p>
+ * This is the one place either is written down. {@code ContextConfig} names the
+ * same keys as typed getters and is what production code should read;
+ * {@code ContextConfigOCD} turns them into an OSGi metatype so they can be
+ * described and edited from outside. Both refer back to the constants here, so a
+ * default changed here changes everywhere.
+ * </p>
+ *
+ * <p>
+ * Every default is a compile-time constant on purpose - the metatype needs them
+ * as constant expressions in annotations. Keep them primitive or {@code String};
+ * a boxed type or an enum here breaks the metatype build.
+ * </p>
+ */
 public class ConfigConstants {
     public static final String QUERY_LIMIT = "queryLimit";
     public static final String SEGMENT_CACHE = "segmentCache";
@@ -45,6 +61,16 @@ public class ConfigConstants {
     public static final String ITERATION_LIMIT = "iterationLimit";
     public static final String LEVEL_PRE_CACHE_THRESHOLD = "levelPreCacheThreshold";
     public static final String MAX_CONSTRAINTS = "maxConstraints";
+
+    public static final String CASE_SENSITIVE = "caseSensitive";
+    public static final String CASE_SENSITIVE_MDX_INSTR = "caseSensitiveMdxInstr";
+    public static final String COMPARE_SIBLINGS_BY_ORDER_KEY = "compareSiblingsByOrderKey";
+    public static final String ENABLE_EXP_CACHE = "enableExpCache";
+    public static final String ENABLE_NON_EMPTY_ON_ALL_AXIS = "enableNonEmptyOnAllAxis";
+    public static final String ENABLE_ROLAP_CUBE_MEMBER_CACHE = "enableRolapCubeMemberCache";
+    public static final String FILTER_CHILDLESS_SNOWFLAKE_MEMBERS = "filterChildlessSnowflakeMembers";
+    public static final String NULL_MEMBER_REPRESENTATION = "nullMemberRepresentation";
+    public static final String RESULT_LIMIT = "resultLimit";
     public static final String TEST_EXP_DEPENDENCIES = "testExpDependencies";
     public static final String READ_AGGREGATES = "readAggregates";
     public static final String ALERT_NATIVE_EVALUATION_UNSUPPORTED = "alertNativeEvaluationUnsupported";
@@ -69,15 +95,15 @@ public class ConfigConstants {
     public static final String EXECUTE_DURATION = "executeDuration";
     public static final String EXECUTE_DURATION_UNIT = "executeDurationUnit";
 
-    public static final Integer QUERY_LIMIT_DEFAULT_VALUE = 40;
+    public static final int QUERY_LIMIT_DEFAULT_VALUE = 40;
     public static final String SEGMENT_CACHE_DEFAULT_VALUE = null;
-    public static final Boolean ENABLE_TOTAL_COUNT_DEFAULT_VALUE = false;
-    public static final Integer SEGMENT_CACHE_MANAGER_NUMBER_CACHE_THREADS_DEFAULT_VALUE = 100;
-    public static final Integer CELL_BATCH_SIZE_DEFAULT_VALUE = -1;
-    public static final Integer ROLAP_CONNECTION_SHEPHERD_NB_THREADS_DEFAULT_VALUE = 20;
-    public static final Long ROLAP_CONNECTION_SHEPHERD_THREAD_POLLING_INTERVAL_DEFAULT_VALUE = 1000L;
-    public static final TimeUnit ROLAP_CONNECTION_SHEPHERD_THREAD_POLLING_INTERVAL_UNIT_DEFAULT_VALUE = TimeUnit.MILLISECONDS;
-    public static final Integer SEGMENT_CACHE_MANAGER_NUMBER_SQL_THREADS_DEFAULT_VALUE = 100;
+    public static final boolean ENABLE_TOTAL_COUNT_DEFAULT_VALUE = false;
+    public static final int SEGMENT_CACHE_MANAGER_NUMBER_CACHE_THREADS_DEFAULT_VALUE = 100;
+    public static final int CELL_BATCH_SIZE_DEFAULT_VALUE = -1;
+    public static final int ROLAP_CONNECTION_SHEPHERD_NB_THREADS_DEFAULT_VALUE = 20;
+    public static final long ROLAP_CONNECTION_SHEPHERD_THREAD_POLLING_INTERVAL_DEFAULT_VALUE = 1000L;
+    public static final String ROLAP_CONNECTION_SHEPHERD_THREAD_POLLING_INTERVAL_UNIT_DEFAULT_VALUE = "MILLISECONDS";
+    public static final int SEGMENT_CACHE_MANAGER_NUMBER_SQL_THREADS_DEFAULT_VALUE = 100;
     public static final String SOLVE_ORDER_MODE_DEFAULT_VALUE = "ABSOLUTE";
     public static final boolean CHOOSE_AGGREGATE_BY_VOLUME_DEFAULT_VALUE = false;
     public static final boolean DISABLE_CACHING_DEFAULT_VALUE = false;
@@ -88,11 +114,12 @@ public class ConfigConstants {
     public static final boolean ENABLE_DRILL_THROUGH_DEFAULT_VALUE = true;
     public static final boolean ENABLE_NATIVE_FILTER_DEFAULT_VALUE = true;
     public static final boolean ENABLE_NATIVE_CROSS_JOIN_DEFAULT_VALUE = true;
+    public static final boolean ENABLE_NATIVE_NON_EMPTY_DEFAULT_VALUE = true;
     public static final boolean ENABLE_NATIVE_TOP_COUNT_DEFAULT_VALUE = true;
     public static final boolean ENABLE_IN_MEMORY_ROLLUP_DEFAULT_VALUE = true;
     public static final boolean EXPAND_NON_NATIVE_DEFAULT_VALUE = false;
     public static final boolean GENERATE_AGGREGATE_SQL_DEFAULT_VALUE = false;
-    public static final Boolean IGNORE_INVALID_MEMBERS_DURING_QUERY_DEFAULT_VALUE = false;
+    public static final boolean IGNORE_INVALID_MEMBERS_DURING_QUERY_DEFAULT_VALUE = false;
     public static final boolean IGNORE_MEASURE_FOR_NON_JOINING_DIMENSION_DEFAULT_VALUE = false;
     public static final int ITERATION_LIMIT_DEFAULT_VALUE = 0;
     public static final int LEVEL_PRE_CACHE_THRESHOLD_DEFAULT_VALUE = 300;
@@ -102,7 +129,7 @@ public class ConfigConstants {
     public static final String ALERT_NATIVE_EVALUATION_UNSUPPORTED_DEFAULT_VALUE = "OFF";
     public static final int CROSS_JOIN_OPTIMIZER_SIZE_DEFAULT_VALUE = 0;
     public static final String CURRENT_MEMBER_WITH_COMPOUND_SLICER_ALERT_DEFAULT_VALUE = "ERROR";
-    public static final Boolean IGNORE_INVALID_MEMBERS_DEFAULT_VALUE = false;
+    public static final boolean IGNORE_INVALID_MEMBERS_DEFAULT_VALUE = false;
     public static final int MAX_EVAL_DEPTH_DEFAULT_VALUE = 10;
     public static final int CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE = 1000;
     public static final boolean MEMORY_MONITOR_DEFAULT_VALUE = false;
@@ -120,5 +147,17 @@ public class ConfigConstants {
     public static final boolean GENERATE_FORMATTED_SQL_DEFAULT_VALUE = false;
     public static final long EXECUTE_DURATION_DEFAULT_VALUE = 0;
     public static final String EXECUTE_DURATION_UNIT_DEFAULT_VALUE = "MILLISECONDS";
+
+
+    public static final boolean CASE_SENSITIVE_DEFAULT_VALUE = false;
+    public static final boolean CASE_SENSITIVE_MDX_INSTR_DEFAULT_VALUE = false;
+    public static final boolean COMPARE_SIBLINGS_BY_ORDER_KEY_DEFAULT_VALUE = false;
+    public static final boolean ENABLE_EXP_CACHE_DEFAULT_VALUE = true;
+    public static final boolean ENABLE_NON_EMPTY_ON_ALL_AXIS_DEFAULT_VALUE = false;
+    public static final boolean ENABLE_ROLAP_CUBE_MEMBER_CACHE_DEFAULT_VALUE = true;
+    public static final boolean FILTER_CHILDLESS_SNOWFLAKE_MEMBERS_DEFAULT_VALUE = true;
+    public static final String NULL_MEMBER_REPRESENTATION_DEFAULT_VALUE = "#null";
+    /** 0 means no limit. */
+    public static final int RESULT_LIMIT_DEFAULT_VALUE = 0;
 
 }

@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.ListAssert.assertThatList;
 
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.exceptions.ResourceLimitExceededException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ class ArrayTupleListTest {
 
     @AfterEach
     void afterEach() {
-        SystemWideProperties.instance().populateInitial();
     }
 
     @Mock
@@ -42,10 +40,10 @@ class ArrayTupleListTest {
 
     @Test
     void addOverInitialCapacity() {
-        SystemWideProperties.instance().ResultLimit = 0;
         int count = 50;
 
-        atlList = new ArrayTupleList(2, 10);
+        // 0 = no limit
+        atlList = new ArrayTupleList(2, 10, 0);
         addTuplesToList(atlList, count);
 
         assertThatList(atlList).hasSize(count).anySatisfy(tuple -> assertThat(m1).isEqualTo(tuple.get(0)))
@@ -54,8 +52,7 @@ class ArrayTupleListTest {
 
     @Test
     void addOverResultLimit() {
-        SystemWideProperties.instance().ResultLimit = 15;
-        atlList = new ArrayTupleList(2, 10);
+        atlList = new ArrayTupleList(2, 10, 15);
 
         assertThatThrownBy(() -> addTuplesToList(atlList, 16)).isInstanceOf(ResourceLimitExceededException.class)
                 .hasMessageContaining("result (16) exceeded limit (15)");

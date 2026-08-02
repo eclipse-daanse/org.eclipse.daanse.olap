@@ -27,7 +27,6 @@
 package org.eclipse.daanse.olap.util;
 
 import org.eclipse.daanse.olap.api.execution.Execution;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 
 /**
  * Encapsulates cancel and timeouts checks
@@ -52,7 +51,7 @@ public class CancellationChecker {
   {
     if (execution != null && execution.getDaanseStatement() != null) {
       int checkCancelOrTimeoutInterval = execution.getDaanseStatement().getDaanseConnection().getContext()
-              .getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class);
+              .getConfig().checkCancelOrTimeoutInterval();
       synchronized (execution) {
         if (checkCancelOrTimeoutInterval > 0
             && currentIteration % checkCancelOrTimeoutInterval == 0)

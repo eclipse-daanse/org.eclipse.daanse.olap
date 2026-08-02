@@ -27,15 +27,13 @@
 
 package org.eclipse.daanse.olap.fun.sort;
 
-import static org.eclipse.daanse.olap.common.Util.newInternal;
+import org.eclipse.daanse.olap.common.ExecutionConfig;
 
-import java.time.LocalDateTime;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +53,6 @@ import org.eclipse.daanse.olap.api.type.ScalarType;
 import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
 import org.eclipse.daanse.olap.util.CancellationChecker;
@@ -680,7 +677,7 @@ public class Sorter {
       }
     }
     if(
-        SystemWideProperties.instance().CompareSiblingsByOrderKey
+        ExecutionConfig.current().compareSiblingsByOrderKey()
         &&
         m1.getLevel().getOrdinalExps() != null
     ) {

@@ -148,6 +148,24 @@ public interface Context<C extends Connection> {
 
     <T> T getConfigValue(String key, T dflt, Class<T> clazz);
 
+    /**
+     * The configuration of this context as a typed view.
+     *
+     * <p>
+     * Prefer this over {@link #getConfigValue(String, Object, Class)}: the getters
+     * name their setting, carry its documentation, and get their default and their
+     * type right without the caller having to repeat either. The raw accessor
+     * remains for the test contexts, which write into the underlying map.
+     * </p>
+     *
+     * <p>
+     * The returned view reads the configuration on every call, so a context whose
+     * configuration is updated keeps answering with the current values through the
+     * same instance.
+     * </p>
+     */
+    ContextConfig getConfig();
+
     Semaphore getQueryLimitSemaphore();
 
     Optional<Map<Object, Object>> getSqlMemberSourceValuePool();

@@ -20,20 +20,20 @@ import org.eclipse.daanse.olap.api.Context;
 
 public class ExecuteDurationUtil {
 
+    /**
+     * The configured limit on how long a single statement may run, or empty when
+     * none is set.
+     *
+     * <p>
+     * Every {@link java.util.concurrent.TimeUnit} is honoured.
+     * </p>
+     */
     public static Optional<Duration> executeDurationValue(Context<?> context) {
-        long duration = context.getConfigValue(ConfigConstants.EXECUTE_DURATION, ConfigConstants.EXECUTE_DURATION_DEFAULT_VALUE, Long.class);
-        if (duration > 0) {
-            String unit = context.getConfigValue(ConfigConstants.EXECUTE_DURATION_UNIT, ConfigConstants.EXECUTE_DURATION_UNIT_DEFAULT_VALUE, String.class).toLowerCase();
-            switch (unit) {
-                case "milliseconds":
-                    return Optional.of(Duration.ofMillis(duration));
-                case "seconds":
-                    return Optional.of(Duration.ofSeconds(duration));
-                default:
-                    return Optional.of(Duration.ofMillis(duration));
-            }
+        long duration = context.getConfig().executeDuration();
+        if (duration <= 0) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        return Optional.of(Duration.of(duration, context.getConfig().executeDurationUnit().toChronoUnit()));
     }
 
 }

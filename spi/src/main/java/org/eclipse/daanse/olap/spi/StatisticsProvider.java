@@ -35,7 +35,7 @@ import org.eclipse.daanse.olap.execution.ExecutionImpl;
  * current connection. The default implementation of that method looks first at
  * the "mondrian.statistics.providers.DATABASE" property (substituting the
  * current database name, e.g. MYSQL or ORACLE, for DATABASE), then at
- * the org.eclipse.daanse.olap.common.SystemWideProperties#StatisticsProviders "mondrian.statistics.providers"
+ * the the statistics-provider configuration "mondrian.statistics.providers"
  * property.
  *
  * mondrian.spi.impl.JdbcStatisticsProvider

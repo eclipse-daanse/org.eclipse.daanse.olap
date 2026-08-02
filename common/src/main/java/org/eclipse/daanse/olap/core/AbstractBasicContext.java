@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextConfig;
 import org.eclipse.daanse.olap.api.agg.OlapAggregationManager;
 import org.eclipse.daanse.olap.api.cache.CatalogCache;
 import org.eclipse.daanse.olap.api.connection.Connection;
@@ -35,6 +36,7 @@ import org.eclipse.daanse.olap.api.monitor.event.MdxStatementEventCommon;
 import org.eclipse.daanse.olap.api.monitor.event.MdxStatementStartEvent;
 import org.eclipse.daanse.olap.api.monitor.event.ServertEventCommon;
 import org.eclipse.daanse.olap.api.result.ResultShepherd;
+import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,9 +72,21 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 
 	protected Map<String, Object> configuration = null;
 
+	/**
+	 * Reads {@link #configuration} through a supplier rather than a copy, so it
+	 * stays correct across {@link #updateConfiguration(Map)} and across the
+	 * in-place writes the test contexts do.
+	 */
+	private final ContextConfig config = new MapContextConfig(() -> configuration);
+
 
 	protected void updateConfiguration(Map<String, Object> configuration) {
 		this.configuration = configuration;
+	}
+
+	@Override
+	public ContextConfig getConfig() {
+		return config;
 	}
 
 	@Override

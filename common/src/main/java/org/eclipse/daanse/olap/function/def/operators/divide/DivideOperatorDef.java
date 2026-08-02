@@ -20,7 +20,6 @@ import org.eclipse.daanse.olap.api.calc.DoubleCalc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
@@ -42,7 +41,7 @@ public class DivideOperatorDef extends AbstractFunctionDefinition {
         final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
         final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
         final boolean isNullDenominatorProducesNull = compiler.getEvaluator().getQuery().getConnection().getContext()
-                .getConfigValue(ConfigConstants.NULL_DENOMINATOR_PRODUCES_NULL, ConfigConstants.NULL_DENOMINATOR_PRODUCES_NULL_DEFAULT_VALUE, Boolean.class);
+                .getConfig().nullDenominatorProducesNull();
 
         // If the mondrian property
         // mondrian.olap.NullOrZeroDenominatorProducesNull

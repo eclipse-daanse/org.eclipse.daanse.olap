@@ -92,7 +92,7 @@ public interface Hierarchy extends OlapElement, MetaElement {
     /**
      * Returns the unique name of this hierarchy, always including the dimension
      * name, e.g. "[Time].[Time]", regardless of whether
-     * SystemWideProperties#SsasCompatibleNaming is enabled.
+     * SSAS-compatible naming is enabled.
      *
      * @deprecated Will be removed in mondrian-4.0, when #getUniqueName() will have
      *             this behavior.

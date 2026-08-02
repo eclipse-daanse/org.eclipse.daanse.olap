@@ -26,6 +26,7 @@
 
 package org.eclipse.daanse.olap.execution;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -56,6 +57,7 @@ import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.core.AbstractBasicContext;
 import org.eclipse.daanse.olap.exceptions.MemoryLimitExceededException;
 import org.eclipse.daanse.olap.exceptions.QueryCanceledException;
+import org.eclipse.daanse.olap.exceptions.QueryTimeoutException;
 
 /**
  * Execution context.
@@ -72,6 +74,13 @@ public class ExecutionImpl implements Execution {
      * Used for MDX logging, allows for a MDX Statement UID.
      */
     private static final AtomicLong SEQ = new AtomicLong();
+
+    /**
+     * Wording of the timeout error. Carries the configured budget in seconds,
+     * because that is the unit the {@code queryTimeout} setting is expressed in and
+     * the first thing anyone reading the message wants to know.
+     */
+    private static final String QUERY_TIMEOUT_MESSAGE = "Query timeout of {0} seconds reached";
 
     private final AbstractStatement statement;
 
@@ -95,6 +104,20 @@ public class ExecutionImpl implements Execution {
 
     private LocalDateTime startTime;
     private Optional<Duration> duration;
+
+    /**
+     * Absolute moment at which this execution has run out of time, or null when it
+     * has no time limit.
+     *
+     * <p>
+     * Computed once in {@link #start()} rather than compared against
+     * {@link #startTime} on every check: a deadline is a single value to test, and
+     * a null deadline states "no limit" without arithmetic. A zero or negative
+     * {@link #duration} yields null - that is what makes {@code queryTimeout=0}
+     * mean "no limit" rather than "already expired".
+     * </p>
+     */
+    private Instant deadline;
     private final QueryTimingImpl queryTiming = new QueryTimingImpl();
     private int phase;
     private int cellCacheHitCount;
@@ -153,6 +176,10 @@ public class ExecutionImpl implements Execution {
     public void start() {
         assert this.state == State.FRESH;
         this.startTime = LocalDateTime.now();
+        this.deadline = duration
+                .filter(d -> !d.isZero() && !d.isNegative())
+                .map(Instant.now()::plus)
+                .orElse(null);
         this.state = State.RUNNING;
         this.queryTiming.init(this.statement.getProfileHandler() != null);
         fireExecutionStartEvent();
@@ -246,13 +273,11 @@ public class ExecutionImpl implements Execution {
             throw new QueryCanceledException();
         case RUNNING:
         case TIMEOUT:
-            if (duration.isPresent()) {
-                long currTime = System.currentTimeMillis();
-//          if ( currTime > timeoutTimeMillis ) {
-//            this.state = State.TIMEOUT;
-//            fireExecutionEndEvent();
-//            throw new InvalidArgumentException(MessageFormat.format(QueryTimeout, timeoutIntervalMillis / 1000 ));
-//          }
+            if (deadline != null && Instant.now().isAfter(deadline)) {
+                this.state = State.TIMEOUT;
+                fireExecutionEndEvent();
+                throw new QueryTimeoutException(MessageFormat.format(QUERY_TIMEOUT_MESSAGE,
+                        duration.map(Duration::toMillis).orElse(0L) / 1000d));
             }
             break;
         case ERROR:
@@ -286,12 +311,8 @@ public class ExecutionImpl implements Execution {
             return true;
         }
         synchronized (stateLock) {
-            if (state == State.CANCELED || state == State.ERROR || state == State.TIMEOUT
-                    || (state == State.RUNNING && duration.isPresent()
-                            && Duration.between(LocalDateTime.now(), startTime).compareTo(duration.get()) > 0)) {
-                return true;
-            }
-            return false;
+            return state == State.CANCELED || state == State.ERROR || state == State.TIMEOUT
+                    || (state == State.RUNNING && deadline != null && Instant.now().isAfter(deadline));
         }
     }
 
@@ -395,7 +416,7 @@ public class ExecutionImpl implements Execution {
     }
 
     public final Duration getElapsedMillis() {
-        return Duration.between(LocalDateTime.now(), startTime);
+        return startTime == null ? Duration.ZERO : Duration.between(startTime, LocalDateTime.now());
     }
 
     private void fireExecutionEndEvent() {
@@ -405,8 +426,7 @@ public class ExecutionImpl implements Execution {
         ExecutionEndEvent endEvent = new ExecutionEndEvent(new ExecutionEventCommon(
 
                 new MdxStatementEventCommon(new ConnectionEventCommon(new ServertEventCommon(
-                        new EventCommon(
-                                Instant.ofEpochMilli(Duration.between(LocalDateTime.now(), this.startTime).toMillis())),
+                        new EventCommon(Instant.now()),
                         context.getName()), connection.getId()), this.statement.getId()),
                 this.id), phase, state, cellCacheHitCount, cellCacheMissCount, cellCachePendingCount, expCacheHitCount,
                 expCacheMissCount);
@@ -420,8 +440,7 @@ public class ExecutionImpl implements Execution {
         ExecutionStartEvent executionStartEvent = new ExecutionStartEvent(new ExecutionEventCommon(
 
                 new MdxStatementEventCommon(new ConnectionEventCommon(new ServertEventCommon(
-                        new EventCommon(
-                                Instant.ofEpochMilli(Duration.between(LocalDateTime.now(), this.startTime).toMillis())),
+                        new EventCommon(Instant.now()),
                         context.getName()), connection.getId()), statement.getId()),
                 id), getMdx());
         context.getMonitor().accept(executionStartEvent);

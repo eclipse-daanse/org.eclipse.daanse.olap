@@ -66,7 +66,7 @@ public abstract class HierarchyBase
      * [Customers]>   Customers   null
      *
      *
-     * If org.eclipse.daanse.olap.common.SystemWideProperties#SsasCompatibleNaming is
+     * If SSAS-compatible naming is
      * true, name and subName have the same value.
      */
     protected final String subName;

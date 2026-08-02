@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.calc.StringCalc;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCalc;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.ExecutionConfig;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.fun.DaanseEvaluationException;
 
@@ -43,7 +43,7 @@ public class PropertiesCalc extends AbstractProfilingNestedUnknownCalc {
     }
 
     private static Object properties(Member member, String s) {
-        boolean matchCase = SystemWideProperties.instance().CaseSensitive;
+        boolean matchCase = ExecutionConfig.current().caseSensitive();
         Object o = member.getPropertyValue(s, matchCase);
         if (o == null) {
             if (!Util.isValidProperty(s, member.getLevel())) {

@@ -103,6 +103,7 @@ import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
+import org.eclipse.daanse.olap.api.execution.ExecutionContext;
 import org.eclipse.daanse.olap.api.execution.QueryTiming;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
@@ -413,15 +414,14 @@ public class Util {
     /**
      * Returns whether two names are equal.
      * Takes into account the
-     * {@link SystemWideProperties#CaseSensitive case sensitive option}.
+     * {@link ConfigConstants#CASE_SENSITIVE case sensitive option}.
      * Names may be null.
  */
     public static boolean equalName(String s, String t) {
         if (s == null) {
             return t == null;
         }
-        boolean caseSensitive =
-            SystemWideProperties.instance().CaseSensitive;
+        boolean caseSensitive = caseSensitive();
         return caseSensitive ? s.equals(t) : s.equalsIgnoreCase(t);
     }
 
@@ -443,13 +443,12 @@ public class Util {
     /**
      * Compares two names.  if case sensitive flag is false,
      * apply finer grain difference with case sensitive
-     * Takes into account the {@link SystemWideProperties#CaseSensitive case
+     * Takes into account the {@link ConfigConstants#CASE_SENSITIVE case
      * sensitive option}.
      * Names must not be null.
  */
     public static int caseSensitiveCompareName(String s, String t) {
-        boolean caseSensitive =
-            SystemWideProperties.instance().CaseSensitive;
+        boolean caseSensitive = caseSensitive();
         if (caseSensitive) {
             return s.compareTo(t);
         } else {
@@ -463,26 +462,38 @@ public class Util {
 
     /**
      * Compares two names.
-     * Takes into account the {@link SystemWideProperties#CaseSensitive case
+     * Takes into account the {@link ConfigConstants#CASE_SENSITIVE case
      * sensitive option}.
      * Names must not be null.
  */
     public static int compareName(String s, String t) {
-        boolean caseSensitive =
-            SystemWideProperties.instance().CaseSensitive;
+        boolean caseSensitive = caseSensitive();
         return caseSensitive ? s.compareTo(t) : s.compareToIgnoreCase(t);
     }
 
     /**
      * Generates a normalized form of a name, for use as a key into a map.
      * Returns the upper case name if
-     * {@link SystemWideProperties#CaseSensitive} is true, the name unchanged
+     * {@link ConfigConstants#CASE_SENSITIVE} is true, the name unchanged
      * otherwise.
  */
     public static String normalizeName(String s) {
-        return SystemWideProperties.instance().CaseSensitive
+        return caseSensitive()
             ? s
             : s.toUpperCase();
+    }
+
+    /**
+     * Whether names are compared case-sensitively in the running execution.
+     *
+     * <p>
+     * The name comparisons below are static and sit in the resolution path of
+     * every identifier, so there is no parameter to carry the setting. Outside an
+     * execution the default applies.
+     * </p>
+     */
+    private static boolean caseSensitive() {
+        return ExecutionConfig.current().caseSensitive();
     }
 
     /**
@@ -1166,8 +1177,7 @@ public class Util {
             level = level.getParentLevel();
         } while (level != null);
         // Now try a standard property.
-        boolean caseSensitive =
-            SystemWideProperties.instance().CaseSensitive;
+        boolean caseSensitive = caseSensitive();
         final Property property = StandardProperty.lookup(propertyName, caseSensitive);
         if (property != null
             && property.isMemberProperty()
@@ -2415,7 +2425,7 @@ public class Util {
      * @throws ResourceLimitExceededException
  */
     public static void checkCJResultLimit(long resultSize) {
-        int resultLimit = SystemWideProperties.instance().ResultLimit;
+        int resultLimit = ExecutionConfig.current().resultLimit();
 
         // Throw an exeption, if the size of the crossjoin exceeds the result
         // limit.

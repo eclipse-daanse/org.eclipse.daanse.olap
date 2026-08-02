@@ -29,11 +29,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Map;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.common.ConfigConstants;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,6 @@ class CancellationCheckerTest {
 
     @AfterEach
     void afterEach() {
-        SystemWideProperties.instance().populateInitial();
     }
 
     private ExecutionImpl excMock = mock(ExecutionImpl.class);
@@ -99,8 +99,9 @@ class CancellationCheckerTest {
         Statement statement = mock(Statement.class);
         Connection rolapConnection = mock(Connection.class);
         Context context = mock(Context.class);
-        when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL,
-                ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(i);
+        // CancellationChecker reads this through Context.getConfig().
+        when(context.getConfig()).thenReturn(new MapContextConfig(
+                () -> Map.of(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, i)));
         when(rolapConnection.getContext()).thenReturn(context);
         when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(excMock.getDaanseStatement()).thenReturn(statement);

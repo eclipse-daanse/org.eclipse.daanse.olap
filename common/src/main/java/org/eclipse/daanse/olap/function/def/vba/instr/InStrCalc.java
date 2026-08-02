@@ -47,7 +47,7 @@ public class InStrCalc extends AbstractProfilingNestedIntegerCalc {
             }
             String lwStringCheck = stringCheck;
             String lwStringMatch = stringMatch;
-            if(!org.eclipse.daanse.olap.common.SystemWideProperties.instance().CaseSensitiveMdxInstr) {
+            if(!org.eclipse.daanse.olap.common.ExecutionConfig.current().caseSensitiveMdxInstr()) {
                 if(stringCheck != null) {
                     lwStringCheck = stringCheck.toLowerCase();
                 }

@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.aggregator.Aggregator;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleCursor;
 import org.eclipse.daanse.olap.api.calc.tuple.TupleIterator;
@@ -40,7 +41,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedUnknownCa
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
 import org.eclipse.daanse.olap.calc.base.util.HierarchyDependsChecker;
 import org.eclipse.daanse.olap.common.StandardProperty;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.function.def.crossjoin.CrossJoinFunDef;
@@ -144,18 +144,13 @@ public class AggregateCalc  extends AbstractProfilingNestedUnknownCalc {
         //
         // Similar optimization can also be done for list of members.
 
-        boolean unlimitedIn  = false;
-
-        //TODO: reactivate
-        //TODO: Functions should know their context , (dialext and configProps)
-//        if (evaluator instanceof RolapEvaluator) {
-//            unlimitedIn =
-//                ((RolapEvaluator) evaluator).getDialect()
-//                    .supportsUnlimitedValueList();
-//        }
+        Context<?> context = evaluator.getCatalogReader().getContext();
+        // maxConstraints exists because most databases cap the length of an IN list.
+        // A database that does not needs no list optimization at all.
+        boolean unlimitedIn = context.getDialect().supportsUnlimitedValueList();
+        int maxConstraints = context.getConfig().maxConstraints();
         boolean tupleSizeWithinInListSize =
-            tupleList.size()
-                <= SystemWideProperties.instance().MaxConstraints;
+            tupleList.size() <= maxConstraints;
         if (unlimitedIn || tupleSizeWithinInListSize) {
             // If the DBMS does not have an upper limit on IN list
             // predicate size, then don't attempt any list
@@ -230,7 +225,8 @@ public class AggregateCalc  extends AbstractProfilingNestedUnknownCalc {
                 evaluator.getCatalogReader(),
                 evaluator.getMeasureCube());
         if (checkSize) {
-            checkIfAggregationSizeIsTooLarge(tupleList, SystemWideProperties.instance().MaxConstraints);
+            checkIfAggregationSizeIsTooLarge(tupleList,
+                evaluator.getCatalogReader().getContext().getConfig().maxConstraints());
         }
         return tupleList;
     }

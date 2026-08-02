@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.cache.CacheCalc;
 import org.eclipse.daanse.olap.common.ExpCacheDescriptorImpl;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 import org.slf4j.Logger;
@@ -74,7 +73,7 @@ public class RankFunDef extends AbstractFunctionDefinition {
       final TupleListCalc listCalc0 = compiler.compileList( listExp );
       Calc<?> listCalc1 = new RankedListCalc( listCalc0, tuple );
       final Calc<?> listCalc;
-      if ( SystemWideProperties.instance().EnableExpCache ) {
+      if ( compiler.getEvaluator().getCatalogReader().getContext().getConfig().enableExpCache() ) {
         final ExpCacheDescriptorImpl key = new ExpCacheDescriptorImpl( listExp, listCalc1, compiler.getEvaluator() );
         listCalc = new CacheCalc( listExp.getType(), key );
       } else {

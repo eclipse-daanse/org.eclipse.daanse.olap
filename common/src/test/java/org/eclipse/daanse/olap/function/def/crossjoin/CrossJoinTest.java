@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.Map;
 import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
 import org.eclipse.daanse.olap.api.Context;
@@ -63,7 +64,7 @@ import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.ArrayTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.UnaryTupleList;
 import org.eclipse.daanse.olap.common.ConfigConstants;
-import org.eclipse.daanse.olap.common.SystemWideProperties;
+import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
@@ -123,7 +124,6 @@ public class CrossJoinTest {
 
   @AfterEach
   protected void afterEach() throws Exception {
-	  SystemWideProperties.instance().populateInitial();
   }
 
   ////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,9 @@ public class CrossJoinTest {
         Statement statement = mock(Statement.class);
         Connection rolapConnection = mock(Connection.class);
         Context context = mock(Context.class);
-        when(context.getConfigValue(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL_DEFAULT_VALUE, Integer.class)).thenReturn(0);
+        // 0 switches the cancellation check off entirely.
+        when(context.getConfig()).thenReturn(new MapContextConfig(
+                () -> Map.of(ConfigConstants.CHECK_CANCEL_OR_TIMEOUT_INTERVAL, 0)));
         when(rolapConnection.getContext()).thenReturn(context);
         when(statement.getDaanseConnection()).thenReturn(rolapConnection);
         when(excMock.getDaanseStatement()).thenReturn(statement);

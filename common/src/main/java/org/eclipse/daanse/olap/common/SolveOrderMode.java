@@ -26,7 +26,7 @@ package org.eclipse.daanse.olap.common;
 
 /**
  * Strategies for applying solve order, exposed via the property
- * SystemWideProperties#SolveOrderMode.
+ * ConfigConstants#SOLVE_ORDER_MODE.
  */
 public enum SolveOrderMode {
 

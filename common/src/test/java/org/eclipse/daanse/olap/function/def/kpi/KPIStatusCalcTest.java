@@ -22,6 +22,7 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
@@ -34,6 +35,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
 import org.eclipse.daanse.olap.api.type.MemberType;
 import org.eclipse.daanse.olap.common.ConfigConstants;
+import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,8 +72,10 @@ class KPIStatusCalcTest {
         when(cube.getCatalog()).thenReturn(catalog);
         when(catalog.getInternalConnection()).thenReturn(connection);
         when(connection.getContext()).thenReturn(context);
-        when(context.getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS, true, Boolean.class)).thenReturn(true);
-        when(context.getConfigValue(ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY, false, Boolean.class)).thenReturn(true);
+        // The identifier parser reads these through Context.getConfig().
+        when(context.getConfig()).thenReturn(new MapContextConfig(() -> Map.of(
+                ConfigConstants.IGNORE_INVALID_MEMBERS, Boolean.TRUE,
+                ConfigConstants.IGNORE_INVALID_MEMBERS_DURING_QUERY, Boolean.TRUE)));
         when(evaluator.getCatalogReader()).thenReturn(catalogReader);
         when(catalogReader.getCalculatedMember(any())).thenReturn(expectedMember);
     }

@@ -25,7 +25,6 @@ package org.eclipse.daanse.olap.fun;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.daanse.olap.common.SystemWideProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +44,6 @@ class SortTest {
 
   @AfterEach
   public void afterEach() {
-    SystemWideProperties.instance().populateInitial();
   }
 
   @Test

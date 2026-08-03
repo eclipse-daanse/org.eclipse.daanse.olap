@@ -23,11 +23,23 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.daanse.mdx.model.api.expression.operation.EmptyOperationAtom;
-import org.eclipse.daanse.mdx.model.api.expression.operation.InternalOperationAtom;
-import org.eclipse.daanse.mdx.model.api.expression.operation.ParenthesesOperationAtom;
-import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.cwm.model.cwm.foundation.keysindexes.UniqueKey;
+import org.eclipse.daanse.cwm.model.cwm.objectmodel.behavioral.Parameter;
+import org.eclipse.daanse.cwm.model.cwm.objectmodel.core.BooleanExpression;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.CheckConstraint;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.Column;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.ForeignKey;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.PrimaryKey;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.Procedure;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.SQLIndex;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.SQLIndexColumn;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.Schema;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.Table;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.UniqueConstraint;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.View;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.enumerations.DeferrabilityType;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.util.Columns;
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.util.ForeignKeys;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.element.Catalog;
@@ -43,12 +55,10 @@ import org.eclipse.daanse.olap.api.element.StoredMeasure;
 import org.eclipse.daanse.olap.api.element.db.DatabaseColumn;
 import org.eclipse.daanse.olap.api.element.db.DatabaseSchema;
 import org.eclipse.daanse.olap.api.element.db.DatabaseTable;
-import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.result.Property;
 import org.eclipse.daanse.olap.api.result.Property.TypeFlag;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
-import org.eclipse.daanse.xmla.api.VarType;
 import org.eclipse.daanse.xmla.api.XmlaConstants;
 import org.eclipse.daanse.xmla.api.XmlaConstants.DBType;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -59,14 +69,12 @@ import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.HierarchyOriginEnum;
-import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
@@ -77,13 +85,24 @@ import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
+import org.eclipse.daanse.xmla.api.discover.dbschema.assertions.DbSchemaAssertionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.foreignkeys.DbSchemaForeignKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.indexes.DbSchemaIndexesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.primarykeys.DbSchemaPrimaryKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedureparameters.DbSchemaProcedureParametersResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedures.DbSchemaProceduresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableconstraints.DbSchemaTableConstraintsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.views.DbSchemaViewsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewtableusage.DbSchemaViewTableUsageResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.dimensions.MdSchemaDimensionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
@@ -93,13 +112,23 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRe
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.foreignkeys.DbSchemaForeignKeysResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.indexes.DbSchemaIndexesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.primarykeys.DbSchemaPrimaryKeysResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.procedureparameters.DbSchemaProcedureParametersResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.procedures.DbSchemaProceduresResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tableconstraints.DbSchemaTableConstraintsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.views.DbSchemaViewsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.viewtableusage.DbSchemaViewTableUsageResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesResponseRowR;
-import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsResponseRowR;
-import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.dimensions.MdSchemaDimensionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis.MdSchemaKpisResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsResponseRowR;
@@ -272,7 +301,9 @@ public class Utils {
             String schemaOwnerRequ) {
         return catalog.getDatabaseSchemas().stream()
                 .filter(dbs -> (schemaNameReq == null || dbs.getName().equals(schemaNameReq)))
-                .map(dbs -> new DbSchemaSchemataResponseRowR(catalog.getName(), dbs.getName(), "")).toList();
+                //TODO
+                .map(dbs -> new DbSchemaSchemataResponseRowR(catalog.getName(), dbs.getName(), "", Optional.empty(), Optional.empty(),
+                        Optional.empty())).toList();
     }
 
     static List<MdSchemaCubesResponseRow> getMdSchemaCubesResponseRow(Connection connection, Catalog catalog, Optional<String> schemaName,
@@ -1639,4 +1670,724 @@ public class Utils {
         }
         return measures;
     }
+
+    static List<DbSchemaAssertionsResponseRow> getDbSchemaAssertionsResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oConstraintName) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    static List<DbSchemaIndexesResponseRow> getDbSchemaIndexesResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oTableName, Optional<String> oIndexName,
+            Optional<String> oType) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaIndexesResponseRow(catalog.getName(), dbs, oTableName, oIndexName,  oType)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaIndexesResponseRow(catalog.getName(), dbs, oTableName, oIndexName,  oType)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaIndexesResponseRow> getDbSchemaIndexesResponseRow(String catalogName, Schema databaseSchema, Optional<String> oTableName,
+            Optional<String> oIndexName, Optional<String> oType) {
+        String databaseSchemaName  = databaseSchema.getName();
+        if (oIndexName.isPresent()) {
+            return databaseSchema.getOwnedElement().stream().filter(SQLIndex.class::isInstance)
+                    .map(SQLIndex.class::cast).toList().stream().filter(i -> i.getName().equals(oIndexName.get()))
+                .map(di -> getDbSchemaIndexesResponseRow(catalogName, databaseSchemaName, di, oTableName, oType)).flatMap(Collection::stream).toList();
+        } else {
+            return databaseSchema.getOwnedElement().stream().filter(SQLIndex.class::isInstance)
+                    .map(SQLIndex.class::cast).toList().stream()
+                .map(di -> getDbSchemaIndexesResponseRow(catalogName, databaseSchemaName, di, oTableName, oType)).flatMap(Collection::stream).toList();
+        }
+    }
+    
+    private static List<DbSchemaIndexesResponseRow> getDbSchemaIndexesResponseRow(String catalogName, String databaseSchemaName, SQLIndex index, Optional<String> oTableName, Optional<String> oType) {
+        return index.getIndexedFeature().stream().filter(SQLIndexColumn.class::isInstance)
+        .map(SQLIndexColumn.class::cast).toList().stream().map(sic -> new DbSchemaIndexesResponseRowR(Optional.of(catalogName), Optional.ofNullable(databaseSchemaName),
+                Optional.ofNullable(index.getSpannedClass().getName()), 
+                Optional.of(catalogName), Optional.ofNullable(databaseSchemaName), Optional.ofNullable(index.getName()), Optional.empty(),
+                Optional.ofNullable(index.isIsUnique()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
+                Optional.empty(), Optional.empty(), Optional.ofNullable(index.isAutoUpdate()), Optional.empty(),
+                Optional.empty(), Optional.ofNullable(sic.getFeature().getName()), Optional.empty(), Optional.empty(),
+                Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
+                Optional.empty()))
+        .map(DbSchemaIndexesResponseRow.class::cast)
+        .toList();
+    }
+
+    static List<DbSchemaProceduresResponseRow> getDbSchemaProceduresResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oProcedureName, Optional<String> oProcedureType) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaProceduresResponseRow(catalog.getName(), dbs, oProcedureName, oProcedureType)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaProceduresResponseRow(catalog.getName(), dbs, oProcedureName, oProcedureType)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaProceduresResponseRow> getDbSchemaProceduresResponseRow(String catalogName, Schema dbs,
+            Optional<String> oProcedureName, Optional<String> oProcedureType) {
+        if (oProcedureName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Procedure.class::isInstance)
+                    .map(Procedure.class::cast).toList().stream()
+                .filter(p -> (p.getName().equals(oProcedureName.get())))
+                .map(p -> getDbSchemaProceduresResponseRow(catalogName, dbs.getName(), p, oProcedureType)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Procedure.class::isInstance)
+                    .map(Procedure.class::cast).toList().stream()
+                    .map(p -> getDbSchemaProceduresResponseRow(catalogName, dbs.getName(), p, oProcedureType)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaProceduresResponseRow> getDbSchemaProceduresResponseRow(String catalogName, String dbSchemaName,  Procedure p,
+            Optional<String> oProcedureType) {
+        return List.of(new DbSchemaProceduresResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(dbSchemaName), Optional.ofNullable(p.getName()), 
+                Optional.ofNullable(p.getType() != null ? p.getType().getValue() : null), Optional.ofNullable(p.getBody() != null ? p.getBody().getBody() : null), Optional.ofNullable(p.getName()), Optional.empty(), Optional.empty()));
+    }
+
+    static List<DbSchemaProcedureParametersResponseRow> getDbSchemaProcedureParametersResponseRow(Catalog catalog, Optional<String> oSchemaName,
+            Optional<String> oProcedureName, Optional<String> oParameterName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaProcedureParametersResponseRow(catalog.getName(), dbs, oProcedureName, oParameterName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaProcedureParametersResponseRow(catalog.getName(), dbs, oProcedureName, oParameterName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaProcedureParametersResponseRow> getDbSchemaProcedureParametersResponseRow(String catalogName, Schema dbs,
+            Optional<String> oProcedureName, Optional<String> oParameterName) {
+        if (oProcedureName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Procedure.class::isInstance)
+                    .map(Procedure.class::cast).toList().stream()
+                .filter(p -> (p.getName().equals(oProcedureName.get())))
+                .map(p -> getDbSchemaProcedureParametersResponseRow(catalogName, dbs.getName(), p, oParameterName)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Procedure.class::isInstance)
+                    .map(Procedure.class::cast).toList().stream()
+                    .map(p -> getDbSchemaProcedureParametersResponseRow(catalogName, dbs.getName(), p, oParameterName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+    
+
+    private static List<DbSchemaProcedureParametersResponseRow> getDbSchemaProcedureParametersResponseRow(String catalogName, String schemaName, Procedure procedure,
+            Optional<String> oParameterName) {
+        if (oParameterName.isPresent()) {
+            return procedure.getParameter().stream()
+                .filter(p -> (p.getName().equals(oParameterName.get())))
+                .map(p -> getDbSchemaProcedureParametersResponseRow1(catalogName, schemaName, p.getName(), procedure.getParameter().indexOf(p), p)).toList();
+        } else {
+            return procedure.getParameter().stream()
+                    .map(p -> getDbSchemaProcedureParametersResponseRow1(catalogName, schemaName, p.getName(), procedure.getParameter().indexOf(p), p)).toList();
+
+        }
+    }
+
+    private static DbSchemaProcedureParametersResponseRow getDbSchemaProcedureParametersResponseRow1(String catalogName, String schemaName, String procedureName, Integer ordinalPosition, Parameter parameter) {
+        return new DbSchemaProcedureParametersResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(procedureName), Optional.ofNullable(parameter.getName()),
+                Optional.of(ordinalPosition), Optional.empty(), Optional.of(parameter.getDefaultValue() != null),
+                Optional.ofNullable(parameter.getDefaultValue() != null ? parameter.getDefaultValue().getBody() : null), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
+                Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    }
+
+    static List<DbSchemaViewsResponseRow> getDbSchemaViewsResponseRow(Catalog catalog, Optional<String> oSchemaName,
+            Optional<String> oTableName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaViewsResponseRow(catalog.getName(), dbs, oTableName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaViewsResponseRow(catalog.getName(), dbs, oTableName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaViewsResponseRow> getDbSchemaViewsResponseRow(String catalogName, Schema dbs, Optional<String> oTableName) {
+        if (oTableName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                .filter(v -> (v.getName().equals(oTableName.get())))
+                .map(v -> getDbSchemaViewsResponseRow(catalogName, dbs.getName(), v)).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                    .map(v -> getDbSchemaViewsResponseRow(catalogName, dbs.getName(), v)).toList();
+
+        }
+    }
+
+    private static DbSchemaViewsResponseRow getDbSchemaViewsResponseRow(String catalogName, String schemaName, View v) {
+        return new DbSchemaViewsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(v.getName()),
+                Optional.ofNullable(v.getQueryExpression() != null ? v.getQueryExpression().getBody() : null), Optional.ofNullable(v.isCheckOption()),
+                Optional.of(Boolean.valueOf(!v.isIsReadOnly())), Optional.ofNullable(v.getName()), Optional.empty(), Optional.empty());
+    }
+
+    static List<DbSchemaViewTableUsageResponseRow> getDbSchemaViewTableUsageResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oViewName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaViewTableUsageResponseRow(catalog.getName(), dbs, oViewName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaViewTableUsageResponseRow(catalog.getName(), dbs, oViewName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaViewTableUsageResponseRow> getDbSchemaViewTableUsageResponseRow(String catalogName, Schema dbs, Optional<String> oViewName) {
+        if (oViewName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                .filter(v -> (v.getName().equals(oViewName.get())))
+                .map(v -> getDbSchemaViewTableUsageResponseRow(catalogName, dbs.getName(), v)).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                    .map(v -> getDbSchemaViewTableUsageResponseRow(catalogName, dbs.getName(), v)).toList();
+
+        }
+    }
+
+    private static DbSchemaViewTableUsageResponseRow getDbSchemaViewTableUsageResponseRow(String catalogName, String schemaName, View v) {
+        return new DbSchemaViewTableUsageResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(v.getName()),
+                Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(v.getName()));
+    }
+
+    static List<DbSchemaViewColumnUsageResponseRow> getDbSchemaViewColumnUsageResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oViewName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaViewColumnUsageResponseRow(catalog.getName(), dbs, oViewName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaViewColumnUsageResponseRow(catalog.getName(), dbs, oViewName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+    
+    private static List<DbSchemaViewColumnUsageResponseRow> getDbSchemaViewColumnUsageResponseRow(String catalogName, Schema dbs, Optional<String> oViewName) {
+        if (oViewName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                .filter(v -> (v.getName().equals(oViewName.get())))
+                .map(v -> getDbSchemaViewColumnUsageResponseRow(catalogName, dbs.getName(), v)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(View.class::isInstance)
+                    .map(View.class::cast).toList().stream()
+                    .map(v -> getDbSchemaViewColumnUsageResponseRow(catalogName, dbs.getName(), v)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaViewColumnUsageResponseRow> getDbSchemaViewColumnUsageResponseRow(String catalogName, String schemaName, View v) {
+        return v.getFeature().stream().filter(Column.class::isInstance)
+        .map(Column.class::cast).toList().stream()
+        .map(c -> {
+                       final Optional<Table> oTable = Columns.tableOwner(c);
+                       final String tableName = oTable.isPresent() ? oTable.get().getName() : null;
+                       return new DbSchemaViewColumnUsageResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(v.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(tableName), Optional.ofNullable(c.getName()),
+                            Optional.empty(), Optional.empty());
+                })
+        .map(DbSchemaViewColumnUsageResponseRow.class::cast)
+        .toList();
+    }
+
+    static List<DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oTableCatalogName, Optional<String> oTableSchemaName,
+            Optional<String> oTableName, Optional<String> oConstraintName, Optional<String> oConstraintType) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaTableConstraintsResponseRow(catalog.getName(), dbs, oTableCatalogName, oTableSchemaName,
+                        oTableName, oConstraintName, oConstraintType)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaTableConstraintsResponseRow(catalog.getName(), dbs, oTableCatalogName, oTableSchemaName,
+                            oTableName, oConstraintName, oConstraintType)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsResponseRow(String catalogName, Schema dbs,
+            Optional<String> oTableCatalogName, Optional<String> oTableSchemaName, Optional<String> oTableName, Optional<String> oConstraintName,
+            Optional<String> oConstraintType) {
+        if (oTableName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                .filter(t -> (t.getName().equals(oTableName.get())))
+                .map(t -> getDbSchemaTableConstraintsResponseRow(catalogName, dbs.getName(), t, oConstraintName, oConstraintType)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                    .map(t -> getDbSchemaTableConstraintsResponseRow(catalogName, dbs.getName(), t, oConstraintName, oConstraintType)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsResponseRow(String catalogName, String scemaName, Table t,
+            Optional<String> oConstraintName, Optional<String> oConstraintType) {
+        List<DbSchemaTableConstraintsResponseRow> result = new ArrayList<DbSchemaTableConstraintsResponseRow>();
+        if (oConstraintType.isPresent()) {
+            String constraintType = oConstraintType.get();
+            switch (constraintType) {
+             case "PRIMARY KEY":
+                 result.addAll(getDbSchemaTableConstraintsPKResponseRow(catalogName, scemaName, t, oConstraintName));
+                 break;
+             case "UNIQUE":
+                 result.addAll(getDbSchemaTableConstraintsUniqueResponseRow(catalogName, scemaName, t, oConstraintName));
+                 break;
+             case "FOREIGN KEY":
+                 result.addAll(getDbSchemaTableConstraintsFKResponseRow(catalogName, scemaName, t, oConstraintName));
+                 break;
+             case "CHECK":
+                 result.addAll(getDbSchemaTableConstraintsCheckResponseRow(catalogName, scemaName, t, oConstraintName));
+                 break;
+            }
+        } else {
+            result.addAll(getDbSchemaTableConstraintsPKResponseRow(catalogName, scemaName, t, oConstraintName));
+            result.addAll(getDbSchemaTableConstraintsUniqueResponseRow(catalogName, scemaName, t, oConstraintName));
+            result.addAll(getDbSchemaTableConstraintsFKResponseRow(catalogName, scemaName, t, oConstraintName));
+            result.addAll(getDbSchemaTableConstraintsCheckResponseRow(catalogName, scemaName, t, oConstraintName));
+        }
+        return result;
+    }
+
+    private static Collection<? extends DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsCheckResponseRow(
+            String catalogName, String schemaName, Table t, Optional<String> oConstraintName) {
+        List<DbSchemaTableConstraintsResponseRow> result = new ArrayList<DbSchemaTableConstraintsResponseRow>();
+        if (oConstraintName.isPresent()) {
+            result.addAll(t.getConstraint().stream().filter(CheckConstraint.class::isInstance).map(CheckConstraint.class::cast).toList().stream().filter(c -> c.getName().equals(oConstraintName.get()))
+                    .map(c -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(c.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("CHECK"), getDeferrability(c.getDeferrability()),
+                            getInitiallyDeferred(c.getDeferrability()), Optional.ofNullable(c.getName())))
+                    .toList());
+            result.addAll(
+                    t.getFeature().stream()
+                        .filter(Column.class::isInstance)
+                        .map(Column.class::cast)
+                        .flatMap(column -> column.getConstraint().stream()
+                            .filter(CheckConstraint.class::isInstance)
+                            .map(CheckConstraint.class::cast)
+                            .filter(c -> oConstraintName.map(name -> c.getName().equals(name)).orElse(false))
+                            .map(c -> new DbSchemaTableConstraintsResponseRowR(
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(c.getName()),
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(t.getName()),
+                                Optional.of("CHECK"),
+                                getDeferrability(c.getDeferrability()),
+                                getInitiallyDeferred(c.getDeferrability()),
+                                Optional.ofNullable(c.getName())
+                            ))
+                        )
+                        .toList()
+                );
+        } else {
+            result.addAll(t.getConstraint().stream().filter(CheckConstraint.class::isInstance).map(CheckConstraint.class::cast).toList().stream()
+                    .map(c -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(c.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("CHECK"), getDeferrability(c.getDeferrability()),
+                            getInitiallyDeferred(c.getDeferrability()), Optional.ofNullable(c.getName())))
+                    .toList());
+            result.addAll(
+                    t.getFeature().stream()
+                        .filter(Column.class::isInstance)
+                        .map(Column.class::cast)
+                        .flatMap(column -> column.getConstraint().stream()
+                            .filter(CheckConstraint.class::isInstance)
+                            .map(CheckConstraint.class::cast)
+                            .map(c -> new DbSchemaTableConstraintsResponseRowR(
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(c.getName()),
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(t.getName()),
+                                Optional.of("CHECK"),
+                                getDeferrability(c.getDeferrability()),
+                                getInitiallyDeferred(c.getDeferrability()),
+                                Optional.ofNullable(c.getName())
+                            ))
+                        )
+                        .toList()
+                );
+        }
+        return result;
+    }
+
+    private static Optional<Boolean> getDeferrability(DeferrabilityType deferrability) {
+        return deferrability != null ? Optional.of(Boolean.TRUE) : Optional.of(Boolean.FALSE);
+    }
+    
+    private static Optional<Boolean> getInitiallyDeferred(DeferrabilityType deferrability) {
+        return deferrability != null ? Optional.of(deferrability.equals(DeferrabilityType.INITIALLY_DEFERRED) || deferrability.equals(DeferrabilityType.INITIALLY_IMMEDIATE)) : Optional.empty();
+    }
+
+    private static Collection<? extends DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsFKResponseRow(
+            String catalogName, String schemaName, Table t, Optional<String> oConstraintName) {
+        List<DbSchemaTableConstraintsResponseRow> result = new ArrayList<DbSchemaTableConstraintsResponseRow>();
+        if (oConstraintName.isPresent()) {
+            result.addAll(t.getOwnedElement().stream().filter(ForeignKey.class::isInstance).map(ForeignKey.class::cast).toList().stream().filter(pk -> pk.getName().equals(oConstraintName.get()))
+                    .map(fk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(fk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("FOREIGN KEY"), getDeferrability(fk.getDeferrability()),
+                            getInitiallyDeferred(fk.getDeferrability()), Optional.ofNullable(fk.getName())))
+                    .toList());
+        } else {
+            result.addAll(t.getConstraint().stream().filter(ForeignKey.class::isInstance).map(ForeignKey.class::cast).toList().stream()
+                    .map(fk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(fk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("FOREIGN KEY"), getDeferrability(fk.getDeferrability()),
+                            getInitiallyDeferred(fk.getDeferrability()), Optional.ofNullable(fk.getName())))
+                    .toList());
+        }
+        return result;
+    }
+
+    private static Collection<? extends DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsUniqueResponseRow(
+            String catalogName, String schemaName, Table t, Optional<String> oConstraintName) {
+        List<DbSchemaTableConstraintsResponseRow> result = new ArrayList<DbSchemaTableConstraintsResponseRow>();
+        if (oConstraintName.isPresent()) {
+            result.addAll(t.getOwnedElement().stream().filter(UniqueConstraint.class::isInstance).map(UniqueConstraint.class::cast).toList().stream().filter(pk -> pk.getName().equals(oConstraintName.get()))
+                    .map(uk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(uk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("UNIQUE"), getDeferrability(uk.getDeferrability()),
+                            getInitiallyDeferred(uk.getDeferrability()), Optional.ofNullable(uk.getName())))
+                    .toList());
+        } else {
+            result.addAll(t.getConstraint().stream().filter(UniqueConstraint.class::isInstance).map(UniqueConstraint.class::cast).toList().stream()
+                    .map(uk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(uk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("UNIQUE"), getDeferrability(uk.getDeferrability()),
+                            getInitiallyDeferred(uk.getDeferrability()), Optional.ofNullable(uk.getName())))
+                    .toList());
+        }
+        return result;
+    }
+
+    private static Collection<? extends DbSchemaTableConstraintsResponseRow> getDbSchemaTableConstraintsPKResponseRow(
+            String catalogName, String schemaName, Table t, Optional<String> oConstraintName) {
+        List<DbSchemaTableConstraintsResponseRow> result = new ArrayList<DbSchemaTableConstraintsResponseRow>();
+        if (oConstraintName.isPresent()) {
+            result.addAll(t.getOwnedElement().stream().filter(PrimaryKey.class::isInstance).map(PrimaryKey.class::cast).toList().stream().filter(pk -> pk.getName().equals(oConstraintName.get()))
+                    .map(pk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(pk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("PRIMARY KEY"), getDeferrability(pk.getDeferrability()),
+                            getInitiallyDeferred(pk.getDeferrability()), Optional.ofNullable(pk.getName())))
+                    .toList());
+        } else {
+            result.addAll(t.getConstraint().stream().filter(PrimaryKey.class::isInstance).map(PrimaryKey.class::cast).toList().stream()
+                    .map(pk -> new DbSchemaTableConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(pk.getName()),
+                            Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(t.getName()), Optional.of("PRIMARY KEY"), getDeferrability(pk.getDeferrability()),
+                            getInitiallyDeferred(pk.getDeferrability()), Optional.ofNullable(pk.getName())))
+                    .toList());
+        }
+        return result;
+    }
+
+    public static List<DbSchemaPrimaryKeysResponseRow> getDbSchemaPrimaryKeysResponseRow(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oTableName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaPrimaryKeysResponseRow(catalog.getName(), dbs, oTableName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaPrimaryKeysResponseRow(catalog.getName(), dbs, oTableName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaPrimaryKeysResponseRow> getDbSchemaPrimaryKeysResponseRow(String catalogName, Schema dbs, Optional<String> oTableName) {
+        if (oTableName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                .filter(t -> (t.getName().equals(oTableName.get())))
+                .map(t -> getDbSchemaPrimaryKeysResponseRow(catalogName, dbs.getName(), t)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                    .map(t -> getDbSchemaPrimaryKeysResponseRow(catalogName, dbs.getName(), t)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaPrimaryKeysResponseRow> getDbSchemaPrimaryKeysResponseRow(String catalogName, String schemaName, Table t) {
+        return t.getOwnedElement().stream()
+                .filter(PrimaryKey.class::isInstance)
+                .map(PrimaryKey.class::cast)
+                .flatMap(pk -> pk.getFeature().stream()
+                    .filter(Column.class::isInstance)
+                    .map(Column.class::cast)
+                    .map(c -> new DbSchemaPrimaryKeysResponseRowR(
+                        Optional.ofNullable(catalogName),
+                        Optional.ofNullable(schemaName),
+                        Optional.ofNullable(t.getName()),
+                        Optional.ofNullable(c.getName()),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.ofNullable(pk.getName())
+                    ))
+                ).map(DbSchemaPrimaryKeysResponseRow.class::cast)
+                .toList();
+    }
+
+    public static List<DbSchemaCheckConstraintsResponseRow> getDbSchemaCheckConstraints(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oConstraintName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaCheckConstraints(catalog.getName(), dbs, oConstraintName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaCheckConstraints(catalog.getName(), dbs, oConstraintName)).flatMap(Collection::stream).toList();
+        }
+    }
+
+    private static List<DbSchemaCheckConstraintsResponseRow> getDbSchemaCheckConstraints(String catalogName, Schema dbs, Optional<String> oConstraintName) {
+        return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                .map(Table.class::cast).toList().stream()
+                .map(t -> getDbSchemaCheckConstraints(catalogName, dbs.getName(), t, oConstraintName)).flatMap(Collection::stream).toList();
+    }
+
+    private static List<DbSchemaCheckConstraintsResponseRow> getDbSchemaCheckConstraints(String catalogName, String schemaName, Table t,
+            Optional<String> oConstraintName) {
+        List<DbSchemaCheckConstraintsResponseRow> result = new ArrayList<DbSchemaCheckConstraintsResponseRow>();
+        result.addAll(t.getConstraint().stream().filter(CheckConstraint.class::isInstance).map(CheckConstraint.class::cast).toList().stream()
+                .map(c -> new DbSchemaCheckConstraintsResponseRowR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName), Optional.ofNullable(c.getName()),
+                        Optional.ofNullable(c.getBody()  != null ? c.getBody().getBody() : null), Optional.of(c.getName())))
+                .toList());
+        result.addAll(
+                t.getFeature().stream()
+                .filter(Column.class::isInstance)
+                .map(Column.class::cast)
+                .flatMap(column -> column.getConstraint().stream()
+                    .filter(CheckConstraint.class::isInstance)
+                    .map(CheckConstraint.class::cast)
+                    .map(c -> {
+                        String bodyText = Optional.ofNullable(c.getBody())
+                            .map(BooleanExpression::getBody) 
+                            .orElse(null);
+                        return new DbSchemaCheckConstraintsResponseRowR(
+                            Optional.ofNullable(catalogName),
+                            Optional.ofNullable(schemaName),
+                            Optional.ofNullable(c.getName()),
+                            Optional.ofNullable(bodyText),
+                            Optional.of(c.getName())
+                        );
+                    })
+                )
+                .toList());
+        return result;
+    }
+
+    public static List<DbSchemaCheckConstraintsByTableResponseRow> getDbSchemaCheckConstraintsByTable(Catalog catalog,
+            Optional<String> oSchemaName, Optional<String> oConstraintName, Optional<String> oTableCatalogName,
+            Optional<String> oTableSchemaName, Optional<String> oTableName) {
+        if (oSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oSchemaName.get())))
+                .map(dbs -> getDbSchemaCheckConstraintsByTable(catalog.getName(), dbs, oConstraintName, oTableCatalogName, oTableSchemaName, oTableName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaCheckConstraintsByTable(catalog.getName(), dbs, oConstraintName, oTableCatalogName, oTableSchemaName, oTableName)).flatMap(Collection::stream).toList();
+        }
+    }
+
+    private static List<DbSchemaCheckConstraintsByTableResponseRow> getDbSchemaCheckConstraintsByTable(String catalogName, Schema dbs, Optional<String> oConstraintName,
+            Optional<String> oTableCatalogName, Optional<String> oTableSchemaName, Optional<String> oTableName) {
+        if (oTableName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                .filter(t -> (t.getName().equals(oTableName.get())))
+                .map(t -> getDbSchemaCheckConstraintsByTable(catalogName, dbs.getName(), t, oConstraintName)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                    .map(t -> getDbSchemaCheckConstraintsByTable(catalogName, dbs.getName(), t, oConstraintName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaCheckConstraintsByTableResponseRow> getDbSchemaCheckConstraintsByTable(String catalogName, String schemaName, Table t,
+            Optional<String> oConstraintName) {
+        List<DbSchemaCheckConstraintsByTableResponseRow> result = new ArrayList<DbSchemaCheckConstraintsByTableResponseRow>();
+        if (oConstraintName.isPresent()) {
+            result.addAll(t.getConstraint().stream().filter(CheckConstraint.class::isInstance).map(CheckConstraint.class::cast).toList().stream().filter(c -> c.getName().equals(oConstraintName.get()))
+                    .map(c -> {
+                        String bodyText = Optional.ofNullable(c.getBody())
+                                .map(BooleanExpression::getBody) 
+                                .orElse(null);
+                        return new DbSchemaCheckConstraintsByTableResponseRowR(
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(t.getName()),
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(c.getName()),
+                                Optional.ofNullable(bodyText),
+                                Optional.ofNullable(c.getName()));
+                        })
+                    .toList());
+            
+            result.addAll(
+                    t.getFeature().stream()
+                        .filter(Column.class::isInstance)
+                        .map(Column.class::cast)
+                        .flatMap(column -> column.getConstraint().stream()
+                            .filter(CheckConstraint.class::isInstance)
+                            .map(CheckConstraint.class::cast)
+                            .filter(c -> oConstraintName.map(name -> c.getName().equals(name)).orElse(false))
+                            .map(c -> {
+                                String bodyText = Optional.ofNullable(c.getBody())
+                                        .map(BooleanExpression::getBody) 
+                                        .orElse(null);
+                                return new DbSchemaCheckConstraintsByTableResponseRowR(
+                                        Optional.ofNullable(catalogName),
+                                        Optional.ofNullable(schemaName),
+                                        Optional.ofNullable(t.getName()),
+                                        Optional.ofNullable(catalogName),
+                                        Optional.ofNullable(schemaName),
+                                        Optional.ofNullable(c.getName()),
+                                        Optional.ofNullable(bodyText),
+                                        Optional.ofNullable(c.getName()));
+                                })
+                        )
+                        .toList()
+                );
+        } else {
+            result.addAll(t.getConstraint().stream().filter(CheckConstraint.class::isInstance).map(CheckConstraint.class::cast).toList().stream()
+                    .map(c -> {
+                        String bodyText = Optional.ofNullable(c.getBody())
+                                .map(BooleanExpression::getBody) 
+                                .orElse(null);
+                        return new DbSchemaCheckConstraintsByTableResponseRowR(
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(t.getName()),
+                                Optional.ofNullable(catalogName),
+                                Optional.ofNullable(schemaName),
+                                Optional.ofNullable(c.getName()),
+                                Optional.ofNullable(bodyText),
+                                Optional.ofNullable(c.getName()));
+                        })
+                    .toList());
+            
+            result.addAll(
+                    t.getFeature().stream()
+                        .filter(Column.class::isInstance)
+                        .map(Column.class::cast)
+                        .flatMap(column -> column.getConstraint().stream()
+                            .filter(CheckConstraint.class::isInstance)
+                            .map(CheckConstraint.class::cast)
+                            .map(c -> {
+                                String bodyText = Optional.ofNullable(c.getBody())
+                                        .map(BooleanExpression::getBody) 
+                                        .orElse(null);
+                                return new DbSchemaCheckConstraintsByTableResponseRowR(
+                                        Optional.ofNullable(catalogName),
+                                        Optional.ofNullable(schemaName),
+                                        Optional.ofNullable(t.getName()),
+                                        Optional.ofNullable(catalogName),
+                                        Optional.ofNullable(schemaName),
+                                        Optional.ofNullable(c.getName()),
+                                        Optional.ofNullable(bodyText),
+                                        Optional.ofNullable(c.getName()));
+                                })
+                        )
+                        .toList()
+                );
+        }
+        return result;
+    }
+
+    public static List<DbSchemaForeignKeysResponseRow> getDbSchemaForeignKeys(Catalog catalog,
+            Optional<String> oFkSchemaName, Optional<String> oFkTableName, Optional<String> oPkCatalogName,
+            Optional<String> oPkSchemaName, Optional<String> oPkTableName) {
+        if (oFkSchemaName.isPresent()) {
+            return catalog.getRelationalSchemas().stream()
+                .filter(dbs -> (dbs.getName().equals(oFkSchemaName.get())))
+                .map(dbs -> getDbSchemaForeignKeys(catalog.getName(), dbs, oFkTableName, oPkCatalogName,
+                        oPkSchemaName, oPkTableName)).flatMap(Collection::stream).toList();
+        } else {
+            return catalog.getRelationalSchemas().stream()
+                    .map(dbs -> getDbSchemaForeignKeys(catalog.getName(), dbs, oFkTableName, oPkCatalogName,
+                            oPkSchemaName, oPkTableName)).flatMap(Collection::stream).toList();
+        }
+    }
+
+    private static List<DbSchemaForeignKeysResponseRow> getDbSchemaForeignKeys(String catalogName, Schema dbs, Optional<String> oFkTableName,
+            Optional<String> oPkCatalogName, Optional<String> oPkSchemaName, Optional<String> oPkTableName) {
+        if (oFkTableName.isPresent()) {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                .filter(t -> (t.getName().equals(oFkTableName.get())))
+                .map(t -> getDbSchemaForeignKeys(catalogName, dbs.getName(), t, oPkCatalogName, oPkSchemaName, oPkTableName)).flatMap(Collection::stream).toList();
+        } else {
+            return dbs.getOwnedElement().stream().filter(Table.class::isInstance)
+                    .map(Table.class::cast).toList().stream()
+                    .map(t -> getDbSchemaForeignKeys(catalogName, dbs.getName(), t, oPkCatalogName, oPkSchemaName, oPkTableName)).flatMap(Collection::stream).toList();
+
+        }
+    }
+
+    private static List<DbSchemaForeignKeysResponseRow> getDbSchemaForeignKeys(String catalogName, String schemaName, Table t,
+            Optional<String> oPkCatalogName, Optional<String> oPkSchemaName, Optional<String> oPkTableName) {
+         return t.getOwnedElement().stream()
+                .filter(ForeignKey.class::isInstance)
+                .map(ForeignKey.class::cast)
+                .collect(Collectors.toList()).stream().map(fk -> getDbSchemaForeignKeys(catalogName, schemaName, t.getName(), fk,
+            oPkCatalogName, oPkSchemaName, oPkTableName)).flatMap(Collection::stream).toList();
+    }
+
+    private static List<DbSchemaForeignKeysResponseRow> getDbSchemaForeignKeys(String catalogName, String schemaName, String fktableName, ForeignKey fk,
+            Optional<String> oPkCatalogName, Optional<String> oPkSchemaName, Optional<String> oPkTableName) {
+        Optional<UniqueKey> oPk = ForeignKeys.targetUniqueKey(fk);
+        Optional<Table> oPkTable = ForeignKeys.targetTable(fk);
+        Optional<String> oPkTN  = oPkTable.isPresent() ? Optional.ofNullable(oPkTable.get().getName()) : Optional.empty();
+        List<Column> fkColumns = fk.getFeature().stream().filter(Column.class::isInstance).map(Column.class::cast).toList();
+        List<Column> pkColumns = oPk.get().getFeature().stream().filter(Column.class::isInstance).map(Column.class::cast).toList();
+        if (pkColumns.size() != fkColumns.size()) {
+            throw new RuntimeException("fk columns size should be same with pk columns size for " + fk.getName());
+        }
+        List<DbSchemaForeignKeysResponseRow> result = new ArrayList<DbSchemaForeignKeysResponseRow>();
+        for (int i = 0; i < fkColumns.size(); i++) {
+            result.add(new DbSchemaForeignKeysResponseRowR(
+                    Optional.ofNullable(catalogName),
+                    Optional.ofNullable(schemaName),
+                    oPkTN,
+                    Optional.ofNullable(pkColumns.get(i).getName()),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.ofNullable(catalogName),
+                    Optional.ofNullable(schemaName),
+                    Optional.ofNullable(fktableName),
+                    Optional.ofNullable(fkColumns.get(i).getName()),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.of(Long.valueOf(i)),
+                    Optional.ofNullable(fk.getUpdateRule() != null ? fk.getUpdateRule().getLiteral() : null),
+                    Optional.ofNullable(fk.getDeleteRule() !=null ? fk.getDeleteRule().getLiteral() : null),
+                    Optional.ofNullable(oPk.get().getName()),
+                    Optional.ofNullable(fk.getName()),
+                    Optional.ofNullable( fk.getDeferrability() != null ? fk.getDeferrability().getValue() : null)
+                    ));
+        }
+        return result;
+    }
+
 }
+    

@@ -17,6 +17,7 @@ import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getDbSchemaColu
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getDbSchemaSchemataResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getDbSchemaSourceTablesResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getDbSchemaTablesInfoResponseRow;
+import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getDbSchemaAssertionsResponseRow;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.getRoles;
 import static org.eclipse.daanse.olap.xmla.bridge.discover.Utils.isDataTypeCond;
 
@@ -34,20 +35,74 @@ import org.eclipse.daanse.xmla.api.XmlaConstants;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
+import org.eclipse.daanse.xmla.api.discover.dbschema.assertions.DbSchemaAssertionsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.assertions.DbSchemaAssertionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.charactersets.DbSchemaCharacterSetsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.charactersets.DbSchemaCharacterSetsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.collations.DbSchemaCollationsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.collations.DbSchemaCollationsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columndomainusage.DbSchemaColumnDomainUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columndomainusage.DbSchemaColumnDomainUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columnprivileges.DbSchemaColumnPrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columnprivileges.DbSchemaColumnPrivilegesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constraintcolumnusage.DbSchemaConstraintColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constraintcolumnusage.DbSchemaConstraintColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constrainttableusage.DbSchemaConstraintTableUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constrainttableusage.DbSchemaConstraintTableUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.foreignkeys.DbSchemaForeignKeysRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.foreignkeys.DbSchemaForeignKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.indexes.DbSchemaIndexesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.indexes.DbSchemaIndexesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.keycolumnusage.DbSchemaKeyColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.keycolumnusage.DbSchemaKeyColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.primarykeys.DbSchemaPrimaryKeysRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.primarykeys.DbSchemaPrimaryKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedurecolumns.DbSchemaProcedureColumnsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedurecolumns.DbSchemaProcedureColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedureparameters.DbSchemaProcedureParametersRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedureparameters.DbSchemaProcedureParametersResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedures.DbSchemaProceduresRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedures.DbSchemaProceduresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.referentialconstraints.DbSchemaReferentialConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.referentialconstraints.DbSchemaReferentialConstraintsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sqllanguages.DbSchemaSqlLanguagesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sqllanguages.DbSchemaSqlLanguagesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.statistics.DbSchemaStatisticsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.statistics.DbSchemaStatisticsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableconstraints.DbSchemaTableConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableconstraints.DbSchemaTableConstraintsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableprivileges.DbSchemaTablePrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableprivileges.DbSchemaTablePrivilegesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablestatistics.DbSchemaTableStatisticsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablestatistics.DbSchemaTableStatisticsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.translations.DbSchemaTranslationsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.translations.DbSchemaTranslationsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.usageprivileges.DbSchemaUsagePrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.usageprivileges.DbSchemaUsagePrivilegesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.views.DbSchemaViewsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.views.DbSchemaViewsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewtableusage.DbSchemaViewTableUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewtableusage.DbSchemaViewTableUsageResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRowR;
 
@@ -250,6 +305,338 @@ public class DBSchemaDiscoverService {
         } else {
             return contextsListSupplyer.get(metaData.sessionId()).stream()
                     .map(c -> getDbSchemaTablesInfoResponseRow(c, oSchemaName, tableName, tableType))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaAssertionsResponseRow> dbSchemaAssertions(DbSchemaAssertionsRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().constraintCatalog();
+        Optional<String> oSchemaName = request.restrictions().constraintSchema();
+        Optional<String> oConstraintName = request.restrictions().constraintName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return getDbSchemaAssertionsResponseRow(oCatalog.get(), oSchemaName, oConstraintName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> getDbSchemaAssertionsResponseRow(c, oSchemaName, oConstraintName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaCharacterSetsResponseRow> dbSchemaCharacterSets(DbSchemaCharacterSetsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaCheckConstraintsResponseRow> dbSchemaCheckConstraints(DbSchemaCheckConstraintsRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().constraintCatalog();
+        Optional<String> oSchemaName = request.restrictions().constraintSchema();
+        Optional<String> oConstraintName = request.restrictions().constraintName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaCheckConstraints(oCatalog.get(), oSchemaName, oConstraintName);
+            } else {
+                return List.of();
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaCheckConstraints(c, oSchemaName, oConstraintName))
+                    .flatMap(Collection::stream).toList();
+        }
+    }
+
+    public List<DbSchemaCheckConstraintsByTableResponseRow> dbSchemaCheckConstraintsByTable(
+            DbSchemaCheckConstraintsByTableRequest request, RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().constraintCatalog();
+        Optional<String> oSchemaName = request.restrictions().constraintSchema();
+        Optional<String> oConstraintName = request.restrictions().constraintName();
+        Optional<String> oTableSchemaName = request.restrictions().tableSchema();
+        Optional<String> oTableCatalogName = request.restrictions().tableCatalog();
+        Optional<String> oTableName = request.restrictions().tableName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaCheckConstraintsByTable(oCatalog.get(), oSchemaName, oConstraintName, oTableCatalogName, oTableSchemaName, oTableName);
+            } else {
+                return List.of();
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaCheckConstraintsByTable(c, oSchemaName, oConstraintName, oTableCatalogName, oTableSchemaName, oTableName))
+                    .flatMap(Collection::stream).toList();
+        }
+    }
+
+    public List<DbSchemaCollationsResponseRow> dbSchemaCollations(DbSchemaCollationsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaColumnDomainUsageResponseRow> dbSchemaColumnDomainUsage(
+            DbSchemaColumnDomainUsageRequest request, RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaColumnPrivilegesResponseRow> dbSchemaColumnPrivileges(DbSchemaColumnPrivilegesRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaConstraintColumnUsageResponseRow> dbSchemaConstraintColumnUsage(
+            DbSchemaConstraintColumnUsageRequest request, RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaConstraintTableUsageResponseRow> dbSchemaConstraintTableUsage(
+            DbSchemaConstraintTableUsageRequest request, RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaForeignKeysResponseRow> dbDbSchemaForeignKeys(DbSchemaForeignKeysRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oFkCatalogName = request.restrictions().fkTableCatalog();
+        Optional<String> oFkSchemaName = request.restrictions().fkTableSchema();
+        Optional<String> oFkTableName = request.restrictions().fkTableName();
+        Optional<String> oPkCatalogName = request.restrictions().pkTableCatalog();
+        Optional<String> oPkSchemaName = request.restrictions().pkTableSchema();
+        Optional<String> oPkTableName = request.restrictions().pkTableName();
+        if (oFkCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oFkCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaForeignKeys(oCatalog.get(), oFkSchemaName, oFkTableName, oPkCatalogName, oPkSchemaName, oPkTableName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaForeignKeys(c, oFkSchemaName, oFkTableName, oPkCatalogName, oPkSchemaName, oPkTableName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaIndexesResponseRow> dbSchemaIndexes(DbSchemaIndexesRequest request, RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().tableCatalog();
+        Optional<String> oSchemaName = request.restrictions().tableSchema();
+        Optional<String> oIndexName = request.restrictions().indexName();
+        Optional<String> oTableName = request.restrictions().tableName();
+        Optional<String> oType = request.restrictions().type();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaIndexesResponseRow(oCatalog.get(), oSchemaName, oTableName, oIndexName, oType);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaIndexesResponseRow(c, oSchemaName, oTableName, oIndexName, oType))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaKeyColumnUsageResponseRow> dbSchemaKeyColumnUsage(DbSchemaKeyColumnUsageRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaPrimaryKeysResponseRow> dbSchemaPrimaryKeys(DbSchemaPrimaryKeysRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().tableCatalog();
+        Optional<String> oSchemaName = request.restrictions().tableSchema();
+        Optional<String> oTableName = request.restrictions().tableName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaPrimaryKeysResponseRow(oCatalog.get(), oSchemaName, oTableName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaPrimaryKeysResponseRow(c, oSchemaName, oTableName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaProcedureColumnsResponseRow> dbSchemaProcedureColumns(DbSchemaProcedureColumnsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaProcedureParametersResponseRow> dbSchemaProcedureParameters(
+            DbSchemaProcedureParametersRequest request, RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().procedureCatalog();
+        Optional<String> oSchemaName = request.restrictions().procedureSchema();
+        Optional<String> oProcedureName = request.restrictions().procedureName();
+        Optional<String> oParameterName = request.restrictions().parameterName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaProcedureParametersResponseRow(oCatalog.get(), oSchemaName, oProcedureName, oParameterName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaProcedureParametersResponseRow(c, oSchemaName, oProcedureName, oParameterName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaProceduresResponseRow> dbSchemaProcedures(DbSchemaProceduresRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().procedureCatalog();
+        Optional<String> oSchemaName = request.restrictions().procedureSchema();
+        Optional<String> oProcedureName = request.restrictions().procedureName();
+        Optional<String> oProcedureType = request.restrictions().procedureType();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaProceduresResponseRow(oCatalog.get(), oSchemaName, oProcedureName, oProcedureType);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaProceduresResponseRow(c, oSchemaName, oProcedureName, oProcedureType))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaReferentialConstraintsResponseRow> dbSchemaReferentialConstraints(
+            DbSchemaReferentialConstraintsRequest request, RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaSqlLanguagesResponseRow> dbSchemaSqlLanguages(DbSchemaSqlLanguagesRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaStatisticsResponseRow> dbSchemaStatistics(DbSchemaStatisticsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaTableConstraintsResponseRow> dbSchemaTableConstraints(DbSchemaTableConstraintsRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().constraintCatalog();
+        Optional<String> oSchemaName = request.restrictions().constraintSchema();
+        Optional<String> oTableCatalogName = request.restrictions().tableCatalog();
+        Optional<String> oTableSchemaName = request.restrictions().tableSchema();
+        Optional<String> oConstraintName = request.restrictions().constraintName();
+        Optional<String> oTableName = request.restrictions().tableName();
+        Optional<String> oConstraintType = request.restrictions().constraintType();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaTableConstraintsResponseRow(oCatalog.get(), oSchemaName, oTableCatalogName, oTableSchemaName, oTableName, oConstraintName, oConstraintType);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaTableConstraintsResponseRow(c, oSchemaName, oTableCatalogName, oTableSchemaName, oTableName, oConstraintName, oConstraintType))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaTablePrivilegesResponseRow> dbSchemaTablePrivileges(DbSchemaTablePrivilegesRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaTableStatisticsResponseRow> dbSchemaTableStatistics(DbSchemaTableStatisticsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaTranslationsResponseRow> dbSchemaTranslations(DbSchemaTranslationsRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaUsagePrivilegesResponseRow> dbSchemaUsagePrivileges(DbSchemaUsagePrivilegesRequest request,
+            RequestMetaData metaData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<DbSchemaViewColumnUsageResponseRow> dbSchemaViewColumnUsage(DbSchemaViewColumnUsageRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().viewCatalog();
+        Optional<String> oSchemaName = request.restrictions().viewSchema();
+        Optional<String> oViewName = request.restrictions().viewName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaViewColumnUsageResponseRow(oCatalog.get(), oSchemaName, oViewName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaViewColumnUsageResponseRow(c, oSchemaName, oViewName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaViewTableUsageResponseRow> dbSchemaViewTableUsage(DbSchemaViewTableUsageRequest request,
+            RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().viewCatalog();
+        Optional<String> oSchemaName = request.restrictions().viewSchema();
+        Optional<String> oViewName = request.restrictions().viewName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaViewTableUsageResponseRow(oCatalog.get(), oSchemaName, oViewName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaViewTableUsageResponseRow(c, oSchemaName, oViewName))
+                    .flatMap(Collection::stream).toList();
+        }
+        return List.of();
+    }
+
+    public List<DbSchemaViewsResponseRow> dbSchemaViews(DbSchemaViewsRequest request, RequestMetaData metaData) {
+        Optional<String> oCatalogName = request.restrictions().tableCatalog();
+        Optional<String> oSchemaName = request.restrictions().tableSchema();
+        Optional<String> oTableName = request.restrictions().tableName();
+        if (oCatalogName.isPresent()) {
+            Optional<Catalog> oCatalog = oCatalogName
+                    .flatMap(name -> contextsListSupplyer.tryGetFirstByName(name, metaData.sessionId()));
+            if (oCatalog.isPresent()) {
+                return Utils.getDbSchemaViewsResponseRow(oCatalog.get(), oSchemaName, oTableName);
+            }
+        } else {
+            return contextsListSupplyer.get(metaData.sessionId()).stream()
+                    .map(c -> Utils.getDbSchemaViewsResponseRow(c, oSchemaName, oTableName))
                     .flatMap(Collection::stream).toList();
         }
         return List.of();

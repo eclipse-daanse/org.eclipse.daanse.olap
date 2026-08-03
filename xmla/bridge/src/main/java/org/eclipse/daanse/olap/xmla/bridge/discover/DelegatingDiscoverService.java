@@ -21,20 +21,74 @@ import org.eclipse.daanse.olap.xmla.bridge.ContextListSupplyer;
 import org.eclipse.daanse.xmla.api.RequestMetaData;
 import org.eclipse.daanse.xmla.api.UserRolePrincipal;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
+import org.eclipse.daanse.xmla.api.discover.dbschema.assertions.DbSchemaAssertionsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.assertions.DbSchemaAssertionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.charactersets.DbSchemaCharacterSetsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.charactersets.DbSchemaCharacterSetsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraints.DbSchemaCheckConstraintsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.checkconstraintsbytable.DbSchemaCheckConstraintsByTableResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.collations.DbSchemaCollationsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.collations.DbSchemaCollationsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columndomainusage.DbSchemaColumnDomainUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columndomainusage.DbSchemaColumnDomainUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columnprivileges.DbSchemaColumnPrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columnprivileges.DbSchemaColumnPrivilegesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constraintcolumnusage.DbSchemaConstraintColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constraintcolumnusage.DbSchemaConstraintColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constrainttableusage.DbSchemaConstraintTableUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.constrainttableusage.DbSchemaConstraintTableUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.foreignkeys.DbSchemaForeignKeysRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.foreignkeys.DbSchemaForeignKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.indexes.DbSchemaIndexesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.indexes.DbSchemaIndexesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.keycolumnusage.DbSchemaKeyColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.keycolumnusage.DbSchemaKeyColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.primarykeys.DbSchemaPrimaryKeysRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.primarykeys.DbSchemaPrimaryKeysResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedurecolumns.DbSchemaProcedureColumnsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedurecolumns.DbSchemaProcedureColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedureparameters.DbSchemaProcedureParametersRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedureparameters.DbSchemaProcedureParametersResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedures.DbSchemaProceduresRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.procedures.DbSchemaProceduresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.referentialconstraints.DbSchemaReferentialConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.referentialconstraints.DbSchemaReferentialConstraintsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sqllanguages.DbSchemaSqlLanguagesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sqllanguages.DbSchemaSqlLanguagesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.statistics.DbSchemaStatisticsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.statistics.DbSchemaStatisticsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableconstraints.DbSchemaTableConstraintsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableconstraints.DbSchemaTableConstraintsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableprivileges.DbSchemaTablePrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tableprivileges.DbSchemaTablePrivilegesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablestatistics.DbSchemaTableStatisticsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablestatistics.DbSchemaTableStatisticsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.translations.DbSchemaTranslationsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.translations.DbSchemaTranslationsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.usageprivileges.DbSchemaUsagePrivilegesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.usageprivileges.DbSchemaUsagePrivilegesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewcolumnusage.DbSchemaViewColumnUsageResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.views.DbSchemaViewsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.views.DbSchemaViewsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewtableusage.DbSchemaViewTableUsageRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.viewtableusage.DbSchemaViewTableUsageResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.csdlmetadata.DiscoverCsdlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
@@ -275,6 +329,168 @@ public class DelegatingDiscoverService implements DiscoverService {
             RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
 
         return otherSchemaService.csdlMetaData(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaAssertionsResponseRow> dbSchemaAssertions(DbSchemaAssertionsRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaAssertions(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaCharacterSetsResponseRow> dbSchemaCharacterSets(DbSchemaCharacterSetsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaCharacterSets(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaCheckConstraintsResponseRow> dbSchemaCheckConstraints(DbSchemaCheckConstraintsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaCheckConstraints(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaCheckConstraintsByTableResponseRow> dbSchemaCheckConstraintsByTable(
+            DbSchemaCheckConstraintsByTableRequest request, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaCheckConstraintsByTable(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaCollationsResponseRow> dbSchemaCollations(DbSchemaCollationsRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaCollations(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaColumnDomainUsageResponseRow> dbSchemaColumnDomainUsage(DbSchemaColumnDomainUsageRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaColumnDomainUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaColumnPrivilegesResponseRow> dbSchemaColumnPrivileges(DbSchemaColumnPrivilegesRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaColumnPrivileges(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaConstraintColumnUsageResponseRow> dbSchemaConstraintColumnUsage(
+            DbSchemaConstraintColumnUsageRequest request, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaConstraintColumnUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaConstraintTableUsageResponseRow> dbSchemaConstraintTableUsage(
+            DbSchemaConstraintTableUsageRequest request, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaConstraintTableUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaForeignKeysResponseRow> dbSchemaForeignKeys(DbSchemaForeignKeysRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaForeignKeys(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaIndexesResponseRow> dbSchemaIndexes(DbSchemaIndexesRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaIndexes(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaKeyColumnUsageResponseRow> dbSchemaKeyColumnUsage(DbSchemaKeyColumnUsageRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+            return dbSchemaService.dbSchemaKeyColumnUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaPrimaryKeysResponseRow> dbSchemaPrimaryKeys(DbSchemaPrimaryKeysRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaPrimaryKeys(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaProcedureColumnsResponseRow> dbSchemaProcedureColumns(DbSchemaProcedureColumnsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaProcedureColumns(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaProcedureParametersResponseRow> dbSchemaProcedureParameters(
+            DbSchemaProcedureParametersRequest request, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaProcedureParameters(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaProceduresResponseRow> dbSchemaProcedures(DbSchemaProceduresRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaProcedures(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaReferentialConstraintsResponseRow> dbSchemaReferentialConstraints(
+            DbSchemaReferentialConstraintsRequest request, RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaReferentialConstraints(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaSqlLanguagesResponseRow> dbSchemaSqlLanguages(DbSchemaSqlLanguagesRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaSqlLanguages(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaStatisticsResponseRow> dbSchemaStatistics(DbSchemaStatisticsRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaStatistics(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaTableConstraintsResponseRow> dbSchemaTableConstraints(DbSchemaTableConstraintsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaTableConstraints(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaTablePrivilegesResponseRow> dbSchemaTablePrivileges(DbSchemaTablePrivilegesRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaTablePrivileges(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaTableStatisticsResponseRow> dbSchemaTableStatistics(DbSchemaTableStatisticsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaTableStatistics(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaTranslationsResponseRow> dbSchemaTranslations(DbSchemaTranslationsRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaTranslations(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaUsagePrivilegesResponseRow> dbSchemaUsagePrivileges(DbSchemaUsagePrivilegesRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaUsagePrivileges(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaViewColumnUsageResponseRow> dbSchemaViewColumnUsage(DbSchemaViewColumnUsageRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaViewColumnUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaViewTableUsageResponseRow> dbSchemaViewTableUsage(DbSchemaViewTableUsageRequest request,
+            RequestMetaData metaData, UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaViewTableUsage(request, metaData);
+    }
+
+    @Override
+    public List<DbSchemaViewsResponseRow> dbSchemaViews(DbSchemaViewsRequest request, RequestMetaData metaData,
+            UserRolePrincipal userRolePrincipal) {
+        return dbSchemaService.dbSchemaViews(request, metaData);
     }
 
 }

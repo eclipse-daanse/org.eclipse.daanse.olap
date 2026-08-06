@@ -32,6 +32,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.daanse.cwm.model.cwm.resource.relational.Schema;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
@@ -122,4 +123,6 @@ public interface Catalog extends MetaElement {
     Connection getInternalConnection();
 
     NamedSet getNamedSet(IdentifierSegment segment);
+
+    List<Schema> getRelationalSchemas();
 }

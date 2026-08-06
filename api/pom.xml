@@ -54,5 +54,52 @@
 			<artifactId>org.eclipse.daanse.mdx.model.api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!--dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.foundation.businessinformation</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.foundation.datatypes</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.foundation.keysindexes</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.objectmodel.behavioral</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency-->
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.objectmodel.core</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.resource.relational</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!--dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.cwm.model.cwm.objectmodel.instance</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency!-->
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.ecore</artifactId>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -21,6 +21,7 @@ import java.util.concurrent.Semaphore;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.dmv.parser.api.DmvParserProvider;
 import org.eclipse.daanse.mdx.parser.api.MdxParserProvider;
 import org.eclipse.daanse.olap.api.agg.AggregationFactory;
 import org.eclipse.daanse.olap.api.aggregator.CustomAggregatorFactory;
@@ -173,6 +174,13 @@ public interface Context<C extends Connection> {
     FunctionService getFunctionService();
 
     MdxParserProvider getMdxParserProvider();
+
+    /**
+     * The parser for DMV statements ({@code SELECT ... FROM $SYSTEM.<rowset>}) - a language
+     * of its own, with its own parser service. Empty when no DMV parser is installed; a DMV
+     * query is then refused with that reason instead of being guessed at by other parsers.
+     */
+    Optional<DmvParserProvider> getDmvParserProvider();
 
     Optional<SqlGuardFactory> getSqlGuardFactory();
 

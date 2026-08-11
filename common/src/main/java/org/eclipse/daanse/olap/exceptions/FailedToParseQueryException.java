@@ -20,9 +20,18 @@ import org.eclipse.daanse.olap.api.exception.OlapRuntimeException;
 @SuppressWarnings("serial")
 public class FailedToParseQueryException extends OlapRuntimeException {
 
-	private final static String failedToParseQuery = "Failed to parse query ''{0}''";
+	private final static String failedToParseQuery = "Failed to parse query ''{0}'': {1}";
 
 	public FailedToParseQueryException(String query, Throwable e) {
-		super(MessageFormat.format(failedToParseQuery, query), e);
+		// The cause's message is part of this message: the reader of a fault sees only the
+		// outermost text, and "failed to parse" without the why hides the actual error.
+		super(MessageFormat.format(failedToParseQuery, query, reasonOf(e)), e);
+	}
+
+	private static String reasonOf(Throwable e) {
+		if (e == null || e.getMessage() == null || e.getMessage().isBlank()) {
+			return "no reason given";
+		}
+		return e.getMessage();
 	}
 }

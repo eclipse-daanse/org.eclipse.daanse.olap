@@ -25,7 +25,6 @@ import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.getExpressi
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
@@ -37,7 +36,6 @@ import org.eclipse.daanse.mdx.model.api.select.Allocation;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
-import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -49,7 +47,6 @@ import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
-import org.eclipse.daanse.olap.query.component.DmvQueryImpl;
 import org.eclipse.daanse.olap.query.component.DrillThroughImpl;
 import org.eclipse.daanse.olap.query.component.ExplainImpl;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
@@ -65,7 +62,6 @@ public class QueryProviderImpl implements QueryProvider {
         case SelectStatement select -> createQuery(statement, select, strictValidation);
         case DrillthroughStatement drillthrougt -> createDrillThrough(statement, drillthrougt, strictValidation);
         case ExplainStatement explain -> createExplain(statement, explain, strictValidation);
-        case DMVStatement dmv -> createDMV(dmv);
         case RefreshStatement refresh -> createRefresh(refresh);
         case UpdateStatement update -> createUpdate(update);
         };
@@ -94,17 +90,6 @@ public class QueryProviderImpl implements QueryProvider {
         Allocation allocation = updateClause.allocation();
         Expression weight = MdxToQueryConverter.getExpression(updateClause.weight().get());
         return new UpdateImpl.UpdateClauseImpl(tuple, value, allocation, weight);
-    }
-
-    @Override
-    public DmvQuery createDMV(DMVStatement dmvStatement) {
-        String tableName = convertName(dmvStatement.table());
-        List<String> columns = new ArrayList<>();
-        if (dmvStatement.columns() != null) {
-            dmvStatement.columns().forEach(c -> columns.addAll(convertColumns(c.objectIdentifiers())));
-        }
-        Expression whereExpression = MdxToQueryConverter.getExpression(dmvStatement.where().get());
-        return new DmvQueryImpl(tableName, columns, whereExpression);
     }
 
     @Override

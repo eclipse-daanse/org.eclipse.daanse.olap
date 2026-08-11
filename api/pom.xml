@@ -41,6 +41,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.dmv.model.api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.dmv.parser.api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
 			<artifactId>org.eclipse.daanse.mdx.parser.api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

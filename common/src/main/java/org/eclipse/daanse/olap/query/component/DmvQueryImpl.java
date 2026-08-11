@@ -20,40 +20,22 @@
 
 package org.eclipse.daanse.olap.query.component;
 
-import java.util.List;
+import java.util.Objects;
 
+import org.eclipse.daanse.dmv.model.api.DmvStatement;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
-import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.common.AbstractQueryPart;
 
 public class DmvQueryImpl extends AbstractQueryPart implements DmvQuery {
-    private final String tableName;
-    private final List<String> columns;
-    private final Expression whereExpression;
 
-    public DmvQueryImpl(
-            String tableName,
-            List<String> columns,
-            Expression whereExpression)
-    {
-        this.tableName = tableName;
-        this.columns = columns;
-        this.whereExpression = whereExpression;
+    private final DmvStatement statement;
+
+    public DmvQueryImpl(DmvStatement statement) {
+        this.statement = Objects.requireNonNull(statement, "statement must not be null");
     }
 
     @Override
-    public String getTableName() {
-        return this.tableName;
-    }
-
-    @Override
-    public Expression getWhereExpression() {
-        return this.whereExpression;
-    }
-
-    @Override
-    public List<String> getColumns() {
-        return columns;
+    public DmvStatement statement() {
+        return statement;
     }
 }
-

@@ -20,6 +20,6 @@
   <artifactId>org.eclipse.daanse.olap.xmla</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>bridge</module>
+  	<module>connector</module>
   </modules>
 </project>

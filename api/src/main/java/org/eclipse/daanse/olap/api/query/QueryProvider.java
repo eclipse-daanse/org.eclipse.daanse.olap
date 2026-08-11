@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.api.query;
 
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
@@ -43,8 +42,6 @@ public interface QueryProvider {
             boolean strictValidation);
 
     Explain createExplain(Statement statement, ExplainStatement explainStatement, boolean strictValidation);
-
-    DmvQuery createDMV(DMVStatement dmvStatement);
 
     Refresh createRefresh(RefreshStatement refreshStatement);
 

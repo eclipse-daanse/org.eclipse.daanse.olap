@@ -38,12 +38,15 @@ import org.eclipse.daanse.olap.api.query.ExpressionProvider;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.dmv.parser.api.DmvParserProvider;
 import org.eclipse.daanse.olap.common.SqlQueryImpl;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.FailedToParseQueryException;
 import org.eclipse.daanse.olap.guard.DatabaseCatalogImpl;
 import org.eclipse.daanse.olap.query.base.ExpressionProviderImpl;
 import org.eclipse.daanse.olap.query.base.QueryProviderImpl;
+import org.eclipse.daanse.olap.query.base.StatementRouter;
+import org.eclipse.daanse.olap.query.component.DmvQueryImpl;
 import org.eclipse.daanse.sql.guard.api.SqlGuard;
 import org.eclipse.daanse.sql.guard.api.SqlGuardFactory;
 import org.eclipse.daanse.sql.guard.api.exception.GuardException;
@@ -101,43 +104,101 @@ public abstract class ConnectionBase implements Connection {
         FunctionService funTable,
         boolean strictValidation)
     {
-        boolean debug = false;
-
         if (getLogger().isDebugEnabled()) {
             String s = new StringBuilder().append(Util.NL).append(queryToParse.replaceAll("[\n\r]", "_")).toString();
             getLogger().debug(s);
         }
 
-        MdxParser parser;
+        // The kind is decided before any parser runs, not by which parser happens to fail:
+        // decision-by-exception answered a broken DMV with the SQL guard's complaint and the
+        // real parse error was gone.
+        StatementRouter.Kind kind = StatementRouter.classify(queryToParse);
+        if (kind == StatementRouter.Kind.SQL) {
+            return parseSql(statement, queryToParse, funTable, strictValidation);
+        }
+        if (kind == StatementRouter.Kind.DMV) {
+            return parseDmv(queryToParse);
+        }
+
+        MdxStatement mdxStatement;
         try {
-            parser = getContext().getMdxParserProvider().newParser(queryToParse, funTable.getPropertyWords());
+            MdxParser parser = getContext().getMdxParserProvider().newParser(queryToParse,
+                    funTable.getPropertyWords());
+            mdxStatement = parser.parseMdxStatement();
+        } catch (Exception mdxPE) {
+            throw new FailedToParseQueryException(queryToParse, mdxPE);
+        }
+        // Conversion runs outside the catch: a conversion error is not a parse error and
+        // carries its own message.
+        return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
+    }
+
+    /**
+     * A statement that reads as SQL goes to the guard first; only if the guard cannot even
+     * parse it does the MDX parser get its turn - the classification is lexical and a rare
+     * MDX statement can look like SQL, but a SQL error must read as one.
+     */
+    private QueryComponent parseSql(
+        Statement statement,
+        String queryToParse,
+        FunctionService funTable,
+        boolean strictValidation)
+    {
+        Optional<SqlGuardFactory> oSqlGuardFactory = getContext().getSqlGuardFactory();
+        if (oSqlGuardFactory.isEmpty()) {
+            return parseAsMdxAfterAll(statement, queryToParse, funTable, strictValidation, null);
+        }
+        List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
+        org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl("", ds);
+        //TODO need resolve function list from other place
+        SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of("sum", "avg", "min", "max", "count", "concat"), this.getContext().getDialect());
+        // TODO add white list functions
+        try {
+            String sanetizedSql = guard.guard(queryToParse);
+            return new SqlQueryImpl(sanetizedSql, getContext().getDataSource());
+        } catch (UnparsableStatementGuardException uex) {
+            return parseAsMdxAfterAll(statement, queryToParse, funTable, strictValidation, uex);
+        } catch (GuardException guardEx) {
+            throw new FailedToParseQueryException(queryToParse, guardEx);
+        }
+    }
+
+    private QueryComponent parseAsMdxAfterAll(
+        Statement statement,
+        String queryToParse,
+        FunctionService funTable,
+        boolean strictValidation,
+        Exception sqlFailure)
+    {
+        try {
+            MdxParser parser = getContext().getMdxParserProvider().newParser(queryToParse,
+                    funTable.getPropertyWords());
             MdxStatement mdxStatement = parser.parseMdxStatement();
             return getQueryProvider().createQuery(statement, mdxStatement, strictValidation);
         } catch (Exception mdxPE) {
-
-            Optional<SqlGuardFactory> oSqlGuardFactory = getContext().getSqlGuardFactory();
-            if (oSqlGuardFactory.isEmpty()) {
-                throw new FailedToParseQueryException(queryToParse, mdxPE);
-            } else {
-                List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
-                org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl("", ds);
-                //TODO need resolve function list from other place
-                SqlGuard guard = oSqlGuardFactory.get().create("", "", dc, List.of("sum", "avg", "min", "max", "count", "concat"), this.getContext().getDialect());
-                // TODO add white list functions
-                try {
-                    String sanetizedSql = guard.guard(queryToParse);
-                    return new SqlQueryImpl(sanetizedSql, getContext().getDataSource());
-                } catch (UnparsableStatementGuardException uex) {
-                    // when can´t be parse then we decide to throw the exception of MDX
-                    throw new FailedToParseQueryException(queryToParse, mdxPE);
-                } catch (GuardException guasdEx) {
-                    throw new FailedToParseQueryException(queryToParse, guasdEx);
-                }
-            }
+            throw new FailedToParseQueryException(queryToParse,
+                    sqlFailure == null ? mdxPE : sqlFailure);
         }
     }
 
 
+
+    /**
+     * A DMV is its own language with its own parser service. No parser installed means the
+     * query is refused with that reason - not handed to parsers that would guess wrong.
+     */
+    private QueryComponent parseDmv(String queryToParse) {
+        Optional<DmvParserProvider> provider = getContext().getDmvParserProvider();
+        if (provider.isEmpty()) {
+            throw new FailedToParseQueryException(queryToParse,
+                    new IllegalStateException("no DMV parser is installed"));
+        }
+        try {
+            return new DmvQueryImpl(provider.get().newParser(queryToParse).parseDmvStatement());
+        } catch (Exception dmvPE) {
+            throw new FailedToParseQueryException(queryToParse, dmvPE);
+        }
+    }
 
     public QueryProvider getQueryProvider() {
         return queryProvider;

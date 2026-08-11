@@ -13,13 +13,14 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import java.util.List;
+import org.eclipse.daanse.dmv.model.api.DmvStatement;
 
+/**
+ * A DMV query as a query component: the parsed statement, carried whole. Everything a
+ * consumer needs - columns or star, rowset name, restrictions, WHERE, ORDER BY, DISTINCT,
+ * TOP - is on the statement; this interface only ties it into the sealed component family.
+ */
 public non-sealed interface DmvQuery extends QueryComponent {
 
-    String getTableName();
-
-    Expression getWhereExpression();
-
-    List<String> getColumns();
+    DmvStatement statement();
 }

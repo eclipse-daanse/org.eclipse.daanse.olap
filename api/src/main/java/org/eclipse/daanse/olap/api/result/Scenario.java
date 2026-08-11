@@ -15,22 +15,34 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * Context for a set of writeback operations.
  *
- * An analyst performing a what-if analysis would first create a scenario, or
- * open an existing scenario, then modify a sequence of cell values.
+ * An analyst performing a what-if analysis would first create a scenario, then
+ * modify a sequence of cell values.
  *
- * Some OLAP engines allow scenarios to be saved (to a file, or perhaps to the
- * database) and restored in a future session.
+ * This is an engine concept, not a protocol one: XMLA has no scenario. Where
+ * [MS-SSAS] names a handle for pending writeback at all it is the {@code ResultId}
+ * of the {@code KeepResult}/{@code Result}/{@code ClearResult} headers, and the
+ * specification never ties that handle's lifetime to a session. Who holds a
+ * scenario, and for how long, is therefore the caller's decision.
  *
- * Multiple scenarios may be open at the same time, by different users of the
- * OLAP engine.
+ * Two kinds of pending state live here and they behave differently. The rows
+ * added through {@link #addPendingRows} are what a commit writes to a cube's
+ * writeback table; they belong to the cube they were produced for, which is why
+ * they are kept per cube rather than in one list. The cells recorded by
+ * {@link #setCellValue}'s numeric path are in-memory what-if only and are never
+ * made permanent - see {@link #getWritebackCells()}.
+ *
+ * Of jhyde's original description, the identity half is not implemented here: a
+ * scenario cannot be named, saved, or reopened.
  *
  * @see AllocationPolicy
  *
@@ -43,12 +55,19 @@ public interface Scenario {
      *
      * The format of the string returned is implementation defined. Client
      * applications must not make any assumptions about the structure or contents of
-     * such strings.
+     * such strings. Nothing can be looked up by it.
      *
      * @return Unique identifier of this Scenario.
      */
     String getId();
 
+    /**
+     * The cells the numeric what-if path recorded.
+     *
+     * These are held in memory and never written to the database - a commit does
+     * not look at them. They are read by the {@code [Scenario]} member evaluator,
+     * which no catalog can currently reach.
+     */
     List<WritebackCell> getWritebackCells();
 
     /**
@@ -63,7 +82,27 @@ public interface Scenario {
     void setCellValue(Connection connection, List<Member> members, Object newValue, Object currentValue,
             AllocationPolicy allocationPolicy, Object[] allocationArgs);
 
-    List<Map<String, Map.Entry<DataTypeJdbc, Object>>> getSessionValues();
+    /**
+     * The rows pending for one cube, in the order they were produced.
+     *
+     * Empty when nothing is pending for it. These are the rows a commit writes to
+     * that cube's writeback table, and the rows its fact source is rewritten with
+     * while the values are still uncommitted.
+     */
+    List<Map<String, Map.Entry<DataTypeJdbc, Object>>> pendingRows(Cube cube);
 
+    /**
+     * Records rows produced for one cube.
+     *
+     * The cube is part of the record because a row only means anything against the
+     * cube it was allocated for: handing it to another one rewrites that cube's
+     * facts with values that were never meant for it.
+     */
+    void addPendingRows(Cube cube, List<Map<String, Map.Entry<DataTypeJdbc, Object>>> rows);
+
+    /** Every cube something is pending for. */
+    Set<Cube> pendingCubes();
+
+    /** Forgets everything pending, of both kinds. */
     void clear();
 }

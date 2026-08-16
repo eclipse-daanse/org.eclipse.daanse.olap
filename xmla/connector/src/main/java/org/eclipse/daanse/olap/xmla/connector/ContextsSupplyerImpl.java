@@ -57,10 +57,26 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
         return contextsGroup.getValidContexts();
     }
 
+    /**
+     * The catalog of that name, matched exactly first and then ignoring case.
+     * <p>
+     * A catalog name reaches this from the {@code Catalog} property, where a client
+     * repeats what it read from DBSCHEMA_CATALOGS - but not always in the same
+     * case, and a name that does not match answers as if the catalog did not exist.
+     * The exact match is tried first so that two catalogs differing only in case
+     * still resolve to the one that was asked for.
+     */
     @Override
     public Optional<Context<?>> getContext(String name) {
-        return getContexts().stream().filter(c -> c.getName().equals(name)).findFirst();
-
+        if (name == null) {
+            return Optional.empty();
+        }
+        List<Context<?>> all = getContexts();
+        if (all == null) {
+            return Optional.empty();
+        }
+        return all.stream().filter(c -> name.equals(c.getName())).findFirst()
+                .or(() -> all.stream().filter(c -> name.equalsIgnoreCase(c.getName())).findFirst());
     }
 
     public Map<String, Map<String, Connection>> getSessionCache() {

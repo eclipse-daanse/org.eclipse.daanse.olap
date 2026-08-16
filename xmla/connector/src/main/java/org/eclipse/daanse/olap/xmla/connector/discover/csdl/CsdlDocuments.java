@@ -68,6 +68,12 @@ public final class CsdlDocuments {
         options.put(XMLResource.OPTION_ENCODING, "UTF-8");
         options.put(XMLResource.OPTION_FORMATTED, Boolean.TRUE);
         options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+        // No XML declaration: this document does not travel on its own, it is written
+        // into the METADATA column of a rowset row. A nested <?xml ...?> is not a
+        // detail a parser forgives - it is an illegal processing instruction target,
+        // and the whole answer is rejected with "Illegal processing instruction target
+        // (\"xml\")" before a client sees any of it.
+        options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
 
         resource.save(baos, options);
 

@@ -21,5 +21,9 @@
   <packaging>pom</packaging>
   <modules>
   	<module>connector</module>
+  	<module>connector.relational</module>
+  	<module>connector.relational.oledb</module>
+  	<module>connector.multidimensional</module>
+  	<module>connector.embedded</module>
   </modules>
 </project>

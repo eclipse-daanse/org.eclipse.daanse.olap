@@ -119,7 +119,13 @@ public class OtherDiscover {
         DiscoverDatasourcesRow row = CORE.createDiscoverDatasourcesRow();
         row.setDataSourceName("DataSource of " + context.getName());
         context.getDescription().ifPresent(row::setDataSourceDescription);
-        row.setDataSourceInfo("");
+        // The instance name, as [MS-SSAS] asks: "Contains the information, such as the
+        // instance name, that is required to connect to the data source." Over HTTP
+        // this rowset is the second round trip of every connection and a client refuses
+        // the connection over it, so the value has to be one - the empty string is not.
+        // The client keeps it as the connection's DataSourceInfo property and sends it
+        // back with every later request.
+        row.setDataSourceInfo(SupportedProperties.serverName());
         row.setProviderName(DAANSE);
         row.getProviderType().add("MDP");
         row.setAuthenticationMode("Unauthenticated");
@@ -214,16 +220,17 @@ public class OtherDiscover {
 
     private String propertyValue(PropertyCatalog.Property property, Optional<String> catalogProperty) {
         if ("Catalog".equals(property.name())) {
-            // The Catalog property answers with the current catalog: the one the client
-            // asked
-            // about when it named one this server has, the first one otherwise.
+            // The current catalog: the one the client named where this server has it,
+            // the first one otherwise. A server with no catalog at all answers with no
+            // value rather than throwing - the property exists, it is just unset.
             if (catalogProperty.isPresent()) {
                 Optional<Context<?>> context = contexts.getContext(catalogProperty.get());
                 if (context.isPresent()) {
                     return context.get().getName();
                 }
             }
-            return contexts.getContexts().getFirst().getName();
+            List<Context<?>> all = contexts.getContexts();
+            return all == null || all.isEmpty() ? null : all.get(0).getName();
         }
         String serverTruth = SupportedProperties.VALUES.get(property.name());
         if (serverTruth != null) {
@@ -236,17 +243,25 @@ public class OtherDiscover {
      * DISCOVER_XML_METADATA: the requested object's DDL definition, built from the
      * engine model and serialized into its own namespace - the shape every live
      * server answers with. No restriction means the Server; {@code DatabaseID}
-     * selects that Database as the root instead; {@code ObjectExpansion} of
-     * ExpandObject/ExpandFull attaches the Databases children, the reference forms
-     * do not.
+     * selects that Database as the root instead; every {@code ObjectExpansion}
+     * except ObjectProperties attaches the Databases children.
      */
     public List<EObject> xmlMetaData(RestrictionValues restrictions, XmlaRequest caller) {
+        // Only a restriction picks the object. [MS-SSAS] lists this rowset's additional
+        // restrictions by name - DatabaseID, CubeID, DimensionID and the rest - and the
+        // connection's Catalog is not among them: it says which database the session is
+        // on, not which object is asked for. Reading it here would answer every request
+        // a connected client sends with a Database as the root, and never the Server
+        // element AMO reads the version and compatibility level from.
         Optional<String> databaseId = restrictions.value("DatabaseID");
-        if (databaseId.isEmpty()) {
-            databaseId = restrictions.catalogProperty();
-        }
         String expansion = restrictions.value("ObjectExpansion").orElse("ExpandObject");
-        boolean expanded = "ExpandObject".equalsIgnoreCase(expansion) || "ExpandFull".equalsIgnoreCase(expansion);
+        // Only ObjectProperties keeps the contained objects out. [MS-SSAS] on the four
+        // values: ReferenceOnly "returns only the name/ID/timestamp/state ... for the
+        // requested objects and all descendant major objects recursively";
+        // ObjectProperties "expands the requested object with no references to
+        // contained objects"; ExpandObject is ObjectProperties plus the name, ID and
+        // timestamp of contained major objects; ExpandFull expands everything.
+        boolean withDatabases = !"ObjectProperties".equalsIgnoreCase(expansion);
         XMLGregorianCalendar date = timestampNow();
 
         List<EObject> result = new ArrayList<>();
@@ -262,14 +277,22 @@ public class OtherDiscover {
             return result;
         }
         Server server = EngineFactory.eINSTANCE.createServer();
-        server.setName(catalogs.get(0).getName());
-        server.setId(catalogs.get(0).getName());
+        // The server's own name, not the first catalog's - this is the Server object.
+        // It is the same value DISCOVER_PROPERTIES reports as ServerName, so a client
+        // that compares the two finds them agreeing.
+        String serverName = SupportedProperties.serverName();
+        server.setName(serverName);
+        server.setId(serverName);
         server.setCreatedTimestamp(date);
         server.setLastSchemaUpdate(date);
-        server.setVersion("11.0.7001.0");
+        // Exactly the seven elements a recorded Analysis Services writes here, and in
+        // its order: Name, ID, CreatedTimestamp, LastSchemaUpdate, Version, Edition,
+        // EditionID. An element more is not free - a reader takes this sequence in
+        // order and an unexpected one arrives in the wrong place.
+        server.setVersion("13.0.4001.0");
         server.setEdition(EditionEnum.ENTERPRISE64);
         server.setEditionID(1804890536L);
-        if (expanded) {
+        if (withDatabases) {
             for (Catalog catalog : catalogs) {
                 server.getDatabases().add(databaseOf(catalog, date));
             }
@@ -278,12 +301,25 @@ public class OtherDiscover {
         return result;
     }
 
+    /**
+     * The compatibility level of a multidimensional database, stated rather than
+     * left out.
+     * <p>
+     * AMO reads it from the Database element of DISCOVER_XML_METADATA and, finding
+     * none, falls back to 1050 - the 2008 R2 level, below what a client needs for a
+     * live connection to a multidimensional model. 1100 is SQL Server 2012, which
+     * this engine is; 1200 and above mean tabular metadata, which it has not.
+     */
+    private static final java.math.BigInteger MULTIDIMENSIONAL_COMPATIBILITY_LEVEL = java.math.BigInteger
+            .valueOf(1100);
+
     private static Database databaseOf(Catalog catalog, XMLGregorianCalendar date) {
         Database database = EngineFactory.eINSTANCE.createDatabase();
         database.setName(catalog.getName());
         database.setId(catalog.getName());
         database.setCreatedTimestamp(date);
         database.setLastSchemaUpdate(date);
+        database.setCompatibilityLevel(MULTIDIMENSIONAL_COMPATIBILITY_LEVEL);
         return database;
     }
 
@@ -309,18 +345,41 @@ public class OtherDiscover {
 
     private static XMLGregorianCalendar timestampNow() {
         try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().format(FORMATTER));
+            // UTC, for the same reason as everywhere else a timestamp leaves this server:
+            // the client converts it to local time on arrival.
+            return DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(LocalDateTime.now(java.time.ZoneOffset.UTC).format(FORMATTER));
         } catch (DatatypeConfigurationException e) {
             throw new IllegalStateException(e);
         }
     }
 
     /**
+     * The CSDL versions the emitters produce, by the {@code <integer>.<integer>}
+     * text a client asks with. [MS-SSAS] 3.1.4.2.2.1.3.61.2 fixes only the shape of
+     * the value, not a vocabulary, so what is listed here is what this server can
+     * actually emit rather than what the specification enumerates.
+     */
+    private static final java.util.Map<String, CsdlVersion> CSDL_VERSIONS = java.util.Map.of("1.1", CsdlVersion.V1_1,
+            "2.0", CsdlVersion.V2_0,
+            // 2.5 is not in [MS-CSDLBI], which stops at 2.0, but it is what a client
+            // asks for before establishing a live connection, and a recorded Analysis
+            // Services answers it with a document. Served by the 2.0 emitter, the
+            // closest this server has - an approximation, and where to look if a 2.5
+            // document turns out to differ in a way that matters.
+            "2.5", CsdlVersion.V2_0);
+
+    private static final CsdlVersion CSDL_DEFAULT = CsdlVersion.V2_0;
+
+    /**
      * DISCOVER_CSDL_METADATA: the catalog as an Edmx document, one row holding the
      * whole of it. The emitters were ported from the bridge's
-     * {@code discover/csdl/dimensional} intact; the version is pinned to 2.0 as the
-     * bridge pinned it, and an unnamed catalog falls back to the first one, exactly
-     * like DISCOVER_XML_METADATA above.
+     * {@code discover/csdl/dimensional} intact; an unnamed catalog falls back to
+     * the first one, exactly like DISCOVER_XML_METADATA above.
+     * <p>
+     * The VERSION restriction is honoured: an unsupported version is refused the way
+     * Analysis Services refuses it (error {@code 0xC114022F}), never silently
+     * answered with a different one.
      */
     public List<EObject> csdlMetaData(RestrictionValues restrictions, XmlaRequest caller) {
         Optional<String> catalogName = restrictions.value("CATALOG_NAME");
@@ -328,6 +387,7 @@ public class OtherDiscover {
             catalogName = restrictions.catalogProperty();
         }
         Optional<String> perspectiveName = restrictions.value("PERSPECTIVE_NAME");
+        CsdlVersion version = csdlVersion(restrictions.value("VERSION"));
 
         Catalog catalog = null;
         if (catalogName.isPresent()) {
@@ -347,10 +407,33 @@ public class OtherDiscover {
 
         CatalogReader reader = catalog.getCatalogReaderWithDefaultRole();
         LocalePolicy localePolicy = new LocalePolicy.ServerDefault(java.util.Locale.getDefault());
-        CsdlRequest csdlRequest = new CsdlRequest(CsdlVersion.V2_0, perspectiveName, localePolicy);
+        CsdlRequest csdlRequest = new CsdlRequest(version, perspectiveName, localePolicy);
         DiscoverCsdlMetadataRow row = SERVER.createDiscoverCsdlMetadataRow();
         row.setMetaData(CsdlDocuments.asString(new CsdlEmitterImpl().emit(reader, csdlRequest)));
         return List.of((EObject) row);
+    }
+
+    /**
+     * @throws IllegalArgumentException if the value is malformed or names a version
+     *                                  this server cannot emit — better a refusal
+     *                                  the client can read than a document in a
+     *                                  version it did not ask for
+     */
+    private static CsdlVersion csdlVersion(Optional<String> requested) {
+        if (requested.isEmpty()) {
+            return CSDL_DEFAULT;
+        }
+        String asked = requested.get().trim();
+        if (!asked.matches("\\d+\\.\\d+")) {
+            throw new IllegalArgumentException(
+                    "the VERSION restriction must be of the format <integer>.<integer>, not '" + asked + "'");
+        }
+        CsdlVersion known = CSDL_VERSIONS.get(asked);
+        if (known == null) {
+            throw new IllegalArgumentException("CSDL version " + asked + " is not supported; this server emits "
+                    + new java.util.TreeSet<>(CSDL_VERSIONS.keySet()));
+        }
+        return known;
     }
 
 }

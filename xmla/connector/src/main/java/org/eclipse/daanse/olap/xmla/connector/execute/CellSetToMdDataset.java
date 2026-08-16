@@ -79,6 +79,18 @@ public final class CellSetToMdDataset {
 
     private static final MdDatasetFactory FACTORY = MdDatasetFactory.eINSTANCE;
 
+    /**
+     * The one safe way to write a timestamp into this document.
+     * <p>
+     * Never {@code LocalDateTime.toString()}: it omits the seconds when they are
+     * zero, which is not an {@code xsd:dateTime} - the type requires them - and a
+     * client refuses the whole answer rather than the offending value. Wrong once a
+     * minute and correct the other fifty-nine seconds, which is what makes it hard
+     * to see.
+     */
+    private static final java.time.format.DateTimeFormatter XSD_DATE_TIME = java.time.format.DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
     public static final String SLICER_AXIS = "SlicerAxis";
     public static final String CELL_ORDINAL = "CELL_ORDINAL";
     public static final String VALUE = "VALUE";
@@ -147,8 +159,12 @@ public final class CellSetToMdDataset {
 
         OlapInfoCube infoCube = FACTORY.createOlapInfoCube();
         infoCube.setCubeName(cube.getName());
-        infoCube.setLastDataUpdate(Instant.now().toString());
-        infoCube.setLastSchemaUpdate(Instant.now().toString());
+        // One reading for both, in UTC and to the second. Instant.toString() wrote a
+        // trailing Z and up to nine fractional digits, neither of which SSAS writes;
+        // and two separate readings could disagree in the same response.
+        String now = XSD_DATE_TIME.format(java.time.LocalDateTime.now(java.time.ZoneOffset.UTC));
+        infoCube.setLastDataUpdate(now);
+        infoCube.setLastSchemaUpdate(now);
         CubeInfo cubeInfo = FACTORY.createCubeInfo();
         cubeInfo.getCube().add(infoCube);
 

@@ -56,20 +56,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Serves XMLA from the OLAP engine through the EMF-native SPI.
  * <p>
- * The successor of the bridge's {@code ContextGroupXmlaService}, with the layer
- * it existed to feed removed: the request arrives as the Ecore model read it
- * off the wire — a {@link Discover} or an {@link Execute} — and the rows go
- * back as the EObjects the model writes. One method per verb; which rowset it
- * is lives in the request, so the 103-method service and its generated
- * converters have no counterpart here.
+ * The request arrives as the Ecore model read it off the wire - a
+ * {@link Discover} or an {@link Execute} - and the rows go back as the EObjects
+ * the model writes. One method per verb, since which rowset it is lives in the
+ * request.
  * <p>
- * Sessions are the specification's: this component registers as
- * {@link XmlaSessionHandler} too, and a session opens one connection per
- * context with the caller's roles — the same connection cache the bridge kept,
- * keyed by the id the transport carries in the SOAP header.
- * <p>
- * Anonymity is the endpoint's policy, enforced by the transport before dispatch
- * - this connector holds no policy of its own.
+ * This component registers as {@link XmlaSessionHandler} too: a session holds
+ * one connection per context with the caller's roles, keyed by the id the
+ * transport carries in the SOAP header. Anonymity is the endpoint's policy,
+ * enforced by the transport before dispatch - this connector holds none of its
+ * own.
  */
 @Component(service = { XmlaConnector.class, XmlaSessionHandler.class }, configurationPid = OlapXmlaConnector.PID)
 @Designate(ocd = SessionConfig.class)
@@ -145,6 +141,61 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
     @Reference(cardinality = ReferenceCardinality.MANDATORY, name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
     void bindContextGroup(ContextGroup contextGroup) {
         this.contextGroup = contextGroup;
+    }
+
+    /**
+     * Assembles a connector outside OSGi, from a map of request type to provider.
+     * <p>
+     * The bind methods below are declarative-services callbacks, not an interface:
+     * a framework calls them, in an order it decides, and nothing else should. An
+     * embedding has to do the same wiring by hand, and does it through here - one
+     * entry point stating what a complete connector needs, rather than four
+     * package-private calls made in the right order by luck.
+     * <p>
+     * The session rowset is built here because it is the one provider that needs
+     * the connector itself: it reports the connector's own sessions.
+     *
+     * @param sessionRowset the DISCOVER_SESSIONS provider, built from the
+     *                      connector handed to it; {@code null} to leave that
+     *                      rowset unserved
+     * @param config        the session settings, usually the metatype defaults
+     */
+    public static OlapXmlaConnector assemble(ContextGroup contextGroup,
+            Map<String, RowsetProvider<ContextListSupplyer>> providers,
+            java.util.function.Function<OlapXmlaConnector, RowsetProvider<ContextListSupplyer>> sessionRowset,
+            SessionConfig config) {
+        OlapXmlaConnector connector = new OlapXmlaConnector();
+        connector.bindContextGroup(contextGroup);
+        providers.forEach((requestType, provider) -> connector.bindRowsetProvider(fixed(provider),
+                Map.of(RowsetProvider.PROPERTY_REQUEST_TYPE, requestType)));
+        if (sessionRowset != null) {
+            connector.bindRowsetProvider(fixed(sessionRowset.apply(connector)),
+                    Map.of(RowsetProvider.PROPERTY_REQUEST_TYPE, "DISCOVER_SESSIONS"));
+        }
+        connector.activate(config);
+        return connector;
+    }
+
+    /** A service-objects wrapper over one instance, for an assembly with no OSGi. */
+    private static ComponentServiceObjects<RowsetProvider<ContextListSupplyer>> fixed(
+            RowsetProvider<ContextListSupplyer> provider) {
+        return new ComponentServiceObjects<>() {
+
+            @Override
+            public RowsetProvider<ContextListSupplyer> getService() {
+                return provider;
+            }
+
+            @Override
+            public void ungetService(RowsetProvider<ContextListSupplyer> service) {
+                // one instance, nothing to release
+            }
+
+            @Override
+            public org.osgi.framework.ServiceReference<RowsetProvider<ContextListSupplyer>> getServiceReference() {
+                return null;
+            }
+        };
     }
 
     @Activate
@@ -255,6 +306,21 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
         }
     }
 
+    /**
+     * The request types registered on the whiteboard, which is exactly what this
+     * connector can answer.
+     * <p>
+     * A provider already gets this set through {@code RowsetScope}; the transport
+     * asks separately, when no provider answered {@code DISCOVER_SCHEMA_ROWSETS}
+     * itself, so that it announces what can be answered rather than the whole model
+     * - a rowset announced and then refused is a promise broken on the next
+     * request.
+     */
+    @Override
+    public Set<String> served() {
+        return Set.copyOf(providers.keySet());
+    }
+
     @Override
     public org.eclipse.emf.ecore.EObject execute(Execute request, XmlaRequest context) {
         return execute.execute(request, context);
@@ -283,14 +349,13 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
     }
 
     /**
-     * Registers the session and opens nothing.
+     * Registers the session and opens nothing; connections come on first use.
      * <p>
-     * Connections used to be opened here, one per context. Three things were wrong
-     * with that: a context that failed left a half-populated session and only a log
-     * line; a client that only wanted DISCOVER_DATASOURCES paid for every catalog;
-     * and the in-band handshake binds an identity <em>after</em> BeginSession, so
-     * the connections carried the roles of a caller who was still anonymous, which
-     * is to say none. They are opened on first use instead.
+     * Opening one per context here would charge a client that only wants
+     * DISCOVER_DATASOURCES for every catalog, leave a half-populated session behind
+     * when one fails, and - because the in-band handshake binds an identity
+     * <em>after</em> BeginSession - give every connection the roles of a caller who
+     * is still anonymous, which is none.
      */
     @Override
     protected void onBeginSession(String sessionId, XmlaRequest request) {

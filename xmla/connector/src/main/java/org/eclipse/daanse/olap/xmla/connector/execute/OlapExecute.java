@@ -73,21 +73,17 @@ import org.slf4j.LoggerFactory;
  * Execute: an MDX statement against a connection, answered as a model
  * {@code MdDataset}.
  * <p>
- * Ported from the bridge's {@code OlapExecuteService}, statement kind by
- * statement kind. The MDX query path — parse, scenario, run,
- * {@link CellSetToMdDataset} — keeps the bridge's rules: a client that names no
- * catalog gets the only one when there is only one (Power BI sends an empty
- * catalog then), the connection carries the caller's roles and locale, a
- * writeback session's scenario is applied to the fact before the query runs,
- * and {@code Content=Data} omits the default slicer info the way SSAS does.
+ * The MDX query path - parse, scenario, run, {@link CellSetToMdDataset} - takes
+ * the caller's roles and locale into the connection, applies a writeback
+ * session's scenario to the fact before running, and omits the default slicer
+ * info under {@code Content=Data} the way Analysis Services does. A client that
+ * names no catalog gets the only one where there is only one.
  * <p>
- * The writeback family — {@code BEGIN/COMMIT/ROLLBACK}, {@code UPDATE CUBE},
- * {@code REFRESH}, calculated formulas — and the commands {@code Alter},
- * {@code Cancel} and {@code ClearCache} answer as the bridge answered them. The
- * kinds whose answer is a rowset rather than a dataset — DMV, drill-through,
- * SQL, {@code Format=Tabular} — name themselves when asked for, and the codec
- * writes them as the tabular Execute answer and an empty result would read as
- * success.
+ * Beside it: the writeback family ({@code BEGIN/COMMIT/ROLLBACK},
+ * {@code UPDATE CUBE}, {@code REFRESH}, calculated formulas), the commands
+ * {@code Alter}, {@code Cancel} and {@code ClearCache}, and the kinds answered
+ * with a rowset rather than a dataset - DMV, drill-through, SQL,
+ * {@code Format=Tabular}.
  */
 public class OlapExecute {
 
@@ -144,10 +140,9 @@ public class OlapExecute {
      * did.
      */
     private EObject cancel(XmlaRequest context) {
-        List<String> roles = rolesOf(context);
         for (Context<?> olapContext : contexts.getContexts()) {
             try {
-                Connection connection = olapContext.getConnection(new ConnectionProps(roles));
+                Connection connection = olapContext.getConnection(new ConnectionProps(rolesOf(context, olapContext)));
                 @SuppressWarnings("unchecked")
                 Context<Connection> typed = (Context<Connection>) connection.getContext();
                 for (org.eclipse.daanse.olap.api.execution.Statement statement : typed.getStatements(connection)) {
@@ -173,31 +168,44 @@ public class OlapExecute {
         if (properties != null && properties.getCatalog() != null && !properties.getCatalog().isEmpty()) {
             catalogName = Optional.of(properties.getCatalog());
         }
-        // Some clients (Power BI) send an empty catalog when there is only one.
-        if (catalogName.isEmpty() && contexts.getContexts() != null && contexts.getContexts().size() == 1) {
-            catalogName = Optional.of(contexts.getContexts().getFirst().getName());
+        // Some clients send an empty catalog when there is only one.
+        List<Context<?>> available = contexts.getContexts() == null ? List.of() : contexts.getContexts();
+        if (catalogName.isEmpty() && available.size() == 1) {
+            catalogName = Optional.of(available.get(0).getName());
         }
-        if (catalogName.isEmpty()) {
-            LOGGER.warn("no catalog named and more than one available; nothing is run");
-            return null;
-        }
-
-        Optional<Context<?>> olapContext = contexts.getContext(catalogName.get());
-        if (olapContext.isEmpty()) {
+        Optional<Context<?>> named = catalogName.flatMap(contexts::getContext);
+        if (named.isEmpty() && catalogName.isPresent()) {
             LOGGER.warn("no context found for catalog {}", catalogName.get());
             return null;
         }
 
+        // Parsing needs a connection, but a DMV does not need *this* one: it asks about
+        // metadata rather than about a cube, and its rows come from the discover
+        // implementations, which already span every catalog the caller may see when no
+        // Catalog property names one. So where none is named, borrow the first
+        // reachable catalog to parse with, and insist on a real one only for the
+        // statement kinds that genuinely need it - refusing here would answer a client
+        // that names no catalog with the empty root, which it reads as "not a rowset".
+        Optional<Context<?>> olapContext = named.isPresent() ? named : available.stream().findFirst();
+        if (olapContext.isEmpty()) {
+            LOGGER.warn("this server has no catalog to run a statement against; nothing is run");
+            return null;
+        }
+
         Connection connection = olapContext.get()
-                .getConnection(new ConnectionProps(rolesOf(context), locale(properties)));
+                .getConnection(new ConnectionProps(rolesOf(context, olapContext.get()), locale(properties)));
         QueryComponent queryComponent = connection.parseStatement(mdx);
 
         String sessionId = context.sessionId();
-        if (queryComponent instanceof Query query) {
-            return runQuery(query, properties, sessionId);
-        }
         if (queryComponent instanceof DmvQuery dmvQuery) {
             return dmv(dmvQuery, request, context);
+        }
+        if (named.isEmpty()) {
+            LOGGER.warn("no catalog named and more than one available; nothing is run");
+            return null;
+        }
+        if (queryComponent instanceof Query query) {
+            return runQuery(query, properties, sessionId);
         }
         if (queryComponent instanceof DrillThrough drillThrough) {
             return drillThrough(drillThrough, properties, sessionId);
@@ -251,7 +259,7 @@ public class OlapExecute {
             // rowset.
             if (properties != null && properties.getFormat() != null
                     && "Tabular".equalsIgnoreCase(properties.getFormat())) {
-                return TabularResults.fromCellSet(cellSet, schemaIncluded(properties));
+                return applyContent(TabularResults.fromCellSet(cellSet, schemaIncluded(properties)), properties);
             }
             return CellSetToMdDataset.toMdDataset(cellSet, omitDefaultSlicerInfo);
         } finally {
@@ -405,12 +413,41 @@ public class OlapExecute {
     /**
      * The Content property decides whether the inline schema travels with the rows.
      */
-    private static boolean schemaIncluded(PropertyList properties) {
+    static boolean schemaIncluded(PropertyList properties) {
         if (properties == null || properties.getContent() == null) {
             return true;
         }
         String content = properties.getContent();
         return !"Data".equalsIgnoreCase(content) && !"None".equalsIgnoreCase(content);
+    }
+
+    /**
+     * And the other half of the same switch: whether the rows travel at all.
+     * <p>
+     * {@code Schema} means the shape without the data, and clients ask for it - for
+     * a schema lookup and for {@code CommandBehavior.SchemaOnly}. Answering it with
+     * every row is the expensive answer to a request for the cheap one.
+     */
+    static boolean dataIncluded(PropertyList properties) {
+        if (properties == null || properties.getContent() == null) {
+            return true;
+        }
+        String content = properties.getContent();
+        return !"Schema".equalsIgnoreCase(content) && !"Metadata".equalsIgnoreCase(content)
+                && !"None".equalsIgnoreCase(content);
+    }
+
+    /**
+     * The single place the data half of Content is applied. Dropping the rows after
+     * they were built wastes the work but keeps one rule in one place; the four
+     * builders differ too much to each carry the flag.
+     */
+    private static org.eclipse.daanse.xmla.model.xmla.RowsetResult applyContent(
+            org.eclipse.daanse.xmla.model.xmla.RowsetResult result, PropertyList properties) {
+        if (!dataIncluded(properties)) {
+            result.getRows().clear();
+        }
+        return result;
     }
 
     /**
@@ -453,7 +490,8 @@ public class OlapExecute {
         List<Parameter> parameters = request.getParameters() == null ? List.of()
                 : request.getParameters().getParameter();
         PropertyList properties = request.getProperties() == null ? null : request.getProperties().getPropertyList();
-        return RowsetResults.fromRows(rowClass.get(), rows, statement, parameters, schemaIncluded(properties));
+        return applyContent(RowsetResults.fromRows(rowClass.get(), rows, statement, parameters, schemaIncluded(properties)),
+                properties);
     }
 
     private static String literalText(org.eclipse.daanse.dmv.model.api.DmvLiteral literal) {
@@ -483,7 +521,7 @@ public class OlapExecute {
             resultSet = connection.createStatement().executeQuery(drillThrough, java.util.Optional.empty(),
                     rowCountSlot);
             int rowCount = enableRowCount ? rowCountSlot[0] : -1;
-            return RowsetResults.fromResultSet(resultSet, rowCount, schemaIncluded(properties));
+            return applyContent(RowsetResults.fromResultSet(resultSet, rowCount, schemaIncluded(properties)), properties);
         } catch (java.sql.SQLException e) {
             throw new RuntimeException("Drill through SQL failed", e);
         } finally {
@@ -501,9 +539,20 @@ public class OlapExecute {
         }
     }
 
+    /**
+     * A raw SQL statement, answered as a rowset.
+     * <p>
+     * The result set is drained here and everything behind it closed.
+     * {@code SqlQuery.execute()} hands back a live result set and cannot close the
+     * connection without closing the rows it just returned, so the obligation lands
+     * on this side - one leaked pooled connection per statement otherwise.
+     */
     private EObject sql(SqlQuery sqlQuery, PropertyList properties) {
-        try {
-            return RowsetResults.fromResultSet(sqlQuery.execute(), -1, schemaIncluded(properties));
+        try (java.sql.ResultSet rows = sqlQuery.execute()) {
+            java.sql.Statement statement = rows.getStatement();
+            try (java.sql.Connection connection = statement == null ? null : statement.getConnection()) {
+                return applyContent(RowsetResults.fromResultSet(rows, -1, schemaIncluded(properties)), properties);
+            }
         } catch (java.sql.SQLException e) {
             throw new RuntimeException(e);
         }
@@ -531,14 +580,18 @@ public class OlapExecute {
         return results;
     }
 
-    /** The caller's roles, filtered against what the contexts actually define. */
-    private List<String> rolesOf(XmlaRequest request) {
+    /**
+     * The caller's roles, filtered against what <em>this</em> catalog defines.
+     * <p>
+     * Per catalog, not per server: a role name the catalog does not know is an
+     * error to the rolap layer, so collecting the names every catalog defines makes
+     * one catalog's roles break the connection to the next.
+     */
+    private static List<String> rolesOf(XmlaRequest request, Context<?> context) {
         List<String> roles = new ArrayList<>();
-        for (Context<?> context : contexts.getContexts()) {
-            for (String role : context.getAccessRoles()) {
-                if (request.hasRole(role)) {
-                    roles.add(role);
-                }
+        for (String role : context.getAccessRoles()) {
+            if (request.hasRole(role)) {
+                roles.add(role);
             }
         }
         return roles;

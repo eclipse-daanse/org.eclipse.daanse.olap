@@ -45,7 +45,7 @@ public final class StatementRouter {
         if (upper.startsWith("SELECT")) {
             // An MDX SELECT names axes (ON COLUMNS, ON 0) or a bracketed cube; a SQL SELECT
             // does neither.
-            if (upper.contains(" ON ") || upper.contains("FROM [")) {
+            if (upper.contains("on 0") || upper.contains("on 1") || upper.contains(" ON COLUMNS") || upper.contains(" ON ROWS") || upper.contains("FROM [")) {
                 return Kind.MDX;
             }
             return Kind.SQL;

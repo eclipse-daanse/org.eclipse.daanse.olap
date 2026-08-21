@@ -147,6 +147,35 @@ class MdSchemaDiscoverTest {
         assertThat(((MdschemaCubesRow) rows.get(1)).getDescription()).isEqualTo("cube2description");
     }
 
+    /**
+     * The column a client reads before it offers writeback at all. It used to say
+     * FALSE for every cube, including the ones that declare a writeback table, so
+     * the feature was there and could not be found.
+     */
+    @Test
+    void mdSchemaCubesReportsWhichCubesCanBeWrittenTo() {
+        twoCubes();
+        when(cube1.isVisible()).thenReturn(true);
+        when(cube2.isVisible()).thenReturn(true);
+        when(cube2.isWriteEnabled()).thenReturn(true);
+
+        List<EObject> rows = discover("MDSCHEMA_CUBES", Map.of("CATALOG_NAME", "foo"));
+
+        assertThat(((MdschemaCubesRow) rows.get(0)).getIsWriteEnabled()).isFalse();
+        assertThat(((MdschemaCubesRow) rows.get(1)).getIsWriteEnabled()).isTrue();
+    }
+
+    @Test
+    void mdSchemaMeasureGroupsReportsTheSame() {
+        twoCubes();
+        when(cube2.isWriteEnabled()).thenReturn(true);
+
+        List<EObject> rows = discover("MDSCHEMA_MEASUREGROUPS", Map.of("CATALOG_NAME", "foo"));
+
+        assertThat(((MdschemaMeasuregroupsRow) rows.get(0)).getIsWriteEnabled()).isFalse();
+        assertThat(((MdschemaMeasuregroupsRow) rows.get(1)).getIsWriteEnabled()).isTrue();
+    }
+
     @Test
     void mdSchemaDimensions() {
         twoCubes();

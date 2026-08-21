@@ -37,7 +37,7 @@ public class TransactionCommandImpl extends AbstractQueryPart implements Transac
 
     @Override
     public void unparse(PrintWriter pw) {
-        pw.print( new StringBuilder(this.command.name()).append("TRANSACTION").toString());
+        pw.print( new StringBuilder(this.command.name()).append(" TRANSACTION").toString());
     }
 
     @Override

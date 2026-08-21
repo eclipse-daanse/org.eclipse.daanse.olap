@@ -31,8 +31,11 @@ import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.TransactionKind;
+import org.eclipse.daanse.mdx.model.api.TransactionStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.select.Allocation;
+import org.eclipse.daanse.olap.api.Command;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
@@ -45,12 +48,14 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 import org.eclipse.daanse.olap.query.component.DrillThroughImpl;
 import org.eclipse.daanse.olap.query.component.ExplainImpl;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
 import org.eclipse.daanse.olap.query.component.RefreshImpl;
+import org.eclipse.daanse.olap.query.component.TransactionCommandImpl;
 import org.eclipse.daanse.olap.query.component.UpdateImpl;
 
 public class QueryProviderImpl implements QueryProvider {
@@ -64,12 +69,26 @@ public class QueryProviderImpl implements QueryProvider {
         case ExplainStatement explain -> createExplain(statement, explain, strictValidation);
         case RefreshStatement refresh -> createRefresh(refresh);
         case UpdateStatement update -> createUpdate(update);
+        case TransactionStatement transaction -> createTransaction(transaction);
         };
     }
 
     @Override
     public Refresh createRefresh(RefreshStatement refreshStatement) {
         return new RefreshImpl(convertName(refreshStatement.cubeName()));
+    }
+
+    @Override
+    public TransactionCommand createTransaction(TransactionStatement transactionStatement) {
+        return new TransactionCommandImpl(convertTransactionKind(transactionStatement.kind()));
+    }
+
+    private static Command convertTransactionKind(TransactionKind kind) {
+        return switch (kind) {
+        case BEGIN -> Command.BEGIN;
+        case COMMIT -> Command.COMMIT;
+        case ROLLBACK -> Command.ROLLBACK;
+        };
     }
 
     @Override
@@ -88,7 +107,10 @@ public class QueryProviderImpl implements QueryProvider {
         Expression tuple = MdxToQueryConverter.getExpression(updateClause.tupleExp());
         Expression value = MdxToQueryConverter.getExpression(updateClause.valueExp());
         Allocation allocation = updateClause.allocation();
-        Expression weight = MdxToQueryConverter.getExpression(updateClause.weight().get());
+        // The BY expression is optional, and no client that sends USE_EQUAL_ALLOCATION
+        // sends one - taking it unconditionally made every ordinary UPDATE CUBE fail
+        // to convert, after it had parsed.
+        Expression weight = updateClause.weight().map(MdxToQueryConverter::getExpression).orElse(null);
         return new UpdateImpl.UpdateClauseImpl(tuple, value, allocation, weight);
     }
 

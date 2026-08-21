@@ -158,7 +158,7 @@ public class MdSchemaDiscover {
         row.setDescription(description);
         row.setIsDrillThroughEnabled(Boolean.TRUE);
         row.setIsLinkable(Boolean.TRUE);
-        row.setIsWriteEnabled(Boolean.FALSE);
+        row.setIsWriteEnabled(cube.isWriteEnabled());
         row.setIsSqlEnabled(Boolean.TRUE);
         row.setCubeCaption(cube.getCaption() == null ? cube.getName() : cube.getCaption());
         row.setBaseCubeName(cube.getName());
@@ -723,7 +723,8 @@ public class MdSchemaDiscover {
                 row.setCubeName(cube.getName());
                 row.setMeasureGroupName(cube.getName());
                 row.setDescription("");
-                row.setIsWriteEnabled(Boolean.FALSE);
+                // One group per cube here, so the cube's own answer is the group's.
+                row.setIsWriteEnabled(cube.isWriteEnabled());
                 row.setMeasureGroupCaption(cube.getName());
                 result.add(row);
             }

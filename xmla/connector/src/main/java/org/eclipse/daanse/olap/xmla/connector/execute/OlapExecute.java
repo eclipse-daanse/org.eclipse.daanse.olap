@@ -48,6 +48,7 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Scenario;
 import org.eclipse.daanse.olap.xmla.connector.session.SessionScenarios;
+import org.eclipse.daanse.xmla.api.XmlaCommandFailedException;
 import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.query.component.QueryPrintWriter;
 import org.eclipse.daanse.olap.xmla.connector.ContextListSupplyer;
@@ -88,6 +89,9 @@ import org.slf4j.LoggerFactory;
 public class OlapExecute {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OlapExecute.class);
+
+    /** What a client is told failed, in the place MSOLAP names its own engine. */
+    private static final String SOURCE = "Eclipse Daanse OLAP";
 
     /**
      * How a DMV query reaches the discover implementations without knowing them.
@@ -231,20 +235,20 @@ public class OlapExecute {
 
     private EObject runQuery(Query query, PropertyList properties, String sessionId) {
         Cube cube = query.getCube();
-        try {
-            // A writeback session's pending values take part in every query of that
-            // session. Without one, the query gets a scenario of its own that nothing
-            // outlives - which is what the previous code did too, except that it also
-            // registered an entry it never put the scenario into.
-            Scenario scenario = scenarios.of(sessionId);
-            if (scenario == null) {
-                scenario = query.getConnection().createScenario();
-            }
-            query.getConnection().setScenario(scenario);
-            // This cube's own pending values take part in the query; another cube's
-            // would describe columns it does not have.
-            cube.modifyFact(scenario.pendingRows(cube));
-
+        // A writeback session's pending values take part in every query of that
+        // session. Without one, the query gets a scenario of its own that nothing
+        // outlives - which is what the previous code did too, except that it also
+        // registered an entry it never put the scenario into.
+        Scenario scenario = scenarios.of(sessionId);
+        if (scenario == null) {
+            scenario = query.getConnection().createScenario();
+        }
+        query.getConnection().setScenario(scenario);
+        // This cube's own pending values take part in the query; another cube's
+        // would describe columns it does not have. The bracket holds the cube for
+        // the whole query, so a second session cannot rewrite the fact underneath
+        // this one.
+        return cube.withPendingRows(scenario.pendingRows(cube), () -> {
             org.eclipse.daanse.olap.api.execution.Statement statement = query.getConnection().createStatement();
             CellSet cellSet = statement.executeQuery(query);
 
@@ -262,9 +266,7 @@ public class OlapExecute {
                 return applyContent(TabularResults.fromCellSet(cellSet, schemaIncluded(properties)), properties);
             }
             return CellSetToMdDataset.toMdDataset(cellSet, omitDefaultSlicerInfo);
-        } finally {
-            cube.restoreFact();
-        }
+        });
     }
 
     // --- the writeback family, ported from the bridge clause by clause ---
@@ -278,17 +280,47 @@ public class OlapExecute {
         } else if (transaction.getCommand() == Command.ROLLBACK) {
             scenarios.clear(sessionId);
         } else if (transaction.getCommand() == Command.COMMIT) {
-            Scenario scenario = scenarios.require(sessionId);
+            commit(scenarios.require(sessionId), sessionId, userId);
+        }
+        return null;
+    }
+
+    /**
+     * Makes a session's pending values permanent, or says why it could not.
+     * <p>
+     * A commit that fails is reported in band rather than as a fault, the way a
+     * Microsoft server reports a writeback it cannot honour: the request was
+     * understood and answered, and the session is still there for a rollback or a
+     * second attempt. That is also why the scenario is only cleared once every cube
+     * has been written - a caller told "not committed" must still be holding what
+     * did not commit.
+     */
+    private void commit(Scenario scenario, String sessionId, String userId) {
+        // Silence here was the worst answer available: without a writeback table
+        // WritebackUtil.commit writes nothing and returns, and the client is told the
+        // values are safe.
+        List<String> notWritable = scenario.pendingCubes().stream().filter(cube -> !cube.isWriteEnabled())
+                .map(Cube::getName).toList();
+        if (!notWritable.isEmpty()) {
+            LOGGER.warn("Writeback[commit] refused: no writeback table on {}", notWritable);
+            throw new XmlaCommandFailedException(null,
+                    "Cell writeback errors: the cube \"" + String.join("\", \"", notWritable)
+                            + "\" has no writeback table, so there is nowhere to make these values permanent.",
+                    SOURCE, null);
+        }
+        try {
             // Only the cubes this scenario produced rows for, and each only its own.
             // Handing every cube the whole list wrote the same values into every
             // writeback table in the catalog.
             for (Cube cube : scenario.pendingCubes()) {
                 cube.commit(scenario.pendingRows(cube), userId);
             }
-            scenario.clear();
-            scenarios.clear(sessionId);
+        } catch (RuntimeException e) {
+            LOGGER.error("Writeback[commit] failed", e);
+            throw new XmlaCommandFailedException(null, "Cell writeback errors: " + e.getMessage(), SOURCE, null, e);
         }
-        return null;
+        scenario.clear();
+        scenarios.clear(sessionId);
     }
 
     private EObject update(Connection connection, Update update, String sessionId) {
@@ -304,14 +336,12 @@ public class OlapExecute {
         // modifyFact because the data can already be in the writeback table. Only this
         // cube's own pending rows: another cube's rows describe columns this one does
         // not have, and would answer the caller with values never meant for it.
-        cube.modifyFact(scenario.pendingRows(cube));
-        try {
+        cube.withPendingRows(scenario.pendingRows(cube), () -> {
             for (UpdateClause clause : update.getUpdateClauses()) {
                 applyUpdateClause(connection, scenario, cube, update.getCubeName(), clause);
             }
-        } finally {
-            cube.restoreFact();
-        }
+            return null;
+        });
         return null;
     }
 
@@ -506,35 +536,38 @@ public class OlapExecute {
         boolean enableRowCount = connection.getContext().getConfig().enableTotalCount();
         int[] rowCountSlot = enableRowCount ? new int[] { 0 } : null;
         Cube cube = drillThrough.getQuery().getCube();
-        java.sql.ResultSet resultSet = null;
         try {
             Scenario scenario = scenarios.of(sessionId);
             if (scenario == null) {
                 scenario = connection.createScenario();
             }
             connection.setScenario(scenario);
-            if (cube != null && connection.getScenario() != null) {
-                cube.modifyFact(scenario.pendingRows(cube));
-            }
-            // The model carries no TableFields property (the api had one); nothing is
-            // passed.
-            resultSet = connection.createStatement().executeQuery(drillThrough, java.util.Optional.empty(),
-                    rowCountSlot);
-            int rowCount = enableRowCount ? rowCountSlot[0] : -1;
-            return applyContent(RowsetResults.fromResultSet(resultSet, rowCount, schemaIncluded(properties)), properties);
-        } catch (java.sql.SQLException e) {
-            throw new RuntimeException("Drill through SQL failed", e);
-        } finally {
-            if (cube != null) {
-                cube.restoreFact();
-            }
-            if (resultSet != null) {
+            java.util.function.Supplier<EObject> run = () -> {
+                java.sql.ResultSet resultSet = null;
                 try {
-                    resultSet.close();
-                } catch (java.sql.SQLException ignored) {
-                    // closing is best effort, as it was in the bridge
+                    // The model carries no TableFields property (the api had one); nothing is
+                    // passed.
+                    resultSet = connection.createStatement().executeQuery(drillThrough, java.util.Optional.empty(),
+                            rowCountSlot);
+                    int rowCount = enableRowCount ? rowCountSlot[0] : -1;
+                    return applyContent(RowsetResults.fromResultSet(resultSet, rowCount, schemaIncluded(properties)),
+                            properties);
+                } catch (java.sql.SQLException e) {
+                    throw new RuntimeException("Drill through SQL failed", e);
+                } finally {
+                    if (resultSet != null) {
+                        try {
+                            resultSet.close();
+                        } catch (java.sql.SQLException ignored) {
+                            // closing is best effort, as it was in the bridge
+                        }
+                    }
                 }
-            }
+            };
+            // Read inside the bracket: the rows are the ones this session's fact
+            // describes, and the fact goes back the moment they have been read.
+            return cube == null ? run.get() : cube.withPendingRows(scenario.pendingRows(cube), run);
+        } finally {
             connection.close();
         }
     }

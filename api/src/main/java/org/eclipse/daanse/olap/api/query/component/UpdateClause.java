@@ -23,4 +23,15 @@ public non-sealed interface UpdateClause extends QueryComponent {
 
     Allocation getAllocation();
 
+    /**
+     * The {@code BY} expression a weighted allocation is to use, or {@code null}
+     * where the statement named none - which is every statement a recorded client
+     * sends.
+     * <p>
+     * Carried rather than applied: the allocator weights by the cells' existing
+     * values, which is what a weighted allocation without {@code BY} means. A
+     * statement that does name one is accepted and allocated as if it had not.
+     */
+    Expression getWeight();
+
 }

@@ -82,8 +82,14 @@ public class UpdateImpl extends AbstractQueryPart implements Update {
             return this.value;
         }
 
+        @Override
         public Allocation getAllocation() {
             return allocation == null ? Allocation.USE_EQUAL_ALLOCATION : allocation;
+        }
+
+        @Override
+        public Expression getWeight() {
+            return this.weight;
         }
     }
 }

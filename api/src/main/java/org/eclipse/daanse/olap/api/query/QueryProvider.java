@@ -18,6 +18,7 @@ import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.TransactionStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.olap.api.execution.Statement;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
@@ -30,6 +31,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
 
 public interface QueryProvider {
@@ -46,6 +48,8 @@ public interface QueryProvider {
     Refresh createRefresh(RefreshStatement refreshStatement);
 
     Update createUpdate(UpdateStatement updateStatement);
+
+    TransactionCommand createTransaction(TransactionStatement transactionStatement);
 
     Query createQuery(Statement statement, Formula[] formula, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
             CellProperty[] cellProps, boolean strictValidation);

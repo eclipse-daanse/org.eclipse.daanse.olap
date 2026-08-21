@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -135,6 +136,42 @@ public interface Cube extends OlapElement, MetaElement {
      * @return List of hierarchies
      */
     List<Hierarchy> getHierarchies();
+
+    /**
+     * Whether cells of this cube can be written back to.
+     * <p>
+     * True exactly when the cube declares a writeback table: without one there is
+     * nowhere for a committed value to go, and {@link #commit} would silently do
+     * nothing. This is what {@code MDSCHEMA_CUBES.IS_WRITE_ENABLED} reports, and
+     * clients decide by it whether to offer writeback at all.
+     */
+    default boolean isWriteEnabled() {
+        return false;
+    }
+
+    /**
+     * Runs {@code work} with these pending writeback rows in effect on this cube.
+     * <p>
+     * The bracket exists because {@link #modifyFact} rewrites state the whole cube
+     * shares - the fact source and the star built from it - so two callers doing it
+     * at once would read each other's uncommitted values. Everything that queries a
+     * writeback-enabled cube goes through here, and an implementation is free to
+     * make the span exclusive; the default one, for cubes that cannot be written
+     * to, only guarantees the restore.
+     * <p>
+     * Note that a cube with a writeback table needs this even when
+     * {@code sessionValues} is empty: the rows already committed live in that table
+     * and only reach a query through the rewritten fact.
+     */
+    default <T> T withPendingRows(List<Map<String, Entry<DataTypeJdbc, Object>>> sessionValues,
+            Supplier<T> work) {
+        modifyFact(sessionValues);
+        try {
+            return work.get();
+        } finally {
+            restoreFact();
+        }
+    }
 
     void modifyFact(List<Map<String, Entry<DataTypeJdbc, Object>>> sessionValues);
 

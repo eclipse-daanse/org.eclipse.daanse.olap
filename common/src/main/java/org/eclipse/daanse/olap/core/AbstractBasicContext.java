@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.daanse.olap.api.Context;
@@ -262,5 +263,39 @@ public abstract class AbstractBasicContext<C extends Connection> implements Cont
 			}
 			return dflt;
 		}
+	}
+
+	/**
+	 * Writes {@code value} for {@code key} into the live configuration - the
+	 * write counterpart to {@link #getConfigValue(String, Object, Class)}, for
+	 * test infrastructure that needs to override a single setting (see
+	 * {@link #removeConfigValue(String)} to undo).
+	 *
+	 * <p>
+	 * An absent or immutable {@link #configuration} (for instance the
+	 * {@code Map.of()} a context activates with) is upgraded to a mutable copy
+	 * first, so this is safe to call regardless of how the context was set up.
+	 * </p>
+	 */
+	public synchronized void putConfigValue(String key, Object value) {
+		mutableConfiguration().put(key, value);
+	}
+
+	/**
+	 * Removes {@code key} from the live configuration, if present, so
+	 * {@link #getConfigValue(String, Object, Class)} falls back to its default
+	 * again.
+	 */
+	public synchronized void removeConfigValue(String key) {
+		if (configuration != null) {
+			mutableConfiguration().remove(key);
+		}
+	}
+
+	private Map<String, Object> mutableConfiguration() {
+		if (!(configuration instanceof ConcurrentHashMap)) {
+			configuration = configuration == null ? new ConcurrentHashMap<>() : new ConcurrentHashMap<>(configuration);
+		}
+		return configuration;
 	}
 }

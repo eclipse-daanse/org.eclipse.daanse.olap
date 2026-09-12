@@ -38,7 +38,12 @@ import java.util.Arrays;
  * @author jhyde
  */
 public class ByteString implements Comparable<ByteString>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final byte[] bytes;
+    // hash of an immutable value; computed once, recomputed after deserialization
+    private transient int hash;
+    private transient String string;
 
     private static final char[] digits = {
         '0', '1', '2', '3', '4', '5', '6', '7',
@@ -56,7 +61,12 @@ public class ByteString implements Comparable<ByteString>, Serializable {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(bytes);
+        int h = hash;
+        if (h == 0) {
+            h = Arrays.hashCode(bytes);
+            hash = h;
+        }
+        return h;
     }
 
     @Override
@@ -87,22 +97,23 @@ public class ByteString implements Comparable<ByteString>, Serializable {
      */
     @Override
     public String toString() {
-        char[] chars = new char[bytes.length * 2];
-        for (int i = 0, j = 0; i < bytes.length; i++) {
-            byte b = bytes[i];
-            chars[j++] = digits[(b & 0xF0) >> 4];
-            chars[j++] = digits[b & 0x0F];
+        String s = string;
+        if (s == null) {
+            char[] chars = new char[bytes.length * 2];
+            for (int i = 0, j = 0; i < bytes.length; i++) {
+                byte b = bytes[i];
+                chars[j++] = digits[(b & 0xF0) >> 4];
+                chars[j++] = digits[b & 0x0F];
+            }
+            s = new String(chars);
+            string = s;
         }
-        return new String(chars);
+        return s;
     }
 
-    @SuppressWarnings({
-        "CloneDoesntCallSuperClone",
-        "CloneDoesntDeclareCloneNotSupportedException"
-    })
-    @Override
-    public Object clone() {
-        return this;
+    /** The bytes as a fresh array — this instance stays immutable. */
+    public byte[] toByteArray() {
+        return bytes.clone();
     }
 
     /**

@@ -29,7 +29,8 @@ public class MinusPrefixOperatorDef extends AbstractFunctionDefinition {
     // - <Numeric Expression>
     static PrefixOperationAtom prefixOperationAtom = new PrefixOperationAtom("-");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(prefixOperationAtom,
-            "Returns the negative of a number.", DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC) });
+            "Returns the negative of a number.", DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") })
+            .withTextKey("Minus.Prefix.Operation").caption("Negate Operation");
 
     public MinusPrefixOperatorDef() {
         super(functionMetaData);

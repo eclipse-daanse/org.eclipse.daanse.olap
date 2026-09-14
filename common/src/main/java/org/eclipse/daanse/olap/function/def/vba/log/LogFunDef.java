@@ -31,7 +31,7 @@ public class LogFunDef  extends AbstractFunctionDefinition {
         Returns a Double specifying the natural logarithm of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression")}).withTextKey("Log").caption("Log Function");
 
     public LogFunDef() {
         super(functionMetaData);

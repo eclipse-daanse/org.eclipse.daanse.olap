@@ -68,7 +68,7 @@ public class Expressions {
             org.eclipse.daanse.olap.api.function.FunctionParameter parameter = declared[binding.parameterIndex()];
             result[argIndex] = new FunctionParameterR(expressions[argIndex].getCategory(), parameter.name(),
                     parameter.description(), parameter.reservedWords(), parameter.optional(), parameter.repeatable(),
-                    parameter.repeatGroup(), parameter.skippable());
+                    parameter.repeatGroup(), parameter.skippable(), parameter.textKey());
         }
         for (int i = 0; i < result.length; i++) {
             if (result[i] == null) {

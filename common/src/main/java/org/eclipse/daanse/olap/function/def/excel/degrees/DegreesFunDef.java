@@ -30,7 +30,7 @@ public class DegreesFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Converts radians to degrees.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Radians") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Radians").describedAs("Radians") }).withTextKey("Degrees").caption("Degrees Function");
 
     public DegreesFunDef() {
         super(functionMetaData);

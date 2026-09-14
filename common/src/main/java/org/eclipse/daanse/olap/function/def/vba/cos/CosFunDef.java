@@ -31,7 +31,7 @@ public class CosFunDef  extends AbstractFunctionDefinition {
         Returns a Double specifying the cosine of an angle.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression")}).withTextKey("Cos").caption("Cos Function");
 
     public CosFunDef() {
         super(functionMetaData);

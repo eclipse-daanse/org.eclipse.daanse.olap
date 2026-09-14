@@ -33,13 +33,13 @@ public class DDBResolver extends AbstractFunctionDefinitionMultiResolver {
             specific time period using the double-declining balance method or
             some other method you specify.""";
     
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Cost"),
-            FunctionParameterR.param(DataType.NUMERIC, "Salvage"), FunctionParameterR.param(DataType.NUMERIC, "Life"),
-            FunctionParameterR.param(DataType.NUMERIC, "Period"),
-            FunctionParameterR.param(DataType.NUMERIC, "Factor").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Cost").describedAs("Cost"),
+            FunctionParameterR.param(DataType.NUMERIC, "Salvage").describedAs("Salvage"), FunctionParameterR.param(DataType.NUMERIC, "Life").describedAs("Life"),
+            FunctionParameterR.param(DataType.NUMERIC, "Period").describedAs("Period"),
+            FunctionParameterR.param(DataType.NUMERIC, "Factor").describedAs("Factor").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("DDB").caption("DDB Function");
 
     public DDBResolver() {
         super(List.of(new DDBFunDef(functionMetaData)));

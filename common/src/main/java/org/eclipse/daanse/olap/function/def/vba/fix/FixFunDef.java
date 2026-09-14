@@ -30,7 +30,7 @@ public class FixFunDef  extends AbstractFunctionDefinition {
         Returns an expression that has been converted to a Variant of subtype
         Integer.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "expression") });
+            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression") }).withTextKey("Fix").caption("Fix Function");
 
     public FixFunDef() {
         super(functionMetaData);

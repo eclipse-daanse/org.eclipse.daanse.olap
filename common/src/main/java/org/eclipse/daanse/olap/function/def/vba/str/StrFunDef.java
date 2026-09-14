@@ -29,7 +29,7 @@ public class StrFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (String) representation of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "number") });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "number").describedAs("Expression") }).withTextKey("Str").caption("Str Function");
 
     public StrFunDef() {
         super(functionMetaData);

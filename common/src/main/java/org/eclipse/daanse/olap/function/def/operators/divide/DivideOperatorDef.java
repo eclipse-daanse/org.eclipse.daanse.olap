@@ -29,8 +29,8 @@ public class DivideOperatorDef extends AbstractFunctionDefinition {
     // <Numeric Expression> / <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("/");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Divides two numbers.",
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1").describedAs("First Numeric Expression"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2").describedAs("Second Numeric Expression") }).withTextKey("Divide.Operation").caption("Divide Operation");
 
     public DivideOperatorDef() {
         super(functionMetaData);

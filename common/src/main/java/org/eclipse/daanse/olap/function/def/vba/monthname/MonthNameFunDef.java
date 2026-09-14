@@ -32,7 +32,7 @@ public class MonthNameFunDef  extends AbstractFunctionDefinition {
         Returns a string indicating the specified month.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.INTEGER, "Month"), FunctionParameterR.param(DataType.LOGICAL, "Abbreviate")});
+                    FunctionParameterR.param(DataType.INTEGER, "Month").describedAs("Month"), FunctionParameterR.param(DataType.LOGICAL, "Abbreviate").describedAs("Abbreviate")}).withTextKey("MonthName").caption("MonthName Function");
 
     public MonthNameFunDef() {
         super(functionMetaData);

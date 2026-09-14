@@ -32,14 +32,14 @@ public class ReplaceResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a string in which a specified substring has been replaced
         with another substring a specified number of times.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "expression"),
-            FunctionParameterR.param(DataType.STRING, "find"), FunctionParameterR.param(DataType.STRING, "replace"),
-            FunctionParameterR.param(DataType.INTEGER, "start").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "coun").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "compare").asOptional() }; // compare is currently ignored
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "expression").describedAs("expression"),
+            FunctionParameterR.param(DataType.STRING, "find").describedAs("Find"), FunctionParameterR.param(DataType.STRING, "replace").describedAs("replace"),
+            FunctionParameterR.param(DataType.INTEGER, "start").describedAs("Start").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "coun").describedAs("Coun").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "compare").describedAs("Compare").asOptional() }; // compare is currently ignored
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("Replace").caption("Replace Function");
 
     public ReplaceResolver() {
         super(List.of(new ReplaceFunDef(functionMetaData)));

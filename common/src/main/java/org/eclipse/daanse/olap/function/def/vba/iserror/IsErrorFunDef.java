@@ -31,7 +31,7 @@ public class IsErrorFunDef  extends AbstractFunctionDefinition {
         value.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.VALUE, "VarName")});
+                    FunctionParameterR.param(DataType.VALUE, "VarName").describedAs("Expression")}).withTextKey("IsError").caption("IsError Function");
 
     public IsErrorFunDef() {
         super(functionMetaData);

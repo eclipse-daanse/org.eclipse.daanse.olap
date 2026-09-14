@@ -30,7 +30,7 @@ public class TimeValueFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (Date) containing the time.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date") });
+            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date") }).withTextKey("TimeValue").caption("TimeValue Function");
 
     public TimeValueFunDef() {
         super(functionMetaData);

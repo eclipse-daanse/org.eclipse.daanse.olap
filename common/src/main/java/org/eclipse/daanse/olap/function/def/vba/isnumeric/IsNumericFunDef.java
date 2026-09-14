@@ -31,7 +31,7 @@ public class IsNumericFunDef  extends AbstractFunctionDefinition {
         evaluated as a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.LOGICAL, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.VALUE, "VarName")});
+                    FunctionParameterR.param(DataType.VALUE, "VarName").describedAs("Expression")}).withTextKey("IsNumeric").caption("IsNumeric Function");
 
     public IsNumericFunDef() {
         super(functionMetaData);

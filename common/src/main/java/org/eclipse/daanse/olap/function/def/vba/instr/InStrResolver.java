@@ -32,19 +32,19 @@ public class InStrResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Variant (Long) specifying the position of the first
         occurrence of one string within another.""";
 
-    private static FunctionParameterR[] p1 = { FunctionParameterR.param(DataType.STRING, "String Check"), FunctionParameterR.param(DataType.STRING, "String Match") };
-    private static FunctionParameterR[] p2 = { FunctionParameterR.param(DataType.INTEGER, "Start"), FunctionParameterR.param(DataType.STRING, "String Check"),
-            FunctionParameterR.param(DataType.STRING, "String Match") };
-    private static FunctionParameterR[] p3 = { FunctionParameterR.param(DataType.INTEGER, "Start"), FunctionParameterR.param(DataType.STRING, "String Check"),
-            FunctionParameterR.param(DataType.STRING, "String Match"),
-            FunctionParameterR.param(DataType.INTEGER, "Compare") };
+    private static FunctionParameterR[] p1 = { FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"), FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match") };
+    private static FunctionParameterR[] p2 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match") };
+    private static FunctionParameterR[] p3 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match"),
+            FunctionParameterR.param(DataType.INTEGER, "Compare").describedAs("Compare") };
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p1);
+            DataType.INTEGER, p1).withTextKey("InStr.Basic").caption("InStr Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p2);
+            DataType.INTEGER, p2).withTextKey("InStr.WithStart").caption("InStr Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, p3);
+            DataType.INTEGER, p3).withTextKey("InStr.WithCompare").caption("InStr Function");
 
     public InStrResolver() {
         super(List.of(new InStrFunDef(functionMetaData1), new InStrFunDef(functionMetaData2), new InStrFunDef(functionMetaData3)));

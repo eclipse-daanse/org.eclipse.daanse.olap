@@ -74,7 +74,8 @@ public class SetResolver  extends NoExpressionRequiredFunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(SetFunDef.functionAtom, SetFunDef.DESCRIPTION, DataType.SET,
-            param(DataType.VALUE, "Member_or_Set").asOptional().repeatable(1)));
+            param(DataType.VALUE, "Member_or_Set").asOptional().repeatable(1).describedAs("Member_or_Set")).withTextKey("Brace.Operator")
+        .caption("Brace operator"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

@@ -31,7 +31,7 @@ public class StrReverseFunDef  extends AbstractFunctionDefinition {
         Returns a string in which the character order of a specified string
         is reversed.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String") });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("String Expression") }).withTextKey("StrReverse").caption("StrReverse Function");
 
     public StrReverseFunDef() {
         super(functionMetaData);

@@ -29,7 +29,7 @@ public class TimeFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (Date) indicating the current system time.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { });
+            DataType.DATE_TIME, new FunctionParameterR[] { }).withTextKey("Time").caption("Time Function");
 
     public TimeFunDef() {
         super(functionMetaData);

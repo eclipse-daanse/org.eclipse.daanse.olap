@@ -30,7 +30,8 @@ public class EqualOperatorDef extends AbstractFunctionDefinition {
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("=");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom,
             "Returns whether two expressions are equal.", DataType.LOGICAL,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"), FunctionParameterR.param(DataType.NUMERIC, "Numeric2") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1").describedAs("First Numeric Expression"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2").describedAs("Second Numeric Expression") }).withTextKey("Equal.Operation").caption("Equal Operation");
 
     public EqualOperatorDef() {
         super(functionMetaData);

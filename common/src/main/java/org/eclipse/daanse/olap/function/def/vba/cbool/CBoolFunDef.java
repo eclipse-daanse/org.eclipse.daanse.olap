@@ -29,7 +29,7 @@ public class CBoolFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns an expression that has been converted to a Variant of subtype Boolean.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "Expression") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression") }).withTextKey("CBool").caption("CBool Function");
 
     public CBoolFunDef() {
         super(functionMetaData);

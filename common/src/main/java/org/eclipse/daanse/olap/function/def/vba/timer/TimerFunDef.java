@@ -30,7 +30,7 @@ public class TimerFunDef  extends AbstractFunctionDefinition {
         Returns a Single representing the number of seconds elapsed since
         midnight.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { });
+            DataType.NUMERIC, new FunctionParameterR[] { }).withTextKey("Timer").caption("Timer Function");
 
     public TimerFunDef() {
         super(functionMetaData);

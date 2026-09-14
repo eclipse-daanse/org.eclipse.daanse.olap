@@ -25,15 +25,17 @@ import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.core.resolver.AbstractFunctionDefinitionMultiResolver;
 import org.osgi.service.component.annotations.Component;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
+
 @Component(service = FunctionResolver.class)
 public class CorrelationResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Correlation");
     private static String DESCRIPTION = "Returns the correlation of two series evaluated over a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CorrelationResolver() {
         super(List.of(new CorrelationFunDef(functionMetaData)));

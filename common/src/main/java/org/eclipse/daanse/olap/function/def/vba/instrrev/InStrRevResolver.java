@@ -32,13 +32,13 @@ public class InStrRevResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns the position of an occurrence of one string within another,
         from the end of string.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "String Check"),
-            FunctionParameterR.param(DataType.STRING, "String Match"),
-            FunctionParameterR.param(DataType.INTEGER, "Start").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Compare").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"),
+            FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match"),
+            FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Compare").describedAs("Compare").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, params);
+            DataType.INTEGER, params).withTextKey("InStrRev").caption("InStrRev Function");
 
     public InStrRevResolver() {
         super(List.of(new InStrRevFunDef(functionMetaData)));

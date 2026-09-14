@@ -32,14 +32,14 @@ public class FormatPercentResolver extends AbstractFunctionDefinitionMultiResolv
         Returns an expression formatted as a percentage (multipled by 100)
         with a trailing % character.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression"),
-            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Group Digits").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression"),
+            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").describedAs("Digits After Decimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").describedAs("Include Leading Digit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").describedAs("Use Parens For Negative Numbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Group Digits").describedAs("Group Digits").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, params);
+            DataType.STRING, params).withTextKey("FormatPercent").caption("FormatPercent Function");
 
     public FormatPercentResolver() {
         super(List.of(new FormatPercentFunDef(functionMetaData)));

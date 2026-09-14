@@ -163,7 +163,8 @@ public final class FunctionRows {
 
     private static ParameterInfo parameterInfo(FunctionParameter parameter, ResolvedFunctionTexts texts) {
         String name = parameter.name().orElseGet(() -> parameter.dataType().getPrettyName());
-        String description = Optional.ofNullable(texts.parameters().get(parameter.name().orElse(null)))
+        String key = parameter.textKey().orElse(null);
+        String description = Optional.ofNullable(texts.parameters().get(key))
                 .flatMap(ResolvedFunctionTexts.ResolvedParameterTexts::description).or(parameter::description)
                 .orElse("");
 
@@ -180,7 +181,8 @@ public final class FunctionRows {
     }
 
     private static String displayNameOf(FunctionParameter parameter, ResolvedFunctionTexts texts) {
-        Optional<String> localized = Optional.ofNullable(texts.parameters().get(parameter.name().orElse(null)))
+        String key = parameter.textKey().orElse(null);
+        Optional<String> localized = Optional.ofNullable(texts.parameters().get(key))
                 .map(ResolvedFunctionTexts.ResolvedParameterTexts::displayName);
         return localized.orElseGet(() -> parameter.name().orElse(parameter.dataType().getPrettyName())).replace('_',
                 ' ');

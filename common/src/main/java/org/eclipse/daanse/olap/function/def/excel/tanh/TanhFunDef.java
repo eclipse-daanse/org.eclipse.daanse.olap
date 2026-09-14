@@ -30,7 +30,7 @@ public class TanhFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the hyperbolic tangent of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Radians") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Radians").describedAs("Radians") }).withTextKey("Tanh").caption("Tanh Function");
 
     public TanhFunDef() {
         super(functionMetaData);

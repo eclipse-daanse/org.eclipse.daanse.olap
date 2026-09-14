@@ -24,13 +24,16 @@ import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
+
 public class PlusOperatorDef extends AbstractFunctionDefinition{
 
     // <Numeric Expression> + <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("+");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Adds two numbers.",
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric1")});
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1).describedAs("First Numeric Expression"),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).describedAs("Second Numeric Expression")})
+            .withTextKey("Plus.Operator").caption("Plus Operation");
 
     public PlusOperatorDef() {
         super(functionMetaData);

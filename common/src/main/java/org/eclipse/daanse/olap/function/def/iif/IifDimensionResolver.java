@@ -30,9 +30,9 @@ public class IifDimensionResolver extends ParametersCheckingFunctionDefinitionRe
     static final OperationAtom atom = new FunctionOperationAtom("IIf");
     private static String DESCRIPTION = "Returns one of two dimension values determined by a logical test.";
     private static FunctionParameterR[] params = new FunctionParameterR[] {
-            FunctionParameterR.param(DataType.LOGICAL, "Condition"), FunctionParameterR.param(DataType.DIMENSION, "Dimension1"),
-            FunctionParameterR.param(DataType.DIMENSION, "Dimension2") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.DIMENSION, params);
+            FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"), FunctionParameterR.param(DataType.DIMENSION, "Dimension1").describedAs("First Dimension"),
+            FunctionParameterR.param(DataType.DIMENSION, "Dimension2").describedAs("Second Dimension") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.DIMENSION, params).withTextKey("IIf.Dimension");
     
     public IifDimensionResolver() {
         super(new IifFunDef(metadata));

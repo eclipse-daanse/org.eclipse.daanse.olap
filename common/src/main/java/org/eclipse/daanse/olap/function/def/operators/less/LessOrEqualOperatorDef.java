@@ -29,8 +29,8 @@ public class LessOrEqualOperatorDef extends AbstractFunctionDefinition {
     // <Numeric Expression> <= <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("<=");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Returns whether an expression is less than or equal to another.",
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1").describedAs("First Numeric Expression"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2").describedAs("Second Numeric Expression") }).withTextKey("LessOrEqual.Operation").caption("Less Than Or Equal Operation");
 
     public LessOrEqualOperatorDef() {
         super(functionMetaData);

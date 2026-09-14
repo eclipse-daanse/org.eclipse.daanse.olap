@@ -33,11 +33,11 @@ public class NPerFunDef  extends AbstractFunctionDefinition {
         based on periodic, fixed payments and a fixed interest rate.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] { 
-                    FunctionParameterR.param(DataType.NUMERIC, "Rate"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Pmt"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Pv"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Fv"),
-                    FunctionParameterR.param(DataType.LOGICAL, "Due") });
+                    FunctionParameterR.param(DataType.NUMERIC, "Rate").describedAs("Rate"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Pmt").describedAs("Pmt"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Pv").describedAs("Pv"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Fv").describedAs("Fv"),
+                    FunctionParameterR.param(DataType.LOGICAL, "Due").describedAs("Due") }).withTextKey("NPer").caption("NPer Function");
 
     public NPerFunDef() {
         super(functionMetaData);

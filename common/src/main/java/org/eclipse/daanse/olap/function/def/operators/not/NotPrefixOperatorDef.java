@@ -30,7 +30,8 @@ public class NotPrefixOperatorDef extends AbstractFunctionDefinition {
     static PrefixOperationAtom prefixOperationAtom = new PrefixOperationAtom("NOT");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(prefixOperationAtom,
             "Returns the negation of a condition.", DataType.LOGICAL,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition") })
+            .withTextKey("Not.Operation").caption("NOT Operation");
 
     public NotPrefixOperatorDef() {
         super(functionMetaData);

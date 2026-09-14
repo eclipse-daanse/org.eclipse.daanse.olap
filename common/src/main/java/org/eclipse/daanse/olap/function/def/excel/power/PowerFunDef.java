@@ -30,7 +30,7 @@ public class PowerFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the result of a number raised to a power.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "x"), FunctionParameterR.param(DataType.NUMERIC, "y") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "x").describedAs("x"), FunctionParameterR.param(DataType.NUMERIC, "y").describedAs("y") }).withTextKey("Power").caption("Power Function");
 
     public PowerFunDef() {
         super(functionMetaData);

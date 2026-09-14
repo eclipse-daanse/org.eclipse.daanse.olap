@@ -63,4 +63,20 @@ public interface FunctionParameter {
     default boolean skippable() {
         return false;
     }
+
+    /**
+     * Stable localisation key of this parameter. Texts are looked up as
+     * {@code <functionTextKey>.param.<textKey>.displayName|description}.
+     *
+     * <p>Defaults to {@link #name()}, so every existing bundle entry keyed by the
+     * parameter name stays valid. Declarations should override it with a semantic,
+     * lowerCamel key ({@code sourceSet}, {@code elementCount}) — unlike the name, it
+     * never reaches the wire and never doubles as a display string.
+     *
+     * <p>Within one overload the keys must be unique; parameters of the same
+     * {@code repeatGroup} are one logical parameter and share a single key.
+     */
+    default Optional<String> textKey() {
+        return name();
+    }
 }

@@ -30,7 +30,8 @@ public class LessOrEqualStringOperatorDef extends AbstractFunctionDefinition {
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("<=");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom,
             "Returns whether an expression is less than or equal to another.", DataType.LOGICAL,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1"), FunctionParameterR.param(DataType.STRING, "String2")});
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1").describedAs("First String Expression"),
+                    FunctionParameterR.param(DataType.STRING, "String2").describedAs("Second String Expression")}).withTextKey("LessOrEqual.String.Operation").caption("Less Than Or Equal Operation");
 
     public LessOrEqualStringOperatorDef() {
         super(functionMetaData);

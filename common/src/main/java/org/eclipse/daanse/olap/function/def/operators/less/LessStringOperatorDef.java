@@ -29,8 +29,8 @@ public class LessStringOperatorDef extends AbstractFunctionDefinition {
     // <String Expression> < <String Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("<");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Returns whether an expression is less than another.",
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1"),
-                    FunctionParameterR.param(DataType.STRING, "String2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String1").describedAs("First String Expression"),
+                    FunctionParameterR.param(DataType.STRING, "String2").describedAs("Second String Expression") }).withTextKey("Less.String.Operation").caption("Less Than Operation");
 
     public LessStringOperatorDef() {
         super(functionMetaData);

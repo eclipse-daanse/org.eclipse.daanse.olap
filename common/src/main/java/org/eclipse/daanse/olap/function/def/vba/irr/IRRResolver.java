@@ -32,11 +32,11 @@ public class IRRResolver extends AbstractFunctionDefinitionMultiResolver {
             Returns a Double specifying the internal rate of return for a series
             of periodic cash flows (payments and receipts).""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.ARRAY, "ValueArray"),
-            FunctionParameterR.param(DataType.NUMERIC, "Guess").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.ARRAY, "ValueArray").describedAs("ValueArray"),
+            FunctionParameterR.param(DataType.NUMERIC, "Guess").describedAs("Guess").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("IRR").caption("IRR Function");
 
     public IRRResolver() {
         super(List.of(new IRRFunDef(functionMetaData)));

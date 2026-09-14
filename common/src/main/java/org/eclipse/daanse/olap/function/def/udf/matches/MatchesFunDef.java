@@ -31,7 +31,8 @@ public class MatchesFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns true if the string matches the regular expression.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String"), FunctionParameterR.param(DataType.STRING, "regex") }).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.LOGICAL , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("String Expression"), FunctionParameterR.param(DataType.STRING, "regex").describedAs("Regular Expression") })
+            .withTextKey("Matches.Operation").caption("MATCHES Operation").origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public MatchesFunDef() {
         super(functionMetaData);

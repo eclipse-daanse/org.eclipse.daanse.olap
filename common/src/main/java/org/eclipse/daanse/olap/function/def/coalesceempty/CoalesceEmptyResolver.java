@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.function.def.coalesceempty;
 
 import static org.eclipse.daanse.olap.function.core.FunctionParameterR.param;
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class CoalesceEmptyResolver implements FunctionResolver {
                 if (validator.canConvert(i, args[i], type, conversions)) {
                     matchingArgs++;
                 }
-                argTypes[i] = new FunctionParameterR(type);
+                argTypes[i] = new FunctionParameterR(type, canonicalNameOf(type) + i);
             }
             if (matchingArgs == args.length) {
 
@@ -80,11 +81,11 @@ public class CoalesceEmptyResolver implements FunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(CoalesceEmptyFunDef.functionAtom, DESCRIPTION, DataType.NUMERIC,
-            param(DataType.NUMERIC),
-            param(DataType.NUMERIC).repeatable(1)),
+            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
+            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).repeatable(1)),
         FunctionMetaDataR.of(CoalesceEmptyFunDef.functionAtom, DESCRIPTION, DataType.STRING,
-            param(DataType.STRING),
-            param(DataType.STRING).repeatable(1)));
+            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 1),
+            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 2).repeatable(1)));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

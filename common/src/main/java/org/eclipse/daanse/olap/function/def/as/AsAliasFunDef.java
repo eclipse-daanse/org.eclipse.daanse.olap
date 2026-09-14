@@ -51,7 +51,8 @@ public class AsAliasFunDef extends AbstractFunctionDefinition {
 
 	static final OperationAtom functionAtom = new InfixOperationAtom("AS");
 	static final FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, DESCRIPTION,
-			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.NUMERIC) });
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Expression"), FunctionParameterR.param(DataType.NUMERIC).describedAs("Index") })
+			.withTextKey("AS.Operation").caption("AS Operation");
 
 	private final QueryImpl.ScopedNamedSet scopedNamedSet;
 

@@ -26,13 +26,13 @@ import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 
 public class IifNumericFunDef extends IifFunDef {
 
-    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition"),
-            FunctionParameterR.param(DataType.NUMERIC, "Numeric1"),
-            FunctionParameterR.param(DataType.NUMERIC, "Numeric2") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
+            FunctionParameterR.param(DataType.NUMERIC, "Numeric1").describedAs("First Numeric Expression"),
+            FunctionParameterR.param(DataType.NUMERIC, "Numeric2").describedAs("Second Numeric Expression") };
     static OperationAtom NUMERIC_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
     static FunctionMetaData NUMERIC_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(NUMERIC_INSTANCE_FUNCTION_ATOM,
             "Returns one of two numeric values determined by a logical test.",
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("IIf.Numeric");
     // IIf(<Logical Expression>, <Numeric Expression>, <Numeric Expression>)
 
     public IifNumericFunDef() {

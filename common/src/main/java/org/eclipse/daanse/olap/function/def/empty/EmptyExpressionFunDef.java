@@ -29,7 +29,8 @@ public class EmptyExpressionFunDef extends AbstractFunctionDefinition {
 	private static final OperationAtom atom = new EmptyOperationAtom();
 
 	private static final FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
-			"Dummy function representing the empty expression", DataType.EMPTY, new FunctionParameterR[] {  });
+            "Dummy function representing the empty expression", DataType.EMPTY, new FunctionParameterR[] {  }).withTextKey("Empty.Operation")
+            .caption("Empty Operation");
 
 	public EmptyExpressionFunDef() {
 		super(functionMetaData);

@@ -33,8 +33,8 @@ public class NPVFunDef  extends AbstractFunctionDefinition {
         and a discount rate.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "R"),
-                    FunctionParameterR.param(DataType.ARRAY, "CFS") });
+                    FunctionParameterR.param(DataType.NUMERIC, "R").describedAs("R"),
+                    FunctionParameterR.param(DataType.ARRAY, "CFS").describedAs("CFS") }).withTextKey("NPV").caption("NPV Function");
 
     public NPVFunDef() {
         super(functionMetaData);

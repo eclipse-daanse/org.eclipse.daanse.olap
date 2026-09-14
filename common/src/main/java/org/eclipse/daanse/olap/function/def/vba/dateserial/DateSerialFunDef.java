@@ -30,7 +30,7 @@ public class DateSerialFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (Date) for a specified year, month, and day.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Year"), FunctionParameterR.param(DataType.INTEGER, "Month"), FunctionParameterR.param(DataType.INTEGER, "Day") });
+            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Year").describedAs("Year"), FunctionParameterR.param(DataType.INTEGER, "Month").describedAs("Month"), FunctionParameterR.param(DataType.INTEGER, "Day").describedAs("Day") }).withTextKey("DateSerial").caption("DateSerial Function");
 
     public DateSerialFunDef() {
         super(functionMetaData);

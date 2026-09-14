@@ -29,7 +29,7 @@ public class StringFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("String");
     static String description = "Returns a String containing a repeating string of characters of a given length.";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Number"), FunctionParameterR.param(DataType.STRING, "Character") });
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Number").describedAs("Numeric Expression"), FunctionParameterR.param(DataType.STRING, "Character").describedAs("Character") }).withTextKey("String").caption("String Function");
 
     public StringFunDef() {
         super(functionMetaData);

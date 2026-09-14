@@ -31,9 +31,10 @@ public class IifMemberResolver extends ParametersCheckingFunctionDefinitionResol
     private static String DESCRIPTION = "Returns one of two member values determined by a logical test.";
 
     private static FunctionParameterR[] params = new FunctionParameterR[] {
-            FunctionParameterR.param(DataType.LOGICAL, "Condition"), FunctionParameterR.param(DataType.MEMBER, "Member1"),
-            FunctionParameterR.param(DataType.MEMBER, "Member2") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params);
+            FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
+            FunctionParameterR.param(DataType.MEMBER, "Member1").describedAs("First Member Expression"),
+            FunctionParameterR.param(DataType.MEMBER, "Member2").describedAs("Second Member Expression") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params).withTextKey("IIf.Member");
 
     public IifMemberResolver() {
         super(new IifFunDef(metadata));

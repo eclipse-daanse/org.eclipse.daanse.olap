@@ -29,7 +29,7 @@ public class ValFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns an expression that has been converted to a Variant of subtype Double.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("String Expression") }).withTextKey("Val").caption("Val Function");
 
     public ValFunDef() {
         super(functionMetaData);

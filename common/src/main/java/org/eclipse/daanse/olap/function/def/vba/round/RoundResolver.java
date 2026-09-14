@@ -31,11 +31,11 @@ public class RoundResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
         Returns a number rounded to a specified number of decimal places.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Number"),
-            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression"),
+            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").describedAs("Digits After Decimal").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("Round").caption("Round Function");
 
     public RoundResolver() {
         super(List.of(new RoundFunDef(functionMetaData)));

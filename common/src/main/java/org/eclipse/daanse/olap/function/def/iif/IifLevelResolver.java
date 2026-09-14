@@ -30,9 +30,9 @@ public class IifLevelResolver extends ParametersCheckingFunctionDefinitionResolv
     static final OperationAtom atom = new FunctionOperationAtom("IIf");
     private static String DESCRIPTION = "Returns one of two level values determined by a logical test.";
     private static FunctionParameterR[] params = new FunctionParameterR[] {
-            FunctionParameterR.param(DataType.LOGICAL, "Condition"), FunctionParameterR.param(DataType.LEVEL, "Level1"),
-            FunctionParameterR.param(DataType.LEVEL, "Level2") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params);
+            FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"), FunctionParameterR.param(DataType.LEVEL, "Level1").describedAs("First Level"),
+            FunctionParameterR.param(DataType.LEVEL, "Level2").describedAs("Second Level") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params).withTextKey("IIf.Level");
 
     public IifLevelResolver() {
         super(new IifFunDef(metadata));

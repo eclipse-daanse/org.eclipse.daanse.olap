@@ -31,13 +31,13 @@ public class DateDiffResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
             Returns a Variant (Long) specifying the number of time intervals
             between two specified dates.""";
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName"),
-            FunctionParameterR.param(DataType.DATE_TIME, "Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2"),
-            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName").describedAs("IntervalName"),
+            FunctionParameterR.param(DataType.DATE_TIME, "Date1").describedAs("Date 1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2").describedAs("Date 2"),
+            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").describedAs("First Day Of Week").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").describedAs("First Week Of Year").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("DateDiff").caption("DateDiff Function");
 
     public DateDiffResolver() {
         super(List.of(new DateDiffFunDef(functionMetaData)));

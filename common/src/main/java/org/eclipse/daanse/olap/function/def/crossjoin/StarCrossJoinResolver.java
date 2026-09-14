@@ -36,25 +36,26 @@ public class StarCrossJoinResolver extends AbstractFunctionDefinitionMultiResolv
 
     static final OperationAtom atom = new InfixOperationAtom("*");
 
-    static final FunctionParameterR[] starCrossJoinSetSetParam = { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.SET) };
+    static final FunctionParameterR[] starCrossJoinSetSetParam = { FunctionParameterR.param(DataType.SET).describedAs("First Set"), FunctionParameterR.param(DataType.SET).describedAs("Second Set") };
     static final FunctionMetaData starCrossJoinSetSet = new FunctionMetaDataR(atom,
             "Returns the cross product of two sets.", DataType.SET,
-            starCrossJoinSetSetParam);
+            starCrossJoinSetSetParam).withTextKey("StarCrossJoin.Set.Set").caption("Cross Join Operation with Set and Set");
 
-    static final FunctionParameterR[] starCrossJoinSetMemberParam = { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.MEMBER) };
+    static final FunctionParameterR[] starCrossJoinSetMemberParam = { FunctionParameterR.param(DataType.SET).describedAs("Set"), FunctionParameterR.param(DataType.MEMBER).describedAs("Member") };
     static final FunctionMetaData starCrossJoinSetMember = new FunctionMetaDataR(atom,
             "Returns the cross product of Set and Member.", DataType.SET,
-            starCrossJoinSetMemberParam);
+            starCrossJoinSetMemberParam).withTextKey("StarCrossJoin.Set.Member").caption("Cross Join Operation with Set and Member\"");
 
-    static final FunctionParameterR[] starCrossJoinMemberSetParam = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET) };
+    static final FunctionParameterR[] starCrossJoinMemberSetParam = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.SET).describedAs("Set") };
     static final FunctionMetaData starCrossJoinMemberSet = new FunctionMetaDataR(atom,
             "Returns the cross product of Member and Set.", DataType.SET,
-            starCrossJoinMemberSetParam);
+            starCrossJoinMemberSetParam).withTextKey("StarCrossJoin.Member.Set").caption("Cross Join Operation with Member and Set\"");
 
-    static final FunctionParameterR[] starCrossJoinMemberMemberParam = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.MEMBER) };
+    static final FunctionParameterR[] starCrossJoinMemberMemberParam = { FunctionParameterR.param(DataType.MEMBER).describedAs("First Member"), FunctionParameterR.param(DataType.MEMBER)
+            .describedAs("Second Member") };
     static final FunctionMetaData starCrossJoinMemberMember = new FunctionMetaDataR(atom,
             "Returns the cross product of two Members.", DataType.SET,
-            starCrossJoinMemberMemberParam);
+            starCrossJoinMemberMemberParam).withTextKey("StarCrossJoin.Member.Member").caption("Cross Join Operation with Member and Member\"");
 
     public StarCrossJoinResolver() {
         super(List.of(new CrossJoinFunDef(starCrossJoinSetSet), new CrossJoinFunDef(starCrossJoinSetMember),
@@ -75,8 +76,8 @@ public class StarCrossJoinResolver extends AbstractFunctionDefinitionMultiResolv
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
             FunctionMetaDataR.of(atom, "Returns the cross product of two sets.", DataType.SET,
-                    param(DataType.SET, "Set1"),
-                    param(DataType.SET, "Set2").repeatable(1)));
+                    param(DataType.SET, "Set1").describedAs("First Set"),
+                    param(DataType.SET, "Set2").describedAs("Second Set").repeatable(1)).withTextKey("StarCrossJoin.Set.Set"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

@@ -32,7 +32,7 @@ public class AscBFunDef  extends AbstractFunctionDefinition {
         the first letter in a string.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.INTEGER, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.STRING, "String")});
+                    FunctionParameterR.param(DataType.STRING, "String").describedAs("String Expression")}).withTextKey("AscB").caption("AscB Function");
 
     public AscBFunDef() {
         super(functionMetaData);

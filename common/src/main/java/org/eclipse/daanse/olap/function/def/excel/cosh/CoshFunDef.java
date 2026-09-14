@@ -30,7 +30,7 @@ public class CoshFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the hyperbolic cosine of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression") }).withTextKey("Cosh").caption("Cosh Function");
 
     public CoshFunDef() {
         super(functionMetaData);

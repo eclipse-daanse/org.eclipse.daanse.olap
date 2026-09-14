@@ -32,7 +32,8 @@ public class InFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns true if the member argument is contained in the set argument.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.LOGICAL , new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET) }).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.LOGICAL , new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.SET).describedAs("Set") })
+            .withTextKey("In.Operation").caption("IN Operation").origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public InFunDef() {
         super(functionMetaData);

@@ -25,6 +25,8 @@ import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.core.resolver.AbstractFunctionDefinitionMultiResolver;
 import org.osgi.service.component.annotations.Component;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
+
 @Component(service = FunctionResolver.class)
 public class CovarianceNResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("CovarianceN");
@@ -32,8 +34,8 @@ public class CovarianceNResolver extends AbstractFunctionDefinitionMultiResolver
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CovarianceNResolver() {
         super(List.of(new CovarianceFunDef(functionMetaData)));

@@ -25,6 +25,8 @@ import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.core.resolver.AbstractFunctionDefinitionMultiResolver;
 import org.osgi.service.component.annotations.Component;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
+
 @Component(service = FunctionResolver.class)
 public class DrilldownLevelResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("DrilldownLevel");
@@ -39,7 +41,7 @@ public class DrilldownLevelResolver extends AbstractFunctionDefinitionMultiResol
             FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.NUMERIC, "Index"), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))
                     .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.")};
     private static FunctionParameterR[] xeey = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))
+            FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 1), FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 2), new FunctionParameterR(DataType.SYMBOL, "Include members", Optional.of(RESERVED_WORDS))
                     .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.") };
     // {"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"}
 
@@ -47,13 +49,13 @@ public class DrilldownLevelResolver extends AbstractFunctionDefinitionMultiResol
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
             x);
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xl);
+            DataType.SET, xl).withTextKey("DrilldownLevel.withLevel");;
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xen);
+            DataType.SET, xen).withTextKey("DrilldownLevel.withIndex");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xeny);
+            DataType.SET, xeny).withTextKey("DrilldownLevel.withIndexIncludeMembers");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xeey);
+            DataType.SET, xeey).withTextKey("DrilldownLevel.withIncludeMembers");
 
     @Override
     public List<String> getReservedWords() {

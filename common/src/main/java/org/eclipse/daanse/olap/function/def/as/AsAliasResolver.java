@@ -75,8 +75,8 @@ public class AsAliasResolver extends NoExpressionRequiredFunctionResolver {
 
 	private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
 			FunctionMetaDataR.of(AsAliasFunDef.functionAtom, AsAliasFunDef.DESCRIPTION, DataType.SET,
-					param(DataType.SET, "Set_Expression"),
-					param(DataType.STRING, "Alias")));
+					param(DataType.SET, "Set_Expression").describedAs("Set Expression") ,
+					param(DataType.STRING, "Alias").describedAs("Alias")).withTextKey("AS.Operation").caption("AS Operation"));
 
 	@Override
 	public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

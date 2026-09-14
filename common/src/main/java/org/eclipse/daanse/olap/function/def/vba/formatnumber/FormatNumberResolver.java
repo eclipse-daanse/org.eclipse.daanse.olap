@@ -31,14 +31,14 @@ public class FormatNumberResolver extends AbstractFunctionDefinitionMultiResolve
     private static String DESCRIPTION = """
         Returns an expression formatted as a number.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression"),
-            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Group Digits").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression"),
+            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").describedAs("Digits After Decimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").describedAs("Include Leading Digit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").describedAs("Use Parens For Negative Numbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Group Digits").describedAs("Group Digits").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, params);
+            DataType.STRING, params).withTextKey("FormatNumber").caption("FormatNumber Function");
 
     public FormatNumberResolver() {
         super(List.of(new FormatNumberFunDef(functionMetaData)));

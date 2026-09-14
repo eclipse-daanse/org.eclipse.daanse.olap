@@ -27,11 +27,12 @@ import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 public class IifTupleFunDef extends IifFunDef {
 
     static OperationAtom TUPLE_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
-    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition"),
-            FunctionParameterR.param(DataType.TUPLE, "Tuple1"), FunctionParameterR.param(DataType.TUPLE, "Tuple2") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
+            FunctionParameterR.param(DataType.TUPLE, "Tuple1").describedAs("First Tuple Expression"),
+            FunctionParameterR.param(DataType.TUPLE, "Tuple2").describedAs("Second Tuple Expression") };
     static FunctionMetaData TUPLE_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(TUPLE_INSTANCE_FUNCTION_ATOM,
             "Returns one of two tuples determined by a logical test.",
-            DataType.TUPLE, params);
+            DataType.TUPLE, params).withTextKey("IIf.Tuple");
     // IIf(<Logical Expression>, <Tuple Expression>, <Tuple Expression>)
 
     public IifTupleFunDef() {

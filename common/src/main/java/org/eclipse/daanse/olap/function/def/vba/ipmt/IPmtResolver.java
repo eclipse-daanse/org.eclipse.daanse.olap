@@ -33,14 +33,14 @@ public class IPmtResolver extends AbstractFunctionDefinitionMultiResolver {
             of an annuity based on periodic, fixed payments and a fixed
             interest rate.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate"),
-            FunctionParameterR.param(DataType.NUMERIC, "Per"), FunctionParameterR.param(DataType.NUMERIC, "NPer"),
-            FunctionParameterR.param(DataType.NUMERIC, "Pv"),
-            FunctionParameterR.param(DataType.NUMERIC, "Fv").asOptional(),
-            FunctionParameterR.param(DataType.LOGICAL, "due").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate").describedAs("Rate"),
+            FunctionParameterR.param(DataType.NUMERIC, "Per").describedAs("Per"), FunctionParameterR.param(DataType.NUMERIC, "NPer").describedAs("NPer"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pv").describedAs("Pv"),
+            FunctionParameterR.param(DataType.NUMERIC, "Fv").describedAs("Fv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "due").describedAs("due").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("IPmt").caption("IPmt Function");
 
     public IPmtResolver() {
         super(List.of(new IPmtFunDef(functionMetaData)));

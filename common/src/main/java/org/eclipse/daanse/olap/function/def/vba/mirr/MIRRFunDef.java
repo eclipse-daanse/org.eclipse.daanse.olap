@@ -32,9 +32,9 @@ public class MIRRFunDef  extends AbstractFunctionDefinition {
         a series of periodic cash flows (payments and receipts).""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.ARRAY, "ValueArray"),
-                    FunctionParameterR.param(DataType.NUMERIC, "FinanceRate"),
-                    FunctionParameterR.param(DataType.NUMERIC, "ReinvestRate") });
+                    FunctionParameterR.param(DataType.ARRAY, "ValueArray").describedAs("ValueArray"),
+                    FunctionParameterR.param(DataType.NUMERIC, "FinanceRate").describedAs("FinanceRate"),
+                    FunctionParameterR.param(DataType.NUMERIC, "ReinvestRate").describedAs("ReinvestRate") }).withTextKey("MIRR").caption("MIRR Function");
 
     public MIRRFunDef() {
         super(functionMetaData);

@@ -81,7 +81,7 @@ public class TupleResolver extends NoExpressionRequiredFunctionResolver {
             if(hasSet){
 
                 FunctionMetaData functionMetaData = new FunctionMetaDataR(TupleFunDef.functionAtom,"Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
-                          DataType.SET, Expressions.functionParameterOf(args));
+                          DataType.SET, Expressions.functionParameterOf(args)).withTextKey("Parenthesis.With.Set");
 
 
                 return Optional.of(FunctionResolutionResultR.of(new CrossJoinFunDef(functionMetaData), conversions));
@@ -90,7 +90,7 @@ public class TupleResolver extends NoExpressionRequiredFunctionResolver {
 
 
                 FunctionMetaData functionMetaData = new FunctionMetaDataR(TupleFunDef.functionAtom,"Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
-                          DataType.TUPLE, argTypes);
+                          DataType.TUPLE, argTypes).withTextKey("Parenthesis.Without.Set");
 
                 return Optional.of(FunctionResolutionResultR.of(new TupleFunDef(functionMetaData), conversions));
             }
@@ -101,7 +101,7 @@ public class TupleResolver extends NoExpressionRequiredFunctionResolver {
         FunctionMetaDataR.of(TupleFunDef.functionAtom,
             "Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
             DataType.TUPLE,
-            param(DataType.MEMBER, "Member").repeatable(1)));
+            param(DataType.MEMBER, "Member").describedAs("Member").repeatable(1)).withTextKey("Parenthesis.Member") );
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

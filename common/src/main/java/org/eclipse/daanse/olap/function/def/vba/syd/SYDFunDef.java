@@ -32,10 +32,10 @@ public class SYDFunDef  extends AbstractFunctionDefinition {
         an asset for a specified period.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Cost"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Salvage"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Life"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Period")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Cost").describedAs("Cost"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Salvage").describedAs("Salvage"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Life").describedAs("Life"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Period").describedAs("Period")}).withTextKey("SYD").caption("SYD Function");
 
     public SYDFunDef() {
         super(functionMetaData);

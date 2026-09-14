@@ -20,11 +20,11 @@ import org.eclipse.daanse.olap.api.function.FunctionParameter;
 
 public record FunctionParameterR(DataType dataType, Optional<String> name, Optional<String> description,
         Optional<List<String>> reservedWords, boolean optional, boolean repeatable, int repeatGroup,
-        boolean skippable) implements FunctionParameter {
+        boolean skippable, Optional<String> textKeyOverride) implements FunctionParameter {
 
     public FunctionParameterR(DataType dataType, Optional<String> name, Optional<String> description,
             Optional<List<String>> reservedWords) {
-        this(dataType, name, description, reservedWords, false, false, 0, false);
+        this(dataType, name, description, reservedWords, false, false, 0, false, Optional.empty());
     }
 
     public FunctionParameterR(DataType dataType) {
@@ -50,31 +50,42 @@ public record FunctionParameterR(DataType dataType, Optional<String> name, Optio
 
     public static FunctionParameterR param(DataType dataType, String name) {
         return new FunctionParameterR(dataType, Optional.ofNullable(name), Optional.empty(), Optional.empty(), false,
-                false, 0, false);
+                false, 0, false, Optional.empty());
     }
 
     public FunctionParameterR asOptional() {
         return new FunctionParameterR(dataType, name, description, reservedWords, true, repeatable, repeatGroup,
-                skippable);
+                skippable, Optional.empty());
     }
 
     public FunctionParameterR asSkippable() {
         return new FunctionParameterR(dataType, name, description, reservedWords, optional, repeatable, repeatGroup,
-                true);
+                true, Optional.empty());
     }
 
     public FunctionParameterR repeatable(int group) {
-        return new FunctionParameterR(dataType, name, description, reservedWords, optional, true, group, skippable);
+        return new FunctionParameterR(dataType, name, description, reservedWords, optional, true, group, skippable, Optional.empty());
     }
 
     public FunctionParameterR describedAs(String parameterDescription) {
         return new FunctionParameterR(dataType, name, Optional.ofNullable(parameterDescription), reservedWords,
-                optional, repeatable, repeatGroup, skippable);
+                optional, repeatable, repeatGroup, skippable, Optional.empty());
     }
 
     public FunctionParameterR reserved(String... words) {
         return new FunctionParameterR(dataType, name, description, Optional.of(List.of(words)), optional, repeatable,
-                repeatGroup, skippable);
+                repeatGroup, skippable, Optional.empty());
+    }
+
+    /** Assigns the semantic localisation key of this parameter. */
+    public FunctionParameterR key(String key) {
+        return new FunctionParameterR(dataType, name, description, reservedWords,
+                optional, repeatable, repeatGroup, skippable, Optional.of(key));
+    }
+
+    @Override
+    public Optional<String> textKey() {
+        return textKeyOverride.or(this::name);
     }
 
     /** Canonical parameter name per data type, aligned with the MDX reference. */

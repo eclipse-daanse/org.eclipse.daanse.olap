@@ -32,7 +32,7 @@ public class AbsFunDef  extends AbstractFunctionDefinition {
         absolute value of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression")}).withTextKey("Abs").caption("Abs Function");
 
     public AbsFunDef() {
         super(functionMetaData);

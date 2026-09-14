@@ -32,13 +32,13 @@ public class FVResolver extends AbstractFunctionDefinitionMultiResolver {
             Returns a Double specifying the future value of an annuity based on
             periodic, fixed payments and a fixed interest rate.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate"),
-            FunctionParameterR.param(DataType.NUMERIC, "NPer"), FunctionParameterR.param(DataType.NUMERIC, "Pmt"),
-            FunctionParameterR.param(DataType.NUMERIC, "Pv").asOptional(),
-            FunctionParameterR.param(DataType.LOGICAL, "Type").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Rate").describedAs("Rate"),
+            FunctionParameterR.param(DataType.NUMERIC, "NPer").describedAs("NPer"), FunctionParameterR.param(DataType.NUMERIC, "Pmt").describedAs("Pmt"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pv").describedAs("Pv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "Type").describedAs("Type").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("FV").caption("FV Function");
 
     public FVResolver() {
         super(List.of(new FVFunDef(functionMetaData)));

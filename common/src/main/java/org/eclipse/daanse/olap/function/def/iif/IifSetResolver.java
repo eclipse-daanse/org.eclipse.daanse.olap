@@ -30,9 +30,10 @@ public class IifSetResolver extends ParametersCheckingFunctionDefinitionResolver
     static final OperationAtom atom = new FunctionOperationAtom("IIf");
     private static String DESCRIPTION = "Returns one of two dimension values determined by a logical test.";
     private static FunctionParameterR[] params = new FunctionParameterR[] {
-            FunctionParameterR.param(DataType.LOGICAL, "Condition"), FunctionParameterR.param(DataType.SET, "Set1"),
-            FunctionParameterR.param(DataType.SET, "Set2") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET, params);
+            FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
+            FunctionParameterR.param(DataType.SET, "Set1").describedAs("First Set Expression"),
+            FunctionParameterR.param(DataType.SET, "Set2").describedAs("Second Set Expression") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET, params).withTextKey("IIf.Set");
 
     public IifSetResolver() {
         super(new IifFunDef(metadata));

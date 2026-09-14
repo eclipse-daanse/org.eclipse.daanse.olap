@@ -59,17 +59,14 @@ public class FunctionTextServiceImpl implements FunctionTextService {
 
         Map<String, ResolvedFunctionTexts.ResolvedParameterTexts> parameters = new HashMap<>();
         for (FunctionParameter parameter : functionMetaData.parameters()) {
-            Optional<String> parameterName = parameter.name();
-            if (parameterName.isEmpty()) {
-                continue;
-            }
-            String key = parameterName.get();
-            Optional<String> displayName = firstParameterText(layers, key, FunctionTexts.ParameterTexts::displayName);
-            Optional<String> parameterDescription = firstParameterText(layers, key,
-                    FunctionTexts.ParameterTexts::description);
-            parameters.put(key, new ResolvedFunctionTexts.ResolvedParameterTexts(
-                    displayName.orElseGet(() -> key.replace('_', ' ')),
-                    parameterDescription.or(parameter::description)));
+            parameter.textKey().filter(k -> !k.isEmpty()).ifPresent(key -> {
+                Optional<String> displayName = firstParameterText(layers, key, FunctionTexts.ParameterTexts::displayName);
+                Optional<String> parameterDescription = firstParameterText(layers, key,
+                        FunctionTexts.ParameterTexts::description);
+                parameters.put(key, new ResolvedFunctionTexts.ResolvedParameterTexts(
+                        displayName.orElseGet(() -> key.replace('_', ' ')),
+                        parameterDescription.or(parameter::description)));
+            });
         }
         return new ResolvedFunctionTexts(description, caption, example, remarks, Map.copyOf(parameters));
     }

@@ -31,13 +31,13 @@ public class DatePartResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
             Returns a Variant (Integer) containing the specified part of a given
             date.""";
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName"),
-            FunctionParameterR.param(DataType.DATE_TIME, "Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2"),
-            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName").describedAs("Interval Name"),
+            FunctionParameterR.param(DataType.DATE_TIME, "Date1").describedAs("Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2").describedAs("Date2"),
+            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").describedAs("First Day Of Week").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").describedAs("First Week Of Year").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("DatePart").caption("DatePart Function");
 
     public DatePartResolver() {
         super(List.of(new DatePartFunDef(functionMetaData)));

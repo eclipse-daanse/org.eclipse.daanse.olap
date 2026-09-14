@@ -30,7 +30,8 @@ public class AndOperatorDef extends AbstractFunctionDefinition {
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("AND");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom,
             "Returns the conjunction of two conditions.", DataType.LOGICAL,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition1"), FunctionParameterR.param(DataType.LOGICAL, "Condition2") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition1").describedAs("Condition1"),
+                    FunctionParameterR.param(DataType.LOGICAL, "Condition2").describedAs("Condition2") }).withTextKey("AND.Operation").caption("AND Operation");
 
     public AndOperatorDef() {
         super(functionMetaData);

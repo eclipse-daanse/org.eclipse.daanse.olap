@@ -30,7 +30,7 @@ public class PiFunDef  extends AbstractFunctionDefinition {
         Returns the number 3.14159265358979, the mathematical constant pi,
         accurate to 15 digits.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { });
+            DataType.NUMERIC, new FunctionParameterR[] { }).withTextKey("Pi").caption("Pi Function");
 
     public PiFunDef() {
         super(functionMetaData);

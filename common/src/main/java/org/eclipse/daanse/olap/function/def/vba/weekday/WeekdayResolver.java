@@ -31,11 +31,11 @@ public class WeekdayResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = """
         Returns a Variant (Integer) containing a whole number representing
         the day of the week.""";
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.DATE_TIME, "Date"),
-            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date"),
+            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").describedAs("First Day Of Week").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("Weekday").caption("Weekday Function");
 
     public WeekdayResolver() {
         super(List.of(new WeekdayFunDef(functionMetaData)));

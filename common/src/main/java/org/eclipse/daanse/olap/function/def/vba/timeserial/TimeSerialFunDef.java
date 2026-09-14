@@ -31,8 +31,8 @@ public class TimeSerialFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Date) containing the time for a specific hour,
         minute, and second.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Hour"),
-                    FunctionParameterR.param(DataType.INTEGER, "Minute"), FunctionParameterR.param(DataType.INTEGER, "Second") });
+            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Hour").describedAs("Hour"),
+                    FunctionParameterR.param(DataType.INTEGER, "Minute").describedAs("Minute"), FunctionParameterR.param(DataType.INTEGER, "Second").describedAs("Second") }).withTextKey("TimeSerial").caption("TimeSerial Function");
 
     public TimeSerialFunDef() {
         super(functionMetaData);

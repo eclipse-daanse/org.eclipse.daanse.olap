@@ -33,19 +33,24 @@ public class IsResolver extends AbstractFunctionDefinitionMultiResolver {
     //{"ibmm", "ibll", "ibhh", "ibdd", "ibtt"}
 
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "Member1"), FunctionParameterR.param(DataType.MEMBER, "Member2")});
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "Member1").describedAs("Member 1"), FunctionParameterR.param(DataType.MEMBER, "Member2").describedAs("Member 2")})
+            .withTextKey("Is.Member.Member").caption("IS Operation with Member and Member");
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL, "Level1"), FunctionParameterR.param(DataType.LEVEL, "Level2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL, "Level1").describedAs("Level 1"), FunctionParameterR.param(DataType.LEVEL, "Level2").describedAs("Level 2") })
+            .withTextKey("Is.Level.Level").caption("IS Operation");
 
     private static FunctionMetaData functionMetaDataWithHierrchy = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy1"), FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy1").describedAs("Hierarchy 1"), FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy2").describedAs("Hierarchy 2") })
+            .withTextKey("Is.Hierarchy.Hierarchy").caption("IS Operation");
 
     private static FunctionMetaData functionMetaDataWithDimension = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION, "Dimension1"), FunctionParameterR.param(DataType.DIMENSION, "Dimension2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION, "Dimension1").describedAs("Dimension 1"), FunctionParameterR.param(DataType.DIMENSION, "Dimension2").describedAs("Dimension 2") })
+            .withTextKey("Is.Dimension.Dimension").caption("IS Operation");
 
     private static FunctionMetaData functionMetaDataWithTuple = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.TUPLE, "Tuple1"), FunctionParameterR.param(DataType.TUPLE, "Tuple2") });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.TUPLE, "Tuple1").describedAs("Tuple 1"), FunctionParameterR.param(DataType.TUPLE, "Tuple2").describedAs("Tuple 2") })
+            .withTextKey("Is.Tuple.Tuple").caption("IS Operation");
 
     public IsResolver() {
         super(List.of(new IsFunDef(functionMetaDataWithMember), new IsFunDef(functionMetaDataWithLevel),

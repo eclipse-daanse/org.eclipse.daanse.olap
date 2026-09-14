@@ -32,7 +32,7 @@ public class AsinFunDef  extends AbstractFunctionDefinition {
         angle whose sine is Arg1. The returned angle is given in radians in
         the range -pi/2 to pi/2.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number") });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression") }).withTextKey("Asin").caption("Asin Function");
 
     public AsinFunDef() {
         super(functionMetaData);

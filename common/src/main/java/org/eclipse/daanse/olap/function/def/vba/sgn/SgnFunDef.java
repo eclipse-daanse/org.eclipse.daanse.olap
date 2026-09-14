@@ -31,7 +31,7 @@ public class SgnFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Integer) indicating the sign of a number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.INTEGER, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression")}).withTextKey("Sgn").caption("Sgn Function");
 
     public SgnFunDef() {
         super(functionMetaData);

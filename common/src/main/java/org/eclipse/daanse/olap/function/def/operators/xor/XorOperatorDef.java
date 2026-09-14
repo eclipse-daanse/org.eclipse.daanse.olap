@@ -24,13 +24,17 @@ import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 
+import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonicalNameOf;
+
 public class XorOperatorDef extends AbstractFunctionDefinition {
 
     // <Logical Expression> XOR <Logical Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("XOR");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom,
             "Returns whether two conditions are mutually exclusive.", DataType.LOGICAL,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, "Condition1"), FunctionParameterR.param(DataType.LOGICAL, "Condition1") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.LOGICAL, canonicalNameOf(DataType.LOGICAL) + 1).describedAs("First Logical Expression"),
+                    FunctionParameterR.param(DataType.LOGICAL, canonicalNameOf(DataType.LOGICAL) + 2).describedAs("Second Logical Expression") })
+            .withTextKey("XOR.Operation").caption("XOR Operation");
 
     public XorOperatorDef() {
         super(functionMetaData);

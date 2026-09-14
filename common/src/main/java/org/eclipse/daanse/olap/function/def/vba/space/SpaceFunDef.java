@@ -32,7 +32,7 @@ public class SpaceFunDef  extends AbstractFunctionDefinition {
         spaces.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.INTEGER, "Number") });
+                    FunctionParameterR.param(DataType.INTEGER, "Number").describedAs("Numeric Expression") }).withTextKey("Space").caption("Space Function");
 
     public SpaceFunDef() {
         super(functionMetaData);

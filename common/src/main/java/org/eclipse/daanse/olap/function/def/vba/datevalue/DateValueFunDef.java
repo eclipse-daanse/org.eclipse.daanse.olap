@@ -30,7 +30,7 @@ public class DateValueFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns a Variant (Date) for a specified year, month, and day.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date") });
+            DataType.DATE_TIME, new FunctionParameterR[] { FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date") }).withTextKey("DateValue").caption("DateValue Function");
 
     public DateValueFunDef() {
         super(functionMetaData);

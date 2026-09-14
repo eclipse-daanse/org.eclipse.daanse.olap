@@ -31,7 +31,7 @@ public class SinFunDef  extends AbstractFunctionDefinition {
         Returns a Double specifying the sine of an angle.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "Number")});
+                    FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression")}).withTextKey("Sin").caption("Sin Function");
 
     public SinFunDef() {
         super(functionMetaData);

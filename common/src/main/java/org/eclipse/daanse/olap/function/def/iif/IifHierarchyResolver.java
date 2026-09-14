@@ -30,9 +30,9 @@ public class IifHierarchyResolver extends ParametersCheckingFunctionDefinitionRe
     static final OperationAtom atom = new FunctionOperationAtom("IIf");
     private static String DESCRIPTION = "Returns one of two hierarchy values determined by a logical test.";
     private static FunctionParameterR[] params = new FunctionParameterR[] {
-            FunctionParameterR.param(DataType.LOGICAL, "Condition"), FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy1"),
-            FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy2") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.HIERARCHY, params);
+            FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"), FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy1").describedAs("First Hierarchy"),
+            FunctionParameterR.param(DataType.HIERARCHY, "Hierarchy2").describedAs("Second Hierarchy") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.HIERARCHY, params).withTextKey("IIf.Hierarchy");
     
     public IifHierarchyResolver() {
         super(new IifFunDef(metadata));

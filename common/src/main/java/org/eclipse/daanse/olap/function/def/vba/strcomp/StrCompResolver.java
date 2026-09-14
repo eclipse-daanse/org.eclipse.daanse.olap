@@ -32,12 +32,12 @@ public class StrCompResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Variant (Integer) indicating the result of a string
         comparison.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "String1"),
-            FunctionParameterR.param(DataType.STRING, "String2"),
-            FunctionParameterR.param(DataType.INTEGER, "Compare").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "String1").describedAs("String Expression 1"),
+            FunctionParameterR.param(DataType.STRING, "String2").describedAs("String Expression 2"),
+            FunctionParameterR.param(DataType.INTEGER, "Compare").describedAs("Compare").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, params);
+            DataType.INTEGER, params).withTextKey("StrComp").caption("StrComp Function");
 
     public StrCompResolver() {
         super(List.of(new StrCompFunDef(functionMetaData)));

@@ -32,14 +32,14 @@ public class FormatCurrencyResolver extends AbstractFunctionDefinitionMultiResol
         Returns an expression formatted as a currency value using the
         currency symbol defined in the system control panel.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "expression"),
-            FunctionParameterR.param(DataType.INTEGER, "numDigitsAfterDecimal").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "includeLeadingDigit").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "useParensForNegativeNumbers").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "groupDigits").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "expression").describedAs("Expression"),
+            FunctionParameterR.param(DataType.INTEGER, "numDigitsAfterDecimal").describedAs("Number Digits After Decimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "includeLeadingDigit").describedAs("Include Leading Digit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "useParensForNegativeNumbers").describedAs("Use Parens For Negative Numbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "groupDigits").describedAs("Group Digits").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, params);
+            DataType.STRING, params).withTextKey("FormatCurrency").caption("FormatCurrency Function");
 
     public FormatCurrencyResolver() {
         super(List.of(new FormatCurrencyFunDef(functionMetaData)));

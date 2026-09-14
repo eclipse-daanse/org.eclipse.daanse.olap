@@ -32,14 +32,14 @@ public class RateResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Double specifying the interest rate per period for an
         annuity.""";
 
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "NPer"),
-            FunctionParameterR.param(DataType.NUMERIC, "Pmt"), FunctionParameterR.param(DataType.NUMERIC, "Pv"),
-            FunctionParameterR.param(DataType.NUMERIC, "Fv").asOptional(),
-            FunctionParameterR.param(DataType.LOGICAL, "Due").asOptional(),
-            FunctionParameterR.param(DataType.NUMERIC, "Guess").asOptional() };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "NPer").describedAs("NPer"),
+            FunctionParameterR.param(DataType.NUMERIC, "Pmt").describedAs("Pmt"), FunctionParameterR.param(DataType.NUMERIC, "Pv").describedAs("Pv"),
+            FunctionParameterR.param(DataType.NUMERIC, "Fv").describedAs("Fv").asOptional(),
+            FunctionParameterR.param(DataType.LOGICAL, "Due").describedAs("Due").asOptional(),
+            FunctionParameterR.param(DataType.NUMERIC, "Guess").describedAs("Guess").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, params);
+            DataType.NUMERIC, params).withTextKey("Rate").caption("Rate Function");
 
     public RateResolver() {
         super(List.of(new RateFunDef(functionMetaData)));

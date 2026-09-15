@@ -15,11 +15,11 @@ package org.eclipse.daanse.olap.guard;
 
 import org.eclipse.daanse.sql.guard.api.elements.DatabaseColumn;
 
-public class DatabaseColumnImpl implements DatabaseColumn{
+public class GuardDatabaseColumn implements DatabaseColumn{
 
     private String name;
 
-    public DatabaseColumnImpl(org.eclipse.daanse.olap.api.element.db.DatabaseColumn column) {
+    public GuardDatabaseColumn(org.eclipse.daanse.olap.api.element.db.DatabaseColumn column) {
         this.name = column.getName();
     }
 

@@ -15,27 +15,26 @@ package org.eclipse.daanse.olap.guard;
 
 import java.util.List;
 
-import org.eclipse.daanse.sql.guard.api.elements.DatabaseSchema;
+import org.eclipse.daanse.sql.guard.api.elements.DatabaseColumn;
 import org.eclipse.daanse.sql.guard.api.elements.DatabaseTable;
 
-public class DatabaseSchemaImpl implements DatabaseSchema{
+public class GuardDatabaseTable implements DatabaseTable{
 
-    private List<DatabaseTable> databaseTables;
+    private List<DatabaseColumn> columns;
     private String name;
 
-
-    public DatabaseSchemaImpl(org.eclipse.daanse.olap.api.element.db.DatabaseSchema ds) {
-        this.name = ds.getName() == null ? "" : ds.getName();
-        if (ds.getDbTables() != null) {
-            this.databaseTables = ds.getDbTables().stream().map(t -> (DatabaseTable) new DatabaseTableImpl(t)).toList();
+    public GuardDatabaseTable(org.eclipse.daanse.olap.api.element.db.DatabaseTable table) {
+        this.name = table.getName();
+        if (table.getDbColumns() != null) {
+            columns = table.getDbColumns().stream().map(c -> (DatabaseColumn)new GuardDatabaseColumn(c)).toList();
         } else {
-            this.databaseTables = List.of();
+            columns = List.of();
         }
     }
 
     @Override
-    public List<DatabaseTable> getDatabaseTables() {
-        return this.databaseTables;
+    public List<DatabaseColumn> getDatabaseColumns() {
+        return this.columns;
     }
 
     @Override

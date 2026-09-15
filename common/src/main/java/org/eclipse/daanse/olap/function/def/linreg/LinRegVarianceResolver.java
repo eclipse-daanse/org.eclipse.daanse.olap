@@ -31,9 +31,10 @@ public class LinRegVarianceResolver extends AbstractFunctionDefinitionMultiResol
     private static String DESCRIPTION = "Calculates the linear regression of a set and returns the variance associated with the regression line y = ax + b.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Y"),
-                    FunctionParameterR.param(DataType.NUMERIC, "X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Y").describedAs("Y"),
+                    FunctionParameterR.param(DataType.NUMERIC, "X").describedAs("X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("LinRegVariance.Function").caption("LinRegVariance Function");
 
     public LinRegVarianceResolver() {
         super(List.of(new LinRegFunDef(functionMetaData, LinRegFunDef.VARIANCE)));

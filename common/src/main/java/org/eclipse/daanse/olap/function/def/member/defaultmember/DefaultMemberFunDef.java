@@ -33,7 +33,8 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class DefaultMemberFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtomDefaultMember = new PlainPropertyOperationAtom("DefaultMember");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtomDefaultMember,
-            "Returns the default member of a hierarchy.", DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) }).interfaceName(FunctionInterface.NAVIGATION);
+            "Returns the default member of a hierarchy.", DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy") })
+    		.interfaceName(FunctionInterface.NAVIGATION).withTextKey("DefaultMember.Hierarchy.Property").caption("Hierarchy.DefaultMember Property");
 
     public DefaultMemberFunDef() {
         super(functionMetaData);

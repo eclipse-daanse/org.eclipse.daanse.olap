@@ -28,9 +28,9 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class KPIStatusFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom KPI_STATUS_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("KPIStatus");
-    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi").describedAs("Value") };
     static final FunctionMetaData FUNCTION_META_DATA = new FunctionMetaDataR(KPI_STATUS_INSTANCE_FUNCTION_ATOM, "Returns KPI Status.",
-    		DataType.MEMBER, params);
+    		DataType.MEMBER, params).withTextKey("KPIStatus.Function").caption("KPIStatus Function");
     // KPIStatus(<String>)
 
     public KPIStatusFunDef() {

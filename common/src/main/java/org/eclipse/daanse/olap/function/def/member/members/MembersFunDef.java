@@ -29,7 +29,8 @@ public class MembersFunDef extends AbstractFunctionDefinition {
     static FunctionOperationAtom functionOperationAtom = new FunctionOperationAtom("Members");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionOperationAtom,
             "Returns the last child of the parent of a member.", DataType.MEMBER,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("String Expression") }).withTextKey("Members.String.Function")
+            .caption("Members Function");
 
     public MembersFunDef() {
         super(functionMetaData);

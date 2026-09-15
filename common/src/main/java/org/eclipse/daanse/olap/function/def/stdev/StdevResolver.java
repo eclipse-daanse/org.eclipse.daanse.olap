@@ -29,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class StdevResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Stdev");
     private static String DESCRIPTION = "Returns the standard deviation of a numeric expression evaluated over a set (unbiased).";
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC).asOptional() };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression").asOptional() };
     // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Stdev.Function").caption("Stdev Function");
 
     public StdevResolver() {
         super(List.of(new StdevFunDef(functionMetaData)));

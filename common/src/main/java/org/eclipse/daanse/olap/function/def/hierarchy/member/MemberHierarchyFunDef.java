@@ -32,7 +32,8 @@ public class MemberHierarchyFunDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns a member's hierarchy.", DataType.HIERARCHY,
-            new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ,"Member" ) }).interfaceName(FunctionInterface.METADATA);
+            new FunctionParameterR[] { new FunctionParameterR(  DataType.MEMBER ,"Member" ).describedAs("Member") }).interfaceName(FunctionInterface.METADATA)
+            .withTextKey("Hierarchy.Member.Property").caption("Member.Hierarchy() Property");
 
     public MemberHierarchyFunDef() {
         super(functionMetaData);

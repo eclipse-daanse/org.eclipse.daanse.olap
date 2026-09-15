@@ -32,7 +32,8 @@ public class DimensionOfLevelFunDef extends AbstractFunctionDefinition {
 
 	private static final FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"Returns the dimension that contains a specified level.", DataType.DIMENSION,
-			new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.METADATA);
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") }).interfaceName(FunctionInterface.METADATA)
+			.withTextKey("Level.Dimension.Property").caption("Level.Dimension() Property");
 
 	public DimensionOfLevelFunDef() {
 		super(functionMetaData);

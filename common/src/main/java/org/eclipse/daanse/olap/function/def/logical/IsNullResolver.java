@@ -32,16 +32,20 @@ public class IsNullResolver extends AbstractFunctionDefinitionMultiResolver {
     private static OperationAtom atom = new PostfixOperationAtom("IS NULL");
 
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
+            .withTextKey("Member.IS_NULL.Function").caption("Member.IS NULL Function");
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
+            .withTextKey("Level.IS_NULL.Function").caption("Level.IS NULL Function");
 
     private static FunctionMetaData functionMetaDataWithHierrchy = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy") })
+            .withTextKey("Hierarchy.IS_NULL.Function").caption("Hierarchy.IS NULL Function");
 
     private static FunctionMetaData functionMetaDataWithDimension = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) });
+            DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") })
+            .withTextKey("Dimension.IS_NULL.Function").caption("Dimension.IS NULL Function");
 
     public IsNullResolver() {
         super(List.of(new IsNullFunDef(functionMetaDataWithMember), new IsNullFunDef(functionMetaDataWithLevel),

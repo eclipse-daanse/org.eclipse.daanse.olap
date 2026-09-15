@@ -34,8 +34,9 @@ public class OpeningPeriodResolved extends AbstractFunctionDefinitionMultiResolv
     // {"fm", "fml", "fmlm"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).asOptional(),
-                    FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level").asOptional(),
+                    FunctionParameterR.param(DataType.MEMBER).describedAs("Member").asOptional() })
+            .interfaceName(FunctionInterface.DATETIME).withTextKey("OpeningPeriod.Function").caption("OpeningPeriod Function");
 
     public OpeningPeriodResolved() {
         super(List.of(new OpeningClosingPeriodFunDef(functionMetaData, true)));

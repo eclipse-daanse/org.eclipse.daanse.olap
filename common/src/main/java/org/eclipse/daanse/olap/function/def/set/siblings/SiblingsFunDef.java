@@ -31,7 +31,9 @@ public class SiblingsFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Siblings");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the siblings of a specified member, including the member itself.",
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER)}).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member")})
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Member.Siblings.Property")
+            .caption("Member.Siblings Property");
 
     public SiblingsFunDef() {
         super(functionMetaData);

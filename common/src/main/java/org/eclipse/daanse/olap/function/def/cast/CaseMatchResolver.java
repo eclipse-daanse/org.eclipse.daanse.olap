@@ -87,10 +87,10 @@ public class CaseMatchResolver extends NoExpressionRequiredFunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
             FunctionMetaDataR.of(CaseMatchFunDef.functionAtom, CaseMatchFunDef.DESCRIPTION, DataType.VALUE,
-                    param(DataType.VALUE, "Match_Expression"),
-                    param(DataType.VALUE, "Case_Value").repeatable(1),
-                    param(DataType.VALUE, "Value_Expression").repeatable(1),
-                    param(DataType.VALUE, "Else_Value").asOptional()));
+                    param(DataType.VALUE, "Match_Expression").describedAs("Match Expression"),
+                    param(DataType.VALUE, "Case_Value").repeatable(1).describedAs("Case Value"),
+                    param(DataType.VALUE, "Value_Expression").repeatable(1).describedAs("Value Expression"),
+                    param(DataType.VALUE, "Else_Value").asOptional().describedAs("Else_Value")));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

@@ -38,7 +38,9 @@ public class LevelsNumericPropertyDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData levelsFunctionMetaData = new FunctionMetaDataR(methodOperationAtom,
             "Returns the level whose position in a hierarchy is specified by a numeric expression.",
-            DataType.LEVEL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.NUMERIC, "Ordinal") });
+            DataType.LEVEL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Ordinal").describedAs("Ordinal") })
+            .withTextKey("Hierarchy.Levels.Ordinal.Function").caption("Hierarchy.Levels(Ordinal) Function");
 
     public LevelsNumericPropertyDef() {
         super(levelsFunctionMetaData);

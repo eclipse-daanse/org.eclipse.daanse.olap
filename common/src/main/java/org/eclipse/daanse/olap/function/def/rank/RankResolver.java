@@ -29,24 +29,28 @@ import org.osgi.service.component.annotations.Component;
 public class RankResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Rank");
     private static String DESCRIPTION = "Returns the one-based rank of a tuple in a set.";
-    private static FunctionParameterR[] tx = { FunctionParameterR.param(DataType.TUPLE), FunctionParameterR.param(DataType.SET) };
-    private static FunctionParameterR[] txn = { FunctionParameterR.param(DataType.TUPLE), FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC) };
-    private static FunctionParameterR[] mx = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET) };
-    private static FunctionParameterR[] mxn = { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC) };
+    private static FunctionParameterR[] tx = { FunctionParameterR.param(DataType.TUPLE).describedAs("Tuple"),
+            FunctionParameterR.param(DataType.SET).describedAs("Set") };
+    private static FunctionParameterR[] txn = { FunctionParameterR.param(DataType.TUPLE).describedAs("Tuple"),
+            FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") };
+    private static FunctionParameterR[] mx = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.SET).describedAs("Set") };
+    private static FunctionParameterR[] mxn = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") };
 
     // {"fitx", "fitxn", "fimx", "fimxn"}
 
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, tx).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.INTEGER, tx).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Rank.Tuple.Set.Function").caption("Rank Function");
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, txn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.INTEGER, txn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Rank.Tuple.Set.Numeric.Function").caption("Rank Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, mx).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.INTEGER, mx).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Rank.Member.Set.Function").caption("Rank Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.INTEGER, mxn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.INTEGER, mxn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Rank.Member.Set.Numeric.Function").caption("Rank Function");
 
     public RankResolver() {
         super(List.of(new RankFunDef(functionMetaData), new RankFunDef(functionMetaData1), new RankFunDef(functionMetaData2), new RankFunDef(functionMetaData3)));

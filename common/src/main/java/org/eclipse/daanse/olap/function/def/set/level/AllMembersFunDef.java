@@ -30,7 +30,8 @@ public class AllMembersFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("AllMembers");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns a set that contains all members, including calculated members, of the specified level.",
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) });
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
+            .withTextKey("Level.AllMembers.Property").caption("Level.AllMembers Property");
 
     public AllMembersFunDef() {
         super(functionMetaData);

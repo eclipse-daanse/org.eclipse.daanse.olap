@@ -98,8 +98,8 @@ public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(OrderFunDef.functionAtom,
             "Arranges members of a set, optionally preserving or breaking the hierarchy.", DataType.SET,
-            param(DataType.SET),
-            param(DataType.VALUE, "Value_Expression").repeatable(1),
+            param(DataType.SET).describedAs("Set"),
+            param(DataType.VALUE, "Value_Expression").repeatable(1).describedAs("Value"),
             param(DataType.SYMBOL, "Sort_Flag").repeatable(1).asSkippable()
                 .reserved("ASC", "DESC", "BASC", "BDESC")
                 .describedAs("ASC (default), DESC, BASC or BDESC — B-variants break the hierarchy.")));

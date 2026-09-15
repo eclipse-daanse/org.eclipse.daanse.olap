@@ -34,14 +34,17 @@ public class ClosingPeriodResolved extends AbstractFunctionDefinitionMultiResolv
     // {"fm", "fml", "fmlm", "fmm"}
 
     private static FunctionMetaData functionMetaDataWithoutParam = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] {}).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] {}).interfaceName(FunctionInterface.DATETIME).withTextKey("ClosingPeriod.Function").caption("ClosingPeriod Function");
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") }).interfaceName(FunctionInterface.DATETIME)
+            .withTextKey("ClosingPeriod.Level.Function").caption("ClosingPeriod Function");
     private static FunctionMetaData functionMetaDataWithLevelMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL),
-                    FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level"),
+                    FunctionParameterR.param(DataType.MEMBER).describedAs("Member") }).interfaceName(FunctionInterface.DATETIME)
+            .withTextKey("ClosingPeriod.Level.Member.Function").caption("ClosingPeriod Function");
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") }).interfaceName(FunctionInterface.DATETIME)
+            .withTextKey("ClosingPeriod.Member.Function").caption("ClosingPeriod Function");
 
     public ClosingPeriodResolved() {
         // AbstractFunctionDefinitionMultiResolver.resolve() returns the *first* declaration in

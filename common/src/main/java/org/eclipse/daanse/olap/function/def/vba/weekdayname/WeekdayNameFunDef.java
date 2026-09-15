@@ -32,7 +32,7 @@ public class WeekdayNameFunDef  extends AbstractFunctionDefinition {
         Returns a string indicating the specified day of the week.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.INTEGER, "Weekday").describedAs("Weekday"),
-                    FunctionParameterR.param(DataType.LOGICAL, "abbreviate").describedAs("Abbreviate"), FunctionParameterR.param(DataType.INTEGER, "First day of week").describedAs("First day of week")}).withTextKey("WeekdayName").caption("WeekdayName Function");
+                    FunctionParameterR.param(DataType.LOGICAL, "abbreviate").describedAs("Abbreviate"), FunctionParameterR.param(DataType.INTEGER, "First_day_of_week").describedAs("First day of week")}).withTextKey("WeekdayName").caption("WeekdayName Function");
 
     public WeekdayNameFunDef() {
         super(functionMetaData);

@@ -34,7 +34,8 @@ public class AncestorLevelFunDef extends AbstractFunctionDefinition {
 
 	static final FunctionMetaData fmdLevel = new FunctionMetaDataR(AncestorResolver.operationAtom,
 			"Returns the ancestor of a member at a specified level.", DataType.MEMBER,
-			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.NAVIGATION);
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Members"), FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
+			.interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestor.Member.Level.Function").caption("Ancestor(Member,Level) Function");
 
 	public AncestorLevelFunDef() {
 		super(fmdLevel);

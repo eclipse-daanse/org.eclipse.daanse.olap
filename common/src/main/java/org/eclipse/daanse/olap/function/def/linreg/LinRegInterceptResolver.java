@@ -31,9 +31,10 @@ public class LinRegInterceptResolver extends AbstractFunctionDefinitionMultiReso
     private static String DESCRIPTION = "Calculates the linear regression of a set and returns the value of b in the regression line y = ax + b.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "NumericY"),
-                    FunctionParameterR.param(DataType.NUMERIC, "NumericX").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "NumericY").describedAs("NumericY"),
+                    FunctionParameterR.param(DataType.NUMERIC, "NumericX").describedAs("NumericX").asOptional() })
+            .interfaceName(FunctionInterface.STATISTICAL).withTextKey("LinRegIntercept.Function").caption("LinRegIntercept Function");
 
     public LinRegInterceptResolver() {
         super(List.of(new LinRegFunDef(functionMetaData, LinRegFunDef.INTERCEPT)));

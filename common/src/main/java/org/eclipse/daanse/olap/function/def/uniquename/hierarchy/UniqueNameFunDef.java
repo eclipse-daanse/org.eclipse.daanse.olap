@@ -30,7 +30,8 @@ public class UniqueNameFunDef extends AbstractFunctionDefinition {
     // <Hierarchy>.UniqueName
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("UniqueName");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom, "Returns the unique name of a hierarchy.",
-            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) }).interfaceName(FunctionInterface.METADATA);
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy") }).interfaceName(FunctionInterface.METADATA)
+            .withTextKey("UniqueName.Hierarchy.Property").caption("Hierarchy.UniqueName() Property");
 
     public UniqueNameFunDef() {
         super(functionMetaData);

@@ -34,7 +34,8 @@ public class DimensionOfDimensionFunDef extends AbstractFunctionDefinition {
 
 	private static final FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"Returns the dimension that contains a specified dimension.", DataType.DIMENSION,
-			new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) }).interfaceName(FunctionInterface.METADATA);
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") }).interfaceName(FunctionInterface.METADATA)
+			.withTextKey("Dimension.Dimension.Property").caption("Dimension.Dimension() Property");
 
 	public DimensionOfDimensionFunDef() {
 		super(functionMetaData);

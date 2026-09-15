@@ -30,32 +30,32 @@ public class DescendantsSetResolver extends AbstractFunctionDefinitionMultiResol
     private static String descFlagDescription = "Controls which levels relative to the member are included: SELF, AFTER, BEFORE, BEFORE_AND_AFTER, SELF_AND_AFTER, SELF_AND_BEFORE, SELF_BEFORE_AFTER, LEAVES.";
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Descendants");
     private static String DESCRIPTION = "Returns the set of descendants of a set of members at a specified level, optionally including or excluding descendants in other levels.";
-    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET) };
-    private static FunctionParameterR[] xl = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.LEVEL) };
-    private static FunctionParameterR[] xly = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.LEVEL), new FunctionParameterR(DataType.SYMBOL, Optional.of("Desc_flag"),
+    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET).describedAs("Set") };
+    private static FunctionParameterR[] xl = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level") };
+    private static FunctionParameterR[] xly = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level"), new FunctionParameterR(DataType.SYMBOL, Optional.of("Desc_flag"),
                     Optional.of(descFlagDescription), Optional.of(Flag.asReservedWords())) };
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC) };
-    private static FunctionParameterR[] xny = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
-    private static FunctionParameterR[] xey = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Limit") };
+    private static FunctionParameterR[] xny = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Limit"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+    private static FunctionParameterR[] xey = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.EMPTY).describedAs("Empty"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     // {"fxx", "fxxl", "fxxly", "fxxn", "fxxny", "fxxey"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
-            x);
+            x).withTextKey("Descendants.Set.Function").caption("Descendants Function");
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xl);
+            DataType.SET, xl).withTextKey("Descendants.Set.Level.Function").caption("Descendants Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xly);
+            DataType.SET, xly).withTextKey("Descendants.Set.Level.Symbol.Function").caption("Descendants Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xn);
+            DataType.SET, xn).withTextKey("Descendants.Set.Numeric.Function").caption("Descendants Function");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xny);
+            DataType.SET, xny).withTextKey("Descendants.Set.Numeric.Symbol.Function").caption("Descendants Function");
     private static FunctionMetaData functionMetaData5 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xey);
+            DataType.SET, xey).withTextKey("Descendants.Set.Empty.Symbol.Function").caption("Descendants Function");
 
     @Override
     public List<String> getReservedWords() {

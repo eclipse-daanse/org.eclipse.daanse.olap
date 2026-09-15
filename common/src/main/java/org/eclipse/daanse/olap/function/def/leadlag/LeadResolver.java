@@ -33,7 +33,9 @@ public class LeadResolver extends AbstractFunctionDefinitionMultiResolver {
     //{"mmmn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.NUMERIC) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Value") }).interfaceName(FunctionInterface.NAVIGATION)
+            .withTextKey("Member.Lead.Function").caption("Member.Lead Function");
 
 
     public LeadResolver() {

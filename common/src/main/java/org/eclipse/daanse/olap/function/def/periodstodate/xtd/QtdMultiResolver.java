@@ -34,7 +34,8 @@ public class QtdMultiResolver extends AbstractFunctionDefinitionMultiResolver {
 
 	private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"A shortcut function for the PeriodsToDate function that specifies the level to be Quater.",
-			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member").asOptional() })
+			.interfaceName(FunctionInterface.DATETIME).withTextKey("Qtd.Function").caption("Qtd Function");
 
 	public QtdMultiResolver() {
 		super(List.of(new XtdFunDef(functionMetaData, LevelType.TIME_QUARTERS)));

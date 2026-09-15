@@ -53,7 +53,8 @@ public class CacheFunResolver extends NoExpressionRequiredFunctionResolver {
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
             FunctionMetaDataR.of(CacheFunDef.functionAtom,
                     "Evaluates and returns its sole argument, applying statement-level caching", DataType.VALUE,
-                    param(DataType.VALUE)));
+                    param(DataType.VALUE).describedAs("Value"))
+                    .withTextKey("Cache").caption("Cache Function"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

@@ -28,7 +28,8 @@ public class MemberOrderKeyFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("OrderKey");
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
-            "Returns the member order key.", DataType.VALUE, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) });
+            "Returns the member order key.", DataType.VALUE, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
+            .withTextKey("Member.OrderKey.Property").caption("Member.OrderKey Property");
 
     /**
      * Creates the singleton MemberOrderKeyFunDef.

@@ -48,7 +48,7 @@ public class OrderFunDef  extends AbstractFunctionDefinition {
     public OrderFunDef( FunctionParameterR[] argTypes ) {
     super( new FunctionMetaDataR(functionAtom,
             "Arranges members of a set, optionally preserving or breaking the hierarchy.",
-            DataType.SET, argTypes));
+            DataType.SET, argTypes).withTextKey("Order.Function").caption("Order Function"));
   }
 
   @Override

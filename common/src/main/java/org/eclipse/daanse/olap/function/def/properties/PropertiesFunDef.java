@@ -27,12 +27,12 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 
 public class PropertiesFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtom = new MethodOperationAtom("Properties");
-    public static final FunctionParameterR[] PARAMETER_TYPES = { FunctionParameterR.param(DataType.MEMBER),
-            FunctionParameterR.param(DataType.STRING, "String") };
+    public static final FunctionParameterR[] PARAMETER_TYPES = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.STRING, "String").describedAs("Value") };
 
     public PropertiesFunDef(DataType returnType) {
         super(new FunctionMetaDataR(functionAtom, "Returns the value of a member property.",
-                returnType, PARAMETER_TYPES));
+                returnType, PARAMETER_TYPES).withTextKey("Member.Properties.Function").caption("Member.Properties Function"));
     }
 
     @Override

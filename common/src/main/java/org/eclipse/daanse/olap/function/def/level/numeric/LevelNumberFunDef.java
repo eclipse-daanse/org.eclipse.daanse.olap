@@ -31,7 +31,8 @@ public class LevelNumberFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Level_Number");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the level number of a member.", DataType.INTEGER,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.METADATA);
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") }).interfaceName(FunctionInterface.METADATA)
+            .withTextKey("Member.Level_Number.Property").caption("Member.Level_Number Property");
 
     public LevelNumberFunDef() {
         super(functionMetaData);

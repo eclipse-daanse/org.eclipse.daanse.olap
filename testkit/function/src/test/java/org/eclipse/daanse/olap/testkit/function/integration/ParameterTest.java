@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -52,6 +52,32 @@ public class ParameterTest {
 	                Two independent parameters share a name. They then share one text key, so
 	                MDSCHEMA_FUNCTIONS cannot tell them apart and they cannot be localised
 	                separately. A repeat group is exempt: there it is one logical parameter.
+	                """)
+	            .isEmpty();
+	}
+
+	@Test
+	void textKeysAreUniqueUnlessTheTextsMatch() {
+	    List<String> offenders = new ArrayList<>();
+	    Map<String, List<FunctionMetaData>> byTextKey = new LinkedHashMap<>();
+	    for (FunctionMetaData metaData : StandardFunctions.standard().getFunctionMetaDatas()) {
+	        byTextKey.computeIfAbsent(metaData.textKey(), k -> new ArrayList<>()).add(metaData);
+	    }
+	    byTextKey.forEach((textKey, group) -> {
+	        if (group.size() < 2) {
+	            return;
+	        }
+	        offenders.add(textKey + "  ->  " + group.stream()
+	                .map(SignatureText::ofDeclaration)
+	                .reduce((a, b) -> a + " | " + b)
+	                .orElse(""));
+	    });
+	    assertThat(offenders)
+	            .as("""
+	                Two overloads share a text key but describe different things. Since the
+	                localisation bundle has one entry per text key, one description/caption
+	                silently wins and the others are lost. Give the overload a distinct,
+	                suffixed textKey() (see the javadoc on FunctionMetaData.textKey()).
 	                """)
 	            .isEmpty();
 	}

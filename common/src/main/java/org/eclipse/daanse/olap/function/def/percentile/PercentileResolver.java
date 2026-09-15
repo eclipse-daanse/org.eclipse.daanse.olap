@@ -31,12 +31,14 @@ import static org.eclipse.daanse.olap.function.core.FunctionParameterR.canonical
 public class PercentileResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Percentile");
     private static String DESCRIPTION = "Returns the value of the tuple that is at a given percentile of a set.";
-    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1), FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2) };
+    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1).describedAs("Numeric 1"),
+            FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).describedAs("Numeric 2") };
     // {"fnxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xnn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, xnn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Percentile.Function")
+            .caption("Percentile Function");
 
     public PercentileResolver() {
         super(List.of(new PercentileFunDef(functionMetaData)));

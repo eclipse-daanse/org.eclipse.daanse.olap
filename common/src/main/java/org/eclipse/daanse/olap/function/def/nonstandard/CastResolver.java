@@ -73,8 +73,8 @@ public class CastResolver extends NoExpressionRequiredFunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(CastFunDef.functionAtom, "Converts values to another type.", DataType.VALUE,
-            param(DataType.VALUE),
-            param(DataType.STRING, "Type_Name").reserved("String", "Numeric", "Integer", "Boolean")));
+            param(DataType.VALUE).describedAs("Value"),
+            param(DataType.STRING, "Type_Name").describedAs("Type Name").reserved("String", "Numeric", "Integer", "Boolean")).withTextKey("Cast.Function"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

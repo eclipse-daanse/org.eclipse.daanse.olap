@@ -31,7 +31,8 @@ public class CaptionFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Caption");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the caption of a dimension.", DataType.STRING,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) }).interfaceName(FunctionInterface.METADATA);
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") }).interfaceName(FunctionInterface.METADATA)
+            .withTextKey("Dimension.Caption.Property").caption("Caption Property");
 
     public CaptionFunDef() {
         super(functionMetaData);

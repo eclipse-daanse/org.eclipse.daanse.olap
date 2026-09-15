@@ -29,7 +29,8 @@ public class OrdinalFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Ordinal");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the zero-based ordinal value associated with a level.", DataType.NUMERIC,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
+            .withTextKey("Level.Ordinal.Property").caption("Level.Ordinal Property");
 
     public OrdinalFunDef() {
         super(functionMetaData);

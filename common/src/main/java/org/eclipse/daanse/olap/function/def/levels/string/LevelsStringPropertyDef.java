@@ -37,7 +37,8 @@ public class LevelsStringPropertyDef extends AbstractFunctionDefinition {
     static OperationAtom hierarchyMethodOperationAtom = new MethodOperationAtom(LEVELS);
     static FunctionMetaData hierarchyLevelsFunctionMetaData = new FunctionMetaDataR(hierarchyMethodOperationAtom,
             "Returns the level whose name is specified by a string expression.",
-            DataType.LEVEL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.STRING, "String") });
+            DataType.LEVEL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.STRING, "LevelName").describedAs("Level Name") })
+            .withTextKey("Hierarchy.Levels.LevelName.Function").caption("Hierarchy.Levels(LevelName) Function");
 
     public LevelsStringPropertyDef() {
         super(hierarchyLevelsFunctionMetaData);

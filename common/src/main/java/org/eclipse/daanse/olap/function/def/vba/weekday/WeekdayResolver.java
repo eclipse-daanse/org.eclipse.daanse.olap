@@ -32,7 +32,7 @@ public class WeekdayResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Variant (Integer) containing a whole number representing
         the day of the week.""";
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date"),
-            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").describedAs("First Day Of Week").asOptional() };
+            FunctionParameterR.param(DataType.INTEGER, "First_Day_Of_Week").describedAs("First Day Of Week").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, params).withTextKey("Weekday").caption("Weekday Function");

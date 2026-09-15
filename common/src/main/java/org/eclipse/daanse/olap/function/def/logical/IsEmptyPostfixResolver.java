@@ -32,11 +32,13 @@ public class IsEmptyPostfixResolver extends AbstractFunctionDefinitionMultiResol
 
     private static FunctionMetaData postfixMetaDataMember = new FunctionMetaDataR(pAtom,
         "A shortcut function for the PeriodsToDate function that specifies the level to be Month.",
-        DataType.LOGICAL, new FunctionParameterR[]{ new FunctionParameterR (DataType.MEMBER )});
+        DataType.LOGICAL, new FunctionParameterR[]{ new FunctionParameterR (DataType.MEMBER ).describedAs("Member")})
+            .withTextKey("Member.IS_EMPTY.Function").caption("Member IS_EMPTY Function");
 
     private static FunctionMetaData postfixMetaDataTuple = new FunctionMetaDataR(pAtom,
         "A shortcut function for the PeriodsToDate function that specifies the level to be Month.",
-        DataType.LOGICAL, new FunctionParameterR[]{ FunctionParameterR.param(DataType.TUPLE)});
+        DataType.LOGICAL, new FunctionParameterR[]{ FunctionParameterR.param(DataType.TUPLE).describedAs("Tuple")})
+            .withTextKey("Tuple.IS_EMPTY.Function").caption("Tuple IS EMPTY Function");
 
     public IsEmptyPostfixResolver() {
         super(List.of(new IsEmptyFunDef(postfixMetaDataMember), new IsEmptyFunDef(postfixMetaDataTuple)));

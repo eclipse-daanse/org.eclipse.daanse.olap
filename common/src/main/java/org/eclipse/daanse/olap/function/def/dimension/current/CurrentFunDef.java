@@ -27,7 +27,7 @@ public class CurrentFunDef extends AbstractFunctionDefinition {
 
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Current");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom, "Returns the current tuple from a set during an iteration.",
-            DataType.TUPLE, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET) });
+            DataType.TUPLE, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set") }).withTextKey("Current.Property1").caption("Current Property");
 
 	public CurrentFunDef() {
 		super(functionMetaData);

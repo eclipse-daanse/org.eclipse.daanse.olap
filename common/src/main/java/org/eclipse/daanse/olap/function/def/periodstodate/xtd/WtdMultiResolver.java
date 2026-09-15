@@ -34,7 +34,8 @@ public class WtdMultiResolver extends AbstractFunctionDefinitionMultiResolver {
 
 	private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"A shortcut function for the PeriodsToDate function that specifies the level to be Week.",
-			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member").asOptional() })
+			.interfaceName(FunctionInterface.DATETIME).withTextKey("Wtd.Function").caption("Wtd Function");
 
 	public WtdMultiResolver() {
 		super(List.of(new XtdFunDef(functionMetaData, LevelType.TIME_WEEKS)));

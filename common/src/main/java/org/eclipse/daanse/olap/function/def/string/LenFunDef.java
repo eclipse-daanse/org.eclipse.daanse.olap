@@ -30,7 +30,8 @@ public class LenFunDef extends AbstractFunctionDefinition {
     static FunctionOperationAtom functionOperationAtom = new FunctionOperationAtom("Len");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionOperationAtom,
             "Returns the number of characters in a string", DataType.NUMERIC,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String") });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("StringValue") })
+            .withTextKey("Len.Function").caption("Len Function");
 
     public LenFunDef() {
         super(functionMetaData);

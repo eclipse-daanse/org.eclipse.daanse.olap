@@ -31,7 +31,9 @@ public class CurrentDateStringFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("CurrentDateString");
     static String description = "Returns the current date formatted as specified by the format parameter.";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.STRING , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "Format") }).interfaceName(FunctionInterface.DATETIME).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.STRING , new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "Format").describedAs("Format") })
+            .interfaceName(FunctionInterface.DATETIME).withTextKey("CurrentDateString.Function").caption("CurrentDateString Function")
+            .origin(FunctionOrigin.UDF).library("daanse.udf");
 
     public CurrentDateStringFunDef() {
         super(functionMetaData);

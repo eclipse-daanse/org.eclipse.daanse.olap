@@ -31,7 +31,8 @@ public class ValidMeasureFunDef extends AbstractFunctionDefinition
     static OperationAtom functionAtom = new FunctionOperationAtom("ValidMeasure");
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Returns a valid measure in a virtual cube by forcing inapplicable dimensions to their top level.",
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.TUPLE) });
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.TUPLE).describedAs("Tuple") })
+            .withTextKey("ValidMeasure.Function").caption("ValidMeasure Function");
 
     public ValidMeasureFunDef() {
         super(functionMetaData);

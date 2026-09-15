@@ -29,13 +29,14 @@ import org.osgi.service.component.annotations.Component;
 public class NonEmptyCrossJoinResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("NonEmptyCrossJoin");
     private static String DESCRIPTION = "Returns the cross product of two sets, excluding empty tuples and tuples without associated fact table data.";
-    private static FunctionParameterR set1 = FunctionParameterR.param(DataType.SET, "Set1");
-    private static FunctionParameterR set2 = FunctionParameterR.param(DataType.SET, "Set2");
+    private static FunctionParameterR set1 = FunctionParameterR.param(DataType.SET, "Set1").describedAs("Set 1");
+    private static FunctionParameterR set2 = FunctionParameterR.param(DataType.SET, "Set2").describedAs("Set 2");
     private static FunctionParameterR[] xx = { set1, set2};
     // {"fxxx"}
     
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx).interfaceName(FunctionInterface.FILTER);
+            DataType.SET, xx).interfaceName(FunctionInterface.FILTER).withTextKey("NonEmptyCrossJoin.Function")
+            .caption("NonEmptyCrossJoin Function");
 
     public NonEmptyCrossJoinResolver() {
         super(List.of(new NonEmptyCrossJoinFunDef(functionMetaData)));

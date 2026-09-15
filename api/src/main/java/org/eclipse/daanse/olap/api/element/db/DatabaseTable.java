@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.api.element.db;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DatabaseTable {
 
@@ -22,4 +23,17 @@ public interface DatabaseTable {
     List<DatabaseColumn> getDbColumns();
 
     String getDescription();
+
+    /**
+     * The table's primary key, when the schema declares one or the mapping
+     * implies one. A table with several candidate keys reports the first.
+     */
+    default Optional<DatabaseKey> getPrimaryKey() {
+        return Optional.empty();
+    }
+
+    /** The foreign keys this table's columns hold, referencing other tables. */
+    default List<DatabaseForeignKey> getForeignKeys() {
+        return List.of();
+    }
 }

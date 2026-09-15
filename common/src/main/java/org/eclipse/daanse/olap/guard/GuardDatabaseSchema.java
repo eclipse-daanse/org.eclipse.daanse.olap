@@ -15,28 +15,27 @@ package org.eclipse.daanse.olap.guard;
 
 import java.util.List;
 
-import org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog;
 import org.eclipse.daanse.sql.guard.api.elements.DatabaseSchema;
+import org.eclipse.daanse.sql.guard.api.elements.DatabaseTable;
 
+public class GuardDatabaseSchema implements DatabaseSchema{
 
-public class DatabaseCatalogImpl implements DatabaseCatalog{
-
-    private List<DatabaseSchema> databaseSchemas;
+    private List<DatabaseTable> databaseTables;
     private String name;
 
 
-    public DatabaseCatalogImpl(String name, List<org.eclipse.daanse.olap.api.element.db.DatabaseSchema> databaseSchemas) {
-        this.name = name;
-        if (databaseSchemas != null) {
-            this.databaseSchemas = databaseSchemas.stream().map(ds -> (DatabaseSchema)new DatabaseSchemaImpl(ds)).toList();
+    public GuardDatabaseSchema(org.eclipse.daanse.olap.api.element.db.DatabaseSchema ds) {
+        this.name = ds.getName() == null ? "" : ds.getName();
+        if (ds.getDbTables() != null) {
+            this.databaseTables = ds.getDbTables().stream().map(t -> (DatabaseTable) new GuardDatabaseTable(t)).toList();
         } else {
-            this.databaseSchemas = List.of();
+            this.databaseTables = List.of();
         }
     }
 
     @Override
-    public List<DatabaseSchema> getDatabaseSchemas() {
-        return this.databaseSchemas;
+    public List<DatabaseTable> getDatabaseTables() {
+        return this.databaseTables;
     }
 
     @Override

@@ -45,7 +45,7 @@ import org.eclipse.daanse.dmv.parser.api.DmvParserProvider;
 import org.eclipse.daanse.olap.common.SqlQueryImpl;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.exceptions.FailedToParseQueryException;
-import org.eclipse.daanse.olap.guard.DatabaseCatalogImpl;
+import org.eclipse.daanse.olap.guard.GuardDatabaseCatalog;
 import org.eclipse.daanse.olap.query.base.ExpressionProviderImpl;
 import org.eclipse.daanse.olap.query.base.QueryProviderImpl;
 import org.eclipse.daanse.olap.query.base.StatementRouter;
@@ -156,7 +156,7 @@ public abstract class ConnectionBase implements Connection {
         List<DatabaseSchema> ds = (List<DatabaseSchema>) this.getCatalogReader().getDatabaseSchemas();
         String catalogName = getCatalog().getName();
         String schemaName = currentSchemaName(ds);
-        org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new DatabaseCatalogImpl(catalogName, ds);
+        org.eclipse.daanse.sql.guard.api.elements.DatabaseCatalog dc = new GuardDatabaseCatalog(catalogName, ds);
         //TODO need resolve function list from other place
         SqlGuard guard = oSqlGuardFactory.get().create(catalogName, schemaName, dc,
                 List.of("sum", "avg", "min", "max", "count", "concat"), this.getContext().getDialect());

@@ -330,6 +330,81 @@ public String getPropertyFormattedValue( String propertyName ) {
   }
 
   @Override
+public Object getPropertyValue( String propertyName ) {
+    return getPropertyValue( propertyName, true );
+  }
+
+  /**
+   * Answers the standard member properties that follow from the member's place
+   * in its hierarchy. A subclass with its own property store overrides this and
+   * falls back to {@code super} for the standard ones. Unknown or provider-specific
+   * properties answer {@code null}.
+   */
+  @Override
+public Object getPropertyValue( String propertyName, boolean matchCase ) {
+    StandardProperty property = StandardProperty.lookup( propertyName, matchCase );
+    if ( property == null ) {
+      return null;
+    }
+    if ( property == StandardProperty.CAPTION || property == StandardProperty.MEMBER_CAPTION ) {
+      return getCaption();
+    } else if ( property == StandardProperty.SCHEMA_NAME ) {
+      return getHierarchy().getDimension().getCatalog().getName();
+    } else if ( property == StandardProperty.DIMENSION_UNIQUE_NAME ) {
+      return getHierarchy().getDimension().getUniqueName();
+    } else if ( property == StandardProperty.HIERARCHY_UNIQUE_NAME ) {
+      return getHierarchy().getUniqueName();
+    } else if ( property == StandardProperty.LEVEL_UNIQUE_NAME ) {
+      return getLevel().getUniqueName();
+    } else if ( property == StandardProperty.LEVEL_NUMBER ) {
+      return getLevel().getDepth();
+    } else if ( property == StandardProperty.MEMBER_UNIQUE_NAME ) {
+      return getUniqueName();
+    } else if ( property == StandardProperty.MEMBER_NAME ) {
+      return getName();
+    } else if ( property == StandardProperty.MEMBER_TYPE ) {
+      return getMemberType().ordinal();
+    } else if ( property == StandardProperty.MEMBER_ORDINAL ) {
+      return getOrdinal();
+    } else if ( property == StandardProperty.PARENT_LEVEL ) {
+      Member parent = getParentMember();
+      return parent == null ? 0 : parent.getLevel().getDepth();
+    } else if ( property == StandardProperty.PARENT_UNIQUE_NAME ) {
+      Member parent = getParentMember();
+      return parent == null ? null : parent.getUniqueName();
+    } else if ( property == StandardProperty.PARENT_COUNT ) {
+      return getParentMember() == null ? 0 : 1;
+    } else if ( property == StandardProperty.DEPTH ) {
+      return getDepth();
+    } else if ( property == StandardProperty.VISIBLE ) {
+      return visible;
+    } else if ( property == StandardProperty.DESCRIPTION_PROPERTY ) {
+      return null;
+    }
+    return null;
+  }
+
+  /**
+   * Orders members of one hierarchy by their order key when both have one, else
+   * by unique name. Members of different hierarchies do not compare; a
+   * provider with a richer ordering overrides this.
+   */
+  @Override
+public int compareTo( Object o ) {
+    Member other = (Member) o;
+    Comparable thisKey = getOrderKey();
+    Comparable otherKey = other.getOrderKey();
+    if ( thisKey != null && otherKey != null && thisKey.getClass() == otherKey.getClass() ) {
+      @SuppressWarnings( "unchecked" )
+      int c = thisKey.compareTo( otherKey );
+      if ( c != 0 ) {
+        return c;
+      }
+    }
+    return getUniqueName().compareTo( other.getUniqueName() );
+  }
+
+  @Override
 public boolean isParentChildPhysicalMember() {
     return false;
   }

@@ -31,6 +31,7 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
 /**
@@ -88,6 +89,14 @@ public interface Hierarchy extends OlapElement, MetaElement {
      * calculated member is created, and formula must not be null.
      */
     Member createMember(Member parent, Level level, String name, Formula formula);
+
+    /**
+     * Creates the member the {@code VisualTotals} function substitutes for
+     * {@code member}: same parent and level, the given name and caption, and
+     * {@code exp} as its aggregate expression. A provider whose evaluator needs
+     * its own member type returns that type here.
+     */
+    VisualTotalMember createVisualTotalMember(Member member, String name, String caption, Expression exp);
 
     /**
      * Returns the unique name of this hierarchy, always including the dimension

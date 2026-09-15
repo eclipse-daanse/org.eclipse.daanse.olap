@@ -41,7 +41,9 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.MatchType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.VisualTotalMember;
 import org.eclipse.daanse.olap.api.query.NameSegment;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.common.Util;
 import org.eclipse.daanse.olap.query.component.IdImpl;
 /**
@@ -242,5 +244,14 @@ public abstract class HierarchyBase
     public List<Member> getRootMembers() {
         return members;
         //TODO
+    }
+
+    /**
+     * The provider-neutral visual total member. A provider whose evaluator
+     * requires its own member type overrides this.
+     */
+    @Override
+    public VisualTotalMember createVisualTotalMember(Member member, String name, String caption, Expression exp) {
+        return new VisualTotalMemberImpl(member, name, caption, exp);
     }
 }

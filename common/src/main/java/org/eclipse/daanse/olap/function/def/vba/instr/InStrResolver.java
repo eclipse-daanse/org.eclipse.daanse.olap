@@ -32,11 +32,11 @@ public class InStrResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a Variant (Long) specifying the position of the first
         occurrence of one string within another.""";
 
-    private static FunctionParameterR[] p1 = { FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"), FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match") };
-    private static FunctionParameterR[] p2 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"),
-            FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match") };
-    private static FunctionParameterR[] p3 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String Check").describedAs("String Check"),
-            FunctionParameterR.param(DataType.STRING, "String Match").describedAs("String Match"),
+    private static FunctionParameterR[] p1 = { FunctionParameterR.param(DataType.STRING, "String_Check").describedAs("String Check"), FunctionParameterR.param(DataType.STRING, "String_Match").describedAs("String Match") };
+    private static FunctionParameterR[] p2 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String_Check").describedAs("String Check"),
+            FunctionParameterR.param(DataType.STRING, "String_Match").describedAs("String Match") };
+    private static FunctionParameterR[] p3 = { FunctionParameterR.param(DataType.INTEGER, "Start").describedAs("Start"), FunctionParameterR.param(DataType.STRING, "String_Check").describedAs("String Check"),
+            FunctionParameterR.param(DataType.STRING, "String_Match").describedAs("String Match"),
             FunctionParameterR.param(DataType.INTEGER, "Compare").describedAs("Compare") };
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,

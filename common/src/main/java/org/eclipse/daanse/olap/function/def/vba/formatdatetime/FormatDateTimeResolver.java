@@ -32,7 +32,7 @@ public class FormatDateTimeResolver extends AbstractFunctionDefinitionMultiResol
         Returns an expression formatted as a date or time.""";
 
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date"),
-            FunctionParameterR.param(DataType.INTEGER, "Named Format").describedAs("Named Format").asOptional() };
+            FunctionParameterR.param(DataType.INTEGER, "Named_Format").describedAs("Named Format").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.STRING, params).withTextKey("FormatDateTime").caption("FormatDateTime Function");

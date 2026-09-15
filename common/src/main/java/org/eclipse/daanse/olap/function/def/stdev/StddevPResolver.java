@@ -29,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class StddevPResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("StddevP");
     private static String DESCRIPTION = "Alias for StdevP.";
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC).asOptional() };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression").asOptional() };
     // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("StddevP.Function").caption("StddevP Function");
 
     public StddevPResolver() {
         super(List.of(new StdevPFunDef(functionMetaData)));

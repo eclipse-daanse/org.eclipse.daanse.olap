@@ -33,7 +33,8 @@ public class HierarchyCurrentMemberFunDef extends AbstractFunctionDefinition {
 
     static final FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the current member along a hierarchy during an iteration.",
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy") }).interfaceName(FunctionInterface.NAVIGATION)
+            .withTextKey("CurrentMember.Hierarchy.Property").caption("Hierarchy.CurrentMember() Property");
 
     static final HierarchyCurrentMemberFunDef instance = new HierarchyCurrentMemberFunDef();
 

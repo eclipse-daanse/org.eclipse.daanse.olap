@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.function.core.resolver.AbstractFunctionDefinition
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = FunctionResolver.class)
-public class DatePartResolver extends AbstractFunctionDefinitionMultiResolver {
+public class  DatePartResolver extends AbstractFunctionDefinitionMultiResolver {
     
     private static FunctionOperationAtom atom = new FunctionOperationAtom("DatePart");
     private static String DESCRIPTION = """
@@ -33,8 +33,8 @@ public class DatePartResolver extends AbstractFunctionDefinitionMultiResolver {
             date.""";
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName").describedAs("Interval Name"),
             FunctionParameterR.param(DataType.DATE_TIME, "Date1").describedAs("Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2").describedAs("Date2"),
-            FunctionParameterR.param(DataType.INTEGER, "First Day Of Week").describedAs("First Day Of Week").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "First Week Of Year").describedAs("First Week Of Year").asOptional() };
+            FunctionParameterR.param(DataType.INTEGER, "First_Day_Of_Week").describedAs("First Day Of Week").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "First_Week_Of_Year").describedAs("First Week Of Year").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, params).withTextKey("DatePart").caption("DatePart Function");

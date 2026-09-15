@@ -32,7 +32,7 @@ public class MidResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a specified number of characters from a string.""";
 
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Value").describedAs("Value"),
-            FunctionParameterR.param(DataType.INTEGER, "Begin Index").describedAs("Begin Index"),
+            FunctionParameterR.param(DataType.INTEGER, "Begin_Index").describedAs("Begin Index"),
             FunctionParameterR.param(DataType.INTEGER, "Length").describedAs("Length").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,

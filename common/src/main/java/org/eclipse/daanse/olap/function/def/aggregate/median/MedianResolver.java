@@ -31,8 +31,8 @@ public class MedianResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns the median value of a numeric expression evaluated over a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Percentile").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Percentile").describedAs("Percentile").asOptional() }).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Median").caption("Median Function");
 
     public MedianResolver() {
         super(List.of(new MedianFunDef(functionMetaData)));

@@ -30,7 +30,8 @@ public class UniqueNameFunDef extends AbstractFunctionDefinition {
     // <Level>.UniqueName
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("UniqueName");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom, "Returns the unique name of a level.",
-            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.METADATA);
+            DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") }).interfaceName(FunctionInterface.METADATA)
+            .withTextKey("UniqueName.Level.Property").caption("Level.UniqueName() Property");
 
     public UniqueNameFunDef() {
         super(functionMetaData);

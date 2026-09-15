@@ -30,11 +30,11 @@ import org.osgi.service.component.annotations.Component;
 public class NativizeSetResolver  extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("NativizeSet");
     private static String DESCRIPTION = "Tries to natively evaluate <Set>.";
-    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET) };
+    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET).describedAs("Set") };
     // {"fxx"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, x);
+            DataType.SET, x).withTextKey("NativizeSet.Function").caption("NativizeSet.Function");
 
     public NativizeSetResolver() {
         super(List.of(new NativizeSetFunDef(functionMetaData)));

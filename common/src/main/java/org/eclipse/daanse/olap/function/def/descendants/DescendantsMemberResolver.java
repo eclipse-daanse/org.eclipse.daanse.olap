@@ -29,31 +29,31 @@ public class DescendantsMemberResolver extends AbstractFunctionDefinitionMultiRe
     private static String descFlagDescription = "Controls which levels relative to the member are included: SELF, AFTER, BEFORE, BEFORE_AND_AFTER, SELF_AND_AFTER, SELF_AND_BEFORE, SELF_BEFORE_AFTER, LEAVES.";
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Descendants");
     private static String DESCRIPTION = "Returns the set of descendants of a member at a specified level, optionally including or excluding descendants in other levels.";
-    private static FunctionParameterR[] m = { FunctionParameterR.param(DataType.MEMBER) };
-    private static FunctionParameterR[] ml = { FunctionParameterR.param(DataType.MEMBER),
-            FunctionParameterR.param(DataType.LEVEL) };
-    private static FunctionParameterR[] mly = { FunctionParameterR.param(DataType.MEMBER),
-            FunctionParameterR.param(DataType.LEVEL), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
-    private static FunctionParameterR[] mn = { FunctionParameterR.param(DataType.MEMBER),
-            FunctionParameterR.param(DataType.NUMERIC) };
-    private static FunctionParameterR[] mny = { FunctionParameterR.param(DataType.MEMBER),
-            FunctionParameterR.param(DataType.NUMERIC), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
-    private static FunctionParameterR[] mey = { FunctionParameterR.param(DataType.MEMBER),
+    private static FunctionParameterR[] m = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") };
+    private static FunctionParameterR[] ml = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level") };
+    private static FunctionParameterR[] mly = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+    private static FunctionParameterR[] mn = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") };
+    private static FunctionParameterR[] mny = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+    private static FunctionParameterR[] mey = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
             FunctionParameterR.param(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     // {"fxm", "fxml", "fxmly", "fxmn", "fxmny", "fxmey"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
             m);
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, ml);
+            DataType.SET, ml).withTextKey("Descendants.Member").caption("Descendants Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, mly);
+            DataType.SET, mly).withTextKey("Descendants.Member.Level.Desc_Flag").caption("Descendants Function(Member,Level,Desc_Flag)");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, mn);
+            DataType.SET, mn).withTextKey("Descendants.Member.Numeric").caption("Descendants Function(Member,Numeric)");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, mny);
+            DataType.SET, mny).withTextKey("Descendants.Member.Numeric.Desc_Flag").caption("Descendants Function(Member,Numeric,Desc_Flag)");
     private static FunctionMetaData functionMetaData5 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, mey);
+            DataType.SET, mey).withTextKey("Descendants.Member._.Desc_Flag").caption("Descendants  Function(Member,,Desc_Flag)");;
 
     public DescendantsMemberResolver() {
         super(List.of(new DescendantsByLevelFunDef(functionMetaData), new DescendantsByLevelFunDef(functionMetaData1),

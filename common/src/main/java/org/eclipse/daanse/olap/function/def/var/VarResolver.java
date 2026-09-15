@@ -29,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class VarResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Var");
     private static String DESCRIPTION = "Returns the variance of a numeric expression evaluated over a set (unbiased).";
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Value").asOptional() };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Value").describedAs("Value").asOptional() };
     // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Var.Function").caption("Var Function");
 
     public VarResolver() {
         super(List.of(new VarFunDef(functionMetaData)));

@@ -34,10 +34,12 @@ public class AncestorsResolver extends AbstractFunctionDefinitionMultiResolver {
     //{"fxml", "fxmn"}
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.LEVEL) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestors.Member.Level.Function").caption("Ancestors Function");
 
     private static FunctionMetaData functionMetaDataWithNumeric = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.NUMERIC) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.NUMERIC).describedAs("Distance") })
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestors.Member.Numeric.Function").caption("Ancestors Function");;
 
 
     public AncestorsResolver() {

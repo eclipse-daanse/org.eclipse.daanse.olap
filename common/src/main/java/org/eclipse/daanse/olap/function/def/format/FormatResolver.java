@@ -28,18 +28,18 @@ import org.osgi.service.component.annotations.Component;
 public class FormatResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Format");
     private static String DESCRIPTION = "Formats a number or date to a string.";
-    private static FunctionParameterR[] mS = { FunctionParameterR.param(DataType.MEMBER, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
-    private static FunctionParameterR[] nS = { FunctionParameterR.param(DataType.NUMERIC, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
-    private static FunctionParameterR[] DS = { FunctionParameterR.param(DataType.DATE_TIME, "Value"), FunctionParameterR.param(DataType.STRING, "Format") };
+    private static FunctionParameterR[] mS = { FunctionParameterR.param(DataType.MEMBER, "Value").describedAs("Member"), FunctionParameterR.param(DataType.STRING, "Format").describedAs("Format") };
+    private static FunctionParameterR[] nS = { FunctionParameterR.param(DataType.NUMERIC, "Value").describedAs("Numeric Expression"), FunctionParameterR.param(DataType.STRING, "Format").describedAs("Format") };
+    private static FunctionParameterR[] DS = { FunctionParameterR.param(DataType.DATE_TIME, "Value").describedAs("Date"), FunctionParameterR.param(DataType.STRING, "Format").describedAs("Format") };
     // {"fSmS", "fSnS", "fSDS"}
 
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, mS);
+            DataType.STRING, mS).withTextKey("Format.Member.Function").caption("Format Function");
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, nS);
+            DataType.STRING, nS).withTextKey("Format.Numeric.Function").caption("Format Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, DS);
+            DataType.STRING, DS).withTextKey("Format.Date.Function").caption("Format Function");;
 
     public FormatResolver() {
         super(List.of(new FormatFunDef(functionMetaData), new FormatFunDef(functionMetaData1), new FormatFunDef(functionMetaData2)));

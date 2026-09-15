@@ -30,7 +30,8 @@ public class StripCalculatedMembersFunDef extends AbstractFunctionDefinition {
     static FunctionOperationAtom functionAtom = new FunctionOperationAtom("StripCalculatedMembers");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
             "Removes calculated members from a set.", DataType.SET,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET) });
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set") })
+            .withTextKey("StripCalculatedMembers.Function").caption("StripCalculatedMembers Function");
 
     public StripCalculatedMembersFunDef() {
         super(functionMetaData);

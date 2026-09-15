@@ -34,7 +34,8 @@ public class AncestorNumericFunDef extends AbstractFunctionDefinition {
 
 	static final FunctionMetaData fmdNum = new FunctionMetaDataR(AncestorResolver.operationAtom,
 			"Returns the ancestor of a member at a specified level, defined by the distance.", DataType.MEMBER,
-			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER), FunctionParameterR.param(DataType.NUMERIC) }).interfaceName(FunctionInterface.NAVIGATION);
+			new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Distance"), FunctionParameterR.param(DataType.NUMERIC).describedAs("Distance") })
+			.interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestor.Member.Distance.Function").caption("Ancestor(Member,Distance) Function");
 
 	public AncestorNumericFunDef() {
 		super(fmdNum);

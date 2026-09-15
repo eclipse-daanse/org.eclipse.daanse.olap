@@ -34,9 +34,10 @@ public class ParallelPeriodResolver extends AbstractFunctionDefinitionMultiResol
     // {"fm", "fml", "fmln", "fmlnm"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).asOptional(),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional(),
-                    FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).asOptional().describedAs("Level"),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional().describedAs("Numeric"),
+                    FunctionParameterR.param(DataType.MEMBER).asOptional().describedAs("Member") }).interfaceName(FunctionInterface.DATETIME)
+            .withTextKey("ParallelPeriod.Function").caption("ParallelPeriod Function");
 
     public ParallelPeriodResolver() {
         super(List.of(new ParallelPeriodFunDef(functionMetaData)));

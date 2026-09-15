@@ -30,7 +30,9 @@ public class NextMemberFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("NextMember");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the next member in the level that contains a specified member.",
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Member.NextMember.Property")
+            .caption("Member.NextMember Property");
 
     public NextMemberFunDef() {
         super(functionMetaData);

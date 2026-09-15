@@ -29,8 +29,8 @@ public class MultiplyOperatorDef extends AbstractFunctionDefinition {
     // <Numeric Expression> * <Numeric Expression>
     static InfixOperationAtom infixOperationAtom = new InfixOperationAtom("*");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(infixOperationAtom, "Multiplies two numbers.",
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric1").describedAs("First Numeric Expression"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric2").describedAs("Second Numeric Expression") })
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Multiplicand").describedAs("Multiplicand"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Multiplier").describedAs("Multiplier") })
             .withTextKey("Multiply.Operation")
             .caption("Multiply Operation");
 

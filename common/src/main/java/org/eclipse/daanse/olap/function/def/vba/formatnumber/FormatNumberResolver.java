@@ -32,10 +32,10 @@ public class FormatNumberResolver extends AbstractFunctionDefinitionMultiResolve
         Returns an expression formatted as a number.""";
 
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression"),
-            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").describedAs("Digits After Decimal").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Include Leading Digit").describedAs("Include Leading Digit").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Use Parens For Negative Numbers").describedAs("Use Parens For Negative Numbers").asOptional(),
-            FunctionParameterR.param(DataType.INTEGER, "Group Digits").describedAs("Group Digits").asOptional() };
+            FunctionParameterR.param(DataType.INTEGER, "Digits_After_Decimal").describedAs("Digits After Decimal").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Include_Leading_Digit").describedAs("Include Leading Digit").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Use_Parens_For_Negative_Numbers").describedAs("Use Parens For Negative Numbers").asOptional(),
+            FunctionParameterR.param(DataType.INTEGER, "Group_Digits").describedAs("Group Digits").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.STRING, params).withTextKey("FormatNumber").caption("FormatNumber Function");

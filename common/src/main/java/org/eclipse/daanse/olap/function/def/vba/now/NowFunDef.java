@@ -30,7 +30,7 @@ public class NowFunDef  extends AbstractFunctionDefinition {
         Returns a Variant (Date) specifying the current date and time
         according your computer's system date and time.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.DATE_TIME, new FunctionParameterR[] { }).withTextKey("Now").caption("Now Function");
+            DataType.DATE_TIME, new FunctionParameterR[] { }).withTextKey("Now.Function").caption("Now Function");
 
     public NowFunDef() {
         super(functionMetaData);

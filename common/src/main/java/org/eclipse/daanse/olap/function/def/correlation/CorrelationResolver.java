@@ -33,9 +33,10 @@ public class CorrelationResolver extends AbstractFunctionDefinitionMultiResolver
     private static String DESCRIPTION = "Returns the correlation of two series evaluated over a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set"),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1).describedAs("Numeric Expression1"),
+                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional().describedAs("Numeric Expression2") }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("Correlation").caption("Correlation Function");
 
     public CorrelationResolver() {
         super(List.of(new CorrelationFunDef(functionMetaData)));

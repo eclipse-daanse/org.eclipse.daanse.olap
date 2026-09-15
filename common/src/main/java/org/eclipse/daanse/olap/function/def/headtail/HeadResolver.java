@@ -31,7 +31,7 @@ public class HeadResolver extends AbstractFunctionDefinitionMultiResolver {
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression")
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression")
                             .describedAs("Number of members to return; defaults to 1.").asOptional() });
 
     public HeadResolver() {

@@ -30,7 +30,7 @@ public class CountFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("Count");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the number of tuples in a set including empty cells.", DataType.NUMERIC,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET)}).interfaceName(FunctionInterface.STATISTICAL);
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set")}).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Count").caption("Count Function");
 
     public CountFunDef() {
         super(functionMetaData);

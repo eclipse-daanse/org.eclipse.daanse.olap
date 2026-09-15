@@ -33,7 +33,8 @@ public class DataMemberFunDef extends AbstractFunctionDefinition {
     static OperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("DataMember");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the system-generated data member that is associated with a nonleaf member of a dimension.",
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Member.DataMember.Property").caption("Member.DataMember Property");
 
     public DataMemberFunDef() {
         super(functionMetaData);

@@ -31,9 +31,10 @@ public class LinRegPointResolver extends AbstractFunctionDefinitionMultiResolver
     private static String DESCRIPTION = "Calculates the linear regression of a set and returns the value of y in the regression line y = ax + b.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "xPoint"),
-                    FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.NUMERIC, "Y"),
-                    FunctionParameterR.param(DataType.NUMERIC, "X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "xPoint").describedAs("xPoint"),
+                    FunctionParameterR.param(DataType.SET).describedAs("Set"), FunctionParameterR.param(DataType.NUMERIC, "Y").describedAs("Y"),
+                    FunctionParameterR.param(DataType.NUMERIC, "X").describedAs("X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("LinRegPoint.Function").caption("LinRegPoint Function");
 
     public LinRegPointResolver() {
         super(List.of(new PointFunDef(functionMetaData, LinRegFunDef.POINT)));

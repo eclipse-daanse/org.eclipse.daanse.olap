@@ -28,26 +28,29 @@ import org.osgi.service.component.annotations.Component;
 public class DrilldownLevelBottomResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("DrilldownLevelBottom");
     private static String DESCRIPTION = "Drills down the bottommost members of a set, at a specified level, to one level below.";
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Count") };
-    private static FunctionParameterR[] xnl = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Count"), FunctionParameterR.param(DataType.LEVEL) };
-    private static FunctionParameterR[] xnln = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Count"), FunctionParameterR.param(DataType.LEVEL),
-            FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression") };
-    private static FunctionParameterR[] xnen = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Count"), FunctionParameterR.param(DataType.EMPTY),
-            FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression") };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Count").describedAs("Count") };
+    private static FunctionParameterR[] xnl = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Count").describedAs("Count"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level") };
+    private static FunctionParameterR[] xnln = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Count").describedAs("Count"),
+            FunctionParameterR.param(DataType.LEVEL).describedAs("Level"),
+            FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression").describedAs("Numeric Expression") };
+    private static FunctionParameterR[] xnen = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Count").describedAs("Count"),
+            FunctionParameterR.param(DataType.EMPTY).describedAs("Empty"),
+            FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression").describedAs("Numeric Expression") };
     // {"fxxn", "fxxnl", "fxxnln", "fxxnen"}
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xn);
+            DataType.SET, xn).withTextKey("DrilldownLevelBottom.Set.Numeric.Function").caption("DrilldownLevelBottom Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xnl);
+            DataType.SET, xnl).withTextKey("DrilldownLevelBottom.Set.Numeric.Level.Function").caption("DrilldownLevelBottom Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xnln);
+            DataType.SET, xnln).withTextKey("DrilldownLevelBottom.Set.Numeric.Level.Numeric.Function").caption("DrilldownLevelBottom Function");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xnen);
+            DataType.SET, xnen).withTextKey("DrilldownLevelBottom.Set.Numeric.Empty.Numeric.Function").caption("DrilldownLevelBottom Function");
 
     public DrilldownLevelBottomResolver() {
         super(List.of(new DrilldownLevelTopBottomFunDef(functionMetaData1, false),

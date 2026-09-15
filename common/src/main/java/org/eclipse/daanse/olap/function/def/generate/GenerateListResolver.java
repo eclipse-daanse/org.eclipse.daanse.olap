@@ -31,11 +31,11 @@ public class GenerateListResolver extends AbstractFunctionDefinitionMultiResolve
     private static String DESCRIPTION = "Applies a set to each member of another set and joins the resulting sets by union.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
-                    FunctionParameterR.param(DataType.SET, "Set2"),
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1").describedAs("First Set"),
+                    FunctionParameterR.param(DataType.SET, "Set2").describedAs("Second Set"),
                     new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(GenerateFunDef.ReservedWords))
                             .describedAs("ALL retains duplicates produced by the iteration; without it duplicates are removed.")
-                            .asOptional() });
+                            .asOptional() }).withTextKey("Generate.Set.Set.Symbol.Function").caption("Generate Function");
 
     public GenerateListResolver() {
         super(List.of(new GenerateFunDef(functionMetaData)));

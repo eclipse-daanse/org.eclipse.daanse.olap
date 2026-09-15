@@ -28,9 +28,9 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class KPIWeightFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom KPI_WEIGHT_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("KPIWeight");
-    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi").describedAs("Value") };
     static final FunctionMetaData FUNCTION_META_DATA = new FunctionMetaDataR(KPI_WEIGHT_INSTANCE_FUNCTION_ATOM, "Returns KPI Weight.",
-    		DataType.MEMBER, params);
+    		DataType.MEMBER, params).withTextKey("KPIWeight.Function").caption("KPIWeight Function");
     // KPIWeight(<String>)
 
     public KPIWeightFunDef() {

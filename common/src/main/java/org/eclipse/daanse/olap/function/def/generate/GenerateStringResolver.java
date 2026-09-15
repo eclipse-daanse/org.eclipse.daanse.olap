@@ -28,22 +28,24 @@ import org.osgi.service.component.annotations.Component;
 public class GenerateStringResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Generate");
     private static String DESCRIPTION = "Applies a set to a string expression and joins resulting sets by string concatenation.";
-    private static FunctionParameterR[] xS = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.STRING) };
-    private static FunctionParameterR[] xSS = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.STRING), FunctionParameterR.param(DataType.STRING, "Separator") };
-    private static FunctionParameterR[] xnS = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC), FunctionParameterR.param(DataType.STRING, "Separator") };
+    private static FunctionParameterR[] xS = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.STRING).describedAs("String Expression") };
+    private static FunctionParameterR[] xSS = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.STRING).describedAs("String Expression"),
+            FunctionParameterR.param(DataType.STRING, "Separator").describedAs("Separator") };
+    private static FunctionParameterR[] xnS = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression"),
+            FunctionParameterR.param(DataType.STRING, "Separator").describedAs("Separator") };
     // {"fSxS", "fSxSS", "fSxnS"}
 
 
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, xS);
+            DataType.STRING, xS).withTextKey("Generate.Set.String.Function").caption("Generate Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, xSS);
+            DataType.STRING, xSS).withTextKey("Generate.Set.String.String.Function").caption("Generate Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, xnS);
+            DataType.STRING, xnS).withTextKey("Generate.Set.Numeric.String.Function").caption("Generate Function");
 
     public GenerateStringResolver() {
         super(List.of(new GenerateFunDef(functionMetaData1), new GenerateFunDef(functionMetaData2), new GenerateFunDef(functionMetaData3)));

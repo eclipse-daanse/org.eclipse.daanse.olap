@@ -32,8 +32,8 @@ public class CovarianceResolver extends AbstractFunctionDefinitionMultiResolver 
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression1"),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression2").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression1"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression2").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
 
     public CovarianceResolver() {
         super(List.of(new CovarianceFunDef(functionMetaData)));

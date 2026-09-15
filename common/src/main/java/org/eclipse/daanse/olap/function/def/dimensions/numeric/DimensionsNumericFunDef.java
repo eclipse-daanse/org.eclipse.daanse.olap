@@ -52,7 +52,8 @@ public class DimensionsNumericFunDef extends AbstractFunctionDefinition {
 	static final String DIMENSIONS_NUMERIC_FUN_DESCRIPTION = "Returns the hierarchy whose zero-based position within the cube is specified by a numeric expression.";
 	static final OperationAtom atom = new FunctionOperationAtom("Dimensions");
 	static final FunctionMetaData functionalMetaData = new FunctionMetaDataR(atom, DIMENSIONS_NUMERIC_FUN_DESCRIPTION,
-			DataType.HIERARCHY, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression") });
+			DataType.HIERARCHY, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression").describedAs("Hierarchy Position") }).withTextKey("Dimensions.Numeric.Function")
+			.caption("Dimensions(Hierarchy_Position) Function");
 
 	public DimensionsNumericFunDef() {
 		super(functionalMetaData);

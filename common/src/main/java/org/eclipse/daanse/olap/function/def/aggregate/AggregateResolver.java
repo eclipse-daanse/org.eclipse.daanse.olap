@@ -31,8 +31,8 @@ public class AggregateResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns a calculated value using the appropriate aggregate function, based on the context of the query.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional().describedAs("Numeric Expression") }).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Aggregate").caption("Aggregate");
 
     public AggregateResolver() {
         super(List.of(new AggregateFunDef(functionMetaData)));

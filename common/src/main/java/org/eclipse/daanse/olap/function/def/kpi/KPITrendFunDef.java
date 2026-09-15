@@ -28,9 +28,9 @@ import org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition;
 public class KPITrendFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom KPI_TREND_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("KPITrend");
-    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi") };
+    static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "Kpi").describedAs("Value") };
     static final FunctionMetaData FUNCTION_META_DATA = new FunctionMetaDataR(KPI_TREND_INSTANCE_FUNCTION_ATOM, "Returns KPI Trend.",
-    		DataType.MEMBER, params);
+    		DataType.MEMBER, params).withTextKey("KPITrend.Function").caption("KPITrend Function");
     // KPITrend(<String>)
 
     public KPITrendFunDef() {

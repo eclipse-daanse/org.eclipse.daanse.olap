@@ -33,10 +33,10 @@ public class CountResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns the number of tuples in a set, empty cells included unless the optional EXCLUDEEMPTY flag is used.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
                     new FunctionParameterR(DataType.SYMBOL, "Empty_Flag", Optional.of(ReservedWords))
                             .describedAs("INCLUDEEMPTY (default) counts empty cells, EXCLUDEEMPTY skips them.")
-                            .asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+                            .asOptional() }).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Count.Empty_Flag").caption("Count Function with Empty Flag");
 
     public CountResolver() {
         super(List.of(new CountFunDef(functionMetaData)));

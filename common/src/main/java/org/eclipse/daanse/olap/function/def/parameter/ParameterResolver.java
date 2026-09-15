@@ -45,51 +45,51 @@ public class ParameterResolver extends AbstractMetaDataMultiResolver {
     private static final List<String> RESERVED_WORDS = List.of("NUMERIC", "STRING");
     private static String DESCRIPTION = "Returns default value of parameter.";
 
-    private static FunctionParameterR[] SySS = { FunctionParameterR.param(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue"),
-            FunctionParameterR.param(DataType.STRING, "Description") };
-    private static FunctionParameterR[] SyS = { FunctionParameterR.param(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue") };
+    private static FunctionParameterR[] SySS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.STRING, "DefaultValue").describedAs("Default Value"),
+            FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
+    private static FunctionParameterR[] SyS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue").describedAs("Default Value") };
 
-    private static FunctionParameterR[] SynS = { FunctionParameterR.param(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue"),
-            FunctionParameterR.param(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Syn = { FunctionParameterR.param(DataType.STRING, "Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue") };
+    private static FunctionParameterR[] SynS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue").describedAs("Default Value"),
+            FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
+    private static FunctionParameterR[] Syn = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue").describedAs("Default Value") };
 
-    private static FunctionParameterR[] ShmS = { FunctionParameterR.param(DataType.STRING, "Name"),
-            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.MEMBER, "DefaultValue"),
-            FunctionParameterR.param(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Shm = { FunctionParameterR.param(DataType.STRING, "Name"),
-            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.MEMBER, "DefaultValue") };
+    private static FunctionParameterR[] ShmS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.MEMBER, "DefaultValue").describedAs("Default Value"),
+            FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
+    private static FunctionParameterR[] Shm = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.MEMBER, "DefaultValue").describedAs("Default Value") };
 
-    private static FunctionParameterR[] ShxS = { FunctionParameterR.param(DataType.STRING, "Name"),
-            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.SET, "DefaultValue"),
-            FunctionParameterR.param(DataType.STRING, "Description") };
-    private static FunctionParameterR[] Shx = { FunctionParameterR.param(DataType.STRING, "Name"),
-            FunctionParameterR.param(DataType.HIERARCHY), FunctionParameterR.param(DataType.SET, "DefaultValue") };
+    private static FunctionParameterR[] ShxS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.SET, "DefaultValue").describedAs("Default Value"),
+            FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
+    private static FunctionParameterR[] Shx = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
+            FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.SET, "DefaultValue").describedAs("Default Value") };
 
     // {"fSSySS", "fSSyS", "fnSynS", "fnSyn", "fmShmS", "fmShm","fxShxS", "fxShx"}
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, SySS);
+            DataType.STRING, SySS).withTextKey("Parameter.Name.Type.DefaultValueString.Description").caption("Parameter Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.STRING, SyS);
+            DataType.STRING, SyS).withTextKey("Parameter.Name.Type.DefaultValueString").caption("Parameter Function");
 
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, SynS);
+            DataType.NUMERIC, SynS).withTextKey("Parameter.Name.Type.DefaultValueNumeric.Description").caption("Parameter Function");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, Syn);
+            DataType.NUMERIC, Syn).withTextKey("Parameter.Name.Type.DefaultValueNumeric").caption("Parameter Function");
 
     private static FunctionMetaData functionMetaData5 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, ShmS);
+            DataType.MEMBER, ShmS).withTextKey("Parameter.Name.Hierarchy.DefaultValueMember.Description").caption("Parameter Function");
     private static FunctionMetaData functionMetaData6 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, Shm);
+            DataType.MEMBER, Shm).withTextKey("Parameter.Name.Hierarchy.DefaultValueMember").caption("Parameter Function");
 
     private static FunctionMetaData functionMetaData7 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, ShxS);
+            DataType.SET, ShxS).withTextKey("Parameter.Name.Hierarchy.DefaultValueSet.Description").caption("Parameter Function");
     private static FunctionMetaData functionMetaData8 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, Shx);
+            DataType.SET, Shx).withTextKey("Parameter.Name.Hierarchy.DefaultValueSet").caption("Parameter Function");
 
 
 

@@ -29,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class NonEmptyResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("NonEmpty");
     private static String DESCRIPTION = "Returns the set of tuples that are not empty from a specified set, based on the cross product of the specified set with a second set.";
-    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set1"),
-            FunctionParameterR.param(DataType.SET, "Set2").asOptional() };
+    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set1").describedAs("Set 1"),
+            FunctionParameterR.param(DataType.SET, "Set2").describedAs("Set 2").asOptional() };
     // {"fxx", "fxxx"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
-            xx).interfaceName(FunctionInterface.FILTER);
+            xx).interfaceName(FunctionInterface.FILTER).withTextKey("NonEmpty.Function").caption("NonEmpty Function");
 
     public NonEmptyResolver() {
         super(List.of(new NonEmptyFunDef(functionMetaData)));

@@ -31,8 +31,9 @@ public class MaxResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns the maximum value of a numeric expression evaluated over a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional().describedAs("Numeric Expression") })
+            .interfaceName(FunctionInterface.STATISTICAL).withTextKey("Max.Function").caption("Max Function");
 
     public MaxResolver() {
         super(List.of(new MinMaxFunDef(functionMetaData)));

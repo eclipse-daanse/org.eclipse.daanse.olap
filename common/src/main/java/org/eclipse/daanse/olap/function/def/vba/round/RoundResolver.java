@@ -32,7 +32,7 @@ public class RoundResolver extends AbstractFunctionDefinitionMultiResolver {
         Returns a number rounded to a specified number of decimal places.""";
 
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.NUMERIC, "Number").describedAs("Numeric Expression"),
-            FunctionParameterR.param(DataType.INTEGER, "Digits After Decimal").describedAs("Digits After Decimal").asOptional() };
+            FunctionParameterR.param(DataType.INTEGER, "Digits_After_Decimal").describedAs("Digits After Decimal").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, params).withTextKey("Round").caption("Round Function");

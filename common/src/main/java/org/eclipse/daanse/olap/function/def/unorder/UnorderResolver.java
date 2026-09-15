@@ -28,11 +28,11 @@ import org.osgi.service.component.annotations.Component;
 public class UnorderResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Unorder");
     private static String DESCRIPTION = "Removes any enforced ordering from a specified set.";
-    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET) };
+    private static FunctionParameterR[] x = { FunctionParameterR.param(DataType.SET).describedAs("Set") };
     // {"fxx"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, x);
+            DataType.SET, x).withTextKey("Unorder.Function").caption("Unorder Function");
 
     public UnorderResolver() {
         super(List.of(new UnorderFunDef(functionMetaData)));

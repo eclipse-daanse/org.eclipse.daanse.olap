@@ -25,6 +25,7 @@ import org.osgi.service.component.annotations.Component;
 public class NonFunctionMembersResolver extends NonFunctionResolver {
     public NonFunctionMembersResolver() {
         super(new FunctionMetaDataR(new PlainPropertyOperationAtom("Members"), "Returns the set of members in a dimension.",
-                DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION) }));
+                DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") })
+                .withTextKey("Dimension.Members.Property").caption("Dimension.Members Property"));
     }
 }

@@ -34,8 +34,8 @@ public class ExceptResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Finds the difference between two sets, optionally retaining duplicates.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
-                    FunctionParameterR.param(DataType.SET, "Set2"),
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set"),
+                    FunctionParameterR.param(DataType.SET, "ExcludedSet").describedAs("Excluded Set"),
                     new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(reservedWords))
                             .describedAs("ALL retains duplicates while removing matching members.")
                             .asOptional() }).interfaceName(FunctionInterface.FILTER);

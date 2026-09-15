@@ -31,7 +31,9 @@ public class LastNonEmptyFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the last member of a set whose value is not empty""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.MEMBER , new FunctionParameterR[] { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.MEMBER) }).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.MEMBER , new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.MEMBER).describedAs("Member") }).origin(FunctionOrigin.UDF)
+            .library("daanse.udf").withTextKey("LastNonEmpty.Function").caption("LastNonEmpty Function");
 
     public LastNonEmptyFunDef() {
         super(functionMetaData);

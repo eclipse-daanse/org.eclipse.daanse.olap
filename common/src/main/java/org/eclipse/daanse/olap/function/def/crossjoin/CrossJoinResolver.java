@@ -72,8 +72,8 @@ public class CrossJoinResolver  extends NoExpressionRequiredFunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(functionAtom, "Returns the cross product of two sets.", DataType.SET,
-            param(DataType.SET, "Set1"),
-            param(DataType.SET, "Set2").repeatable(1)));
+            param(DataType.SET, "Set1").describedAs("Set1"),
+            param(DataType.SET, "Set2").describedAs("Set2").repeatable(1)));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

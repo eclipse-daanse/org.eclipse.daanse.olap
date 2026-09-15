@@ -29,12 +29,12 @@ import org.osgi.service.component.annotations.Component;
 public class VariancePResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("VarianceP");
     private static String DESCRIPTION = "Alias for VarP.";
-    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC).asOptional() };
+    private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression").asOptional() };
     // {"fnx", "fnxn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, xn).interfaceName(FunctionInterface.STATISTICAL).withTextKey("VarianceP.Function").caption("VarianceP Function");
 
     public VariancePResolver() {
         super(List.of(new VarPFunDef(functionMetaData)));

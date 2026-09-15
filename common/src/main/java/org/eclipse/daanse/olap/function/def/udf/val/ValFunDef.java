@@ -30,7 +30,8 @@ public class ValFunDef  extends AbstractFunctionDefinition {
     static FunctionOperationAtom atom = new FunctionOperationAtom("Val");
     static String description = "VB function Val";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC , new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Value") }).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.NUMERIC , new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Value").describedAs("Value") })
+            .origin(FunctionOrigin.UDF).library("daanse.udf").withTextKey("Val.Function").caption("Val Function");
 
     public ValFunDef() {
         super(functionMetaData);

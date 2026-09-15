@@ -31,8 +31,9 @@ public class LastPeriodsResolver extends AbstractFunctionDefinitionMultiResolver
     private static String DESCRIPTION = "Returns a set of members prior to and including a specified member.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Index"),
-                    FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.NUMERIC, "Index").describedAs("Index"),
+                    FunctionParameterR.param(DataType.MEMBER).asOptional().describedAs("Member") })
+            .interfaceName(FunctionInterface.DATETIME).withTextKey("LastPeriods.Function").caption("LastPeriods Function");
 
     public LastPeriodsResolver() {
         super(List.of(new LastPeriodsFunDef(functionMetaData)));

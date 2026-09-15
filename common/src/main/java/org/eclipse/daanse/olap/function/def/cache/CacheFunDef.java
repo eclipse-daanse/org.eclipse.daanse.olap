@@ -35,7 +35,9 @@ public class CacheFunDef extends AbstractFunctionDefinition {
     static OperationAtom functionAtom = new FunctionOperationAtom(NAME);
 
     public CacheFunDef(DataType category) {
-        super(new FunctionMetaDataR(functionAtom, DESCRIPTION, category, new FunctionParameterR[] { new FunctionParameterR(  category )}));
+        super(new FunctionMetaDataR(functionAtom, DESCRIPTION, category,
+                new FunctionParameterR[] { new FunctionParameterR(category).describedAs("Value") })
+                .withTextKey("Cache.Function").caption("Cache Function"));
     }
 
     @Override

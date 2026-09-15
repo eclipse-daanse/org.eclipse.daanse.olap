@@ -31,9 +31,10 @@ public class LinRegR2Resolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Calculates the linear regression of a set and returns R2 (the coefficient of determination).";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Y"),
-                    FunctionParameterR.param(DataType.NUMERIC, "X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Y").describedAs("Y"),
+                    FunctionParameterR.param(DataType.NUMERIC, "X").describedAs("X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("LinRegR2.Function").caption("LinRegR2 Function");
 
     public LinRegR2Resolver() {
         super(List.of(new LinRegFunDef(functionMetaData, LinRegFunDef.R2)));

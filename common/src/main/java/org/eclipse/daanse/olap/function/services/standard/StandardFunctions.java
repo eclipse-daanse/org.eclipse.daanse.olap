@@ -73,6 +73,7 @@ import org.eclipse.daanse.olap.function.def.hierarchy.level.LevelHierarchyResolv
 import org.eclipse.daanse.olap.function.def.hierarchy.member.HierarchyCurrentMemberResolver;
 import org.eclipse.daanse.olap.function.def.hierarchy.member.MemberHierarchyResolver;
 import org.eclipse.daanse.olap.function.def.hierarchy.member.NamedSetCurrentResolver;
+import org.eclipse.daanse.olap.function.def.intersect.IntersectResolver;
 import org.eclipse.daanse.olap.function.def.kpi.KPICurrentTimeMemberResolver;
 import org.eclipse.daanse.olap.function.def.kpi.KPIGoalResolver;
 import org.eclipse.daanse.olap.function.def.kpi.KPIStatusResolver;
@@ -205,6 +206,7 @@ import org.eclipse.daanse.olap.function.def.udf.matches.MatchesResolver;
 import org.eclipse.daanse.olap.function.def.udf.nullvalue.NullValueResolver;
 import org.eclipse.daanse.olap.function.def.udf.val.ValResolver;
 import org.eclipse.daanse.olap.function.def.union.UnionResolver;
+import org.eclipse.daanse.olap.function.def.visualtotals.VisualTotalsResolver;
 import org.eclipse.daanse.olap.function.def.unorder.UnorderResolver;
 import org.eclipse.daanse.olap.function.def.var.VariancePResolver;
 import org.eclipse.daanse.olap.function.def.var.VarianceResolver;
@@ -473,6 +475,7 @@ public final class StandardFunctions {
         svc.addResolver(new DrilldownLevelTopResolver());
         svc.addResolver(new DrilldownMemberResolver());
         svc.addResolver(new ExceptResolver());
+        svc.addResolver(new IntersectResolver());
         svc.addResolver(new ExistsResolver());
         svc.addResolver(new GenerateListResolver());
         svc.addResolver(new GenerateStringResolver());
@@ -495,6 +498,7 @@ public final class StandardFunctions {
         svc.addResolver(new SetItemStringResolver());
         svc.addResolver(new SetItemIntResolver());
         svc.addResolver(new UnionResolver());
+        svc.addResolver(new VisualTotalsResolver());
         svc.addResolver(new NativizeSetResolver());
         svc.addResolver(new FormatResolver());
         svc.addResolver(new SetResolver());

@@ -32,7 +32,9 @@ public class AggregateResolver extends AbstractFunctionDefinitionMultiResolver {
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional().describedAs("Numeric Expression") }).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Aggregate").caption("Aggregate");
+                    FunctionParameterR.param(DataType.NUMERIC).asOptional()
+                            .describedAs("(Optional) A numeric expression, typically a measure. If not specified, the default measure for the current context is used.") })
+            .interfaceName(FunctionInterface.STATISTICAL).withTextKey("Aggregate.Function").caption("Aggregate Function");
 
     public AggregateResolver() {
         super(List.of(new AggregateFunDef(functionMetaData)));

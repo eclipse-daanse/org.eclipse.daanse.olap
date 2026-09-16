@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 public class SubsetResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Subset");
     private static String DESCRIPTION = "Returns a subset of elements from a set.";
-    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET),
+    private static FunctionParameterR[] xnn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
             FunctionParameterR.param(DataType.NUMERIC, "Start")
                     .describedAs("Zero-based position of the first member to return."),
             FunctionParameterR.param(DataType.NUMERIC, "Count")
@@ -36,7 +36,7 @@ public class SubsetResolver extends AbstractFunctionDefinitionMultiResolver {
     // {"fxxn", "fxxnn"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xnn);
+            DataType.SET, xnn).withTextKey("Subset.Function").caption("Subset Function");
 
     public SubsetResolver() {
         super(List.of(new SubsetFunDef(functionMetaData)));

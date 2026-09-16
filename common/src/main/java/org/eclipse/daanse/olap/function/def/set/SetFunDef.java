@@ -58,7 +58,7 @@ public class SetFunDef extends AbstractFunctionDefinition {
 
     SetFunDef(FunctionParameterR[] parameterTypes) {
         super(new FunctionMetaDataR(SetFunDef.functionAtom, DESCRIPTION,
-                DataType.SET, parameterTypes));
+                DataType.SET, parameterTypes).withTextKey("Brace.Operator").caption("Brace operator"));
     }
 
     @Override

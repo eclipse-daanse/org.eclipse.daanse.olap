@@ -33,9 +33,10 @@ public class CovarianceNResolver extends AbstractFunctionDefinitionMultiResolver
     private static String DESCRIPTION = "Returns the covariance of two series evaluated over a set (unbiased).";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression_Y").describedAs("Numeric Expression Y"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression_X").describedAs("Numeric Expression X").asOptional() }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("CovarianceN.Function").caption("CovarianceN Function");
 
     public CovarianceNResolver() {
         super(List.of(new CovarianceFunDef(functionMetaData)));

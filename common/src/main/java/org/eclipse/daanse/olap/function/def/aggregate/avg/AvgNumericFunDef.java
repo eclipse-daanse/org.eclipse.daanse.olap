@@ -28,7 +28,8 @@ class AvgNumericFunDef extends AbstractAggregateFunDef {
 	static final FunctionMetaData fmd = new FunctionMetaDataR(AvgResolver.operationAtom,
 			"Returns the average value of a numeric expression evaluated over a set.", DataType.NUMERIC,
 			new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-					FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") }).interfaceName(FunctionInterface.STATISTICAL).withTextKey("Set.Avg.Parameter").caption("Set.Avg Parameter");
+					FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") }).interfaceName(FunctionInterface.STATISTICAL)
+			.withTextKey("Set.Avg.Function").caption("Set.Avg Function");
 
 	public AvgNumericFunDef() {
 		super(fmd);

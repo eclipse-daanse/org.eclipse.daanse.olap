@@ -32,7 +32,7 @@ public class  DatePartResolver extends AbstractFunctionDefinitionMultiResolver {
             Returns a Variant (Integer) containing the specified part of a given
             date.""";
     private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.STRING, "IntervalName").describedAs("Interval Name"),
-            FunctionParameterR.param(DataType.DATE_TIME, "Date1").describedAs("Date1"), FunctionParameterR.param(DataType.DATE_TIME, "Date2").describedAs("Date2"),
+            FunctionParameterR.param(DataType.DATE_TIME, "Date").describedAs("Date"),
             FunctionParameterR.param(DataType.INTEGER, "First_Day_Of_Week").describedAs("First Day Of Week").asOptional(),
             FunctionParameterR.param(DataType.INTEGER, "First_Week_Of_Year").describedAs("First Week Of Year").asOptional() };
 

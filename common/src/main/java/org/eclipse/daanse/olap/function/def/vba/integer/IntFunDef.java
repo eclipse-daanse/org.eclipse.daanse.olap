@@ -30,7 +30,7 @@ public class IntFunDef  extends AbstractFunctionDefinition {
         Returns the integer portion of a number. If negative, returns the
         negative number less than or equal to the number.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "expression").describedAs("expression") }).withTextKey("Int").caption("Int Function");
+            DataType.INTEGER, new FunctionParameterR[] { FunctionParameterR.param(DataType.VALUE, "Expression").describedAs("Expression") }).withTextKey("Int").caption("Int Function");
 
     public IntFunDef() {
         super(functionMetaData);

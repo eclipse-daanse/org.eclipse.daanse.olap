@@ -78,9 +78,9 @@ public class CaseTestResolver  implements FunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
             FunctionMetaDataR.of(CaseTestFunDef.functionAtom, CaseTestFunDef.DESCRIPTION, DataType.VALUE,
-                    param(DataType.LOGICAL, "Condition").repeatable(1),
-                    param(DataType.VALUE, "Value_Expression").repeatable(1),
-                    param(DataType.VALUE, "Else_Value").asOptional()));
+                    param(DataType.LOGICAL, "Condition").describedAs("Condition").repeatable(1),
+                    param(DataType.VALUE, "Value_Expression").describedAs("Value Expression").repeatable(1),
+                    param(DataType.VALUE, "Else_Value").describedAs("Else_Value").asOptional()));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

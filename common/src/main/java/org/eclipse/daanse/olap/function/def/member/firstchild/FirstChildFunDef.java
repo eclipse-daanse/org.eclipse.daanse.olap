@@ -31,7 +31,8 @@ public class FirstChildFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("FirstChild");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the first child of a member.", DataType.MEMBER,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.NAVIGATION);
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
+            .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Member.FirstChild.Property").caption("Member.FirstChild Property");
 
     public FirstChildFunDef() {
         super(functionMetaData);

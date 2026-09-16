@@ -72,8 +72,9 @@ public class ExtractResolver extends NoExpressionRequiredFunctionResolver {
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(ExtractFunDef.functionAtom,
             "Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.", DataType.SET,
-            param(DataType.SET),
-            param(DataType.HIERARCHY, "Hierarchy").repeatable(1)).interfaceName(FunctionInterface.FILTER));
+            param(DataType.SET).describedAs("Set"),
+            param(DataType.HIERARCHY, "Hierarchy").describedAs("Hierarchy").repeatable(1))
+                .withTextKey("Extract.Function").caption("Extract Function").interfaceName(FunctionInterface.FILTER));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

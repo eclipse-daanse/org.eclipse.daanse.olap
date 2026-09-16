@@ -73,14 +73,14 @@ public class StrToSetResolver extends NoExpressionRequiredFunctionResolver {
     private FunctionMetaData functionMetaDataFor(FunctionParameterR[] argTypes) {
         FunctionMetaData functionMetaData = new FunctionMetaDataR(StrToSetFunDef.functionAtom,
                 "Constructs a set from a string expression.",
-                 DataType.SET, argTypes);
+                 DataType.SET, argTypes).withTextKey("StrToSet.Function").caption("StrToSet Function");
         return functionMetaData;
     }
 
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
-        return List.of(functionMetaDataFor(new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING) }));
+        return List.of(functionMetaDataFor(new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "StringParameter").describedAs("String Parameter") }));
     }
 
 

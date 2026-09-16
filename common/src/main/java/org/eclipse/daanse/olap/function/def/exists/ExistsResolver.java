@@ -29,12 +29,13 @@ import org.osgi.service.component.annotations.Component;
 public class ExistsResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Exists");
     private static String DESCRIPTION = "Returns the the set of tuples of the first set that exist with one or more tuples of the second set.";
-    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set1"),
-            FunctionParameterR.param(DataType.SET, "Set2") };
+    private static FunctionParameterR[] xx = { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set whose tuples are tested"),
+            FunctionParameterR.param(DataType.SET, "FilterSet").describedAs("Set the tuples are tested for existence against") };
     // {"fxxx"}
 
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xx).interfaceName(FunctionInterface.FILTER);
+            DataType.SET, xx).interfaceName(FunctionInterface.FILTER)
+            .withTextKey("Exists.Function").caption("Exists Function");
 
     public ExistsResolver() {
         super(List.of(new ExistsFunDef(functionMetaData1)));

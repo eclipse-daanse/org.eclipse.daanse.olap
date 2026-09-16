@@ -139,8 +139,9 @@ public class PropertiesResolver  implements FunctionResolver {
         private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
             FunctionMetaDataR.of(PropertiesFunDef.functionAtom, "Returns the value of a member property.",
                 DataType.VALUE,
-                param(DataType.MEMBER),
-                param(DataType.STRING, "Property_Name")));
+                param(DataType.MEMBER).describedAs("Member"),
+                param(DataType.STRING, "Property_Name").describedAs("Property Name"))
+                    .withTextKey("Member.Properties.Function").caption("Member.Properties Function"));
 
         @Override
         public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

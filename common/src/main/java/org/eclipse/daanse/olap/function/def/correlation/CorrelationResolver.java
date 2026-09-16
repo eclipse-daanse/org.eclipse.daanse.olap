@@ -34,8 +34,8 @@ public class CorrelationResolver extends AbstractFunctionDefinitionMultiResolver
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set"),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1).describedAs("Numeric Expression1"),
-                    FunctionParameterR.param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).asOptional().describedAs("Numeric Expression2") }).interfaceName(FunctionInterface.STATISTICAL)
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression_y").describedAs("A numeric expression (usually a measure) that provides the Y-axis values"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression_x").asOptional().describedAs("(Optional) A numeric expression that provides the X-axis values. If omitted, the current cell context values are used as X") }).interfaceName(FunctionInterface.STATISTICAL)
             .withTextKey("Correlation").caption("Correlation Function");
 
     public CorrelationResolver() {

@@ -35,11 +35,12 @@ public class DescendantsMemberResolver extends AbstractFunctionDefinitionMultiRe
     private static FunctionParameterR[] mly = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
             FunctionParameterR.param(DataType.LEVEL).describedAs("Level"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     private static FunctionParameterR[] mn = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
-            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression") };
+            FunctionParameterR.param(DataType.NUMERIC, "Distance").describedAs("Distance down the hierarchy: 0 — the element itself, 1 — children, 2 — grandchildren, etc.") };
     private static FunctionParameterR[] mny = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
-            FunctionParameterR.param(DataType.NUMERIC).describedAs("Numeric Expression"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+            FunctionParameterR.param(DataType.NUMERIC, "Distance").describedAs("Distance down the hierarchy: 0 — the element itself, 1 — children, 2 — grandchildren, etc."), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     private static FunctionParameterR[] mey = { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"),
-            FunctionParameterR.param(DataType.EMPTY), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+            FunctionParameterR.param(DataType.EMPTY).describedAs("Omitted Level or Numeric Expression argument"),
+            new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     // {"fxm", "fxml", "fxmly", "fxmn", "fxmny", "fxmey"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,

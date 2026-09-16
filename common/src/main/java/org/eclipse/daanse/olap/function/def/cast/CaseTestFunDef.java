@@ -38,7 +38,7 @@ class CaseTestFunDef extends AbstractFunctionDefinition {
     static final String DESCRIPTION = "Evaluates various conditions, and returns the corresponding expression for the first which evaluates to true.";
 
     public CaseTestFunDef(DataType returnType, FunctionParameterR[] types) {
-        super(new FunctionMetaDataR(functionAtom, DESCRIPTION, returnType, types));
+        super(new FunctionMetaDataR(functionAtom, DESCRIPTION, returnType, types).withTextKey("_CaseTest.Operation").caption("CASE WHEN <Logical Expression> THEN <Expression> ... END"));
     }
 
     @Override

@@ -30,11 +30,11 @@ public class IifStringFunDef extends AbstractFunctionDefinition {
 
     static OperationAtom STRING_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
     static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
-            FunctionParameterR.param(DataType.STRING, "String1").describedAs("First String Expression"),
-            FunctionParameterR.param(DataType.STRING, "String2").describedAs("Second String Expression") };
+            FunctionParameterR.param(DataType.STRING, "TruePart").describedAs("String Expression returned when Condition is true"),
+            FunctionParameterR.param(DataType.STRING, "FalsePart").describedAs("String Expression returned when Condition is false") };
     static FunctionMetaData STRING_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(STRING_INSTANCE_FUNCTION_ATOM,
             "Returns one of two string values determined by a logical test.",
-            DataType.STRING, params).withTextKey("IIf.String");
+            DataType.STRING, params).withTextKey("IIf.String.Function").caption("IIf for String Function");
     // IIf(<Logical Expression>, <String Expression>, <String Expression>)
 
     public IifStringFunDef() {

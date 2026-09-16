@@ -28,11 +28,11 @@ public class IifTupleFunDef extends IifFunDef {
 
     static OperationAtom TUPLE_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
     static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
-            FunctionParameterR.param(DataType.TUPLE, "Tuple1").describedAs("First Tuple Expression"),
-            FunctionParameterR.param(DataType.TUPLE, "Tuple2").describedAs("Second Tuple Expression") };
+            FunctionParameterR.param(DataType.TUPLE, "TruePart").describedAs("Tuple Expression returned when Condition is true"),
+            FunctionParameterR.param(DataType.TUPLE, "FalsePart").describedAs("Tuple Expression returned when Condition is false") };
     static FunctionMetaData TUPLE_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(TUPLE_INSTANCE_FUNCTION_ATOM,
             "Returns one of two tuples determined by a logical test.",
-            DataType.TUPLE, params).withTextKey("IIf.Tuple");
+            DataType.TUPLE, params).withTextKey("IIf.Tuple.Function").caption("IIf for Tuple Function");
     // IIf(<Logical Expression>, <Tuple Expression>, <Tuple Expression>)
 
     public IifTupleFunDef() {

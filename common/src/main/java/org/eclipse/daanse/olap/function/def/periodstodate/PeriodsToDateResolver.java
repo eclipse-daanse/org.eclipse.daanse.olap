@@ -36,12 +36,12 @@ public class PeriodsToDateResolver extends AbstractFunctionDefinitionMultiResolv
     // cost 1, Member -> Numeric cost 3) so ordinary calls kept resolving, but it also let a
     // genuine SET or NUMERIC argument (e.g. "PeriodsToDate([Time].[Month], 5)") match at cost
     // 0 and then crash in compileCall instead of being cleanly rejected at resolution.
-    private static FunctionParameterR[] lm = { FunctionParameterR.param(DataType.LEVEL, "Level").asOptional(),
-            FunctionParameterR.param(DataType.MEMBER, "Member").asOptional() };
+    private static FunctionParameterR[] lm = { FunctionParameterR.param(DataType.LEVEL, "Level").describedAs("(Optional) An MDX expression that returns a level of the time hierarchy (for example, [Date].[Calendar].[Calendar Year]). It defines the \"boundary\" within which periods are aggregated.").asOptional(),
+            FunctionParameterR.param(DataType.MEMBER, "TimeMember").describedAs("(Optional) An MDX expression that returns a hierarchy member (e.g., [Date].[Calendar].[Month].[August 2003]). Specifies the end point of the period.").asOptional() };
     // {"fx", "fxl", "fxlm"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, lm).interfaceName(FunctionInterface.DATETIME);
+            DataType.SET, lm).interfaceName(FunctionInterface.DATETIME).withTextKey("PeriodsToDate.Function").caption("PeriodsToDate Function");
 
     public PeriodsToDateResolver() {
         super(List.of(new PeriodsToDateFunDef(functionMetaData)));

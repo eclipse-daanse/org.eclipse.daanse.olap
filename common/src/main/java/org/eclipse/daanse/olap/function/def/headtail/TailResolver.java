@@ -30,9 +30,9 @@ public class TailResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns a subset from the end of a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Count")
-                            .describedAs("Number of members to return; defaults to 1.").asOptional() });
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "Count").describedAs("Count")
+                            .describedAs("Number of members to return; defaults to 1.").asOptional() }).withTextKey("Tail.Function").caption("Tail Function");
 
     public TailResolver() {
         super(List.of(new HeadTailFunDef(functionMetaData)));

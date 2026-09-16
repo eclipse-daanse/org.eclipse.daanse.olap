@@ -32,10 +32,10 @@ public class HierarchizeResolver extends AbstractFunctionDefinitionMultiResolver
     private static String DESCRIPTION = "Orders the members of a set in a hierarchy.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
                     new FunctionParameterR(DataType.SYMBOL, "PrePost", Optional.of(reservedWords))
                             .describedAs("PRE (default) orders parents before children, POST orders children first.")
-                            .asOptional() });
+                            .asOptional() }).withTextKey("Hierarchize.Function").caption("Hierarchize Function");
 
     public HierarchizeResolver() {
         super(List.of(new HierarchizeFunDef(functionMetaData)));

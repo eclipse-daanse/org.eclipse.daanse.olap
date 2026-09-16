@@ -80,7 +80,8 @@ public class SetItemStringResolver extends NoExpressionRequiredFunctionResolver 
 
         FunctionMetaData functionMetaData = new FunctionMetaDataR(SetItemFunDef.functionAtom,
                 "Returns a tuple from the set specified in <Set>. The tuple to be returned is specified by the member name (or names) in <String>.",
-                category, Expressions.functionParameterOf(args));
+                category, Expressions.functionParameterOf(args))
+                .withTextKey("Set.Item.String.Function").caption("Set.Item(String) Function");
 
         return Optional.of(FunctionResolutionResultR.of(new SetItemFunDef(functionMetaData), conversions));
     }
@@ -94,8 +95,9 @@ public class SetItemStringResolver extends NoExpressionRequiredFunctionResolver 
             FunctionMetaDataR.of(SetItemFunDef.functionAtom,
                     "Returns a tuple from the set specified in <Set>. The tuple to be returned is specified by the member name (or names) in <String>.",
                     DataType.TUPLE,
-                    param(DataType.SET),
-                    param(DataType.STRING, "Member_Name").repeatable(1)));
+                    param(DataType.SET).describedAs("Set"),
+                    param(DataType.STRING, "Member_Name").describedAs("Member Name").repeatable(1))
+                    .withTextKey("Set.Item.String.Function").caption("Set.Item(String) Function"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

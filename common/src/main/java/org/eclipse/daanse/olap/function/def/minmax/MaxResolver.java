@@ -32,7 +32,7 @@ public class MaxResolver extends AbstractFunctionDefinitionMultiResolver {
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional().describedAs("Numeric Expression") })
+                    FunctionParameterR.param(DataType.NUMERIC, "Numeric Expression").asOptional().describedAs("A numeric expression (usually a measure). If not specified, the function searches for the maximum among the cell values in the current context for the members of the set.") })
             .interfaceName(FunctionInterface.STATISTICAL).withTextKey("Max.Function").caption("Max Function");
 
     public MaxResolver() {

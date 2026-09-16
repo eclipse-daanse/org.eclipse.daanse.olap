@@ -30,7 +30,8 @@ public class NullValueFunDef  extends AbstractFunctionDefinition {
     static String description = """
         Returns the null value""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
-            DataType.NUMERIC , new FunctionParameterR[] { }).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.NUMERIC , new FunctionParameterR[] { }).origin(FunctionOrigin.UDF).library("daanse.udf")
+            .withTextKey("NullValue.Function").caption("NullValue Function");
 
     public NullValueFunDef() {
         super(functionMetaData);

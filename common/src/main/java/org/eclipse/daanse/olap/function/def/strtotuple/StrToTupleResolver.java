@@ -71,13 +71,13 @@ public class StrToTupleResolver extends NoExpressionRequiredFunctionResolver {
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {
-        return List.of( functionMetaDataFor(new FunctionParameterR[] {FunctionParameterR.param(DataType.STRING)}));
+        return List.of( functionMetaDataFor(new FunctionParameterR[] {FunctionParameterR.param(DataType.STRING).describedAs("String Parameter")}));
     }
 
     private FunctionMetaData functionMetaDataFor(FunctionParameterR[] argTypes) {
         FunctionMetaData functionMetaData = new FunctionMetaDataR(StrToTupleFunDef.functionAtom,
                 "Constructs a tuple from a string.",
-                 DataType.TUPLE, argTypes);
+                 DataType.TUPLE, argTypes).withTextKey("StrToTuple.Function").caption("StrToTuple.Function");
         return functionMetaData;
     }
 

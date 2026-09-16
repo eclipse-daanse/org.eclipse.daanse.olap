@@ -38,7 +38,7 @@ public class ExceptResolver extends AbstractFunctionDefinitionMultiResolver {
                     FunctionParameterR.param(DataType.SET, "ExcludedSet").describedAs("Excluded Set"),
                     new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(reservedWords))
                             .describedAs("ALL retains duplicates while removing matching members.")
-                            .asOptional() }).interfaceName(FunctionInterface.FILTER);
+                            .asOptional() }).interfaceName(FunctionInterface.FILTER).withTextKey("Except.Function").caption("Except Function");
 
     public ExceptResolver() {
         super(List.of(new ExceptFunDef(functionMetaData)));

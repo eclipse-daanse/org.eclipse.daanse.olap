@@ -35,7 +35,7 @@ public class DimensionsStringFunDef extends AbstractFunctionDefinition {
 
     static final FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
             "Returns the hierarchy whose name is specified by a string.", DataType.HIERARCHY,
-            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "String").describedAs("Hierarchy Name") }).withTextKey("Dimensions.String.Function").caption("Dimensions(Hierarchy_Name) Function");
+            new FunctionParameterR[] { FunctionParameterR.param(DataType.STRING, "HierarchyName").describedAs("Hierarchy Name") }).withTextKey("Dimensions.String.Function").caption("Dimensions(Hierarchy_Name) Function");
 
     public DimensionsStringFunDef() {
         super(functionMetaData);

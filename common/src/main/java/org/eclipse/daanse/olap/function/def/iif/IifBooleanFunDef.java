@@ -29,9 +29,10 @@ public class IifBooleanFunDef extends AbstractFunctionDefinition {
 
     static final OperationAtom BOOLEAN_INSTANCE_FUNCTION_ATOM = new FunctionOperationAtom("IIf");
     static FunctionParameterR[] params = { FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
-            FunctionParameterR.param(DataType.LOGICAL, "Boolean1").key("firstParametr").describedAs("First Parameter"), FunctionParameterR.param(DataType.LOGICAL, "Boolean2").describedAs("Second Parameter") };
+            FunctionParameterR.param(DataType.LOGICAL, "TruePart").describedAs("Logical Expression returned when Condition is true"),
+            FunctionParameterR.param(DataType.LOGICAL, "FalsePart").describedAs("Logical Expression returned when Condition is false") };
     static final FunctionMetaData BOOLEAN_INSTANCE_FUNCTION_META_DATA = new FunctionMetaDataR(BOOLEAN_INSTANCE_FUNCTION_ATOM, "Returns boolean determined by a logical test.",
-            DataType.LOGICAL, params).withTextKey("IIf.Boolean");
+            DataType.LOGICAL, params).withTextKey("IIf.Boolean.Function").caption("IIf for Boolean Function");
     // IIf(<Logical Expression>, <Boolean Expression>, <Boolean Expression>)
 
     public IifBooleanFunDef() {

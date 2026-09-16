@@ -41,7 +41,9 @@ public class FilterFunDef extends AbstractFunctionDefinition {
 
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom,
             "Returns the set resulting from filtering a set based on a search condition.",
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET), FunctionParameterR.param(DataType.LOGICAL) }).interfaceName(FunctionInterface.FILTER);
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.LOGICAL).describedAs("Condition") }).interfaceName(FunctionInterface.FILTER)
+            .withTextKey("Filter.Function").caption("Filter Function");
 
     public FilterFunDef() {
         super(functionMetaData);

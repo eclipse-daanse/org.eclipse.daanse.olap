@@ -56,7 +56,8 @@ public class CrossJoinResolver  extends NoExpressionRequiredFunctionResolver {
 
 
         FunctionMetaData functionMetaData = new FunctionMetaDataR(functionAtom, "Returns the cross product of two sets.",
-                org.eclipse.daanse.olap.api.DataType.SET, Expressions.functionParameterOf(args));
+                org.eclipse.daanse.olap.api.DataType.SET, Expressions.functionParameterOf(args))
+                .withTextKey("Crossjoin.Function").caption("Crossjoin Function");
         return Optional.of(FunctionResolutionResultR.of(new CrossJoinFunDef(functionMetaData), conversions));
       }
     }
@@ -73,7 +74,8 @@ public class CrossJoinResolver  extends NoExpressionRequiredFunctionResolver {
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(functionAtom, "Returns the cross product of two sets.", DataType.SET,
             param(DataType.SET, "Set1").describedAs("Set1"),
-            param(DataType.SET, "Set2").describedAs("Set2").repeatable(1)));
+            param(DataType.SET, "Set2").describedAs("Set2").repeatable(1)).withTextKey("Crossjoin.Function").caption("Crossjoin Function"));
+
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

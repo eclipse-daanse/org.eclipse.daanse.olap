@@ -37,7 +37,7 @@ public class IPmtResolver extends AbstractFunctionDefinitionMultiResolver {
             FunctionParameterR.param(DataType.NUMERIC, "Per").describedAs("Per"), FunctionParameterR.param(DataType.NUMERIC, "NPer").describedAs("NPer"),
             FunctionParameterR.param(DataType.NUMERIC, "Pv").describedAs("Pv"),
             FunctionParameterR.param(DataType.NUMERIC, "Fv").describedAs("Fv").asOptional(),
-            FunctionParameterR.param(DataType.LOGICAL, "due").describedAs("due").asOptional() };
+            FunctionParameterR.param(DataType.LOGICAL, "Due").describedAs("Due").asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.NUMERIC, params).withTextKey("IPmt").caption("IPmt Function");

@@ -38,7 +38,7 @@ public class AncestorsResolver extends AbstractFunctionDefinitionMultiResolver {
             .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestors.Member.Level.Function").caption("Ancestors Function");
 
     private static FunctionMetaData functionMetaDataWithNumeric = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.NUMERIC).describedAs("Distance") })
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member"), FunctionParameterR.param(DataType.NUMERIC, "Distance").describedAs("Distance") })
             .interfaceName(FunctionInterface.NAVIGATION).withTextKey("Ancestors.Member.Numeric.Function").caption("Ancestors Function");;
 
 

@@ -33,8 +33,8 @@ public class NPVFunDef  extends AbstractFunctionDefinition {
         and a discount rate.""";
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, description,
             DataType.NUMERIC, new FunctionParameterR[] {
-                    FunctionParameterR.param(DataType.NUMERIC, "R").describedAs("R"),
-                    FunctionParameterR.param(DataType.ARRAY, "CFS").describedAs("CFS") }).withTextKey("NPV").caption("NPV Function");
+                    FunctionParameterR.param(DataType.NUMERIC, "Rate").describedAs("Discount rate over the length of one period"),
+                    FunctionParameterR.param(DataType.ARRAY, "CashFlows").describedAs("Array of periodic cash flows (payments and receipts)") }).withTextKey("NPV").caption("NPV Function");
 
     public NPVFunDef() {
         super(functionMetaData);
@@ -43,7 +43,7 @@ public class NPVFunDef  extends AbstractFunctionDefinition {
     @Override
     public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
         final DoubleCalc rCalc = compiler.compileDouble(call.getArg(0));
-        final Calc<?> cfsCalc = compiler.compileScalar(call.getArg(0), false);
+        final Calc<?> cfsCalc = compiler.compileScalar(call.getArg(1), false);
         return new NPVCalc(call.getType(), rCalc, cfsCalc);
     }
 

@@ -37,9 +37,9 @@ public class DescendantsSetResolver extends AbstractFunctionDefinitionMultiResol
             FunctionParameterR.param(DataType.LEVEL).describedAs("Level"), new FunctionParameterR(DataType.SYMBOL, Optional.of("Desc_flag"),
                     Optional.of(descFlagDescription), Optional.of(Flag.asReservedWords())) };
     private static FunctionParameterR[] xn = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-            FunctionParameterR.param(DataType.NUMERIC).describedAs("Limit") };
+            FunctionParameterR.param(DataType.NUMERIC, "Limit").describedAs("Limit") };
     private static FunctionParameterR[] xny = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-            FunctionParameterR.param(DataType.NUMERIC).describedAs("Limit"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
+            FunctionParameterR.param(DataType.NUMERIC, "Limit").describedAs("Limit"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     private static FunctionParameterR[] xey = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
             FunctionParameterR.param(DataType.EMPTY).describedAs("Empty"), new FunctionParameterR(DataType.SYMBOL, "Desc_flag", descFlagDescription) };
     // {"fxx", "fxxl", "fxxly", "fxxn", "fxxny", "fxxey"}

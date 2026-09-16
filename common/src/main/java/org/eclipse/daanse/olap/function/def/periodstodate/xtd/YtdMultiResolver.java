@@ -34,7 +34,9 @@ public class YtdMultiResolver extends AbstractFunctionDefinitionMultiResolver {
 
 	private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"A shortcut function for the PeriodsToDate function that specifies the level to be Year.",
-			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "TimeMember")
+			.describedAs("A time hierarchy member (e.g., [Time].[1997].[Q3])). It specifies the year and the end point of the period.")
+			.asOptional() }).interfaceName(FunctionInterface.DATETIME).withTextKey("Ytd.Function").caption("Ytd Function");
 
 	public YtdMultiResolver() {
 		super(List.of(new XtdFunDef(functionMetaData, LevelType.TIME_YEARS)));

@@ -30,7 +30,9 @@ public class PrevMemberFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("PrevMember");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom,
             "Returns the previous member in the level that contains a specified member.",
-            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER) }).interfaceName(FunctionInterface.NAVIGATION);
+            DataType.MEMBER, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "Member").describedAs("Member") })
+            .interfaceName(FunctionInterface.NAVIGATION)
+            .withTextKey("Member.PrevMember.Property").caption("Member.PrevMember Property");
 
     public PrevMemberFunDef() {
         super(functionMetaData);

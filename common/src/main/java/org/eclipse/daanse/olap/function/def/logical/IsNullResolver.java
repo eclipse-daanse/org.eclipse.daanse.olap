@@ -33,19 +33,19 @@ public class IsNullResolver extends AbstractFunctionDefinitionMultiResolver {
 
     private static FunctionMetaData functionMetaDataWithMember = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).describedAs("Member") })
-            .withTextKey("Member.IS_NULL.Function").caption("Member.IS NULL Function");
+            .withTextKey("Member.IS_NULL.Operation").caption("Member.IS NULL Operation");
 
     private static FunctionMetaData functionMetaDataWithLevel = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.LEVEL).describedAs("Level") })
-            .withTextKey("Level.IS_NULL.Function").caption("Level.IS NULL Function");
+            .withTextKey("Level.IS_NULL.Operation").caption("Level.IS NULL Operation");
 
     private static FunctionMetaData functionMetaDataWithHierrchy = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy") })
-            .withTextKey("Hierarchy.IS_NULL.Function").caption("Hierarchy.IS NULL Function");
+            .withTextKey("Hierarchy.IS_NULL.Operation").caption("Hierarchy.IS NULL Operation");
 
     private static FunctionMetaData functionMetaDataWithDimension = new FunctionMetaDataR(atom, DESCRIPTION,
             DataType.LOGICAL, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") })
-            .withTextKey("Dimension.IS_NULL.Function").caption("Dimension.IS NULL Function");
+            .withTextKey("Dimension.IS_NULL.Operation").caption("Dimension.IS NULL Operation");
 
     public IsNullResolver() {
         super(List.of(new IsNullFunDef(functionMetaDataWithMember), new IsNullFunDef(functionMetaDataWithLevel),

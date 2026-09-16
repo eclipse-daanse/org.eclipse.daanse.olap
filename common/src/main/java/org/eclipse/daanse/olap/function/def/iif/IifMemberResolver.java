@@ -32,9 +32,10 @@ public class IifMemberResolver extends ParametersCheckingFunctionDefinitionResol
 
     private static FunctionParameterR[] params = new FunctionParameterR[] {
             FunctionParameterR.param(DataType.LOGICAL, "Condition").describedAs("Condition"),
-            FunctionParameterR.param(DataType.MEMBER, "Member1").describedAs("First Member Expression"),
-            FunctionParameterR.param(DataType.MEMBER, "Member2").describedAs("Second Member Expression") };
-    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params).withTextKey("IIf.Member");
+            FunctionParameterR.param(DataType.MEMBER, "TruePart").describedAs("Member Expression returned when Condition is true"),
+            FunctionParameterR.param(DataType.MEMBER, "FalsePart").describedAs("Member Expression returned when Condition is false") };
+    static FunctionMetaData metadata = new FunctionMetaDataR(atom, DESCRIPTION, DataType.MEMBER, params)
+            .withTextKey("IIf.Member.Function").caption("IIf for Member Function");
 
     public IifMemberResolver() {
         super(new IifFunDef(metadata));

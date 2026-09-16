@@ -14,6 +14,7 @@ package org.eclipse.daanse.olap.testkit.function.integration;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -32,13 +33,13 @@ class GenerateBaseTextBundle {
 
     public static void main(String[] args) throws Exception {
         FunctionService service = StandardFunctions.standard();
-        SortedMap<String, SortedMap<String, String>> entriesByFunction = new TreeMap<>();
+        SortedMap<String, LinkedHashMap<String, String>> entriesByFunction = new TreeMap<>();
 
         for (FunctionMetaData metaData : service.getFunctionMetaDatas()) {
             String key = metaData.textKey();
-            SortedMap<String, String> entries = entriesByFunction.computeIfAbsent(key, k -> new TreeMap<>());
-            entries.putIfAbsent(key + ".description", metaData.description());
+            LinkedHashMap<String, String> entries = entriesByFunction.computeIfAbsent(key, k -> new LinkedHashMap<>());
             entries.putIfAbsent(key + ".caption", metaData.caption());
+            entries.putIfAbsent(key + ".description", metaData.description());
             entries.putIfAbsent(key + ".example", SignatureText.ofDeclaration(metaData));
             for (FunctionParameter parameter : metaData.parameters()) {
                 parameter.name().ifPresent(name -> parameter.description().ifPresent(

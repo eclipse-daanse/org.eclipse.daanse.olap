@@ -31,8 +31,9 @@ public class MinResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns the minimum value of a numeric expression evaluated over a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC).asOptional() }).interfaceName(FunctionInterface.STATISTICAL);
+            DataType.NUMERIC, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC).describedAs("Optional. Numerical expression (usually a measure)").asOptional() }).interfaceName(FunctionInterface.STATISTICAL)
+            .withTextKey("Min.Function").caption("Min Function");
 
     public MinResolver() {
         super(List.of(new MinMaxFunDef(functionMetaData)));

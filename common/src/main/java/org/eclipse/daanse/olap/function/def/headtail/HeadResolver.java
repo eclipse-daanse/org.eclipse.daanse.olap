@@ -30,9 +30,10 @@ public class HeadResolver extends AbstractFunctionDefinitionMultiResolver {
     private static String DESCRIPTION = "Returns the first specified number of elements in a set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET),
-                    FunctionParameterR.param(DataType.NUMERIC, "Numeric_Expression")
-                            .describedAs("Number of members to return; defaults to 1.").asOptional() });
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+                    FunctionParameterR.param(DataType.NUMERIC, "N_Elements").describedAs("N elements of the set")
+                            .describedAs("Number of members to return; defaults to 1.").asOptional() })
+            .withTextKey("Head.Function").caption("Head Function");
 
     public HeadResolver() {
         super(List.of(new HeadTailFunDef(functionMetaData)));

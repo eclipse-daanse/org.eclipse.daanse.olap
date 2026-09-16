@@ -28,11 +28,12 @@ public class TopSumResolver extends ParametersCheckingFunctionDefinitionResolver
 
     static final OperationAtom atomTopSum = new FunctionOperationAtom("TopSum");
     private static String DESCRIPTION = "Sorts a set and returns the top N elements whose cumulative total is at least a specified value.";
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Value"), FunctionParameterR.param(DataType.NUMERIC) };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Value").describedAs("Value"),
+            FunctionParameterR.param(DataType.NUMERIC).describedAs("A numerical expression (usually a measure) used to determine the contribution of each element and the total sum.") };
 
     static final FunctionMetaData fmdTopSum = new FunctionMetaDataR(atomTopSum, DESCRIPTION,
-            DataType.SET, params);
+            DataType.SET, params).withTextKey("TopSum.Function").caption("TopSum Function");
 
     public TopSumResolver() {
         super(new TopBottomPercentSumFunDef(fmdTopSum, true, false));

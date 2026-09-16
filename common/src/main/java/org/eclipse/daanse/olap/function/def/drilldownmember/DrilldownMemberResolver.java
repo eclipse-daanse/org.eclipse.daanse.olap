@@ -32,11 +32,11 @@ public class DrilldownMemberResolver extends AbstractFunctionDefinitionMultiReso
     private static String DESCRIPTION = "Drills down the members in a set that are present in a second specified set.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1"),
-                    FunctionParameterR.param(DataType.SET, "Set2"),
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set whose members are drilled down"),
+                    FunctionParameterR.param(DataType.SET, "CompareSet").describedAs("Set of members to drill down, checked for membership in Set"),
                     new FunctionParameterR(DataType.SYMBOL, "Recursive", Optional.of(reservedWords))
                             .describedAs("RECURSIVE drills down every matching member at every level, not only the first match.")
-                            .asOptional() });
+                            .asOptional() }).withTextKey("DrilldownMember.Function").caption("DrilldownMember Function");
 
     @Override
     public List<String> getReservedWords() {

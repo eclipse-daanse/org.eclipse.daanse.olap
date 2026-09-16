@@ -31,8 +31,8 @@ public class GenerateListResolver extends AbstractFunctionDefinitionMultiResolve
     private static String DESCRIPTION = "Applies a set to each member of another set and joins the resulting sets by union.";
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set1").describedAs("First Set"),
-                    FunctionParameterR.param(DataType.SET, "Set2").describedAs("Second Set"),
+            DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.SET, "Set").describedAs("Set to iterate over"),
+                    FunctionParameterR.param(DataType.SET, "SetExpression").describedAs("Set expression evaluated once per member of Set and unioned into the result"),
                     new FunctionParameterR(DataType.SYMBOL, "All", Optional.of(GenerateFunDef.ReservedWords))
                             .describedAs("ALL retains duplicates produced by the iteration; without it duplicates are removed.")
                             .asOptional() }).withTextKey("Generate.Set.Set.Symbol.Function").caption("Generate Function");

@@ -35,7 +35,8 @@ public class ValueFunDef extends AbstractFunctionDefinition {
     ValueFunDef(DataType[] argTypes) {
         super(
                 new FunctionMetaDataR(new ParenthesesOperationAtom(), "Pseudo-function which evaluates a tuple.",
-                        DataType.NUMERIC, Stream.of(argTypes).map(dt -> new FunctionParameterR(dt)).toArray(FunctionParameterR[]::new)));
+                        DataType.NUMERIC, Stream.of(argTypes).map(dt -> new FunctionParameterR(dt)).toArray(FunctionParameterR[]::new))
+                        .withTextKey("_Value.Function").caption("_Value Function"));
         this.argTypes = argTypes;
     }
 

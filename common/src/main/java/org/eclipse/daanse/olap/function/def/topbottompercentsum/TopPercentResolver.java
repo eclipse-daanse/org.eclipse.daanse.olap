@@ -28,11 +28,12 @@ public class TopPercentResolver extends ParametersCheckingFunctionDefinitionReso
 
     static final OperationAtom atomTopPercent = new FunctionOperationAtom("TopPercent");
     private static String DESCRIPTION = "Sorts a set and returns the top N elements whose cumulative total is at least a specified percentage.";
-    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.SET),
-            FunctionParameterR.param(DataType.NUMERIC, "Percentage"), FunctionParameterR.param(DataType.NUMERIC) };
+    private static FunctionParameterR[] params = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
+            FunctionParameterR.param(DataType.NUMERIC, "Percentage").describedAs("Percentage"), FunctionParameterR.param(DataType.NUMERIC)
+            .describedAs("A numerical expression (usually a measure) used to determine the contribution of each element and the overall total.") };
 
     static final FunctionMetaData fmdTopPercent = new FunctionMetaDataR(atomTopPercent, DESCRIPTION,
-            DataType.SET, params);
+            DataType.SET, params).withTextKey("TopPercent.Function").caption("TopPercent Function");
 
     public TopPercentResolver() {
         super(new TopBottomPercentSumFunDef(fmdTopPercent, true, true));

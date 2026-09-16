@@ -39,14 +39,15 @@ public class CurrentDateMemberResolver extends AbstractFunctionDefinitionMultiRe
             namely the Visual Basic format strings.
             See http://www.apostate.com/programming/vb-format.html.""";
 
-    private static FunctionParameterR[] fp = { FunctionParameterR.param(DataType.HIERARCHY),
-            FunctionParameterR.param(DataType.STRING, "Format"),
-            new FunctionParameterR(DataType.SYMBOL, "MatchType", Optional.of(reservedWords))
+    private static FunctionParameterR[] fp = { FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"),
+            FunctionParameterR.param(DataType.STRING, "Format").describedAs("Format"),
+            new FunctionParameterR(DataType.SYMBOL, "MatchType", Optional.of(reservedWords)).describedAs("Match Type")
                     .describedAs("EXACT (default), BEFORE or AFTER — how the current date is matched to a member.")
                     .asOptional() };
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.MEMBER, fp).interfaceName(FunctionInterface.DATETIME).origin(FunctionOrigin.UDF).library("daanse.udf");
+            DataType.MEMBER, fp).interfaceName(FunctionInterface.DATETIME).origin(FunctionOrigin.UDF).library("daanse.udf")
+            .withTextKey("CurrentDateMember.Function").caption("CurrentDateMember Function");
 
     @Override
     public List<String> getReservedWords() {

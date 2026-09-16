@@ -48,7 +48,8 @@ public class ExtractFunDef extends AbstractFunctionDefinition {
     public ExtractFunDef(FunctionParameterR[] parameterTypes) {
         super(new FunctionMetaDataR(functionAtom,
                 "Returns a set of tuples from extracted hierarchy elements. The opposite of Crossjoin.",
-                DataType.SET, parameterTypes).interfaceName(FunctionInterface.FILTER));
+                DataType.SET, parameterTypes).interfaceName(FunctionInterface.FILTER)
+                .withTextKey("Extract.Function").caption("Extract Function"));
     }
 
     @Override

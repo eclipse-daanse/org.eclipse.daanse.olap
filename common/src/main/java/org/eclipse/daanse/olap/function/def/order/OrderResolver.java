@@ -102,7 +102,8 @@ public class OrderResolver  extends NoExpressionRequiredFunctionResolver {
             param(DataType.VALUE, "Value_Expression").repeatable(1).describedAs("Value"),
             param(DataType.SYMBOL, "Sort_Flag").repeatable(1).asSkippable()
                 .reserved("ASC", "DESC", "BASC", "BDESC")
-                .describedAs("ASC (default), DESC, BASC or BDESC — B-variants break the hierarchy.")));
+                .describedAs("ASC (default), DESC, BASC or BDESC — B-variants break the hierarchy."))
+                .withTextKey("Order.Function").caption("Order Function"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

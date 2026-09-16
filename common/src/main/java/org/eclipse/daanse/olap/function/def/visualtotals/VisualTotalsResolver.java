@@ -30,7 +30,7 @@ public class VisualTotalsResolver extends AbstractFunctionDefinitionMultiResolve
     private static final String DESCRIPTION = "Dynamically totals child members specified in a set using a pattern for the total label in the result set.";
 
     private static final FunctionMetaData functionMetaData = FunctionMetaDataR.of(atom, DESCRIPTION, DataType.SET,
-            FunctionParameterR.param(DataType.SET), //
+            FunctionParameterR.param(DataType.SET).describedAs("Set"), //
             FunctionParameterR.param(DataType.STRING, "Pattern").asOptional()
                     .describedAs("Label pattern for the visual total member; * is replaced by the parent name."));
 

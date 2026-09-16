@@ -31,7 +31,7 @@ public class UniqueNameFunDef extends AbstractFunctionDefinition {
     static PlainPropertyOperationAtom plainPropertyOperationAtom = new PlainPropertyOperationAtom("UniqueName");
     static FunctionMetaData functionMetaData = new FunctionMetaDataR(plainPropertyOperationAtom, "Returns the unique name of a dimension.",
             DataType.STRING, new FunctionParameterR[] { FunctionParameterR.param(DataType.DIMENSION).describedAs("Dimension") }).interfaceName(FunctionInterface.METADATA)
-            .withTextKey("UniqueName.Dimension.Property").caption("Dimension.UniqueName() Property");
+            .withTextKey("UniqueName.Dimension.Property").caption("Dimension.UniqueName Property");
 
     public UniqueNameFunDef() {
         super(functionMetaData);

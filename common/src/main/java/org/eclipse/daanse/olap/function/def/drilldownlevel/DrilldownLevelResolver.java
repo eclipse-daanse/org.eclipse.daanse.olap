@@ -36,28 +36,31 @@ public class DrilldownLevelResolver extends AbstractFunctionDefinitionMultiResol
     private static FunctionParameterR[] xl = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
             FunctionParameterR.param(DataType.LEVEL).describedAs("Level").describedAs("Level") };
     private static FunctionParameterR[] xen = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.NUMERIC, "Index").describedAs("Index") };
+            FunctionParameterR.param(DataType.EMPTY).describedAs("Omitted Level argument"),
+            FunctionParameterR.param(DataType.NUMERIC, "Index").describedAs("Index") };
     private static FunctionParameterR[] xeny = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-            FunctionParameterR.param(DataType.EMPTY), FunctionParameterR.param(DataType.NUMERIC, "Index").describedAs("Index"),
+            FunctionParameterR.param(DataType.EMPTY).describedAs("Omitted Level argument"),
+            FunctionParameterR.param(DataType.NUMERIC, "Index").describedAs("Index"),
             new FunctionParameterR(DataType.SYMBOL, "Include_Members", Optional.of(RESERVED_WORDS))
                     .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.")};
     private static FunctionParameterR[] xeey = { FunctionParameterR.param(DataType.SET).describedAs("Set"),
-            FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 1), FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 2),
+            FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 1).describedAs("Omitted Level argument"),
+            FunctionParameterR.param(DataType.EMPTY, canonicalNameOf(DataType.EMPTY) + 2).describedAs("Omitted Numeric Expression argument"),
             new FunctionParameterR(DataType.SYMBOL, "Include_Members", Optional.of(RESERVED_WORDS))
                     .describedAs("INCLUDE_CALC_MEMBERS includes calculated members in the drilled-down result.") };
     // {"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"}
 
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION, DataType.SET,
-            x).withTextKey("DrilldownLevel");
+            x).withTextKey("DrilldownLevel.Function").caption("DrilldownLevel Function");
     private static FunctionMetaData functionMetaData1 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xl).withTextKey("DrilldownLevel.withLevel");;
+            DataType.SET, xl).withTextKey("DrilldownLevel.withLevel.Function").caption("DrilldownLevel Function");
     private static FunctionMetaData functionMetaData2 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xen).withTextKey("DrilldownLevel.withIndex");
+            DataType.SET, xen).withTextKey("DrilldownLevel.withIndex.Function").caption("DrilldownLevel Function");
     private static FunctionMetaData functionMetaData3 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xeny).withTextKey("DrilldownLevel.withIndexIncludeMembers");
+            DataType.SET, xeny).withTextKey("DrilldownLevel.withIndexIncludeMembers.Function").caption("DrilldownLevel Function");
     private static FunctionMetaData functionMetaData4 = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xeey).withTextKey("DrilldownLevel.withIncludeMembers");
+            DataType.SET, xeey).withTextKey("DrilldownLevel.withIncludeMembers.Function").caption("DrilldownLevel Function");
 
     @Override
     public List<String> getReservedWords() {

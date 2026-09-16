@@ -30,14 +30,14 @@ public class UnionResolver extends AbstractFunctionDefinitionMultiResolver {
     private static FunctionOperationAtom atom = new FunctionOperationAtom("Union");
     static final List<String> ReservedWords = List.of("ALL", "DISTINCT");
     private static String DESCRIPTION = "Returns the union of two sets, optionally retaining duplicates.";
-    private static FunctionParameterR[] xxy = { FunctionParameterR.param(DataType.SET, "Set1"),
-            FunctionParameterR.param(DataType.SET, "Set2"),
+    private static FunctionParameterR[] xxy = { FunctionParameterR.param(DataType.SET, "Set1").describedAs("Set 1"),
+            FunctionParameterR.param(DataType.SET, "Set2").describedAs("Set 2"),
             new FunctionParameterR(DataType.SYMBOL, "ALL", Optional.of(ReservedWords))
                     .describedAs("ALL retains duplicates; DISTINCT (default) removes them.").asOptional() };
     // {"fxxx", "fxxxy"}
 
     private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom, DESCRIPTION,
-            DataType.SET, xxy);
+            DataType.SET, xxy).withTextKey("Union.Function").caption("Union Function");
 
     public UnionResolver() {
         super(List.of(new UnionFunDef(functionMetaData)));

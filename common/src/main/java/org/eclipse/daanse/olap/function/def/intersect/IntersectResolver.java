@@ -32,8 +32,8 @@ public class IntersectResolver extends AbstractFunctionDefinitionMultiResolver {
     private static final String DESCRIPTION = "Returns the intersection of two input sets, optionally retaining duplicates.";
 
     private static final FunctionMetaData functionMetaData = FunctionMetaDataR.of(atom, DESCRIPTION, DataType.SET,
-            FunctionParameterR.param(DataType.SET, "Set1"), //
-            FunctionParameterR.param(DataType.SET, "Set2"), //
+            FunctionParameterR.param(DataType.SET, "Set1").describedAs("Set1"), //
+            FunctionParameterR.param(DataType.SET, "Set2").describedAs("Set2"), //
             FunctionParameterR.param(DataType.SYMBOL, "All_Flag").reserved("ALL").asOptional()
                     .describedAs("ALL retains duplicates while intersecting."))
             .interfaceName(FunctionInterface.FILTER);

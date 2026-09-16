@@ -81,11 +81,11 @@ public class CoalesceEmptyResolver implements FunctionResolver {
 
     private static final List<FunctionMetaData> REPRESENTATIVE_METADATAS = List.<FunctionMetaData>of(
         FunctionMetaDataR.of(CoalesceEmptyFunDef.functionAtom, DESCRIPTION, DataType.NUMERIC,
-            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1),
-            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).repeatable(1)).withTextKey("CoalesceEmpty.Numeric").caption("CoalesceEmpty Function"),
+            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 1).describedAs("Numeric Expression 1"),
+            param(DataType.NUMERIC, canonicalNameOf(DataType.NUMERIC) + 2).describedAs("Numeric Expression 2").repeatable(1)).withTextKey("CoalesceEmpty.Numeric.Function").caption("CoalesceEmpty Function"),
         FunctionMetaDataR.of(CoalesceEmptyFunDef.functionAtom, DESCRIPTION, DataType.STRING,
-            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 1),
-            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 2).repeatable(1)).withTextKey("CoalesceEmpty.String").caption("CoalesceEmpty Function"));
+            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 1).describedAs("String Expression 1"),
+            param(DataType.STRING, canonicalNameOf(DataType.STRING) + 2).describedAs("String Expression 2").repeatable(1)).withTextKey("CoalesceEmpty.String.Function").caption("CoalesceEmpty Function"));
 
     @Override
     public List<FunctionMetaData> getRepresentativeFunctionMetaDatas() {

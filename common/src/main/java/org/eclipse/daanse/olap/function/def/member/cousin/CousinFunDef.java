@@ -32,7 +32,8 @@ public class CousinFunDef extends AbstractFunctionDefinition {
             "Returns the member with the same relative position under <ancestor member> as the member specified.",
             DataType.MEMBER,
             new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "Member").describedAs("Member"),
-                    FunctionParameterR.param(DataType.MEMBER, "AncestorMember").describedAs("Ancestor Member") }).interfaceName(FunctionInterface.NAVIGATION);
+                    FunctionParameterR.param(DataType.MEMBER, "AncestorMember").describedAs("Ancestor Member") }).interfaceName(FunctionInterface.NAVIGATION)
+            .withTextKey("Cousin.Function").caption("Cousin Function");
 
     public CousinFunDef() {
         super(functionMetaData);

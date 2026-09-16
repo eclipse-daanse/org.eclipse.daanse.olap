@@ -36,7 +36,7 @@ public class CachedExistsFunDef extends AbstractFunctionDefinition {
             DataType.SET,
             new FunctionParameterR[] { FunctionParameterR.param(DataType.SET).describedAs("Set"),
                     FunctionParameterR.param(DataType.TUPLE).describedAs("Tuple"),
-                    FunctionParameterR.param(DataType.STRING, "String").describedAs("Cache Name") })
+                    FunctionParameterR.param(DataType.STRING, "CacheName").describedAs("Cache Name") })
             .withTextKey("CachedExists.Function").caption("CachedExists Function");
 
     CachedExistsFunDef() {

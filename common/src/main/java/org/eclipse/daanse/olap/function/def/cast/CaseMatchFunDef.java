@@ -38,7 +38,7 @@ class CaseMatchFunDef extends AbstractFunctionDefinition {
 
     public CaseMatchFunDef(DataType returnType, FunctionParameterR[] types) {
         super(new FunctionMetaDataR(functionAtom, DESCRIPTION,
-                returnType, types));
+                returnType, types).withTextKey("_CaseMatch.Operation").caption("CASE <Value> WHEN <Value> THEN <Expression> ... END"));
     }
 
     @Override

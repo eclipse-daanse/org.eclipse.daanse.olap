@@ -49,13 +49,13 @@ public class ParameterResolver extends AbstractMetaDataMultiResolver {
             new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.STRING, "DefaultValue").describedAs("Default Value"),
             FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
     private static FunctionParameterR[] SyS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.STRING, "DefaultValue").describedAs("Default Value") };
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.STRING, "DefaultValue").describedAs("Default Value") };
 
     private static FunctionParameterR[] SynS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
             new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue").describedAs("Default Value"),
             FunctionParameterR.param(DataType.STRING, "Description").describedAs("Description") };
     private static FunctionParameterR[] Syn = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
-            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue").describedAs("Default Value") };
+            new FunctionParameterR(DataType.SYMBOL, "Type", Optional.of(RESERVED_WORDS)).describedAs("Type"), FunctionParameterR.param(DataType.NUMERIC, "DefaultValue").describedAs("Default Value") };
 
     private static FunctionParameterR[] ShmS = { FunctionParameterR.param(DataType.STRING, "Name").describedAs("Name"),
             FunctionParameterR.param(DataType.HIERARCHY).describedAs("Hierarchy"), FunctionParameterR.param(DataType.MEMBER, "DefaultValue").describedAs("Default Value"),

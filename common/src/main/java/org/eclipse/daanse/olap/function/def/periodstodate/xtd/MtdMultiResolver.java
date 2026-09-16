@@ -35,7 +35,9 @@ public class MtdMultiResolver extends AbstractFunctionDefinitionMultiResolver {
 
 	private static FunctionMetaData functionMetaData = new FunctionMetaDataR(atom,
 			"A shortcut function for the PeriodsToDate function that specifies the level to be Month.",
-			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER).asOptional() }).interfaceName(FunctionInterface.DATETIME);
+			DataType.SET, new FunctionParameterR[] { FunctionParameterR.param(DataType.MEMBER, "TimeMember").describedAs("Time hierarchy element (e.g., [Time].[1997].[Q3])").asOptional() })
+			.interfaceName(FunctionInterface.DATETIME)
+			.withTextKey("Mtd.Function").caption("Mtd Function");
 
 	public MtdMultiResolver() {
 		super(List.of(new XtdFunDef(functionMetaData, LevelType.TIME_MONTHS)));

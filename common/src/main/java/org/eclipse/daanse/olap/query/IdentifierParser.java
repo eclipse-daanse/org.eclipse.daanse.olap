@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.query;
 /*
 // Licensed to Julian Hyde under one or more contributor license
 // agreements. See the NOTICE file distributed with this work for
@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.query.IdentifierSegment;
 import org.eclipse.daanse.olap.api.query.Quoting;
+import org.eclipse.daanse.olap.util.Olap4jUtil;
 
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,

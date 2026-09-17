@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.execution;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,6 +39,8 @@ import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
+import org.eclipse.daanse.olap.result.CellImpl;
+import org.eclipse.daanse.olap.result.CellSetImpl;
 
 public class StatementImpl extends org.eclipse.daanse.olap.execution.AbstractStatement implements Statement {
 

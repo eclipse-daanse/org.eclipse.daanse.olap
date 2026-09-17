@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.query;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -97,48 +97,6 @@ public record ParseRegionR(int startLine, int startColumn, int endLine, int endC
             + "]";
     }
 
-    /**
-     * Combines this region with other regions.
-     *
-     * @param nodes Source code regions
-     * @return region which represents the span of the given regions
-     */
-    public ParseRegion plus(final ParseTreeNode... nodes) {
-        return plusAll(
-            new AbstractList<ParseRegion>() {
-                public ParseRegion get(int index) {
-                    final ParseTreeNode node = nodes[index];
-                    if (node == null) {
-                        return null;
-                    }
-                    return node.getRegion();
-                }
-
-                public int size() {
-                    return nodes.length;
-                }
-            });
-    }
-
-    public ParseRegion plus(final List<? extends ParseTreeNode> nodes) {
-        if (nodes == null) {
-            return this;
-        }
-        return plusAll(
-            new AbstractList<ParseRegion>() {
-                public ParseRegion get(int index) {
-                    final ParseTreeNode node = nodes.get(index);
-                    if (node == null) {
-                        return null;
-                    }
-                    return node.getRegion();
-                }
-
-                public int size() {
-                    return nodes.size();
-                }
-            });
-    }
 
     /**
      * Combines this region with other regions.

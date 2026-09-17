@@ -88,11 +88,11 @@ import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.function.def.hierarchy.member.HierarchyCurrentMemberFunDef;
 import org.eclipse.daanse.olap.function.def.parentheses.ParenthesesFunDef;
 import org.eclipse.daanse.olap.function.def.set.SetFunDef;
-import org.eclipse.daanse.olap.impl.IdentifierParser.Builder;
+import org.eclipse.daanse.olap.query.IdentifierParser.Builder;
 import org.eclipse.daanse.olap.query.component.HierarchyExpressionImpl;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 import org.eclipse.daanse.olap.util.ConcatenableList;
-import org.eclipse.daanse.olap.util.IdentifierParser;
+import org.eclipse.daanse.olap.query.ResolvingIdentifierParser;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1468,12 +1468,12 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     String string,
     List<Hierarchy> hierarchies ) {
-    final IdentifierParser.TupleListBuilder builder =
-      new IdentifierParser.TupleListBuilder(
+    final ResolvingIdentifierParser.TupleListBuilder builder =
+      new ResolvingIdentifierParser.TupleListBuilder(
         evaluator.getCatalogReader(),
         evaluator.getCube(),
         hierarchies );
-    IdentifierParser.parseTupleList( builder, string );
+    ResolvingIdentifierParser.parseTupleList( builder, string );
     return builder.tupleList;
   }
 
@@ -1494,7 +1494,7 @@ public class FunUtil extends Util {
     final Member[] members,
     List<Hierarchy> hierarchies ) {
     final Builder builder =
-      new IdentifierParser.TupleBuilder(
+      new ResolvingIdentifierParser.TupleBuilder(
         evaluator.getCatalogReader(),
         evaluator.getCube(),
         hierarchies ) {
@@ -1504,7 +1504,7 @@ public class FunUtil extends Util {
           memberList.toArray( members );
         }
       };
-    return IdentifierParser.parseTuple( builder, string, i );
+    return ResolvingIdentifierParser.parseTuple( builder, string, i );
   }
 
   /**
@@ -1532,12 +1532,12 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     String string,
     Hierarchy hierarchy ) {
-    IdentifierParser.MemberListBuilder builder =
-      new IdentifierParser.MemberListBuilder(
+    ResolvingIdentifierParser.MemberListBuilder builder =
+      new ResolvingIdentifierParser.MemberListBuilder(
         evaluator.getCatalogReader(),
         evaluator.getCube(),
         hierarchy );
-    IdentifierParser.parseMemberList( builder, string );
+    ResolvingIdentifierParser.parseMemberList( builder, string );
     return builder.memberList;
   }
 
@@ -1547,8 +1547,8 @@ public class FunUtil extends Util {
     int i,
     final Member[] members,
     Hierarchy hierarchy ) {
-    IdentifierParser.MemberListBuilder builder =
-      new IdentifierParser.MemberListBuilder(
+    ResolvingIdentifierParser.MemberListBuilder builder =
+      new ResolvingIdentifierParser.MemberListBuilder(
         evaluator.getCatalogReader(), evaluator.getCube(), hierarchy ) {
         @Override
         public void memberComplete() {
@@ -1556,7 +1556,7 @@ public class FunUtil extends Util {
           segmentList.clear();
         }
       };
-    return IdentifierParser.parseMember( builder, string, i );
+    return ResolvingIdentifierParser.parseMember( builder, string, i );
   }
 
   public static Member parseMember(

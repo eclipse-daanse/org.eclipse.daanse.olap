@@ -33,7 +33,7 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.util;
+package org.eclipse.daanse.olap.query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +57,7 @@ import org.eclipse.daanse.olap.fun.FunUtil;
  *
  * @author jhyde
  */
-public class IdentifierParser extends org.eclipse.daanse.olap.impl.IdentifierParser {
+public class ResolvingIdentifierParser extends IdentifierParser {
 
     /**
      * Implementation of Builder that resolves segment lists to members.

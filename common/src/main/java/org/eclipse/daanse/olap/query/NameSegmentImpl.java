@@ -31,7 +31,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.query;
 
 import org.eclipse.daanse.olap.api.query.NameIdentifierSegment;
 import org.eclipse.daanse.olap.api.query.ParseRegion;

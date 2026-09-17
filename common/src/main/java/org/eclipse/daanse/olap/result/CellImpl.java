@@ -11,7 +11,7 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.result;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -239,7 +239,7 @@ public class CellImpl implements Cell {
      * Not a part of the public API. Package-protected because this method
      * also implements the DRILLTHROUGH statement.
      *
-     * @param maxRowCount Maximum number of rows to retrieve, <= 0 if unlimited
+     * @param maxRowCount Maximum number of rows to retrieve, {@code <= 0} if unlimited
      * @param firstRowOrdinal Ordinal of row to skip to (1-based), or 0 to
      *   start from beginning
      * @param fields            List of fields to return, expressed as MDX
@@ -252,7 +252,7 @@ public class CellImpl implements Cell {
      * @param rowCountSlot Slot into which the number of fact rows is written
      * @return Result set
      */
-    ResultSet drillThroughInternal(
+    public ResultSet drillThroughInternal(
         int maxRowCount,
         int firstRowOrdinal,
         List<OlapElement> fields,

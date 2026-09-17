@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,8 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.api.result.SubtotalVisibility;
 import org.eclipse.daanse.olap.common.ExecuteDurationUtil;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
+import org.eclipse.daanse.olap.execution.PreparedStatementImpl;
+import org.eclipse.daanse.olap.execution.StatementImpl;
 import org.eclipse.daanse.olap.query.component.QueryAxisImpl;
 
 public class CellSetImpl extends ExecutionImpl implements CellSet {
@@ -43,11 +45,11 @@ public class CellSetImpl extends ExecutionImpl implements CellSet {
     private final Query query;
 
     public CellSetImpl(StatementImpl statement) {
-        super(statement, ExecuteDurationUtil.executeDurationValue(statement.context));
+        super(statement, ExecuteDurationUtil.executeDurationValue(statement.getConnection().getContext()));
         this.statement = statement;
         query = statement.getQuery();
         this.closed = false;
-        if (statement instanceof PreparedStatement ps) {
+        if (statement instanceof PreparedStatementImpl ps) {
             this.metaData = ps.getCellSetMetaData();
         } else {
             this.metaData =

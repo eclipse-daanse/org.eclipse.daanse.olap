@@ -11,14 +11,14 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.execution;
 
 import org.eclipse.daanse.olap.api.connection.Connection;
 import org.eclipse.daanse.olap.api.result.CellSetMetaData;
 
-public class PreparedStatement extends StatementImpl {
+public class PreparedStatementImpl extends StatementImpl {
 
-    public PreparedStatement(Connection connection) {
+    public PreparedStatementImpl(Connection connection) {
         super(connection);
     }
 

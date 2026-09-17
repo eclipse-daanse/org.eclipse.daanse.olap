@@ -31,7 +31,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.util;
 
 /**
  * Utility methods common to multiple olap4j driver implementations.

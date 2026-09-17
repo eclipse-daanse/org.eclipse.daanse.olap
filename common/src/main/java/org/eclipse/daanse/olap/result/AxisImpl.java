@@ -107,36 +107,4 @@ public class AxisImpl implements Axis {
         }
     }
 
-    /**
-     * Implementation of {@link Position} that reads from a given location in
-     * a {@link TupleList}.
-     */
-    private static class PositionImpl
-        extends AbstractList<Member>
-        implements Position
-    {
-        private final TupleList tupleList;
-        private final int offset;
-
-        PositionImpl(TupleList tupleList, int offset) {
-            this.tupleList = tupleList;
-            this.offset = offset;
-        }
-
-        @Override
-		public Member get(int index) {
-            return tupleList.get(index, offset);
-        }
-
-        @Override
-		public int size() {
-            return tupleList.getArity();
-        }
-
-        @Override
-        public List<Member> getMembers() {
-            // this position IS the member list (AbstractList over the tuple)
-            return this;
-        }
-    }
 }

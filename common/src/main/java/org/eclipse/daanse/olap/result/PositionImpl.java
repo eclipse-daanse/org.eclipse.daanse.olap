@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.result;
 
 import java.util.AbstractList;
 import java.util.List;
@@ -42,17 +42,7 @@ public class PositionImpl extends AbstractList<Member> implements Position {
 
     @Override
     public List<Member> getMembers() {
-        return new AbstractList<>() {
-            @Override
-            public Member get(int slice) {
-                return tupleList.get(slice, offset);
-            }
-
-            @Override
-            public int size() {
-                return tupleList.getArity();
-            }
-        };
-
+        // this position is the member list: an AbstractList over the tuple
+        return this;
     }
 }

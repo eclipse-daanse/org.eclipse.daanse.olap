@@ -39,7 +39,7 @@ import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.IdentifierSegment;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.eclipse.daanse.olap.impl.IdentifierNode;
+import org.eclipse.daanse.olap.query.IdentifierNode;
 
 /**
  * Resolves a list of segments (a parsed identifier) to an OLAP element.

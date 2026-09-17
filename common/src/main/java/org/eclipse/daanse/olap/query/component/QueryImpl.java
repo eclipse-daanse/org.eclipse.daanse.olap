@@ -122,7 +122,7 @@ import org.eclipse.daanse.olap.exceptions.ResultStyleException;
 import org.eclipse.daanse.olap.exceptions.UnknownParameterException;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.function.def.parameter.ParameterFunDef;
-import org.eclipse.daanse.olap.impl.IdentifierParser;
+import org.eclipse.daanse.olap.query.IdentifierParser;
 import org.eclipse.daanse.olap.util.ArrayStack;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
 

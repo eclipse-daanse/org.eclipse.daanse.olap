@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.execution.Statement;
  * Implementation of {@link Statement} for use when you don't have an
  * olap4j connection.
  */
-public class InternalStatement extends org.eclipse.daanse.olap.impl.StatementImpl {
+public class InternalStatement extends org.eclipse.daanse.olap.execution.StatementImpl {
   private boolean closed = false;
 
     /**

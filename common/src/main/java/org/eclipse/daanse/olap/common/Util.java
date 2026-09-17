@@ -135,10 +135,10 @@ import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.function.def.member.validmeasure.ValidMeasureFunDef;
-import org.eclipse.daanse.olap.impl.IdentifierNode;
-import org.eclipse.daanse.olap.impl.IdentifierParser;
-import org.eclipse.daanse.olap.impl.KeySegmentImpl;
-import org.eclipse.daanse.olap.impl.NameSegmentImpl;
+import org.eclipse.daanse.olap.query.IdentifierNode;
+import org.eclipse.daanse.olap.query.IdentifierParser;
+import org.eclipse.daanse.olap.query.KeySegmentImpl;
+import org.eclipse.daanse.olap.query.NameSegmentImpl;
 import org.eclipse.daanse.olap.query.component.DimensionExpressionImpl;
 import org.eclipse.daanse.olap.query.component.HierarchyExpressionImpl;
 import org.eclipse.daanse.olap.query.component.IdImpl;
@@ -1672,7 +1672,7 @@ public class Util {
 
     public static SQLException close(
         CellSet resultSet,
-        org.eclipse.daanse.olap.impl.StatementImpl statement,
+        org.eclipse.daanse.olap.execution.StatementImpl statement,
         org.eclipse.daanse.olap.api.connection.Connection connection)
     {
         SQLException firstException = null;

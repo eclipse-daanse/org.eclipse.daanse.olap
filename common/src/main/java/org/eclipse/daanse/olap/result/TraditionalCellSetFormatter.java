@@ -32,7 +32,7 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.result;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;

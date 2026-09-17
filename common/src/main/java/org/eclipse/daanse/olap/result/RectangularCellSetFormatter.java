@@ -32,7 +32,7 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package org.eclipse.daanse.olap.impl;
+package org.eclipse.daanse.olap.result;
 
 import java.io.PrintWriter;
 import java.util.AbstractList;
@@ -49,6 +49,7 @@ import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
 import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.util.CoordinateIterator;
 
 
 /**

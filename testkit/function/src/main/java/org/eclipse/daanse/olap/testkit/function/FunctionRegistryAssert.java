@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.testkit.assertions.AssertionMessages;
-import org.eclipse.daanse.olap.testkit.function.contracts.FunctionContract;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract;
 
 /** Registry-wide assertions, including the contract coverage meta test. */
 public final class FunctionRegistryAssert {

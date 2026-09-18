@@ -1,0 +1,306 @@
+/*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+package org.eclipse.daanse.olap.testkit.function;
+
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.CallCase;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.DependencyCase;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.EdgeCase;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.Promise;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.ResultStyleCase;
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.ValueCase;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
+
+import org.eclipse.daanse.mdx.model.api.expression.operation.FunctionOperationAtom;
+import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
+import org.eclipse.daanse.olap.api.DataType;
+import org.eclipse.daanse.olap.api.calc.ResultStyle;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+
+public final class Builder {
+
+    private final String name;
+    private Class<? extends OperationAtom> atomClass = FunctionOperationAtom.class;
+    private final List<String> declaredSignatures = new ArrayList<>();
+    private Optional<DataType> returnCategory = Optional.empty();
+    private OptionalInt minArity = OptionalInt.empty();
+    private OptionalInt maxArity = OptionalInt.empty();
+    private final List<String> reservedWords = new ArrayList<>();
+    private final List<CallCase> calls = new ArrayList<>();
+    private final List<EdgeCase> edgeCases = new ArrayList<>();
+    private final List<ValueCase> values = new ArrayList<>();
+    private final List<DependencyCase> dependencies = new ArrayList<>();
+    private final List<ResultStyleCase> resultStyles = new ArrayList<>();
+    private final Map<Promise, String> waivers = new EnumMap<>(Promise.class);
+    private boolean autoEdgeCases;
+
+    Builder(String name) {
+        this.name = name;
+    }
+
+    // ---- promise 1 and 2 ---------------------------------------------------
+
+    public Builder atom(Class<? extends OperationAtom> value) { this.atomClass = value; return this; }
+    public Builder signatures(String... declared) { declaredSignatures.addAll(List.of(declared)); return this; }
+    public Builder returns(DataType category) { returnCategory = Optional.of(category); return this; }
+    public Builder arity(int min, int max) { minArity = OptionalInt.of(min); maxArity = OptionalInt.of(max); return this; }
+    public Builder reservedWords(String... words) { reservedWords.addAll(List.of(words)); return this; }
+
+    // ---- promise 3 and 4 ---------------------------------------------------
+
+    public Builder resolvesTo(Class<? extends FunctionDefinition> definition, DataType... args) {
+        calls.add(new CallCase(List.of(args), false, Optional.of(definition), Optional.empty(),
+                Optional.empty(), OptionalInt.empty(), false, Optional.empty()));
+        return this;
+    }
+
+    public Builder resolvesToInScalarContext(Class<? extends FunctionDefinition> definition, DataType... args) {
+        calls.add(new CallCase(List.of(args), true, Optional.of(definition), Optional.empty(),
+                Optional.empty(), OptionalInt.empty(), false, Optional.empty()));
+        return this;
+    }
+
+    public Builder resolvesToOverload(String declaredSignature, DataType... args) {
+        calls.add(new CallCase(List.of(args), false, Optional.empty(), Optional.of(declaredSignature),
+                Optional.empty(), OptionalInt.empty(), false, Optional.empty()));
+        return this;
+    }
+
+    public Builder resolvesWithCost(int cost, Class<? extends FunctionDefinition> definition, DataType... args) {
+        calls.add(new CallCase(List.of(args), false, Optional.of(definition), Optional.empty(),
+                Optional.empty(), OptionalInt.of(cost), false, Optional.empty()));
+        return this;
+    }
+
+    public Builder rejects(DataType... args) {
+        calls.add(new CallCase(List.of(args), false, Optional.empty(), Optional.empty(),
+                Optional.empty(), OptionalInt.empty(), true, Optional.empty()));
+        return this;
+    }
+
+    public Builder rejectsWith(String messageSubstring, DataType... args) {
+        calls.add(new CallCase(List.of(args), false, Optional.empty(), Optional.empty(),
+                Optional.empty(), OptionalInt.empty(), true, Optional.of(messageSubstring)));
+        return this;
+    }
+
+    /** For {@code NonFunctionResolver} entries that exist only for MDSCHEMA_FUNCTIONS. */
+    public Builder neverResolves() {
+        return waive(Promise.RESOLUTION, "NonFunctionResolver: catalogue entry only, resolves via another atom");
+    }
+
+    // ---- promise 6 ---------------------------------------------------------
+
+    /** Derive edge cases from the declared parameters. Recommended for every contract. */
+    public Builder autoEdgeCases() { this.autoEdgeCases = true; return this; }
+
+    public Builder edgeCase(String label, DataType... args) {
+        edgeCases.add(new EdgeCase(label, List.of(args), Optional.empty()));
+        return this;
+    }
+
+    public Builder edgeCaseMdx(String label, String mdx) {
+        edgeCases.add(new EdgeCase(label, List.of(), Optional.of(mdx)));
+        return this;
+    }
+
+    /**
+     * An edge case that is known to crash undiagnosed today.
+     *
+     * <p>Use this rather than waiving the whole promise: the other edge cases of the
+     * function keep being checked, the defect is written down where the function lives,
+     * and the day it is fixed the test says so instead of quietly passing.
+     *
+     * @param reason why it is open, in a sentence a reader can act on
+     */
+    public Builder edgeCaseMdxKnownToCrash(String label, String mdx, String reason) {
+        edgeCases.add(new EdgeCase(label, List.of(), Optional.of(mdx), Optional.of(reason)));
+        return this;
+    }
+
+    // ---- promise 5 ---------------------------------------------------------
+
+    public Builder value(String mdx, String expectedFormattedValue) {
+        values.add(new ValueCase(mdx, expectedFormattedValue, Optional.empty()));
+        return this;
+    }
+
+    /**
+     * Like {@link #value(String, String)}, but probes with an explicit {@code FORMAT_STRING}
+     * — needed whenever the expected value has decimal places, since the harness's default
+     * cell format has none and would otherwise round the result away.
+     */
+    public Builder value(String mdx, String formatString, String expectedFormattedValue) {
+        values.add(new ValueCase(mdx, expectedFormattedValue, Optional.of(formatString)));
+        return this;
+    }
+
+    /** A value case that is known to fail today. See {@link #dependsOnKnownDefect}. */
+    public Builder valueKnownDefect(String mdx, String expectedFormattedValue, String reason) {
+        values.add(new ValueCase(mdx, expectedFormattedValue, Optional.empty(),
+                Optional.of(reason)));
+        return this;
+    }
+
+    /** MDX NULL formats as the empty string. */
+    public Builder valueIsNull(String mdx) { return value(mdx, ""); }
+
+    // ---- promise 7 ---------------------------------------------------------
+
+    public Builder dependsOn(String mdx, String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, false, List.of(hierarchyUniqueNames), List.of()));
+        return this;
+    }
+
+    public Builder scalarDependsOn(String mdx, String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, true, List.of(hierarchyUniqueNames), List.of()));
+        return this;
+    }
+
+    /** The interesting direction for context-setting functions. */
+    public Builder scalarDoesNotDependOn(String mdx, String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, true, List.of(), List.of(hierarchyUniqueNames)));
+        return this;
+    }
+
+    /**
+     * Set-expression counterpart of {@link #scalarDoesNotDependOn}: asserts that the compiled
+     * set does not depend on the given hierarchies, without pinning down the full dependency
+     * set the way {@link #dependsOn} does. Needed whenever a Set-returning call embeds a
+     * literal-member argument that gets coerced to a scalar (the {@code MemberValueCalc}-style
+     * wrapper fixes its own hierarchy but depends on every other one) — pinning the full
+     * hierarchy list would make the assertion brittle against unrelated schema changes.
+     */
+    public Builder doesNotDependOn(String mdx, String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, false, List.of(), List.of(hierarchyUniqueNames)));
+        return this;
+    }
+
+    /**
+     * A dependency case that is known to fail today.
+     *
+     * <p>Same bargain as {@link #edgeCaseMdxKnownToCrash}: the case runs, the defect is
+     * written down beside the function, and the test speaks up the day it is fixed.
+     */
+    public Builder dependsOnKnownDefect(String mdx, String reason, String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, false, List.of(hierarchyUniqueNames), List.of(),
+                Optional.of(reason)));
+        return this;
+    }
+
+    /** Scalar counterpart of {@link #dependsOnKnownDefect}. */
+    public Builder scalarDependsOnKnownDefect(String mdx, String reason,
+            String... hierarchyUniqueNames) {
+        dependencies.add(new DependencyCase(mdx, true, List.of(hierarchyUniqueNames), List.of(),
+                Optional.of(reason)));
+        return this;
+    }
+
+    // ---- promise 8 ---------------------------------------------------------
+
+    public Builder resultStyle(String mdx, ResultStyle requested, ResultStyle expected) {
+        resultStyles.add(new ResultStyleCase(mdx, requested, expected, false));
+        return this;
+    }
+
+    /** A result-shape case that is known to fail today. See {@link #dependsOnKnownDefect}. */
+    public Builder resultStyleKnownDefect(String mdx, ResultStyle requested, ResultStyle expected,
+            String reason) {
+        resultStyles.add(new ResultStyleCase(mdx, requested, expected, false, Optional.of(reason)));
+        return this;
+    }
+
+    /**
+     * A scalar expression answers {@code VALUE}.
+     *
+     * <p>For a function that returns a number, a string or a single member there is no set
+     * to shape, and the shape promise used to be waived with the words "VALUE by
+     * construction". That is true, and it was never checked. A function that one day
+     * handed back a list where a scalar was asked for would have gone unnoticed.
+     */
+    public Builder scalarResultStyle(String mdx) {
+        resultStyles.add(new ResultStyleCase(mdx, ResultStyle.VALUE, ResultStyle.VALUE, false,
+                Optional.empty(), true));
+        return this;
+    }
+
+    /** See {@link #dependsOnKnownDefect}. */
+    public Builder independentMutableListKnownDefect(String mdx, String reason) {
+        resultStyles.add(new ResultStyleCase(mdx, ResultStyle.MUTABLE_LIST,
+                ResultStyle.MUTABLE_LIST, true, Optional.of(reason)));
+        return this;
+    }
+
+    public Builder independentMutableList(String mdx) {
+        resultStyles.add(new ResultStyleCase(mdx, ResultStyle.MUTABLE_LIST, ResultStyle.MUTABLE_LIST, true));
+        return this;
+    }
+
+    // ---- waivers -----------------------------------------------------------
+
+    public Builder waive(Promise promise, String reason) {
+        if (reason == null || reason.isBlank()) {
+            throw new IllegalArgumentException("a waiver needs a reason: " + name + " / " + promise);
+        }
+        waivers.put(promise, reason);
+        return this;
+    }
+
+    public FunctionContract build() {
+        List<EdgeCase> allEdgeCases = new ArrayList<>(edgeCases);
+        if (autoEdgeCases) {
+            allEdgeCases.add(new EdgeCase("<generated from declared parameters>", List.of(), Optional.empty()));
+        }
+        FunctionContract contract = new FunctionContract(name, atomClass, List.copyOf(declaredSignatures),
+                returnCategory, minArity, maxArity, List.copyOf(reservedWords), List.copyOf(calls),
+                List.copyOf(allEdgeCases), List.copyOf(values), List.copyOf(dependencies),
+                List.copyOf(resultStyles), Map.copyOf(waivers));
+        validate(contract);
+        return contract;
+    }
+
+    /** A promise with neither cases nor a waiver would pass silently. Refuse to build it. */
+    private static void validate(FunctionContract contract) {
+        List<String> problems = new ArrayList<>();
+        checkPromise(contract, Promise.SIGNATURE, !contract.declaredSignatures().isEmpty(), problems,
+                ".signatures(...)");
+        checkPromise(contract, Promise.RESOLUTION, !contract.calls().isEmpty(), problems,
+                ".resolvesTo(...) / .rejects(...)");
+        checkPromise(contract, Promise.EDGE, !contract.edgeCases().isEmpty(), problems,
+                ".autoEdgeCases() / .edgeCaseMdx(...)");
+        checkPromise(contract, Promise.RESULT, !contract.values().isEmpty(), problems,
+                ".value(...)");
+        checkPromise(contract, Promise.DEPENDENCIES, !contract.dependencies().isEmpty(), problems,
+                ".dependsOn(...) / .scalarDependsOn(...)");
+        checkPromise(contract, Promise.RESULT_SHAPE, !contract.resultStyles().isEmpty(), problems,
+                ".resultStyle(...) / .independentMutableList(...)");
+        if (!problems.isEmpty()) {
+            throw new IllegalStateException("FunctionContract for '" + contract.name()
+                    + "' is incomplete" + System.lineSeparator()
+                    + String.join(System.lineSeparator(), problems) + System.lineSeparator()
+                    + "A promise with no cases and no waiver would pass silently and give false confidence.");
+        }
+    }
+
+    private static void checkPromise(FunctionContract contract, Promise promise, boolean hasCases,
+            List<String> problems, String how) {
+        if (!hasCases && !contract.isWaived(promise)) {
+            problems.add("  Promise " + promise + " has neither cases nor a waiver."
+                    + System.lineSeparator() + "    Add " + how
+                    + " or .waive(Promise." + promise + ", \"<reason>\").");
+        }
+    }
+}

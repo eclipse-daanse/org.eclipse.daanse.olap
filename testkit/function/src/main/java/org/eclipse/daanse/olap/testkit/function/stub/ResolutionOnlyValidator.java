@@ -18,7 +18,6 @@ import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.function.FunctionService;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.common.ValidatorImpl;
-import org.eclipse.daanse.olap.function.services.standard.StandardFunctions;
 
 /**
  * A {@link org.eclipse.daanse.olap.api.query.Validator} that can resolve function calls
@@ -48,10 +47,6 @@ public final class ResolutionOnlyValidator extends ValidatorImpl {
         return new ResolutionOnlyValidator(functionService, true);
     }
 
-    /** Convenience: set context over {@code StandardFunctions.standard()}. */
-    public static ResolutionOnlyValidator standard() {
-        return inSetContext(StandardFunctions.standard());
-    }
 
     @Override
     public boolean requiresExpression() {

@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ */
+package org.eclipse.daanse.olap.function.def.ancestor;
+
+import org.eclipse.daanse.olap.testkit.function.FunctionContract;
+import static org.eclipse.daanse.olap.api.DataType.DIMENSION;
+import static org.eclipse.daanse.olap.api.DataType.HIERARCHY;
+import static org.eclipse.daanse.olap.api.DataType.INTEGER;
+import static org.eclipse.daanse.olap.api.DataType.LEVEL;
+import static org.eclipse.daanse.olap.api.DataType.MEMBER;
+import static org.eclipse.daanse.olap.api.DataType.NUMERIC;
+import static org.eclipse.daanse.olap.api.DataType.SET;
+import static org.eclipse.daanse.olap.api.DataType.STRING;
+
+import org.eclipse.daanse.olap.testkit.function.FunctionContract.Promise;
+
+/**
+ * The contract of the MDX function {@code Ancestor(<Member>, <Level>|<Numeric Expression>)}.
+ * {@code AncestorResolver} is an {@code AbstractFunctionDefinitionMultiResolver} over two
+ * declared overloads (by-Level and by-distance) — {@code resolve()} delegates to the generic
+ * {@code FunctionMetaDataMatcher.match}, so there is no hand-written resolver code that could
+ * diverge from the declared signature or throw instead of returning empty.
+ *
+ * <p>{@code AncestorNumericCalc.evaluateInternal} used to pass the compiled {@code Integer}
+ * distance straight into {@code FunUtil.ancestor(Evaluator, Member, int, Level)} — a
+ * primitive-{@code int} parameter — so {@code Ancestor(member, NULL)} unboxed a {@code null}
+ * into a {@code NullPointerException}. Fixed to treat a {@code NULL} distance the same way
+ * {@code FunUtil.ancestor} itself treats a negative one: "no valid ancestor", returning {@code
+ * member.getHierarchy().getNullMember()} directly.
+ *
+ * <p>Both {@code AncestorLevelFunDef.compileCall} and {@code AncestorNumericFunDef.compileCall}
+ * construct an {@code OlapRuntimeException} for a type mismatch on the second argument but
+ * never {@code throw} it — dead code, and harmless: by the time {@code compileCall} runs for
+ * either overload, {@code FunctionMetaDataMatcher.match} has already guaranteed that argument's
+ * category, so the check can never actually fail.
+ *
+ * <p>Both {@code AncestorLevelFunDef} and {@code AncestorNumericFunDef} were package-private
+ * (unlike most other {@code FunDef} classes this suite references) — made public so this
+ * contract can name them in {@code resolvesTo(...)}, the same visibility fix {@link
+ * PeriodsToDateContract} needed for {@code PeriodsToDateFunDef}.
+ */
+public final class AncestorContract {
+
+    private AncestorContract() {
+    }
+
+    public static final FunctionContract CONTRACT = FunctionContract.of("Ancestor")
+            .signatures(
+                    "<Member> Ancestor(<Member>, <Level>)",
+                    "<Member> Ancestor(<Member>, <Numeric Expression>)")
+            .returns(MEMBER)
+            .arity(2, 2)
+
+            .resolvesTo(AncestorLevelFunDef.class, MEMBER, LEVEL)
+            .resolvesTo(AncestorNumericFunDef.class, MEMBER, NUMERIC)
+            .resolvesTo(AncestorNumericFunDef.class, MEMBER, INTEGER)   // Integer -> Numeric, free
+            .resolvesWithCost(1, AncestorLevelFunDef.class, HIERARCHY, LEVEL)    // Hierarchy -> Member
+            .resolvesWithCost(2, AncestorLevelFunDef.class, DIMENSION, LEVEL)    // Dimension -> Member
+            .rejects(SET, LEVEL)       // Set does not convert to Member
+            .rejects(MEMBER, SET)       // Set converts to neither Level nor Numeric
+            .rejects(MEMBER, STRING)    // String does not convert to Level or Numeric
+            .rejects()                  // arity 0
+            .rejects(MEMBER)             // arity 1
+            .rejects(MEMBER, LEVEL, LEVEL)   // arity 3
+
+            .autoEdgeCases()
+            .edgeCaseMdx("level form",       "Ancestor([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level)")
+            .edgeCaseMdx("distance 1",       "Ancestor([Geo].[All Geo].[North], 1)")
+            .edgeCaseMdx("distance 0",       "Ancestor([Geo].[All Geo].[North], 0)")
+            .edgeCaseMdx("distance negative", "Ancestor([Geo].[All Geo].[North], -1)")
+            .edgeCaseMdx("distance NULL",    "Ancestor([Geo].[All Geo].[North], NULL)")
+
+            // [Geo] is flat (hasAll=true): F's only real ancestor, at distance 1 or at the
+            // All member's own level, is the All member — the same member CurrentMemberContract
+            // establishes via [Geo].[All Geo].[North].Parent.
+            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level) IS [Geo].[All Geo].[North].Parent)", "true",
+                            "the MDX parser cannot read this expression, and a calculated member"
+                            + " whose formula it cannot read is taken as a string literal rather"
+                            + " than refused, so the cell holds the text of the formula and the"
+                            + " function is never called. The fallback is deliberate and sits in"
+                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
+                            + " line 113 swallows the parse failure, prints a stack trace and"
+                            + " returns the literal, with a comment doubting that choice")
+            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], 1) IS [Geo].[All Geo].[North].Parent)", "true",
+                            "the MDX parser cannot read this expression, and a calculated member"
+                            + " whose formula it cannot read is taken as a string literal rather"
+                            + " than refused, so the cell holds the text of the formula and the"
+                            + " function is never called. The fallback is deliberate and sits in"
+                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
+                            + " line 113 swallows the parse failure, prints a stack trace and"
+                            + " returns the literal, with a comment doubting that choice")
+            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], 0) IS [Geo].[All Geo].[North])", "true",
+                            "the MDX parser cannot read this expression, and a calculated member"
+                            + " whose formula it cannot read is taken as a string literal rather"
+                            + " than refused, so the cell holds the text of the formula and the"
+                            + " function is never called. The fallback is deliberate and sits in"
+                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
+                            + " line 113 swallows the parse failure, prints a stack trace and"
+                            + " returns the literal, with a comment doubting that choice")
+
+            .dependsOnKnownDefect("Ancestor([Geo].[All Geo].[North], 1)",
+                            "the MDX parser rejects this expression outright: Ancestor is a"
+                            + " reserved token that its grammar does not accept here, so the query"
+                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
+                            + " not in this module")
+
+            .waive(Promise.RESULT_SHAPE,
+                    "no expression of this function compiles: the parser rejects Ancestor"
+                            + " outright, and an unreadable formula is taken as a string literal,"
+                            + " so what a shape case would measure is a constant and not this"
+                            + " function at all. See the recorded defects on the other promises")
+            .build();
+}

@@ -57,6 +57,8 @@
   <modules>
     <module>api</module>
     <module>common</module>
+    <module>function</module>
+    <module>provider</module>
     <module>xmla</module>
     <module>spi</module>
     <module>format</module>

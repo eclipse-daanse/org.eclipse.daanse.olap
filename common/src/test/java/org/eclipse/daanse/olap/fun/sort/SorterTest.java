@@ -55,7 +55,7 @@ import org.eclipse.daanse.olap.common.ConfigConstants;
 import org.eclipse.daanse.olap.common.MapContextConfig;
 import org.eclipse.daanse.olap.connection.ConnectionBase;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
-import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
+import org.eclipse.daanse.olap.calc.base.type.member.MemberOrderKeyCalc;
 import org.eclipse.daanse.olap.query.component.QueryImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

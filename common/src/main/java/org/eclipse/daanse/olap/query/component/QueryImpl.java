@@ -121,7 +121,7 @@ import org.eclipse.daanse.olap.exceptions.ParameterIsNotModifiableException;
 import org.eclipse.daanse.olap.exceptions.ResultStyleException;
 import org.eclipse.daanse.olap.exceptions.UnknownParameterException;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
-import org.eclipse.daanse.olap.function.def.parameter.ParameterFunDef;
+import org.eclipse.daanse.olap.query.base.ParameterExpressions;
 import org.eclipse.daanse.olap.query.IdentifierParser;
 import org.eclipse.daanse.olap.util.ArrayStack;
 import org.eclipse.daanse.olap.util.type.TypeUtil;
@@ -2311,14 +2311,14 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             if (call.getOperationAtom().name().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
-                    ParameterFunDef.getParameterName(call.getArgs());
+                    ParameterExpressions.getParameterName(call.getArgs());
                 if (parametersByName.get(parameterName) != null) {
                     throw new OlapRuntimeException(MessageFormat.format(
                         parameterDefinedMoreThanOnce, parameterName));
                 }
 
                 Type type =
-                    ParameterFunDef.getParameterType(call.getArgs());
+                    ParameterExpressions.getParameterType(call.getArgs());
 
                 // Create a temporary parameter. We don't know its
                 // type yet. The default of NULL is temporary.

@@ -12,5 +12,5 @@
 #   Stefan Bischof (bipolis.org) - initial
 #*******************************************************************
 Export-Package: \
-  org.eclipse.daanse.olap.function*,\
+  org.eclipse.daanse.olap.function.core*,\
   org.eclipse.daanse.olap.calc*

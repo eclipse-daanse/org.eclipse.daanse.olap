@@ -97,8 +97,8 @@ import org.eclipse.daanse.olap.fun.DaanseEvaluationException;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
-import org.eclipse.daanse.olap.function.def.aggregate.AbstractAggregateFunDef;
-import org.eclipse.daanse.olap.function.def.aggregate.AggregateCalc;
+import org.eclipse.daanse.olap.function.core.AbstractAggregateFunDef;
+import org.eclipse.daanse.olap.calc.base.aggregate.AggregateCalc;
 import org.eclipse.daanse.olap.key.CellKey;
 import org.eclipse.daanse.olap.query.component.MdxVisitorImpl;
 import org.eclipse.daanse.olap.query.component.ResolvedFunCallImpl;
@@ -343,7 +343,7 @@ public abstract class ResultImpl extends ResultBase {
                 DataType.NUMERIC, new FunctionParameterR[] { });
         Expression partialExp =
                 new ResolvedFunCallImpl(
-                        new org.eclipse.daanse.olap.function.def.AbstractFunctionDefinition(functionMetaData) {
+                        new org.eclipse.daanse.olap.function.core.AbstractFunctionDefinition(functionMetaData) {
                           @Override
 						public Calc compileCall(
                                   ResolvedFunCall call, org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler compiler)

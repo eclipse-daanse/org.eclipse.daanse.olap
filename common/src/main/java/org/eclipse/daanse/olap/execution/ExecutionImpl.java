@@ -391,6 +391,10 @@ public class ExecutionImpl implements Execution {
         final ExecutionContext currentContext = executionContext;
         AbstractBasicContext abc = (AbstractBasicContext) statement.getConnection().getContext();
         final var aggregationManager = abc.getAggregationManager();
+        if (aggregationManager == null) {
+            // a provider without segment caches registered nothing
+            return;
+        }
         final OlapSegmentCacheManager shared = aggregationManager.getSegmentCacheManager();
         // an isolated session (pending writeback / session caching)
         // registered in ITS OVERLAY's index - sweeping only the shared one

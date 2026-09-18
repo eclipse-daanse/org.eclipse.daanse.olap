@@ -124,6 +124,21 @@ public class DelegatingTupleList extends AbstractTupleList
         list.add(index, element);
     }
 
+    /**
+     * Removes the tuple at {@code index}, delegating like {@link #add} and {@link #set}.
+     *
+     * <p>Without this the inherited {@link java.util.AbstractList#remove(int)} throws, so a
+     * list of this class supported adding and overwriting but not removing, whatever it
+     * delegated to. Every function that promised a caller a mutable list and returned one
+     * of these was promising something it could not keep, and the caller found out as an
+     * UnsupportedOperationException in the middle of evaluation. See
+     * {@link UnaryTupleList#remove(int)}, which has always done this.
+     */
+    @Override
+    public List<Member> remove(int index) {
+        return list.remove(index);
+    }
+
     @Override
     public void addTuple(Member... members) {
         list.add(  List.of(members));

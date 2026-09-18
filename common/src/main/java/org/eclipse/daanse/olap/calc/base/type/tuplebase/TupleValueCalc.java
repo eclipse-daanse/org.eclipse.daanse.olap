@@ -26,6 +26,7 @@ package org.eclipse.daanse.olap.calc.base.type.tuplebase;
 
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.TupleCalc;
+import org.eclipse.daanse.olap.api.calc.TupleMemberCalcs;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
@@ -127,7 +128,7 @@ public class TupleValueCalc extends AbstractProfilingNestedUnknownCalc {
      * @return optimized expression
      */
     public Calc optimize() {
-        if (tupleCalc instanceof org.eclipse.daanse.olap.function.def.tuple.TupleCalc calc) {
+        if (tupleCalc instanceof TupleMemberCalcs calc) {
             return MemberValueCalc.create(
                     getType(),
                     calc.getMemberCalcs(),

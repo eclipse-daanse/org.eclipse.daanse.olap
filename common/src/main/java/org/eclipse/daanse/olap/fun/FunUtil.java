@@ -85,9 +85,9 @@ import org.eclipse.daanse.olap.exceptions.MdxChildObjectNotFoundException;
 import org.eclipse.daanse.olap.exceptions.ResultStyleException;
 import org.eclipse.daanse.olap.fun.sort.OrderKey;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
-import org.eclipse.daanse.olap.function.def.hierarchy.member.HierarchyCurrentMemberFunDef;
-import org.eclipse.daanse.olap.function.def.parentheses.ParenthesesFunDef;
-import org.eclipse.daanse.olap.function.def.set.SetFunDef;
+import org.eclipse.daanse.olap.api.function.CurrentMemberFunction;
+import org.eclipse.daanse.olap.api.function.ParenthesesFunction;
+import org.eclipse.daanse.olap.api.function.SetConstructorFunction;
 import org.eclipse.daanse.olap.query.IdentifierParser.Builder;
 import org.eclipse.daanse.olap.query.component.HierarchyExpressionImpl;
 import org.eclipse.daanse.olap.util.CancellationChecker;
@@ -1287,8 +1287,8 @@ public class FunUtil extends Util {
     // Also, the Set and Parentheses functions are ok since they're
     // essentially just containers.
     Query query = validator.getQuery();
-    if ( !( funDef instanceof SetFunDef )
-      && !( funDef instanceof ParenthesesFunDef )
+    if ( !( funDef instanceof SetConstructorFunction )
+      && !( funDef instanceof ParenthesesFunction )
       && query != null
       && query.nativeCrossJoinVirtualCube() ) {
     	DataType[] paramCategories = funDef.getFunctionMetaData().parameterDataTypes();
@@ -1300,7 +1300,7 @@ public class FunUtil extends Util {
           case DIMENSION, HIERARCHY:
             if ( arg0 instanceof DimensionExpression dimensionExpr
               && dimensionExpr.getDimension().isMeasures()
-              && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
+              && !( funDef instanceof CurrentMemberFunction ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
@@ -1591,7 +1591,7 @@ public class FunUtil extends Util {
       || exp instanceof DimensionExpression) {
       return false;
     }
-    if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
+    if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetConstructorFunction) {
       // A set of literals is not worth caching.
       for ( Expression setArg : call.getArgs() ) {
           if ( FunUtil.worthCaching( setArg ) ) {

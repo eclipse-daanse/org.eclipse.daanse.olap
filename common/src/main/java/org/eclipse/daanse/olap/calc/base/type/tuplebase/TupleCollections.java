@@ -621,4 +621,49 @@ public final class TupleCollections {
             return materialize().listIterator(index);
         }
     }
+
+    /** The cross join of two tuple lists, as a fresh mutable list. */
+    public static TupleList mutableCrossJoin(TupleList list1, TupleList list2) {
+        return mutableCrossJoin(java.util.Arrays.asList(list1, list2));
+    }
+
+    /** The cross join of any number of tuple lists, as a fresh mutable list. */
+    public static TupleList mutableCrossJoin(List<TupleList> lists) {
+        long size = 1;
+        int arity = 0;
+        for (TupleList list : lists) {
+            size *= list.size();
+            arity += list.getArity();
+        }
+        if (size == 0L) {
+            return emptyList(arity);
+        }
+        org.eclipse.daanse.olap.common.Util.checkCJResultLimit(size);
+        List<Member> result = new ArrayList<>((int) size * arity);
+        final Member[] partialArray = new Member[arity];
+        final List<Member> partial = java.util.Arrays.asList(partialArray);
+        cartesianProductRecurse(0, lists, partial, partialArray, 0, result);
+        return new ListTupleList(arity, result);
+    }
+
+    private static void cartesianProductRecurse(int i, List<TupleList> lists, List<Member> partial,
+            Member[] partialArray, int partialSize, List<Member> result) {
+        final TupleList tupleList = lists.get(i);
+        final int partialSizeNext = partialSize + tupleList.getArity();
+        final int iNext = i + 1;
+        final TupleCursor cursor = tupleList.tupleCursor();
+        int currentIteration = 0;
+        org.eclipse.daanse.olap.api.execution.Execution execution =
+                org.eclipse.daanse.olap.api.execution.ExecutionContext.current().getExecution();
+        while (cursor.forward()) {
+            org.eclipse.daanse.olap.util.CancellationChecker.checkCancelOrTimeout(currentIteration++, execution);
+            cursor.currentToArray(partialArray, partialSize);
+            if (i == lists.size() - 1) {
+                result.addAll(partial);
+            } else {
+                cartesianProductRecurse(iNext, lists, partial, partialArray, partialSizeNext, result);
+            }
+        }
+    }
+
 }

@@ -54,7 +54,7 @@ import org.eclipse.daanse.olap.calc.base.NullSemantics;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.DelegatingTupleList;
 import org.eclipse.daanse.olap.calc.base.type.tuplebase.TupleCollections;
 import org.eclipse.daanse.olap.common.Util;
-import org.eclipse.daanse.olap.function.def.member.memberorderkey.MemberOrderKeyCalc;
+import org.eclipse.daanse.olap.calc.base.type.member.MemberOrderKeyCalc;
 import org.eclipse.daanse.olap.util.CancellationChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -321,10 +321,6 @@ public class Sorter {
 
     @SuppressWarnings("unchecked")
     List<Member>[] tuples = tupleArrayList.toArray(List[]::new);
-    final DelegatingTupleList result =
-      new DelegatingTupleList(
-        tupleIterable.getArity(),
-        Arrays.asList( tuples ) );
 
     Comparator<List<Member>> comparator;
     if ( brk ) {
@@ -339,6 +335,14 @@ public class Sorter {
 
     }
     Arrays.sort( tuples, comparator );
+    // Built after the sort, and over a list the caller may modify. Wrapping
+    // Arrays.asList( tuples ) before sorting was cheaper and worked because the view sees
+    // the array being sorted underneath it, but it is fixed size: every caller promised a
+    // mutable list and handed out one that refuses to shrink.
+    final DelegatingTupleList result =
+      new DelegatingTupleList(
+        tupleIterable.getArity(),
+        new ArrayList<>( Arrays.asList( tuples ) ) );
     logTuples( tupleList, "Sorter.sortTuples" );
     return result;
   }
@@ -803,18 +807,15 @@ public class Sorter {
     // O(n + limit * log(limit)) to quicksort
     partialSort( pairs, pairComp, length );
 
-    // Use an abstract list to avoid doing a copy. The result is immutable.
-    return new AbstractList<>() {
-      @Override
-      public T get( int index ) {
-        return pairs[ index ].t;
-      }
-
-      @Override
-      public int size() {
-        return length;
-      }
-    };
+    // A list the caller may modify. The obvious cheaper thing is a read-only view over
+    // the pair array, and that is what stood here: it made every caller's promise of a
+    // mutable list untrue, and the caller found out as an UnsupportedOperationException
+    // in the middle of evaluation. The copy is of the first `length` elements only.
+    List<T> result = new ArrayList<>( length );
+    for ( int k = 0; k < length; k++ ) {
+      result.add( pairs[ k ].t );
+    }
+    return result;
   }
 
 
@@ -864,8 +865,11 @@ public class Sorter {
       elements[ --n ] = queue.poll().t;
     }
     assert queue.isEmpty();
-    //noinspection unchecked
-    return Arrays.asList( (T[]) elements );
+    // An ArrayList rather than Arrays.asList: the latter is fixed size, so a caller that
+    // was promised a mutable list cannot remove from it. See stablePartialSortMarc.
+    @SuppressWarnings( "unchecked" )
+    List<T> result = new ArrayList<>( Arrays.asList( (T[]) elements ) );
+    return result;
   }
 
 

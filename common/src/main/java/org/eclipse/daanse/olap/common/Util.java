@@ -134,7 +134,7 @@ import org.eclipse.daanse.olap.execution.ExecutionCatalogReaderWrapper;
 import org.eclipse.daanse.olap.execution.ExecutionImpl;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.fun.sort.Sorter;
-import org.eclipse.daanse.olap.function.def.member.validmeasure.ValidMeasureFunDef;
+import org.eclipse.daanse.olap.api.function.ValidMeasureFunction;
 import org.eclipse.daanse.olap.query.IdentifierNode;
 import org.eclipse.daanse.olap.query.IdentifierParser;
 import org.eclipse.daanse.olap.query.KeySegmentImpl;
@@ -2776,7 +2776,7 @@ public class Util {
     public static boolean containsValidMeasure( Expression... expressions ) {
         for ( Expression expression : expressions ) {
           if ( expression instanceof ResolvedFunCall fun ) {
-            return fun.getFunDef() instanceof ValidMeasureFunDef || containsValidMeasure( fun.getArgs() );
+            return fun.getFunDef() instanceof ValidMeasureFunction || containsValidMeasure( fun.getArgs() );
           }
         }
         return false;

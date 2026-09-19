@@ -88,24 +88,39 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
     public Connection getConnection(XmlaRequest caller, String catalogName) {
         Context<?> context = getContext(catalogName)
                 .orElseThrow(() -> new RuntimeException("No context found for catalog " + catalogName));
-        String sessionId = caller == null ? null : caller.sessionId();
+        // Without a caller there are no roles to open with, and no roles is what the
+        // rolap layer reads as the catalog's default role. Nothing here may reach a
+        // connection that way, so a missing caller is refused rather than served.
+        if (caller == null) {
+            throw new IllegalArgumentException("No caller to open a connection for, catalog " + catalogName);
+        }
+        List<String> roles = rolesOf(caller, context);
+        String sessionId = caller.sessionId();
         Map<String, Connection> held = sessionId == null ? null : sessionCache.get(sessionId);
         if (held != null) {
             // A session opens a connection when one is first wanted, not when it begins,
             // and keeps it until the session ends - which is also what closes it. A catalog
             // that appears mid-session becomes usable here with no special handling.
-            return held.computeIfAbsent(catalogName, name -> open(caller, context));
+            //
+            // Held under the roles as well as the catalog: a connection answers with the
+            // roles it was opened with, so one opened for other roles is not this
+            // caller's, even inside the same session.
+            return held.computeIfAbsent(heldAs(context, roles), key -> open(context, roles));
         }
         // No session: one connection for this request, with the caller's own roles.
         // Opening it without them would answer with the catalog's default role, which
         // is
         // how metadata used to escape a restricted caller that had not opened a
         // session.
-        return open(caller, context);
+        return open(context, roles);
     }
 
-    private Connection open(XmlaRequest caller, Context<?> context) {
-        return context.getConnection(new ConnectionProps(rolesOf(caller, context)));
+    private static Connection open(Context<?> context, List<String> roles) {
+        return context.getConnection(new ConnectionProps(roles));
+    }
+
+    private static String heldAs(Context<?> context, List<String> roles) {
+        return context.getName() + '\n' + String.join("\n", roles.stream().sorted().toList());
     }
 
     /**
@@ -114,9 +129,6 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
      * dropped rather than passed on.
      */
     private static List<String> rolesOf(XmlaRequest caller, Context<?> context) {
-        if (caller == null) {
-            return List.of();
-        }
         return context.getAccessRoles().stream().filter(caller::hasRole).toList();
     }
 

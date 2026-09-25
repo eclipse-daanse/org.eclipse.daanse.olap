@@ -61,53 +61,18 @@ public final class AllMembersContract {
             .edgeCaseMdx("level",     "[Geo].[All Geo].[North].Level.AllMembers")
 
             // [Geo] has no calculated members in the Sales cube: same members as .Members.
-            .valueKnownDefect("SetToStr([Geo].AllMembers)", "{[Geo].[Geo].[All Geo], [Geo].[Region].[F], [Geo].[Region].[M]}",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("SetToStr([Geo].[All Geo].[North].Level.AllMembers)", "{[Geo].[Region].[F], [Geo].[Region].[M]}",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
+            .value("SetToStr([Geo].AllMembers)",
+                    "{[Geo].[All Geo], [Geo].[All Geo].[North], [Geo].[All Geo].[North].[A], [Geo].[All Geo].[North].[B],"
+                    + " [Geo].[All Geo].[South], [Geo].[All Geo].[South].[C], [Geo].[All Geo].[South].[D],"
+                    + " [Geo].[All Geo].[South].[E]}")
+            .value("SetToStr([Geo].[All Geo].[North].Level.AllMembers)", "{[Geo].[All Geo].[North], [Geo].[All Geo].[South]}")
 
-            .dependsOnKnownDefect("[Geo].AllMembers",
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
-            .dependsOnKnownDefect("[Geo].[All Geo].[North].Level.AllMembers",
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
+            .dependsOn("[Geo].AllMembers")
+            .dependsOn("[Geo].[All Geo].[North].Level.AllMembers")
 
-            .resultStyleKnownDefect("[Geo].AllMembers", ResultStyle.MUTABLE_LIST, ResultStyle.MUTABLE_LIST,
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
-            .resultStyleKnownDefect("[Geo].AllMembers", ResultStyle.ITERABLE, ResultStyle.ITERABLE,
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
-            .independentMutableListKnownDefect("[Geo].AllMembers",
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in"
-                            + " org.eclipse.daanse.mdx, not in this module")
-            .independentMutableListKnownDefect("[Geo].[All Geo].[North].Level.AllMembers",
-                            "the MDX parser rejects this expression outright: .AllMembers is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in"
-                            + " org.eclipse.daanse.mdx, not in this module")
+            .resultStyle("[Geo].AllMembers", ResultStyle.MUTABLE_LIST, ResultStyle.MUTABLE_LIST)
+            .resultStyle("[Geo].AllMembers", ResultStyle.ITERABLE, ResultStyle.MUTABLE_LIST)
+            .independentMutableList("[Geo].AllMembers")
+            .independentMutableList("[Geo].[All Geo].[North].Level.AllMembers")
             .build();
 }

@@ -86,36 +86,11 @@ public final class DimensionContract {
             .edgeCaseMdx("level reference",      "[Geo].[All Geo].[North].Level.Dimension")
             .edgeCaseMdx("member reference",     "[Geo].[All Geo].[North].Dimension")
 
-            .valueKnownDefect("([Geo].[All Geo].[North].Dimension IS [Geo].Dimension)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("([Geo].[All Geo].[North].Level.Dimension IS [Geo].Dimension)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("([Geo].Dimension.Dimension IS [Geo].Dimension)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
+            .value("([Geo].[All Geo].[North].Dimension IS [Geo].Dimension)", "true")
+            .value("([Geo].[All Geo].[North].Level.Dimension IS [Geo].Dimension)", "true")
+            .value("([Geo].Dimension.Dimension IS [Geo].Dimension)", "true")
 
-            .dependsOnKnownDefect("[Geo].[All Geo].[North].Dimension",
-                            "the MDX parser rejects this expression outright: .Dimension is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
+            .dependsOn("[Geo].[All Geo].[North].Dimension")
 
             .waive(Promise.RESULT_SHAPE,
                     "returns a Dimension, not a set; the Set ResultStyle promise does not apply")

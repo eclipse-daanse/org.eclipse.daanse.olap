@@ -66,24 +66,12 @@ public final class HierarchizeContract {
             // shows the difference without needing to know the All member's schema-specific
             // name — the IIf compares names inside the MDX itself.
             .value("Count(Hierarchize([Geo].Members))", "8")
-            .valueKnownDefect("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}, PRE).Item(0).Name = "
-                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "YES",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")
-            .valueKnownDefect("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}, POST).Item(0).Name = "
-                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "NO",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")
-            .valueKnownDefect("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}).Item(0).Name = "
-                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "YES",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")   // default is PRE
+            .value("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}, PRE).Item(0).Name = "
+                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "YES")
+            .value("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}, POST).Item(0).Name = "
+                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "NO")
+            .value("IIf(Hierarchize({[Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent}).Item(0).Name = "
+                   + "[Geo].[All Geo].[North].Parent.Name, \"YES\", \"NO\")", "YES")   // default is PRE
 
             .dependsOn("Hierarchize([Geo].Members)")
             .dependsOn("Hierarchize([Geo].Members, POST)")

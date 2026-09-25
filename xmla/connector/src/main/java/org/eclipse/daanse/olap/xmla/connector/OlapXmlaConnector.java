@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.daanse.lcid.api.LcidService;
 import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.api.connection.Connection;
+import org.eclipse.daanse.olap.api.query.StatementLanguage;
 import org.eclipse.daanse.olap.xmla.connector.execute.OlapExecute;
 import org.eclipse.daanse.olap.xmla.connector.session.SessionScenarios;
 import org.eclipse.daanse.xmla.api.RowsetProvider;
@@ -36,6 +37,7 @@ import org.eclipse.daanse.xmla.api.XmlaSessionHandler;
 import org.eclipse.daanse.xmla.api.auth.AuthenticatedIdentity;
 import org.eclipse.daanse.olap.xmla.connector.api.ocd.SessionConfig;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -104,6 +106,22 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
         if (requestType != null) {
             providers.remove(requestType, provider);
         }
+    }
+
+    /**
+     * The further statement languages, e.g. DAX: whoever registers one serves its
+     * statements, without this connector knowing the language. A live list, read on
+     * every statement.
+     */
+    private final List<StatementLanguage> languages = new CopyOnWriteArrayList<>();
+
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    void bindStatementLanguage(StatementLanguage language) {
+        languages.add(language);
+    }
+
+    void unbindStatementLanguage(StatementLanguage language) {
+        languages.remove(language);
     }
 
     private static String requestTypeOf(Map<String, Object> properties) {
@@ -202,7 +220,7 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
     void activate(SessionConfig config) {
         this.config = config;
         this.contexts = new ContextsSupplyerImpl(contextGroup);
-        this.execute = new OlapExecute(contexts, scenarios, lcidService, this::dispatch);
+        this.execute = new OlapExecute(contexts, scenarios, lcidService, this::dispatch, languages);
         startSweeper();
     }
 

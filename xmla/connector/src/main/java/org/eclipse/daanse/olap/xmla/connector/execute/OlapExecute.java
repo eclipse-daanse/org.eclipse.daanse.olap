@@ -15,10 +15,14 @@ package org.eclipse.daanse.olap.xmla.connector.execute;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.daanse.lcid.api.LcidService;
@@ -31,6 +35,7 @@ import org.eclipse.daanse.olap.api.connection.ConnectionProps;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Measure;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.StatementLanguage;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
@@ -105,13 +110,24 @@ public class OlapExecute {
     private final SessionScenarios scenarios;
     private final LcidService lcidService;
     private final Discoverer discoverer;
+    private final List<StatementLanguage> languages;
 
     public OlapExecute(ContextListSupplyer contexts, SessionScenarios scenarios, LcidService lcidService,
             Discoverer discoverer) {
+        this(contexts, scenarios, lcidService, discoverer, List.of());
+    }
+
+    /**
+     * @param languages the further statement languages; read on every statement,
+     *                  so a live list keeps up with languages that come and go
+     */
+    public OlapExecute(ContextListSupplyer contexts, SessionScenarios scenarios, LcidService lcidService,
+            Discoverer discoverer, List<StatementLanguage> languages) {
         this.contexts = contexts;
         this.scenarios = scenarios;
         this.lcidService = lcidService;
         this.discoverer = discoverer;
+        this.languages = languages;
     }
 
     /**
@@ -211,6 +227,16 @@ public class OlapExecute {
         // (removeSegmentCacheManager) - so the transaction-boundary reap
         // no longer depends on matching the connection object either.
         try {
+            // A further language comes first: its statements are not MDX, and the MDX
+            // parser would only fail on them.
+            Optional<StatementLanguage> language = languageOf(mdx);
+            if (language.isPresent()) {
+                if (named.isEmpty()) {
+                    LOGGER.warn("no catalog named and more than one available; nothing is run");
+                    return null;
+                }
+                return statementLanguage(language.get(), connection, mdx, properties, context.sessionId());
+            }
             QueryComponent queryComponent = connection.parseStatement(mdx);
 
             String sessionId = context.sessionId();
@@ -247,6 +273,76 @@ public class OlapExecute {
         } finally {
             connection.close();
         }
+    }
+
+    private Optional<StatementLanguage> languageOf(String statement) {
+        for (StatementLanguage language : languages) {
+            if (language.accepts(statement)) {
+                return Optional.of(language);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * A statement of a further language: each of its result sets becomes a rowset,
+     * several of them an {@code xmla-m:results} as a Batch answers. A failure is the
+     * command's, not the session's, so the client reads it as an error in the
+     * result.
+     */
+    private EObject statementLanguage(StatementLanguage language, Connection connection, String statement,
+            PropertyList properties, String sessionId) {
+        // A writeback session's pending values take part here too, as in an MDX query.
+        Scenario scenario = scenarios.of(sessionId);
+        connection.setScenario(scenario != null ? scenario : connection.createScenario());
+
+        List<ResultSet> resultSets;
+        try {
+            resultSets = language.execute(connection, statement, languageProperties(properties));
+        } catch (SQLException e) {
+            throw new XmlaCommandFailedException(null, e.getMessage(), SOURCE, null, e);
+        }
+        try {
+            List<EObject> rowsets = new ArrayList<>(resultSets.size());
+            for (ResultSet resultSet : resultSets) {
+                rowsets.add(applyContent(RowsetResults.fromResultSet(resultSet, -1, schemaIncluded(properties)),
+                        properties));
+            }
+            if (rowsets.isEmpty()) {
+                return null;
+            }
+            if (rowsets.size() == 1) {
+                return rowsets.get(0);
+            }
+            org.eclipse.daanse.xmla.model.multipleresults.Results results = org.eclipse.daanse.xmla.model.multipleresults.MultipleResultsFactory.eINSTANCE
+                    .createResults();
+            results.getResults().addAll(rowsets);
+            return results;
+        } catch (SQLException e) {
+            throw new XmlaCommandFailedException(null, e.getMessage(), SOURCE, null, e);
+        } finally {
+            for (ResultSet resultSet : resultSets) {
+                try {
+                    resultSet.close();
+                } catch (SQLException ignored) {
+                    // closing is best effort
+                }
+            }
+        }
+    }
+
+    /** The request properties a further language may need, by their XMLA names. */
+    static Map<String, String> languageProperties(PropertyList properties) {
+        Map<String, String> result = new LinkedHashMap<>();
+        if (properties != null) {
+            if (properties.getCatalog() != null && !properties.getCatalog().isEmpty()) {
+                result.put("Catalog", properties.getCatalog());
+            }
+            if (properties.getCube() != null && !properties.getCube().isEmpty()) {
+                result.put("Cube", properties.getCube());
+            }
+        }
+        return result;
     }
 
     private EObject runQuery(Query query, PropertyList properties, String sessionId) {

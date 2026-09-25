@@ -78,60 +78,16 @@ public final class AncestorsContract {
 
             // [Geo] is flat (hasAll=true): F has exactly one ancestor, the All member —
             // the same member CurrentMemberContract establishes via [Geo].[All Geo].[North].Parent.
-            .valueKnownDefect("Count(Ancestors([Geo].[All Geo].[North], 1))", "1",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("Count(Ancestors([Geo].[All Geo].[North], 0))", "0",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("Count(Ancestors([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level))", "1",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("(Ancestors([Geo].[All Geo].[North], 1).Item(0) IS [Geo].[All Geo].[North].Parent)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
+            .value("Count(Ancestors([Geo].[All Geo].[North], 1))", "1")
+            .value("Count(Ancestors([Geo].[All Geo].[North], 0))", "0")
+            .value("Count(Ancestors([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level))", "1")
+            .value("(Ancestors([Geo].[All Geo].[North], 1).Item(0) IS [Geo].[All Geo].[North].Parent)", "true")
 
-            .dependsOnKnownDefect("Ancestors([Geo].[All Geo].[North], 1)",
-                            "the MDX parser rejects this expression outright: Ancestors is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
+            .dependsOn("Ancestors([Geo].[All Geo].[North], 1)")
 
-            .resultStyleKnownDefect("Ancestors([Geo].[All Geo].[North], 1)", ResultStyle.MUTABLE_LIST, ResultStyle.MUTABLE_LIST,
-                            "the MDX parser rejects this expression outright: Ancestors is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
-            .resultStyleKnownDefect("Ancestors([Geo].[All Geo].[North], 1)", ResultStyle.ITERABLE, ResultStyle.ITERABLE,
-                            "the MDX parser rejects this expression outright: Ancestors is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
-            .independentMutableListKnownDefect("Ancestors([Geo].[All Geo].[North], 1)",
-                            "the MDX parser rejects this expression outright: Ancestors is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in"
-                            + " org.eclipse.daanse.mdx, not in this module")
+            .resultStyle("Ancestors([Geo].[All Geo].[North], 1)", ResultStyle.MUTABLE_LIST, ResultStyle.MUTABLE_LIST)
+            .resultStyle("Ancestors([Geo].[All Geo].[North], 1)", ResultStyle.ITERABLE, ResultStyle.MUTABLE_LIST)
+            .independentMutableList("Ancestors([Geo].[All Geo].[North], 1)")
 
             .build();
 }

@@ -69,19 +69,11 @@ public final class AsContract {
 
             // AsAliasCalc delegates straight to the aliased expression's own evaluation; the
             // alias itself introduces no dependency of its own.
-            .dependsOnKnownDefect("[Geo].Members as t",
-                            "the name introduced by AS never comes into scope: even the"
-                            + " canonical Generate(set AS t, {t.Current}) form fails with \"MDX"
-                            + " object t not found\", so no expression using an alias can be"
-                            + " validated")
+            .dependsOn("[Geo].Members as t")
 
             // AsAliasCalc extends AbstractProfilingNestedTupleIteratorCalc, not the TupleList
             // base every other set-returning contract in this suite uses — it is iterator-shaped
             // by construction, so only ITERABLE is asserted here.
-            .resultStyleKnownDefect("[Geo].Members as t", ITERABLE, ITERABLE,
-                            "the name introduced by AS never comes into scope: even the"
-                            + " canonical Generate(set AS t, {t.Current}) form fails with \"MDX"
-                            + " object t not found\", so no expression using an alias can be"
-                            + " validated")
+            .resultStyle("[Geo].Members as t", ITERABLE, ITERABLE)
             .build();
 }

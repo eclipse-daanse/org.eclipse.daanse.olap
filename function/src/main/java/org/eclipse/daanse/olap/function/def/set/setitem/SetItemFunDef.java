@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.operation.MethodOperationAtom;
 import org.eclipse.daanse.mdx.model.api.expression.operation.OperationAtom;
+import org.eclipse.daanse.mdx.model.api.expression.operation.PlainPropertyOperationAtom;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.IntegerCalc;
 import org.eclipse.daanse.olap.api.calc.StringCalc;
@@ -28,6 +30,7 @@ import org.eclipse.daanse.olap.api.function.FunctionMetaData;
 import org.eclipse.daanse.olap.api.query.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.LevelType;
 import org.eclipse.daanse.olap.api.type.MemberType;
 import org.eclipse.daanse.olap.api.type.SetType;
 import org.eclipse.daanse.olap.api.type.StringType;
@@ -35,6 +38,7 @@ import org.eclipse.daanse.olap.api.type.TupleType;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.fun.FunUtil;
 import org.eclipse.daanse.olap.function.core.AbstractFunctionDefinition;
+import org.eclipse.daanse.olap.query.component.UnresolvedFunCallImpl;
 
 public class SetItemFunDef extends AbstractFunctionDefinition {
     
@@ -43,6 +47,23 @@ public class SetItemFunDef extends AbstractFunctionDefinition {
     
     public SetItemFunDef(FunctionMetaData functionMetaData) {
         super(functionMetaData);
+    }
+
+    /**
+     * The resolver lets a Level stand for the set of its members, but nothing
+     * makes that set: {@code <Level>.Item(n)} would reach {@link #getResultType}
+     * and the compiler with a Level where they need a set. So the Level becomes
+     * {@code <Level>.Members} here, as it does where a set is compiled from one.
+     */
+    @Override
+    protected Expression validateArgument(Validator validator, Expression[] args, int argumentNumber,
+            DataType category) {
+        Expression argument = super.validateArgument(validator, args, argumentNumber, category);
+        if (argumentNumber == 0 && argument.getType() instanceof LevelType) {
+            return new UnresolvedFunCallImpl(new PlainPropertyOperationAtom("Members"),
+                    new Expression[] { argument }).accept(validator);
+        }
+        return argument;
     }
 
     @Override

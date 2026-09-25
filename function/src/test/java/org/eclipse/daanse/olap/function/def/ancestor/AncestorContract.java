@@ -23,6 +23,7 @@ import static org.eclipse.daanse.olap.api.DataType.STRING;
 
 import org.eclipse.daanse.olap.testkit.function.FunctionContract.Promise;
 
+
 /**
  * The contract of the MDX function {@code Ancestor(<Member>, <Level>|<Numeric Expression>)}.
  * {@code AncestorResolver} is an {@code AbstractFunctionDefinitionMultiResolver} over two
@@ -82,41 +83,13 @@ public final class AncestorContract {
             // [Geo] is flat (hasAll=true): F's only real ancestor, at distance 1 or at the
             // All member's own level, is the All member — the same member CurrentMemberContract
             // establishes via [Geo].[All Geo].[North].Parent.
-            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level) IS [Geo].[All Geo].[North].Parent)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], 1) IS [Geo].[All Geo].[North].Parent)", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
-            .valueKnownDefect("(Ancestor([Geo].[All Geo].[North], 0) IS [Geo].[All Geo].[North])", "true",
-                            "the MDX parser cannot read this expression, and a calculated member"
-                            + " whose formula it cannot read is taken as a string literal rather"
-                            + " than refused, so the cell holds the text of the formula and the"
-                            + " function is never called. The fallback is deliberate and sits in"
-                            + " MdxParserUtil.getExpression in org.eclipse.daanse.mdx: the catch at"
-                            + " line 113 swallows the parse failure, prints a stack trace and"
-                            + " returns the literal, with a comment doubting that choice")
+            .value("(Ancestor([Geo].[All Geo].[North], [Geo].[All Geo].[North].Parent.Level) IS [Geo].[All Geo].[North].Parent)", "true")
+            .value("(Ancestor([Geo].[All Geo].[North], 1) IS [Geo].[All Geo].[North].Parent)", "true")
+            .value("(Ancestor([Geo].[All Geo].[North], 0) IS [Geo].[All Geo].[North])", "true")
 
-            .dependsOnKnownDefect("Ancestor([Geo].[All Geo].[North], 1)",
-                            "the MDX parser rejects this expression outright: Ancestor is a"
-                            + " reserved token that its grammar does not accept here, so the query"
-                            + " never reaches the function. The defect is in org.eclipse.daanse.mdx,"
-                            + " not in this module")
+            .dependsOn("Ancestor([Geo].[All Geo].[North], 1)")
 
             .waive(Promise.RESULT_SHAPE,
-                    "no expression of this function compiles: the parser rejects Ancestor"
-                            + " outright, and an unreadable formula is taken as a string literal,"
-                            + " so what a shape case would measure is a constant and not this"
-                            + " function at all. See the recorded defects on the other promises")
+                    "returns a Member, not a set; the Set ResultStyle promise does not apply")
             .build();
 }

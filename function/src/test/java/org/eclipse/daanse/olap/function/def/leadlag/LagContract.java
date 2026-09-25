@@ -83,28 +83,11 @@ public final class LagContract {
 
             // [Geo] is a one-level hierarchy under an All member: F is index 0, M is index 1
             // (same ordering FirstChildContract/FirstSiblingContract rely on).
-            .valueKnownDefect("([Geo].[All Geo].[North].Lag(0) IS [Geo].[All Geo].[North])", "true",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")
-            .valueKnownDefect("([Geo].[All Geo].[South].Lag(1) IS [Geo].[All Geo].[North])", "true",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")
-            .valueKnownDefect("([Geo].[All Geo].[North].Lag(-1) IS [Geo].[All Geo].[South])", "true",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression. The no-argument forms work. The defect is in the MDX"
-                            + " parser, org.eclipse.daanse.mdx, not here")
+            .value("([Geo].[All Geo].[North].Lag(0) IS [Geo].[All Geo].[North])", "true")
+            .value("([Geo].[All Geo].[South].Lag(1) IS [Geo].[All Geo].[North])", "true")
+            .value("([Geo].[All Geo].[North].Lag(-1) IS [Geo].[All Geo].[South])", "true")
 
-            .dependsOnKnownDefect("[Geo].[All Geo].[North].Lag(1)",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression, so this fails validation with \"no function matches"
-                            + " signature\". The no-argument forms such as .NextMember work. The"
-                            + " defect is in the MDX parser, org.eclipse.daanse.mdx, not here")
+            .dependsOn("[Geo].[All Geo].[North].Lag(1)")
 
             .waive(Promise.RESULT_SHAPE,
                     "returns a Member, not a set; the Set ResultStyle promise does not apply")

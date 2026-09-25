@@ -45,13 +45,12 @@ import org.eclipse.daanse.olap.function.def.tupleitem.TupleItemFunDef;
  * type-compatible. Only Level (which converts to Set but not to Tuple) and Dimension/Hierarchy
  * (which convert to Tuple but not to Set) are unambiguous.
  *
- * <p>{@code SetItemFunDef.getResultType} does an unchecked {@code (SetType) args[0].getType()}
- * and {@code compileList} demands a literal {@code SetType} — the same shape of gap {@link
- * ExtractContract} documents for a bare Level argument (Level -> Set is never materialized
- * into an actual set literal, unlike Member/Tuple -> Set). Unlike Extract, this is not
- * fixed here: it only fires once a query is actually compiled (Stage B), which this module
- * never reaches, so it is left as a precise, documented, currently-inert edge case rather than
- * force a promise waiver — same treatment as {@code BottomCountContract}'s negative-count gap.
+ * <p>Level -> Set resolves (cost 1) but the resolver never materializes the set, so a bare
+ * Level used to reach {@code SetItemFunDef.getResultType}'s {@code (SetType)} cast and
+ * {@code compileList} as a Level and crash with a {@code ClassCastException} — the same shape
+ * of gap {@link ExtractContract} documents for a bare Level argument. {@code
+ * SetItemFunDef.validateArgument} now turns the Level into {@code <Level>.Members}, so
+ * {@code <Level>.Item(n)} is the n-th member of the level.
  */
 public final class ItemContract {
 
@@ -89,36 +88,20 @@ public final class ItemContract {
             .edgeCaseMdx("index NULL",                "[Geo].Members.Item(NULL)")
             .edgeCaseMdx("name lookup, found",        "[Geo].Members.Item(\"F\")")
             .edgeCaseMdx("name lookup, not found",    "[Geo].Members.Item(\"ZZZ\")")
-            .edgeCaseMdxKnownToCrash("tuple item in range",       "([Geo].[All Geo].[North], [Measures].[Amount]).Item(0)",
-                            "the MDX parser builds a MethodOperationAtom with a null name for .Item"
-                            + " applied to a parenthesised tuple and throws NullPointerException"
-                            + " before this function is reached; the defect is in the parser,"
-                            + " org.eclipse.daanse.mdx, not here")
-            .edgeCaseMdxKnownToCrash("tuple item out of range",   "([Geo].[All Geo].[North], [Measures].[Amount]).Item(5)",
-                            "the MDX parser builds a MethodOperationAtom with a null name for .Item"
-                            + " applied to a parenthesised tuple and throws NullPointerException"
-                            + " before this function is reached; the defect is in the parser,"
-                            + " org.eclipse.daanse.mdx, not here")
-            .edgeCaseMdxKnownToCrash("tuple item index NULL",     "([Geo].[All Geo].[North], [Measures].[Amount]).Item(NULL)",
-                            "the MDX parser builds a MethodOperationAtom with a null name for .Item"
-                            + " applied to a parenthesised tuple and throws NullPointerException"
-                            + " before this function is reached; the defect is in the parser,"
-                            + " org.eclipse.daanse.mdx, not here")
-            .edgeCaseMdxKnownToCrash("member as degenerate tuple", "([Geo].[All Geo].[North]).Item(0)",
-                            "the MDX parser builds a MethodOperationAtom with a null name for .Item"
-                            + " applied to a parenthesised tuple and throws NullPointerException"
-                            + " before this function is reached; the defect is in the parser,"
-                            + " org.eclipse.daanse.mdx, not here")
-            // Documented, currently-inert gap: see the class Javadoc. Level -> Set resolves
-            // (cost 1) but is never materialized, so SetItemFunDef.getResultType's unchecked
-            // (SetType) cast would throw ClassCastException once this ever reaches Stage B.
-            .edgeCaseMdx("bare Level calling object (documented gap)", "[Geo].[Region].Item(0)")
+            .edgeCaseMdx("tuple item in range",       "([Geo].[All Geo].[North], [Measures].[Amount]).Item(0)")
+            .edgeCaseMdx("tuple item out of range",   "([Geo].[All Geo].[North], [Measures].[Amount]).Item(5)")
+            .edgeCaseMdx("tuple item index NULL",     "([Geo].[All Geo].[North], [Measures].[Amount]).Item(NULL)")
+            .edgeCaseMdx("member as degenerate tuple", "([Geo].[All Geo].[North]).Item(0)")
+            // Level -> Set: see the class Javadoc.
+            .edgeCaseMdx("bare Level calling object", "[Geo].[Region].Item(0)")
 
             // [Geo].Members is {F, M} (F at index 0): matches HeadContract's established
             // ordering.
             .value("[Geo].Members.Item(0).Name", "All Gender")
             .value("[Geo].Members.Item(1).Name", "F")
             .value("[Geo].Members.Item(\"F\").Name", "F")
+            // a bare Level is the set of its members: F is the first of [Geo].[Region]
+            .value("[Geo].[Region].Item(0).Name", "F")
             // Out-of-range/not-found/NULL-index results are covered as edge cases above
             // (survives-without-crashing), not as value assertions: they return the
             // hierarchy's null-member sentinel, and this contract does not assert what its
@@ -126,17 +109,8 @@ public final class ItemContract {
             .value("([Geo].[All Geo].[North], [Measures].[Amount]).Item(0).Name", "F")
             .value("([Geo].[All Geo].[North], [Measures].[Amount]).Item(1).Name", "Unit Sales")
 
-            .scalarDependsOnKnownDefect("[Geo].Members.Item(0).Name",
-                            "a method call that takes an argument does not resolve: the"
-                            + " argument is lost and the receiver is typed as a numeric"
-                            + " expression, so this fails validation with \"no function matches"
-                            + " signature\". The no-argument forms such as .NextMember work. The"
-                            + " defect is in the MDX parser, org.eclipse.daanse.mdx, not here")
-            .scalarDependsOnKnownDefect("([Geo].[All Geo].[North], [Measures].[Amount]).Item(1).Name",
-                            "the parser builds a method operation with a null name for .Item"
-                            + " applied to a parenthesised tuple and throws NullPointerException"
-                            + " before the function is reached. The defect is in"
-                            + " org.eclipse.daanse.mdx, not here")
+            .scalarDependsOn("[Geo].Members.Item(0).Name")
+            .scalarDependsOn("([Geo].[All Geo].[North], [Measures].[Amount]).Item(1).Name")
 
             .waive(FunctionContract.Promise.RESULT_SHAPE,
                     "returns a Member or Tuple, never a Set; there is no set-context ResultStyle to honor")

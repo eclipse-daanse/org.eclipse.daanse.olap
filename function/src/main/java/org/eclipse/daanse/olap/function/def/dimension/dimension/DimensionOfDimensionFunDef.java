@@ -18,12 +18,9 @@ import org.eclipse.daanse.mdx.model.api.expression.operation.PlainPropertyOperat
 import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.compiler.ExpressionCompiler;
-import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.function.FunctionInterface;
 import org.eclipse.daanse.olap.api.function.FunctionMetaData;
-import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
 import org.eclipse.daanse.olap.function.core.FunctionMetaDataR;
 import org.eclipse.daanse.olap.function.core.FunctionParameterR;
 import org.eclipse.daanse.olap.function.core.AbstractFunctionDefinition;
@@ -41,11 +38,13 @@ public class DimensionOfDimensionFunDef extends AbstractFunctionDefinition {
 		super(functionMetaData);
 	}
 
+	/**
+	 * The dimension of a dimension is the dimension itself - also when it is computed,
+	 * as in {@code [Geo].Dimension.Dimension}, not only a literal one.
+	 */
 	@Override
 	public Calc<?> compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-		DimensionExpression dimensionExpression = (DimensionExpression) call.getArg(0);
-		Dimension dimension = dimensionExpression.getDimension();
-		return ConstantDimensionCalc.of(dimension);
+		return compiler.compileDimension(call.getArg(0));
 	}
 
 }

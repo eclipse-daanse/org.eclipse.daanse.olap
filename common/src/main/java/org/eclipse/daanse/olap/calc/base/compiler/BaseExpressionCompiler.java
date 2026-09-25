@@ -195,8 +195,10 @@ public class BaseExpressionCompiler implements ExpressionCompiler {
     public LevelCalc compileLevel(Expression expression) {
         final Type type = expression.getType();
         return switch (type) {
-            case MemberType _ -> {
+            case MemberType _, DimensionType _ -> {
                 // <Member> --> <Member>.Level
+                // <Dimension> --> <Dimension>.CurrentMember.Level: the conversion
+                // Dimension -> Level goes through the member of the default hierarchy
                 final MemberCalc memberCalc = compileMember(expression);
                 yield new MemberLevelCalc(LevelType.forType(type), memberCalc);
             }

@@ -76,6 +76,9 @@ public final class OrdinalContract {
             // (the same numbering LevelNumberContract establishes for [Geo].[All Geo].[North].Level_Number).
             .value("[Geo].[All Geo].[North].Level.Ordinal", "1")
             .value("[Geo].[All Geo].[North].Parent.Level.Ordinal", "0")
+            // Dimension -> Level goes through the current member of the default hierarchy,
+            // the All member here, whose level sits at depth 0
+            .value("[Geo].Dimension.Ordinal", "0")
 
             .scalarDependsOn("[Geo].[All Geo].[North].Level.Ordinal")
 

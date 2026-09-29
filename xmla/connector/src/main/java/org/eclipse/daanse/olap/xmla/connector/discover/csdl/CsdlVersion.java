@@ -17,5 +17,16 @@ package org.eclipse.daanse.olap.xmla.connector.discover.csdl;
  * the two differ in enough places that the emitters branch on it.
  */
 public enum CsdlVersion {
-    V1_1, V2_0
+    V1_1("1.1"), V2_0("2.0");
+
+    private String value;
+
+	CsdlVersion(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
 }

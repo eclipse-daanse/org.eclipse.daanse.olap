@@ -25,8 +25,13 @@ import org.eclipse.daanse.xmla.model.csdl.v2.bi.BiFactory;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.BiPackage;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TEntityContainer;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TEntityType;
+import org.eclipse.daanse.xmla.model.csdl.v2.bi.TProperty;
+import org.eclipse.daanse.xmla.model.csdl.v2.bi.TStability;
 import org.eclipse.daanse.xmla.model.csdl.v2.edm.EdmFactory;
 import org.eclipse.daanse.xmla.model.csdl.v2.edm.EntityContainerType;
+import org.eclipse.daanse.xmla.model.csdl.v2.edm.TEntityKeyElement;
+import org.eclipse.daanse.xmla.model.csdl.v2.edm.TEntityProperty;
+import org.eclipse.daanse.xmla.model.csdl.v2.edm.TPropertyRef;
 import org.eclipse.daanse.xmla.model.csdl.v2.edm.TSchema;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
@@ -59,14 +64,14 @@ public class CsdlEmitterImpl implements CsdlEmitter {
 
                 EStructuralFeature versionFeature = ExtendedMetaData.INSTANCE.demandFeature(BiPackage.eNS_URI,
                         "Version", false);
-                schema.getAnyAttribute().add(versionFeature, req.version());
+                schema.getAnyAttribute().add(versionFeature, req.version().getValue());
 
                 EntityContainerType container = edmFactory.createEntityContainerType();
                 container.setName(names.namespaceOf(catalog));
 
                 TEntityContainer biContainer = biFactory.createTEntityContainer();
-                biContainer.setCaption(cube.getName());
-                biContainer.setCulture(req.localePolicy().locale().getDisplayName());
+                biContainer.setCaption(names.namespaceOf(catalog));
+                biContainer.setCulture(req.localePolicy().locale().toLanguageTag());
                 container.setBiEntityContainer(biContainer);
                 schema.getEntityContainer().add(container);
 
@@ -88,6 +93,7 @@ public class CsdlEmitterImpl implements CsdlEmitter {
                         TEntityType biEntityType = biFactory.createTEntityType();
                         edmEntityType.setBiEntityType(biEntityType);
                         edmEntityType.setName(names.tableNameOf(dimension));
+                        emitRowNumberKey(edmEntityType);
                         dimensionEntityEmitter.emitDimensionEntity(schema, container, cube, dimension, ctx);
 
                         schema.getEntityType().add(edmEntityType);
@@ -119,5 +125,28 @@ public class CsdlEmitterImpl implements CsdlEmitter {
             throw new CsdlEmitException("perspective is absent in requers");
         }
     }
+
+    /**
+     * The hidden RowNumber column every table entity is keyed on.
+     */
+    private void emitRowNumberKey(org.eclipse.daanse.xmla.model.csdl.v2.edm.TEntityType edmEntityType) {
+        TEntityKeyElement key = edmFactory.createTEntityKeyElement();
+        TPropertyRef keyRef = edmFactory.createTPropertyRef();
+        keyRef.setName(ROW_NUMBER);
+        key.getPropertyRef().add(keyRef);
+        edmEntityType.setKey(key);
+
+        TEntityProperty rowNumber = edmFactory.createTEntityProperty();
+        rowNumber.setName(ROW_NUMBER);
+        rowNumber.setNullable(false);
+        rowNumber.setType("Int64");
+        TProperty biProperty = biFactory.createTProperty();
+        biProperty.setHidden(true);
+        biProperty.setStability(TStability.ROW_NUMBER);
+        rowNumber.setBiProperty(biProperty);
+        edmEntityType.getProperty().add(rowNumber);
+    }
+
+    private static final String ROW_NUMBER = "RowNumber";
 
 }

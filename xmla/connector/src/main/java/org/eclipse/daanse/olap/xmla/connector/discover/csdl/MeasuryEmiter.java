@@ -100,10 +100,8 @@ public class MeasuryEmiter {
         applyFacets(p, type.facets());
 
         TMeasure bi = ctx.bi().createTMeasure();
-        bi.setCaption(member.getCaption());
-        if (!p.getName().equals(member.getName())) {
-            bi.setReferenceName(member.getName());
-        }
+        bi.setCaption(member.getName());
+        bi.setReferenceName(member.getName());
         boolean simple = kind == MeasureKind.STORED && aggName.map(SIMPLE_AGGREGATORS::contains).orElse(false);
         bi.setIsSimpleMeasure(simple);
         if (aggName.isPresent() && !SIMPLE_AGGREGATORS.contains(aggName.get())) {

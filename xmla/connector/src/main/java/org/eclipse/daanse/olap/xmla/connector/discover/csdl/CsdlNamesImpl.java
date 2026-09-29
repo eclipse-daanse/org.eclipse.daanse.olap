@@ -37,7 +37,7 @@ public class CsdlNamesImpl implements CsdlNames {
 
     @Override
     public String columnNameOf(Level level, Property memberProperty) {
-        return removeSquareBrackets(level.getUniqueName()) + "_" + memberProperty.getName();
+        return removeSquareBrackets(level.getUniqueName() + memberProperty.getName());
     }
 
     @Override
@@ -61,6 +61,7 @@ public class CsdlNamesImpl implements CsdlNames {
     }
 
     private static String removeSquareBrackets(String name) {
-        return name.replace("[", "").replace("]", "").replace(".", "_").replace(" ", "_");
+        return name.replace("[", "").replace("]", "").replace("-", "").replace("–", "").replace("_", "")
+                .replace(".", "").replace(" ", "");
     }
 }

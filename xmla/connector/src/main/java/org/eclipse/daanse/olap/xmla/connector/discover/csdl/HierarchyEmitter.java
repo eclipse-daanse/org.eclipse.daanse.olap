@@ -26,6 +26,7 @@ import org.eclipse.daanse.olap.api.element.Property;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.BiFactory;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.ContainsHiddenMembersType;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.SourceType;
+import org.eclipse.daanse.xmla.model.csdl.v2.bi.TDefaultAggregateFunction;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TDocumentation;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TEntityType;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.THideMembers;
@@ -147,6 +148,9 @@ public final class HierarchyEmitter {
         p.setName(ctx.mangle(level.getUniqueName()));
         typeMapper.apply(p, level.getDatatype());
         TProperty biProp = bi.createTProperty();
+        biProp.setCaption(level.getName());
+        biProp.setReferenceName(level.getUniqueName().replaceAll("\\[", "").replaceAll("\\]", ""));
+        biProp.setDefaultAggregateFunction(TDefaultAggregateFunction.NONE);
         orderByOf(level).ifPresent(biProp::setOrderBy);
         statisticsOf(level).ifPresent(biProp::setStatistics);
         p.setBiProperty(biProp);

@@ -43,7 +43,8 @@ public class DimensionEntityEmitter {
         if (!dim.isVisible()) {
             biEntitySet.setHidden(true);
         }
-        biEntitySet.setCaption(table);
+        biEntitySet.setCaption(dim.getName());
+        biEntitySet.setReferenceName(dim.getName());
         entitySet.setBiEntitySet(biEntitySet);
 
         container.getEntitySet().add(entitySet);

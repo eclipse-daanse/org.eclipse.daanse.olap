@@ -195,6 +195,8 @@ public final class HierarchyEmitter {
             ref.setName(levelProp.getName());
             relatedTo.getPropertyRef().add(ref);
             biProp.setRelatedTo(relatedTo);
+            biProp.setReferenceName(level.getUniqueName().replaceAll("\\[", "").replaceAll("\\]", "") + "." + property.getName());
+            biProp.setDefaultAggregateFunction(TDefaultAggregateFunction.NONE);
             if (!Objects.equals(property.getCaption(), property.getName())) {
                 biProp.setCaption(property.getCaption());
             }

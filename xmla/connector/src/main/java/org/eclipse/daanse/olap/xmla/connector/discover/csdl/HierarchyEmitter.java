@@ -82,12 +82,6 @@ public final class HierarchyEmitter {
             ctx.info("Hierarchie {} ohne emittierbare Level uebersprungen", hierarchy.getUniqueName());
             return;
         }
-        if (real.stream().anyMatch(Level::isParentChild)) {
-            ctx.warn("parent-child hierarchy {} has no bi:Hierarchy form; its columns are " + "emitted flat",
-                    hierarchy.getUniqueName());
-            real.forEach(l -> emitLevelProperty(l, edmEntity));
-            return;
-        }
 
         THierarchy tHierarchy = bi.createTHierarchy();
         tHierarchy.setName(ctx.mangle(hierarchy.getUniqueName()));
@@ -100,10 +94,21 @@ public final class HierarchyEmitter {
         }
         docSummary(hierarchy.getDescription()).ifPresent(tHierarchy::setDocumentation);
 
-        for (Level level : real) {
-            TEntityProperty levelProp = emitLevelProperty(level, edmEntity);
-            tHierarchy.getLevel().add(emitLevel(level, levelProp));
-            emitMemberProperties(level, levelProp, edmEntity);
+        if (real.stream().anyMatch(Level::isParentChild)) {
+            ctx.warn("parent-child hierarchy {} has no bi:Hierarchy form; its columns are " + "emitted flat",
+                    hierarchy.getUniqueName());
+            real.forEach(l ->  {
+                if (l.isParentChild()) {
+                    TEntityProperty levelProp = emitLevelProperty(l, edmEntity);
+                    tHierarchy.getLevel().add(emitLevel(l, levelProp));
+                }
+            });
+        } else {
+            for (Level level : real) {
+                TEntityProperty levelProp = emitLevelProperty(level, edmEntity);
+                tHierarchy.getLevel().add(emitLevel(level, levelProp));
+                emitMemberProperties(level, levelProp, edmEntity);
+            }
         }
         biEntity.getHierarchy().add(tHierarchy);
 
@@ -119,6 +124,8 @@ public final class HierarchyEmitter {
         tLevel.setName(ctx.mangle(level.getUniqueName()));
         if (!Objects.equals(level.getCaption(), level.getName())) {
             tLevel.setCaption(level.getCaption());
+        } else {
+            tLevel.setCaption(level.getName());
         }
         SourceType source = bi.createSourceType();
         org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef ref = bi.createTPropertyRef();
@@ -148,6 +155,7 @@ public final class HierarchyEmitter {
         p.setName(ctx.mangle(level.getUniqueName()));
         typeMapper.apply(p, level.getDatatype());
         TProperty biProp = bi.createTProperty();
+        biProp.setHidden(true);
         biProp.setCaption(level.getName());
         biProp.setReferenceName(level.getUniqueName().replaceAll("\\[", "").replaceAll("\\]", ""));
         biProp.setDefaultAggregateFunction(TDefaultAggregateFunction.NONE);
@@ -190,15 +198,26 @@ public final class HierarchyEmitter {
             p.setName(ctx.mangle(level.getUniqueName() + "_" + property.getName()));
             typeMapper.apply(p, property.getType());
             TProperty biProp = bi.createTProperty();
-            TPropertyRefs relatedTo = bi.createTPropertyRefs();
-            org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef ref = bi.createTPropertyRef();
-            ref.setName(levelProp.getName());
-            relatedTo.getPropertyRef().add(ref);
-            biProp.setRelatedTo(relatedTo);
+            //TPropertyRefs relatedTo = bi.createTPropertyRefs();
+            //org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef ref = bi.createTPropertyRef();
+            //ref.setName(levelProp.getName());
+            //relatedTo.getPropertyRef().add(ref);
+            //biProp.setRelatedTo(relatedTo);
+
+            if (levelProp.getBiProperty().getRelatedTo() == null) {
+                levelProp.getBiProperty().setRelatedTo(bi.createTPropertyRefs());
+            }
+            org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef pref = bi.createTPropertyRef();
+            pref.setName(p.getName()); 
+            levelProp.getBiProperty().getRelatedTo().getPropertyRef().add(pref);
+            
+            //biProp.setHidden(true);
             biProp.setReferenceName(level.getUniqueName().replaceAll("\\[", "").replaceAll("\\]", "") + "." + property.getName());
             biProp.setDefaultAggregateFunction(TDefaultAggregateFunction.NONE);
             if (!Objects.equals(property.getCaption(), property.getName())) {
                 biProp.setCaption(property.getCaption());
+            } else {
+                biProp.setCaption(property.getName());
             }
             p.setBiProperty(biProp);
             edmEntity.getProperty().add(p);

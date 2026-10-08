@@ -23,6 +23,7 @@ import org.eclipse.daanse.xmla.model.csdl.v2.bi.KpiTrendType;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TDocumentation;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TKpi;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.TMeasure;
+import org.eclipse.daanse.xmla.model.csdl.v2.bi.TProperty;
 import org.eclipse.daanse.xmla.model.csdl.v2.edm.EdmFactory;
 import org.eclipse.daanse.xmla.model.csdl.v2.edm.TEntityProperty;
 
@@ -57,15 +58,19 @@ public final class KpiEmitter {
     }
 
     private void emitKpi(KPI kpi) {
-        Optional<TEntityProperty> valueProp = measures.resolveMeasureProperty(kpi.getValue());
+        Optional<TEntityProperty> valueProp = measures.resolveMeasureProperty(ctx.names().encode(kpi.getValue()));
         TEntityProperty anchor = valueProp.orElseGet(
-                () -> emitSupportMeasure(ctx.mangle("v_" + kpi.getName() + "_Value"), "Value of KPI " + kpi.getName()));
+                () -> emitSupportMeasure(ctx.mangle("v_" + kpi.getName() + "_Value"), getMeasureName(kpi.getValue()), kpi.getName()));
         TMeasure anchorMeasure = (TMeasure) anchor.getBiMeasure();
+        anchorMeasure.setHidden(false);
+        TKpi tKpi;
         if (anchorMeasure.getKpi() != null) {
             ctx.warn("measure {} already carries a bi:Kpi, so KPI {} gets a hidden carrier of " + "its own",
                     anchor.getName(), kpi.getName());
-            anchor = emitSupportMeasure(ctx.mangle("v_" + kpi.getName() + "_Value"), "Value of KPI " + kpi.getName());
-            anchorMeasure = (TMeasure) anchor.getBiMeasure();
+            tKpi = anchorMeasure.getKpi();
+        } else {
+            tKpi = bi.createTKpi();
+            anchorMeasure.setKpi(tKpi);
         }
 
         if (isBlank(kpi.getGoal()) || isBlank(kpi.getStatus())) {
@@ -74,12 +79,10 @@ public final class KpiEmitter {
             return;
         }
 
-        TKpi tKpi = bi.createTKpi();
-
-        tKpi.setKpiGoal(goalOf(supportRef(anchor, "Goal")));
-        tKpi.setKpiStatus(statusOf(supportRef(anchor, "Status")));
+        tKpi.setKpiGoal(goalOf(supportRef(anchor, kpi.getGoal(), "Goal")));
+        tKpi.setKpiStatus(statusOf(supportRef(anchor, kpi.getStatus(), "Status")));
         if (!isBlank(kpi.getTrend())) {
-            tKpi.setKpiTrend(trendOf(supportRef(anchor, "Trend")));
+            tKpi.setKpiTrend(trendOf(supportRef(anchor, kpi.getTrend(), "Trend")));
             if (!isBlank(kpi.getTrendGraphic())) {
                 tKpi.setTrendGraphic(kpi.getTrendGraphic());
             }
@@ -95,25 +98,29 @@ public final class KpiEmitter {
         }
 
         folders.forProperty(measures.biEntityType(), kpi.getDisplayFolder(), anchor.getName());
-
-        anchorMeasure.setKpi(tKpi);
     }
 
-    private org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef supportRef(TEntityProperty anchor, String role) {
-        String name = ctx.uniquePropertyName("v_" + anchor.getName() + "_" + role);
-        emitSupportMeasure(name, anchor.getName() + " " + role);
+    private String getMeasureName(String uniqueName) {
+        return uniqueName.replaceAll("^.*[\\.\\[]([^\\]\\.]+)\\]?$", "$1");
+	}
+
+	private org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef supportRef(TEntityProperty anchor, String measureUnicalName, String role) {
+        Optional<TEntityProperty> oProp = measures.resolveMeasureProperty(ctx.names().encode(measureUnicalName));
+        TEntityProperty prop = oProp.orElseGet(
+                () -> emitSupportMeasure(ctx.mangle("v_" + anchor.getName() + role), getMeasureName(measureUnicalName), role));
         org.eclipse.daanse.xmla.model.csdl.v2.bi.TPropertyRef ref = bi.createTPropertyRef();
-        ref.setName(ctx.requireProperty(name));
+        ref.setName(prop.getName());
         return ref;
     }
 
-    private TEntityProperty emitSupportMeasure(String name, String referenceName) {
+    private TEntityProperty emitSupportMeasure(String name, String referenceName, String caption) {
         TEntityProperty p = edm.createTEntityProperty();
         p.setName(name);
         p.setType("Double");
         TMeasure m = bi.createTMeasure();
-        m.setHidden(true);
+        //m.setHidden(true);
         m.setReferenceName(referenceName);
+        m.setCaption(caption);
         p.setBiMeasure(m);
         measures.edmEntityType().getProperty().add(p);
         return p;

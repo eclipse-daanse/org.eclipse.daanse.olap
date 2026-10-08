@@ -1,2 +1,2 @@
 # org.eclipse.daanse.olap
-Repository for the olap
+Repository for the  olap

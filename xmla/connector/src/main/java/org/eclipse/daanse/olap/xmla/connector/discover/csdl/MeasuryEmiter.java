@@ -156,8 +156,8 @@ public class MeasuryEmiter {
 
     private void applyFormatAndVisibility(TMeasure bi, Member member) {
         Object fmt = member.getPropertyValue(StandardProperty.FORMAT_STRING.getName());
-        if (fmt instanceof String s && !s.isBlank()) {
-            bi.setFormatString(s);
+        if (fmt instanceof String s) {
+            CsdlFormatStrings.of(s).ifPresent(bi::setFormatString);
         }
         Object visible = member.getPropertyValue(StandardProperty.VISIBLE.getName());
         if (Boolean.FALSE.equals(visible)) {

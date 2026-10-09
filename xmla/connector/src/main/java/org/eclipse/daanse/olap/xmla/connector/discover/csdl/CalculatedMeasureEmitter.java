@@ -84,8 +84,8 @@ public final class CalculatedMeasureEmitter {
             m.setCaption(member.getCaption());
         }
         Object format = member.getPropertyValue(StandardProperty.FORMAT_STRING.getName());
-        if (format instanceof String fs && !fs.isBlank()) {
-            m.setFormatString(fs);
+        if (format instanceof String fs) {
+            CsdlFormatStrings.of(fs).ifPresent(m::setFormatString);
         }
         if (!member.isVisible()) {
             m.setHidden(true);

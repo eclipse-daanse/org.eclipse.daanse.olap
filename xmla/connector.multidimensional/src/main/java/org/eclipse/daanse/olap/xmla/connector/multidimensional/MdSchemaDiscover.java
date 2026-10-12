@@ -123,9 +123,12 @@ public class MdSchemaDiscover {
                 }
             }
             if ((source & CUBE_SOURCE_DIMENSION) != 0) {
-                for (Cube cube : filterByName(cubes, cubeName)) {
+                // A dimension row is named $<dimension>, so CUBE_NAME is matched against
+                // that name - not against the cube the dimension is found in.
+                for (Cube cube : cubes) {
                     for (Dimension dimension : connection.getCatalogReader().getCubeDimensions(cube)) {
-                        if (!dimension.isMeasures()) {
+                        if (!dimension.isMeasures()
+                                && cubeName.map(name -> name.equals("$" + dimension.getName())).orElse(true)) {
                             EObject row = dimensionAsCubeRow(catalog.getName(), dimension);
                             if (row != null) {
                                 result.add(row);
@@ -154,6 +157,7 @@ public class MdSchemaDiscover {
         row.setCubeName(cube.getName());
         row.setCubeType("CUBE");
         row.setCreatedOn(startOfToday());
+        row.setLastSchemaUpdate(startOfToday());
         row.setLastDataUpdate(startOfToday());
         row.setDescription(description);
         row.setIsDrillThroughEnabled(Boolean.TRUE);
@@ -161,7 +165,7 @@ public class MdSchemaDiscover {
         row.setIsWriteEnabled(cube.isWriteEnabled());
         row.setIsSqlEnabled(Boolean.TRUE);
         row.setCubeCaption(cube.getCaption() == null ? cube.getName() : cube.getCaption());
-        row.setBaseCubeName(cube.getName());
+        //row.setBaseCubeName(cube.getName());
         row.setCubeSource(CUBE_SOURCE_CUBE);
         row.setPreferredQueryPatterns(1);
         return row;

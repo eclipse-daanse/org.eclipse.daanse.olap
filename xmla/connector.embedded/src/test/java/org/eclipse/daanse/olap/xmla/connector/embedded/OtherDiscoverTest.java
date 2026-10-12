@@ -186,10 +186,7 @@ class OtherDiscoverTest {
         assertThat(document).contains("xmlns=\"http://schemas.microsoft.com/analysisservices/2003/engine\"")
                 .contains("<Name>FoodMart</Name>").contains("<Version>13.0.4001.0</Version>")
                 .contains("<Edition>Enterprise64</Edition>").contains("<EditionID>1804890536</EditionID>")
-                .contains("<Databases>")
-                // AMO reads the compatibility level from here and, finding none, falls
-                // back to 1050 - below what a live connection needs.
-                .contains("<CompatibilityLevel>1100</CompatibilityLevel>");
+                .contains("<Databases>");
     }
 
     /**

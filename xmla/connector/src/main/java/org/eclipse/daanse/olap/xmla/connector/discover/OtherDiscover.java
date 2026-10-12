@@ -18,8 +18,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -28,18 +34,37 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.DataTypeJdbc;
 import org.eclipse.daanse.olap.api.catalog.CatalogReader;
 import org.eclipse.daanse.olap.api.element.Catalog;
+import org.eclipse.daanse.olap.api.element.DimensionType;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.StoredMeasure;
+import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.olap.xmla.connector.discover.csdl.CsdlDocuments;
 import org.eclipse.daanse.olap.xmla.connector.discover.csdl.CsdlEmitterImpl;
 import org.eclipse.daanse.olap.xmla.connector.discover.csdl.CsdlRequest;
 import org.eclipse.daanse.olap.xmla.connector.discover.csdl.CsdlVersion;
 import org.eclipse.daanse.olap.xmla.connector.discover.csdl.LocalePolicy;
 import org.eclipse.daanse.olap.xmla.connector.ContextListSupplyer;
+import org.eclipse.daanse.xmla.model.engine.AggregateFunctionEnum;
+import org.eclipse.daanse.xmla.model.engine.Cube;
+import org.eclipse.daanse.xmla.model.engine.CubeDimension;
+import org.eclipse.daanse.xmla.model.engine.CubeHierarchy;
 import org.eclipse.daanse.xmla.model.engine.Database;
+import org.eclipse.daanse.xmla.model.engine.Dimension;
+import org.eclipse.daanse.xmla.model.engine.DimensionAttribute;
+import org.eclipse.daanse.xmla.model.engine.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.model.engine.EditionEnum;
 import org.eclipse.daanse.xmla.model.engine.EngineFactory;
+import org.eclipse.daanse.xmla.model.engine.Hierarchy;
+import org.eclipse.daanse.xmla.model.engine.Level;
+import org.eclipse.daanse.xmla.model.engine.Measure;
+import org.eclipse.daanse.xmla.model.engine.MeasureDataTypeEnum;
+import org.eclipse.daanse.xmla.model.engine.MeasureGroup;
+import org.eclipse.daanse.xmla.model.engine.RegularMeasureGroupDimension;
 import org.eclipse.daanse.xmla.model.engine.Server;
+import org.eclipse.daanse.xmla.model.engine.StorageModeEnum;
 import org.eclipse.daanse.xmla.model.io.EcoreXmlWriter;
 import org.eclipse.daanse.xmla.model.io.HardenedXml;
 import org.eclipse.daanse.xmla.model.io.PropertyCatalog;
@@ -85,6 +110,7 @@ public class OtherDiscover {
     // factory but for the engine model rather than for rowsets.
     private static final RowsetCoreFactory CORE = RowsetCoreFactory.eINSTANCE;
     private static final RowsetServerFactory SERVER = RowsetServerFactory.eINSTANCE;
+    private static final EngineFactory ENGINE = EngineFactory.eINSTANCE;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
             .withZone(ZoneId.systemDefault());
@@ -316,11 +342,235 @@ public class OtherDiscover {
     private static Database databaseOf(Catalog catalog, XMLGregorianCalendar date) {
         Database database = EngineFactory.eINSTANCE.createDatabase();
         database.setName(catalog.getName());
-        database.setId(catalog.getName());
+        database.setId(idOf(catalog.getName()));
         database.setCreatedTimestamp(date);
         database.setLastSchemaUpdate(date);
-        database.setCompatibilityLevel(MULTIDIMENSIONAL_COMPATIBILITY_LEVEL);
+        Map<String, String> idsByName = new HashMap<>();
+        for (org.eclipse.daanse.olap.api.element.Cube olapCube : catalog.getCubes()) {
+            Map<String, String> dimensionIds = new HashMap<>();
+            for (var olapDimension : olapCube.getDimensions()) {
+                if (!olapDimension.isMeasures()) {
+                    String name = olapDimension.getName().trim();
+                    String key = name.toLowerCase(java.util.Locale.ROOT);
+                    String id = idsByName.get(key);
+                    if (id == null) {
+                        id = UUID.randomUUID().toString();
+                        idsByName.put(key, id);
+                        database.getDimensions().add(dimensionOf(olapDimension, id, name, date));
+                    }
+                    dimensionIds.put(olapDimension.getUniqueName(), id);
+                }
+            }
+            database.getCubes().add(cubeOf(olapCube, dimensionIds, date));
+        }
         return database;
+    }
+
+    /**
+     * The database dimension: every non-All level becomes an attribute, every
+     * hierarchy a user hierarchy over those attributes. The attributes keep their
+     * own attribute hierarchies hidden - the cube has no hierarchy but the ones
+     * the schema declares.
+     */
+    private static Dimension dimensionOf(org.eclipse.daanse.olap.api.element.Dimension olapDimension, String id,
+            String dimensionName, XMLGregorianCalendar date) {
+        Dimension dimension = ENGINE.createDimension();
+        dimension.setName(dimensionName);
+        dimension.setId(id);
+        dimension.setCreatedTimestamp(date);
+        dimension.setLastSchemaUpdate(date);
+        setIfPresent(olapDimension.getDescription(), dimension::setDescription);
+        dimension.setType(olapDimension.getDimensionType() == DimensionType.TIME_DIMENSION ? DimensionTypeEnum.TIME
+                : DimensionTypeEnum.REGULAR);
+        dimension.setStorageMode(StorageModeEnum.ROLAP);
+
+        // Attributes and hierarchies share one namespace in a dimension - AMO refuses
+        // a hierarchy whose ID or name an attribute already holds. A single-level
+        // hierarchy is usually named like its level, so the attribute steps aside.
+        Set<String> hierarchyNames = new HashSet<>();
+        for (var olapHierarchy : olapDimension.getHierarchies()) {
+            hierarchyNames.add(olapHierarchy.getName());
+        }
+        Set<String> attributeNames = new HashSet<>();
+        Map<String, DimensionAttribute> attributes = new LinkedHashMap<>();
+        for (var olapHierarchy : olapDimension.getHierarchies()) {
+            Hierarchy hierarchy = ENGINE.createHierarchy();
+            hierarchy.setName(olapHierarchy.getName());
+            hierarchy.setId(idOf(olapHierarchy.getUniqueName()));
+            setIfPresent(olapHierarchy.getDescription(), hierarchy::setDescription);
+            setIfPresent(olapHierarchy.getDisplayFolder(), hierarchy::setDisplayFolder);
+            if (olapHierarchy.hasAll() && olapHierarchy.getAllMember() != null) {
+                hierarchy.setAllMemberName(olapHierarchy.getAllMember().getName());
+            }
+            for (var olapLevel : olapHierarchy.getLevels()) {
+                if (olapLevel.isAll()) {
+                    continue;
+                }
+                DimensionAttribute attribute = attributes.computeIfAbsent(olapLevel.getName(), levelName -> {
+                    String name = levelName;
+                    for (int i = 1; hierarchyNames.contains(name) || attributeNames.contains(name); i++) {
+                        name = levelName + " Attribute" + (i == 1 ? "" : " " + i);
+                    }
+                    attributeNames.add(name);
+                    DimensionAttribute a = ENGINE.createDimensionAttribute();
+                    a.setName(name);
+                    a.setId(idOf(name));
+                    a.setAttributeHierarchyVisible(Boolean.FALSE);
+                    return a;
+                });
+                Level level = ENGINE.createLevel();
+                level.setName(olapLevel.getName());
+                level.setId(idOf(olapLevel.getUniqueName()));
+                setIfPresent(olapLevel.getDescription(), level::setDescription);
+                level.setSourceAttributeID(attribute.getId());
+                hierarchy.getLevels().add(level);
+            }
+            dimension.getHierarchies().add(hierarchy);
+        }
+        dimension.getAttributes().addAll(attributes.values());
+        return dimension;
+    }
+
+    /** {@code dimensionIds} maps a dimension unique name to the ID of its database dimension. */
+    private static Cube cubeOf(org.eclipse.daanse.olap.api.element.Cube olapCube, Map<String, String> dimensionIds,
+            XMLGregorianCalendar date) {
+        Cube cube = ENGINE.createCube();
+        cube.setName(olapCube.getName());
+        cube.setId(idOf(olapCube.getUniqueName()));
+        cube.setCreatedTimestamp(date);
+        cube.setLastSchemaUpdate(date);
+        setIfPresent(olapCube.getDescription(), cube::setDescription);
+        if (!olapCube.isVisible()) {
+            cube.setVisible(Boolean.FALSE);
+        }
+
+        for (var olapDimension : olapCube.getDimensions()) {
+            if (olapDimension.isMeasures()) {
+                continue;
+            }
+            CubeDimension cubeDimension = ENGINE.createCubeDimension();
+            cubeDimension.setId(idOf(olapDimension.getUniqueName()));
+            cubeDimension.setName(olapDimension.getName());
+            cubeDimension.setDimensionID(dimensionIds.get(olapDimension.getUniqueName()));
+            if (!olapDimension.isVisible()) {
+                cubeDimension.setVisible(Boolean.FALSE);
+            }
+            for (var olapHierarchy : olapDimension.getHierarchies()) {
+                if (!olapHierarchy.isVisible()) {
+                    CubeHierarchy cubeHierarchy = ENGINE.createCubeHierarchy();
+                    cubeHierarchy.setHierarchyID(idOf(olapHierarchy.getUniqueName()));
+                    cubeHierarchy.setVisible(Boolean.FALSE);
+                    cubeDimension.getHierarchies().add(cubeHierarchy);
+                }
+            }
+            cube.getDimensions().add(cubeDimension);
+        }
+
+        // One measure group per fact cube: a stored measure of a virtual cube names
+        // the base cube it comes from, and its group takes that cube's name.
+        // Calculated measures are no part of a measure group - they live in the
+        // MDX script.
+        Map<String, MeasureGroup> measureGroups = new LinkedHashMap<>();
+        for (Member olapMeasure : olapCube.getMeasures()) {
+            if (!(olapMeasure instanceof StoredMeasure stored)) {
+                continue;
+            }
+            org.eclipse.daanse.olap.api.element.Cube factCube = stored.getCube() != null ? stored.getCube() : olapCube;
+            MeasureGroup measureGroup = measureGroups.computeIfAbsent(factCube.getUniqueName(),
+                    id -> measureGroupOf(factCube, cube, date));
+            measureGroup.getMeasures().add(measureOf(stored));
+        }
+        cube.getMeasureGroups().addAll(measureGroups.values());
+        return cube;
+    }
+
+    private static MeasureGroup measureGroupOf(org.eclipse.daanse.olap.api.element.Cube factCube,
+            Cube cube, XMLGregorianCalendar date) {
+        MeasureGroup measureGroup = ENGINE.createMeasureGroup();
+        measureGroup.setName(factCube.getName());
+        measureGroup.setId(idOf(factCube.getUniqueName()));
+        measureGroup.setCreatedTimestamp(date);
+        measureGroup.setLastSchemaUpdate(date);
+        // Only the cube dimensions the fact cube itself joins - for a virtual cube
+        // not every dimension reaches every base cube.
+        Set<String> factDimensions = new HashSet<>();
+        for (var olapDimension : factCube.getDimensions()) {
+            factDimensions.add(idOf(olapDimension.getUniqueName()));
+        }
+        for (CubeDimension cubeDimension : cube.getDimensions()) {
+            if (factDimensions.contains(cubeDimension.getId())) {
+                RegularMeasureGroupDimension dimension = ENGINE.createRegularMeasureGroupDimension();
+                dimension.setCubeDimensionID(cubeDimension.getId());
+                //measureGroup.getDimensions().add(dimension);
+            }
+        }
+        return measureGroup;
+    }
+
+    private static Measure measureOf(StoredMeasure olapMeasure) {
+        Measure measure = ENGINE.createMeasure();
+        measure.setName(olapMeasure.getName());
+        measure.setId(idOf(olapMeasure.getUniqueName()));
+        setIfPresent(olapMeasure.getDescription(), measure::setDescription);
+        aggregateFunctionOf(olapMeasure.getAggregateFunction()).ifPresent(measure::setAggregateFunction);
+        olapMeasure.getDataType().flatMap(OtherDiscover::measureDataTypeOf).ifPresent(measure::setDataType);
+        Object format = olapMeasure.getPropertyValue(StandardProperty.FORMAT_STRING.getName());
+        if (format instanceof String s && !s.isEmpty()) {
+            measure.setFormatString(s);
+        }
+        Object folder = olapMeasure.getPropertyValue(StandardProperty.DISPLAY_FOLDER.getName());
+        if (folder instanceof String s && !s.isEmpty()) {
+            measure.setDisplayFolder(s);
+        }
+        if (olapMeasure.isHidden()) {
+            measure.setVisible(Boolean.FALSE);
+        }
+        return measure;
+    }
+
+    /** No AggregateFunction for an aggregator Analysis Services has no name for, avg among them. */
+    private static Optional<AggregateFunctionEnum> aggregateFunctionOf(String aggregator) {
+        if (aggregator == null) {
+            return Optional.empty();
+        }
+        return switch (aggregator.toLowerCase(java.util.Locale.ROOT)) {
+        case "sum" -> Optional.of(AggregateFunctionEnum.SUM);
+        case "count" -> Optional.of(AggregateFunctionEnum.COUNT);
+        case "min" -> Optional.of(AggregateFunctionEnum.MIN);
+        case "max" -> Optional.of(AggregateFunctionEnum.MAX);
+        case "distinct-count" -> Optional.of(AggregateFunctionEnum.DISTINCT_COUNT);
+        case "none" -> Optional.of(AggregateFunctionEnum.NONE);
+        default -> Optional.empty();
+        };
+    }
+
+    private static Optional<MeasureDataTypeEnum> measureDataTypeOf(DataTypeJdbc dataType) {
+        return switch (dataType) {
+        case VARCHAR -> Optional.of(MeasureDataTypeEnum.WCHAR);
+        case INTEGER -> Optional.of(MeasureDataTypeEnum.INTEGER);
+        case BIGINT -> Optional.of(MeasureDataTypeEnum.BIG_INT);
+        case SMALLINT -> Optional.of(MeasureDataTypeEnum.SMALLINT);
+        case REAL -> Optional.of(MeasureDataTypeEnum.SINGLE);
+        case FLOAT, DOUBLE, NUMERIC, DECIMAL -> Optional.of(MeasureDataTypeEnum.DOUBLE);
+        case BOOLEAN -> Optional.of(MeasureDataTypeEnum.BOOL);
+        case DATE, TIMESTAMP -> Optional.of(MeasureDataTypeEnum.DATE);
+        default -> Optional.empty();
+        };
+    }
+
+
+    /** Characters left out of every ID. */
+    private static final java.util.regex.Pattern ID_RESERVED = java.util.regex.Pattern
+            .compile("[.,;'`:/\\\\*|?\"&%$!+=()\\[\\]{}<>]");
+
+    private static String idOf(String value) {
+        return ID_RESERVED.matcher(value).replaceAll("");
+    }
+
+    private static void setIfPresent(String value, java.util.function.Consumer<String> setter) {
+        if (value != null && !value.isEmpty()) {
+            setter.accept(value);
+        }
     }
 
     private static EObject metadataRow(String document) {

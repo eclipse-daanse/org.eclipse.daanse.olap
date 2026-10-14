@@ -235,7 +235,14 @@ public class OlapExecute {
                     LOGGER.warn("no catalog named and more than one available; nothing is run");
                     return null;
                 }
-                return statementLanguage(language.get(), connection, mdx, properties, context.sessionId());
+                Map<String, String> languageProperties = languageProperties(properties);
+                if (!languageProperties.containsKey("Cube")) {
+                    // SSMS names the cube only in the DISCOVER_CSDL_METADATA before.
+                    contexts.rememberedCube(context, named.get().getName())
+                            .ifPresent(cube -> languageProperties.put("Cube", cube));
+                }
+                return statementLanguage(language.get(), connection, mdx, languageProperties, properties,
+                        context.sessionId());
             }
             QueryComponent queryComponent = connection.parseStatement(mdx);
 
@@ -291,14 +298,14 @@ public class OlapExecute {
      * result.
      */
     private EObject statementLanguage(StatementLanguage language, Connection connection, String statement,
-            PropertyList properties, String sessionId) {
+            Map<String, String> languageProperties, PropertyList properties, String sessionId) {
         // A writeback session's pending values take part here too, as in an MDX query.
         Scenario scenario = scenarios.of(sessionId);
         connection.setScenario(scenario != null ? scenario : connection.createScenario());
 
         List<ResultSet> resultSets;
         try {
-            resultSets = language.execute(connection, statement, languageProperties(properties));
+            resultSets = language.execute(connection, statement, languageProperties);
         } catch (SQLException e) {
             throw new XmlaCommandFailedException(null, e.getMessage(), SOURCE, null, e);
         }

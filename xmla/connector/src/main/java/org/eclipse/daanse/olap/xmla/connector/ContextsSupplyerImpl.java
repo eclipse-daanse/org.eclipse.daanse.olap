@@ -31,6 +31,8 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
     private final ContextGroup contextsGroup;
     // Mutated from request threads, so not a plain HashMap.
     private final Map<String, Map<String, Connection>> sessionCache = new ConcurrentHashMap<>();
+    // The cube each session last named, by catalog; see rememberCube.
+    private final Map<String, Map<String, String>> sessionCubes = new ConcurrentHashMap<>();
 
     public ContextsSupplyerImpl(ContextGroup contextsGroup) {
         this.contextsGroup = contextsGroup;
@@ -82,6 +84,29 @@ public class ContextsSupplyerImpl implements ContextListSupplyer {
     public Map<String, Map<String, Connection>> getSessionCache() {
         return this.sessionCache;
 
+    }
+
+    public Map<String, Map<String, String>> getSessionCubes() {
+        return this.sessionCubes;
+    }
+
+    @Override
+    public void rememberCube(XmlaRequest caller, String catalogName, String cubeName) {
+        String sessionId = caller == null ? null : caller.sessionId();
+        if (sessionId == null || catalogName == null || cubeName == null || cubeName.isBlank()) {
+            return;
+        }
+        getContext(catalogName).ifPresent(context -> sessionCubes
+                .computeIfAbsent(sessionId, id -> new ConcurrentHashMap<>()).put(context.getName(), cubeName));
+    }
+
+    @Override
+    public Optional<String> rememberedCube(XmlaRequest caller, String catalogName) {
+        String sessionId = caller == null ? null : caller.sessionId();
+        Map<String, String> cubes = sessionId == null ? null : sessionCubes.get(sessionId);
+        // By the context's own name, so the Catalog property finds what the discover
+        // remembered whatever case either of them was spelled in.
+        return cubes == null ? Optional.empty() : getContext(catalogName).map(context -> cubes.get(context.getName()));
     }
 
     @Override

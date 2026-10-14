@@ -175,6 +175,32 @@ class StatementLanguageTest {
     }
 
     @Test
+    void withoutACubeTheSessionsCubeIsPassedOn() throws Exception {
+        XmlaRequest caller = XmlaRequest.anonymous().withSession("s1");
+        when(contexts.rememberedCube(caller, "Sales")).thenReturn(Optional.of("Budget"));
+        ResultSet resultSet = resultSet("[Value]", 1L);
+        when(language.execute(connection, "EVALUATE {1}", Map.of("Catalog", "Sales", "Cube", "Budget")))
+                .thenReturn(List.of(resultSet));
+
+        EObject result = execute.execute(request("EVALUATE {1}", null), caller);
+
+        assertThat(values((RowsetResult) result)).containsExactly("1");
+    }
+
+    @Test
+    void aCubeInThePropertiesOutranksTheSessionsCube() throws Exception {
+        XmlaRequest caller = XmlaRequest.anonymous().withSession("s1");
+        when(contexts.rememberedCube(caller, "Sales")).thenReturn(Optional.of("Budget"));
+        ResultSet resultSet = resultSet("[Value]", 1L);
+        when(language.execute(connection, "EVALUATE {1}", Map.of("Catalog", "Sales", "Cube", "Plan")))
+                .thenReturn(List.of(resultSet));
+
+        EObject result = execute.execute(request("EVALUATE {1}", "Plan"), caller);
+
+        assertThat(values((RowsetResult) result)).containsExactly("1");
+    }
+
+    @Test
     void passesOnlyTheGivenProperties() {
         assertThat(OlapExecute.languageProperties(null)).isEmpty();
         PropertyList properties = XmlaFactory.eINSTANCE.createPropertyList();

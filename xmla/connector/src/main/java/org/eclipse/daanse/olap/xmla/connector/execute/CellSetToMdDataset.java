@@ -159,12 +159,13 @@ public final class CellSetToMdDataset {
 
         OlapInfoCube infoCube = FACTORY.createOlapInfoCube();
         infoCube.setCubeName(cube.getName());
-        // One reading for both, in UTC and to the second. Instant.toString() wrote a
-        // trailing Z and up to nine fractional digits, neither of which SSAS writes;
-        // and two separate readings could disagree in the same response.
-        String now = XSD_DATE_TIME.format(java.time.LocalDateTime.now(java.time.ZoneOffset.UTC));
-        infoCube.setLastDataUpdate(now);
-        infoCube.setLastSchemaUpdate(now);
+        // The start of today in UTC, as MDSCHEMA_CUBES reports it, so a client sees the
+        // same cube timestamps from both. Formatted without a trailing Z or fractional
+        // digits, as SSAS writes it.
+        String startOfToday = XSD_DATE_TIME
+                .format(java.time.LocalDate.now(java.time.ZoneOffset.UTC).atStartOfDay());
+        infoCube.setLastDataUpdate(startOfToday);
+        infoCube.setLastSchemaUpdate(startOfToday);
         CubeInfo cubeInfo = FACTORY.createCubeInfo();
         cubeInfo.getCube().add(infoCube);
 

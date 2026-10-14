@@ -655,6 +655,11 @@ public class OtherDiscover {
             return List.of();
         }
 
+        // The DAX statements that follow name the catalog but not the cube.
+        if (perspectiveName.isPresent()) {
+            contexts.rememberCube(caller, catalogName.orElse(catalog.getName()), perspectiveName.get());
+        }
+
         CatalogReader reader = contexts.getConnection(caller, catalog.getName()).getCatalogReader();
         LocalePolicy localePolicy = new LocalePolicy.ServerDefault(java.util.Locale.getDefault());
         CsdlRequest csdlRequest = new CsdlRequest(version, perspectiveName, localePolicy);

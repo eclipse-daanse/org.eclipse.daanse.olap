@@ -140,6 +140,32 @@ class ContextsSupplyerImplTest {
                 .isInstanceOf(RuntimeException.class);
     }
 
+    @Test
+    void aSessionRemembersTheCubeItNamedInACatalog() {
+        ContextsSupplyerImpl supplyer = supplyerOver(context("reader"));
+        XmlaRequest caller = caller("reader").withSession("s1");
+
+        supplyer.rememberCube(caller, CATALOG, "Budget");
+
+        assertThat(supplyer.rememberedCube(caller, CATALOG)).contains("Budget");
+        // The Catalog property need not repeat the case the discover used.
+        assertThat(supplyer.rememberedCube(caller, CATALOG.toUpperCase())).contains("Budget");
+        assertThat(supplyer.rememberedCube(caller("reader").withSession("s2"), CATALOG)).isEmpty();
+    }
+
+    @Test
+    void withoutASessionNoCubeIsRemembered() {
+        // Never asked for: without a session there is nothing to look the catalog up for.
+        Context<?> context = context("reader");
+        lenient().when(contextGroup.getValidContexts()).thenReturn(List.of(context));
+        ContextsSupplyerImpl supplyer = new ContextsSupplyerImpl(contextGroup);
+
+        supplyer.rememberCube(caller("reader"), CATALOG, "Budget");
+
+        assertThat(supplyer.rememberedCube(caller("reader"), CATALOG)).isEmpty();
+        assertThat(supplyer.getSessionCubes()).isEmpty();
+    }
+
     private ContextsSupplyerImpl supplyerOver(Context<?> context) {
         when(contextGroup.getValidContexts()).thenReturn(List.of(context));
         return new ContextsSupplyerImpl(contextGroup);

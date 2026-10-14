@@ -50,4 +50,20 @@ public interface ContextListSupplyer {
      * one opened with the caller's roles.
      */
     Connection getConnection(XmlaRequest caller, String catalogName);
+
+    /**
+     * Remembers the cube the caller's session last asked about in this catalog.
+     * <p>
+     * SSMS names the cube once, as the PERSPECTIVE_NAME restriction of
+     * DISCOVER_CSDL_METADATA, and then sends its DAX statements with a Catalog
+     * property but no Cube. Without a session there is nothing to remember it in,
+     * and nothing is remembered.
+     */
+    default void rememberCube(XmlaRequest caller, String catalogName, String cubeName) {
+    }
+
+    /** The cube {@link #rememberCube} remembered for the caller's session in this catalog. */
+    default Optional<String> rememberedCube(XmlaRequest caller, String catalogName) {
+        return Optional.empty();
+    }
 }

@@ -384,6 +384,7 @@ public class OlapXmlaConnector extends SimpleSessionHandler implements XmlaConne
     protected void onEndSession(String sessionId) {
         scenarios.clear(sessionId);
         close(contexts.getSessionCache().remove(sessionId));
+        contexts.getSessionCubes().remove(sessionId);
     }
 
     /**

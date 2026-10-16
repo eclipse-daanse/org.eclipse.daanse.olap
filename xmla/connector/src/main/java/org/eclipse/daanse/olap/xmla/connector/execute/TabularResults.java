@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Measure;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Property;
@@ -74,8 +75,11 @@ public final class TabularResults {
 
     private static final class CellColumn extends Column {
 
-        CellColumn(String name) {
+        private final String xsdType;
+
+        CellColumn(String name, String xsdType) {
             super(name);
+            this.xsdType = xsdType;
         }
 
         @Override
@@ -185,15 +189,20 @@ public final class TabularResults {
         Member[] members = new Member[memberOrdinal + 1];
 
         if (!axes.isEmpty()) {
+            Measure slicerMeasure = slicerMeasure(cellSet);
             for (Position position : axes.getFirst().getPositions()) {
                 StringBuilder name = new StringBuilder();
+                Measure measure = null;
                 for (Member member : position.getMembers()) {
                     if (name.length() > 0) {
                         name.append('.');
                     }
                     name.append(member.getUniqueName());
+                    if (measure == null && member instanceof Measure m) {
+                        measure = m;
+                    }
                 }
-                columns.add(new CellColumn(name.toString()));
+                columns.add(new CellColumn(name.toString(), xsdTypeOf(measure != null ? measure : slicerMeasure)));
             }
         }
 
@@ -203,9 +212,9 @@ public final class TabularResults {
             RowsetColumn declared = FACTORY.createRowsetColumn();
             declared.setField(column.name);
             declared.setName(column.encodedName);
-            // A member property is a string; a cell's type varies per row, so its
-            // schema element names none, exactly like a variant rowset column.
-            declared.setXsdType(column instanceof MemberColumn ? ValueInfo.XSD_STRING : null);
+            // A member property is a string; a cell takes the datatype of its
+            // measure, and without one it names none, like a variant rowset column.
+            declared.setXsdType(column instanceof CellColumn cellColumn ? cellColumn.xsdType : ValueInfo.XSD_STRING);
             result.getColumns().add(declared);
         }
 
@@ -224,6 +233,35 @@ public final class TabularResults {
             }
         }
         return result;
+    }
+
+    /** The measure of the WHERE clause, for columns whose position names none. */
+    private static Measure slicerMeasure(CellSet cellSet) {
+        CellSetAxis filter = cellSet.getFilterAxis();
+        if (filter == null || filter.getPositions().isEmpty()) {
+            return null;
+        }
+        for (Member member : filter.getPositions().getFirst().getMembers()) {
+            if (member instanceof Measure measure) {
+                return measure;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * The schema type of a measure's cells. An integer measure is declared
+     * {@code xsd:long}, since its values may exceed {@code xsd:int}.
+     */
+    private static String xsdTypeOf(Measure measure) {
+        if (measure == null) {
+            return null;
+        }
+        Object dataType = measure.getPropertyValue(StandardProperty.DATATYPE.getName());
+        if ("Integer".equals(dataType)) {
+            return ValueInfo.XSD_LONG;
+        }
+        return ValueInfo.getValueTypeHint(dataType instanceof String s ? s : null);
     }
 
     private static void renderAxis(CellSet cellSet, int axis, int memberStart, List<Column> columns, Member[] members,

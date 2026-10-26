@@ -25,7 +25,11 @@ import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.getExpressi
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.mdx.model.api.CreateMemberStatement;
+import org.eclipse.daanse.mdx.model.api.CreateSetStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.DropMemberStatement;
+import org.eclipse.daanse.mdx.model.api.DropSetStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
@@ -70,6 +74,10 @@ public class QueryProviderImpl implements QueryProvider {
         case RefreshStatement refresh -> createRefresh(refresh);
         case UpdateStatement update -> createUpdate(update);
         case TransactionStatement transaction -> createTransaction(transaction);
+        // session calculated members and sets are not kept yet
+        case CreateMemberStatement _, CreateSetStatement _, DropMemberStatement _, DropSetStatement _ ->
+            throw new UnsupportedOperationException(
+                "CREATE MEMBER, CREATE SET, DROP MEMBER and DROP SET statements are not supported");
         };
     }
 

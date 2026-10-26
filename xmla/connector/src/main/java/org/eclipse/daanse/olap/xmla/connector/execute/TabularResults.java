@@ -267,7 +267,8 @@ public final class TabularResults {
     private static void renderAxis(CellSet cellSet, int axis, int memberStart, List<Column> columns, Member[] members,
             int[] pos, List<Integer> posList, RowsetResult result) {
         List<Position> positions = cellSet.getAxes().get(axis).getPositions();
-        int length = axis == 0 ? 1 : positions.size();
+        // the columns axis alone is one row of its cells, none where it is empty (NON EMPTY)
+        int length = axis == 0 ? Math.min(1, positions.size()) : positions.size();
         for (int index = 0; index < length; index++) {
             Position position = positions.get(index);
             int ordinal = memberStart;

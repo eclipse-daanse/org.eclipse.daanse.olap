@@ -75,7 +75,8 @@ public final class TabularResults {
 
     private static final class CellColumn extends Column {
 
-        private final String xsdType;
+        // The measure's datatype; without one, the type of the first cell rendered.
+        private String xsdType;
 
         CellColumn(String name, String xsdType) {
             super(name);
@@ -90,6 +91,9 @@ public final class TabularResults {
             Object value = cell.getValue();
             String dataType = (String) cell.getPropertyValue(StandardProperty.DATATYPE.getName());
             ValueInfo info = new ValueInfo(dataType, value);
+            if (xsdType == null) {
+                xsdType = info.valueType;
+            }
             String text = info.value.toString();
             if (info.isDecimal) {
                 text = ElementNames.normalizeNumericString(text);
@@ -208,15 +212,6 @@ public final class TabularResults {
 
         RowsetResult result = FACTORY.createRowsetResult();
         result.setSchemaIncluded(schemaIncluded);
-        for (Column column : columns) {
-            RowsetColumn declared = FACTORY.createRowsetColumn();
-            declared.setField(column.name);
-            declared.setName(column.encodedName);
-            // A member property is a string; a cell takes the datatype of its
-            // measure, and without one it names none, like a variant rowset column.
-            declared.setXsdType(column instanceof CellColumn cellColumn ? cellColumn.xsdType : ValueInfo.XSD_STRING);
-            result.getColumns().add(declared);
-        }
 
         if (!empty) {
             if (axisCount == 0) {
@@ -231,6 +226,18 @@ public final class TabularResults {
             } else {
                 renderAxis(cellSet, axisCount - 1, 0, columns, members, pos, posList, result);
             }
+        }
+
+        // Declared after the rows: a cell column whose measure names no datatype,
+        // as a calculated measure, takes the type of its cells.
+        for (Column column : columns) {
+            RowsetColumn declared = FACTORY.createRowsetColumn();
+            declared.setField(column.name);
+            declared.setName(column.encodedName);
+            // A member property is a string; a cell column without measure datatype
+            // or cells names none, like a variant rowset column.
+            declared.setXsdType(column instanceof CellColumn cellColumn ? cellColumn.xsdType : ValueInfo.XSD_STRING);
+            result.getColumns().add(declared);
         }
         return result;
     }

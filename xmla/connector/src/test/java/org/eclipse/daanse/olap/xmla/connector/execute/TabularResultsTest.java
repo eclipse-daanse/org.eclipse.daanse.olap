@@ -14,13 +14,18 @@
 package org.eclipse.daanse.olap.xmla.connector.execute;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.element.Measure;
+import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.CellSet;
 import org.eclipse.daanse.olap.api.result.CellSetAxis;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.xmla.model.io.ValueInfo;
 import org.eclipse.daanse.xmla.model.xmla.RowsetResult;
 import org.junit.jupiter.api.Test;
 
@@ -44,5 +49,33 @@ class TabularResultsTest {
 
         assertThat(result.getColumns()).isEmpty();
         assertThat(result.getRows()).isEmpty();
+    }
+
+    /**
+     * SELECT {[Measures].[Profit]} ON COLUMNS, a calculated measure naming no
+     * DATATYPE: the cell column takes the type of its cells.
+     */
+    @Test
+    void calculatedMeasureColumnTakesTypeOfItsCells() {
+        Measure profit = mock(Measure.class);
+        when(profit.getUniqueName()).thenReturn("[Measures].[Profit]");
+        Position position = mock(Position.class);
+        when(position.getMembers()).thenReturn(List.of(profit));
+        CellSetAxis columns = mock(CellSetAxis.class);
+        when(columns.getPositions()).thenReturn(List.of(position));
+        CellSetAxis filter = mock(CellSetAxis.class);
+        when(filter.getPositions()).thenReturn(List.of());
+        Cell cell = mock(Cell.class);
+        when(cell.getValue()).thenReturn(6.809);
+        CellSet cellSet = mock(CellSet.class);
+        when(cellSet.getAxes()).thenReturn(List.of(columns));
+        when(cellSet.getFilterAxis()).thenReturn(filter);
+        when(cellSet.getCell(anyList())).thenReturn(cell);
+
+        RowsetResult result = TabularResults.fromCellSet(cellSet, true);
+
+        assertThat(result.getColumns()).singleElement()
+                .satisfies(column -> assertThat(column.getXsdType()).isEqualTo(ValueInfo.XSD_DOUBLE));
+        assertThat(result.getRows()).hasSize(1);
     }
 }

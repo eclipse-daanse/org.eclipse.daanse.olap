@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.OrderByProperty;
 import org.eclipse.daanse.olap.api.element.Property;
+import org.eclipse.daanse.olap.common.StandardProperty;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.BiFactory;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.ContainsHiddenMembersType;
 import org.eclipse.daanse.xmla.model.csdl.v2.bi.SourceType;
@@ -153,7 +154,14 @@ public final class HierarchyEmitter {
             org.eclipse.daanse.xmla.model.csdl.v2.edm.TEntityType edmEntity) {
         TEntityProperty p = edm.createTEntityProperty();
         p.setName(ctx.mangle(level.getUniqueName()));
-        typeMapper.apply(p, level.getDatatype());
+        // The property carries the member names: a level with a name column is typed
+        // by that column, not by its key (Customers.Name: numeric id, string name).
+        Optional<Property> nameProperty = nameProperty(level);
+        if (nameProperty.isPresent()) {
+            typeMapper.apply(p, nameProperty.get().getType());
+        } else {
+            typeMapper.apply(p, level.getDatatype());
+        }
         TProperty biProp = bi.createTProperty();
         biProp.setHidden(true);
         biProp.setCaption(level.getName());
@@ -164,6 +172,19 @@ public final class HierarchyEmitter {
         p.setBiProperty(biProp);
         edmEntity.getProperty().add(p);
         return p;
+    }
+
+    private static Optional<Property> nameProperty(Level level) {
+        Property[] properties = level.getProperties();
+        if (properties == null) {
+            return Optional.empty();
+        }
+        for (Property property : properties) {
+            if (property.isInternal() && StandardProperty.NAME.getName().equals(property.getName())) {
+                return Optional.of(property);
+            }
+        }
+        return Optional.empty();
     }
 
     private Optional<TPropertyRefs> orderByOf(Level level) {

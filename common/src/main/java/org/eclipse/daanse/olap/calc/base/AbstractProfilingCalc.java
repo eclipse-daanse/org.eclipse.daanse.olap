@@ -24,6 +24,8 @@ import org.eclipse.daanse.olap.api.calc.Calc;
 import org.eclipse.daanse.olap.api.calc.profile.CalcEvaluationProfile;
 import org.eclipse.daanse.olap.api.calc.profile.CalculationProfile;
 import org.eclipse.daanse.olap.api.evaluator.Evaluator;
+import org.eclipse.daanse.olap.api.execution.Statement;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.base.profile.CalcProfileR;
 
@@ -49,6 +51,11 @@ public abstract class AbstractProfilingCalc<T> implements Calc<T> {
 
 	@Override
 	public final T evaluate(Evaluator evaluator) {
+		// reading the clock costs per evaluation, up to microseconds where the
+		// clock source is slow: only for a statement being profiled
+		if (!isProfiling(evaluator)) {
+			return evaluateInternal(evaluator);
+		}
 		Instant startEval = Instant.now();
 		if (firstEvalStart == null) {
 			firstEvalStart = startEval;
@@ -63,6 +70,18 @@ public abstract class AbstractProfilingCalc<T> implements Calc<T> {
 	}
 
 	protected abstract T evaluateInternal(Evaluator evaluator);
+
+	private static boolean isProfiling(Evaluator evaluator) {
+		if (evaluator == null) {
+			return false;
+		}
+		Query query = evaluator.getQuery();
+		if (query == null) {
+			return false;
+		}
+		Statement statement = query.getStatement();
+		return statement != null && statement.getProfileHandler() != null;
+	}
 
     protected void profileEvaluation(Instant evaluationStart, Instant evaluationEnd, T evaluationResult) {
 
